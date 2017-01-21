@@ -1,0 +1,225 @@
+<html>
+
+<link rel="stylesheet" type="text/css" href="../../lib/css/themes/jquery-ui/redmond/jquery-ui.min.css"/>
+<script type="text/javascript" src="../../lib/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+<script type="text/javascript" src="../../lib/js/jquery-ui-1.10.3.full.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+<script type="text/javascript" src="../../js/translate.js"></script>
+<script type="text/javascript" src="../../js/adapter-settings.js"></script>
+
+<style>
+    .number {
+        width: 70px
+    }
+    .table-values th {
+        background: #686868;
+        color: #FFF;
+        font-weight: bold;
+    }
+    .table-values tr:nth-child(even) {
+        background: #d0d0d0;
+    }
+    .error {
+        border: 1px solid red;
+    }
+</style>
+
+<script type="text/javascript">
+    systemDictionary = {
+        "MiHome-vacuum adapter settings": {
+            "de": "MiHome-vacuum Adapter Einstellungen",
+            "ru": "Настройки драйвера MiHome пылесоса"
+        },
+        "IP Address:":          {"en": "IP Address",         "de": "Parser Adaptereinstellungen", "ru": "Настройки драйвера Parser"}
+    };
+
+    var values = [];
+
+    // the function loadSettings has to exist ...
+    function load(settings, onChange) {
+        if (!settings) return;
+
+        $('.value').each(function () {
+            var key = $(this).attr('id');
+            var $key = $('#' + key + '.value');
+            if ($key.attr('type') === 'checkbox') {
+                $key.prop('checked', settings[key]).change(function() {
+                    onChange();
+                });
+            } else {
+                $key.val(settings[key]).change(function() {
+                    onChange();
+                }).keyup(function() {
+                    onChange();
+                });
+            }
+        });
+
+        onChange(false);
+
+        var namespace = adapter + '.' + instance + '.';
+
+        socket.emit('getObjectView', 'system', 'state', {startkey: namespace, endkey: namespace + '\u9999'}, function (err, res) {
+            if (!err && res) {
+                var _res   = {};
+                for (var i = 0; i < res.rows.length; i++) {
+                    var obj = res.rows[i].value;
+                    values.push({
+                        name:       obj._id.substring(namespace.length),
+                        link:       obj.native.link,
+                        read:       obj.common.read,
+                        write:      obj.common.write,
+                        regex:      obj.native.regex,
+                        role:       obj.common.role,
+                        type:       obj.common.type,
+                        unit:       obj.common.unit,
+                        interval:   obj.native.interval,
+                        substitute: obj.native.substitute,
+                        offset:     obj.native.offset,
+                        factor:     obj.native.factor,
+                        obj:        obj
+                    });
+                }
+            }
+
+            var newValues = JSON.parse(JSON.stringify(values));
+            var __values2table;
+            if (typeof values2table !== 'undefined') __values2table = values2table;
+            __values2table = __values2table || _values2table;
+            __values2table('values', newValues, onChange, function () {
+                if (!newValues.length) {
+                    $('.table-button-add').trigger('click');
+                }
+
+                $('.values-input[data-name="name"]').change(function () {
+                    var val = $(this).val();
+                    var error = '';
+                    if (!val) {
+                        error = 'Empty names are not allowed';
+                    } else if (val.indexOf(' ') !== -1) {
+                        error = 'Spaces are not allowed';
+                    }
+                    if (error) {
+                        $(this).addClass(error).attr('title', _(error));
+                    } else {
+                        $(this).removeClass('error').attr('title', '');
+                    }
+                });
+                $('.values-input[data-name="type"]').change(function () {
+                    var id = $(this).data('index');
+                    var val = $(this).val();
+                    if (val === 'number') {
+                        $('.values-input[data-name="factor"][data-index="' + id + '"]').show();
+                        $('.values-input[data-name="offset"][data-index="' + id + '"]').show();
+                    } else {
+                        $('.values-input[data-name="factor"][data-index="' + id + '"]').hide();
+                        $('.values-input[data-name="offset"][data-index="' + id + '"]').hide();
+                    }
+                    if (val === 'boolean' || val === 'json') {
+                        $('.values-input[data-name="unit"][data-index="' + id + '"]').hide();
+                    } else {
+                        $('.values-input[data-name="unit"][data-index="' + id + '"]').show();
+                    }
+                }).each(function () {
+                    var id = $(this).data('index');
+                    var val = $(this).val();
+                    if (val === 'number') {
+                        $('.values-input[data-name="factor"][data-index="' + id + '"]').show();
+                        $('.values-input[data-name="offset"][data-index="' + id + '"]').show();
+                    } else {
+                        $('.values-input[data-name="factor"][data-index="' + id + '"]').hide();
+                        $('.values-input[data-name="offset"][data-index="' + id + '"]').hide();
+                    }
+                    if (val === 'boolean' || val === 'json') {
+                        $('.values-input[data-name="unit"][data-index="' + id + '"]').hide();
+                    } else {
+                        $('.values-input[data-name="unit"][data-index="' + id + '"]').show();
+                    }
+
+                });
+            });
+        });
+    }
+
+    function processTasks(tasks, cb) {
+        if (!tasks || !tasks.length) {
+            cb && cb();
+            return;
+        }
+
+        var task = tasks.pop();
+
+        if (typeof task === 'object') {
+            socket.emit('setObject', task._id, task, function (err) {
+                if (err) console.error(err);
+                setTimeout(function () {
+                    processTasks(tasks, cb);
+                }, 0);
+            });
+        } else {
+            socket.emit('delState', task, function (err) {
+                if (err) console.error(err);
+                socket.emit('delObject', task, function (err) {
+                    if (err) console.error(err);
+                    setTimeout(function () {
+                        processTasks(tasks, cb);
+                    }, 0);
+                });
+            });
+        }
+    }
+
+    function save(callback) {
+        var obj = {};
+        $('.value').each(function () {
+            var $this = $(this);
+            if ($this.attr('type') === 'checkbox') {
+                obj[$this.attr('id')] = $this.prop('checked');
+            } else {
+                obj[$this.attr('id')] = $this.val();
+            }
+        });
+
+        callback(obj);
+    }
+</script>
+
+<div id="adapter-container">
+
+    <table><tr><td><img src="mihome-vacuum.png"></td><td><h3 class="translate">MiHome-vacuum adapter settings</h3></td></tr></table>
+
+    <table style="width: 100%;">
+        <tr>
+            <td style="width: 200px;"><label for="ip" class="translate">IP address: </label></td>
+            <td><input class="value" id="ip" size="15" style="width: 100px;"/></td>
+        </tr>
+        <tr>
+            <td><label for="port" class="translate">Vacuum port: </label></td>
+            <td><input class="value" id="port" size="5" type="number" style="width: 60px;"/></td>
+        </tr>
+        <tr>
+            <td><label for="ownPort" class="translate">Own port: </label></td>
+            <td><input class="value" id="ownPort" size="5" type="number" style="width: 60px;"/></td>
+        </tr>
+        <tr>
+            <td><label for="start" class="translate">Start command: </label></td>
+            <td><input class="value" id="start" style="width: 100%"/></td>
+        </tr>
+        <tr>
+            <td><label for="pause" class="translate">Pause command: </label></td>
+            <td><input class="value" id="pause" style="width: 100%"/></td>
+        </tr>
+        <tr>
+            <td><label for="home" class="translate">Home command: </label></td>
+            <td><input class="value" id="home" style="width: 100%"/></td>
+        </tr>
+        <tr>
+            <td><label for="find" class="translate">Find command: </label></td>
+            <td><input class="value" id="find" style="width: 100%"/></td>
+        </tr>
+    </table>
+
+</div>
+</html>
