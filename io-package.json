@@ -108,6 +108,18 @@
                 "write": true
             },
             "native": {}
+        },
+        {
+            "_id":  "state",
+            "type": "state",
+            "common": {
+                "role":  "switch",
+                "name":  "Start/pause",
+                "type":  "boolean",
+                "read":  false,
+                "write": true
+            },
+            "native": {}
         }
     ]
     

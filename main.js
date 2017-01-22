@@ -21,9 +21,31 @@ adapter.on('stateChange', function (id, state) {
     // output to parser
     var command = id.split('.').pop();
 
+    if (command === 'state') {
+        if (state.val === 'true' || state.val === true || state.val === '1' || state.val === 1) {
+            if (commands.start) {
+                sendCommand(commands.start, function () {
+                    adapter.setForeignState(adapter.namespace + '.state', true, true);
+                });
+            } else {
+                adapter.log.warn('Command start is not configured')
+            }
+        } else {
+            if (commands.pause) {
+                sendCommand(commands.pause, function () {
+                    adapter.setForeignState(adapter.namespace + '.state', false, true);
+                });
+            } else {
+                adapter.log.warn('Command pause is not configured')
+            }
+        }
+    } else
     if (commands[command]) {
         sendCommand(commands[command], function () {
-            adapter.setState(id, true, true);
+            if (command === 'home') {
+                adapter.setForeignState(adapter.namespace + '.state', false, true);
+            }
+            adapter.setForeignState(id, false, true);
         });
     } else {
         if (commands[command] === undefined) {
