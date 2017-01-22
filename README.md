@@ -22,6 +22,9 @@ npm install iobroker.mihome-vacuum
 iobroker add mihome-vacuum
 ```
 
+## Widget
+![Widget](widgets/img/previewControl.png)
+
 ## Changelog
 
 ### 0.0.1 (2017-01-16)
