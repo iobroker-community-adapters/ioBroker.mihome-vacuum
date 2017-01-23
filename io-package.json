@@ -37,7 +37,10 @@
         "pause":    "",
         "home":     "",
         "find":     "",
-        "pingInterval": 20000
+        "pingInterval": 20000,
+        "level1":   "",
+        "level2":   "",
+        "level3":   ""
     },
     "instanceObjects": [
         {
@@ -116,6 +119,20 @@
                 "role":  "switch",
                 "name":  "Start/pause",
                 "type":  "boolean",
+                "read":  false,
+                "write": true
+            },
+            "native": {}
+        },
+        {
+            "_id":  "level",
+            "type": "state",
+            "common": {
+                "role":  "state",
+                "name":  "Power level 1-3",
+                "type":  "number",
+                "min":   1,
+                "max":   3,
                 "read":  false,
                 "write": true
             },
