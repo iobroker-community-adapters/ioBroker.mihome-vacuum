@@ -91,7 +91,7 @@ function sendPing() {
     }, 3000);
 
     try {
-        server.send(commands.ping, adapter.config.port, adapter.config.ip, function (err) {
+        server.send(commands.ping, 0, commands.ping.length, adapter.config.port, adapter.config.ip, function (err) {
             if (err) adapter.log.error('Cannot send ping: ' + err)
         });
     } catch (e) {
@@ -119,7 +119,7 @@ function str2hex(str) {
 
 function sendCommand(cmd, callback) {
     try {
-        server.send(cmd, adapter.config.port, adapter.config.ip, function (err) {
+        server.send(cmd, 0, cmd.length, adapter.config.port, adapter.config.ip, function (err) {
             if (err) adapter.log.error('Cannot send command: ' + err);
             if (typeof callback === 'function') callback(err);
         });
