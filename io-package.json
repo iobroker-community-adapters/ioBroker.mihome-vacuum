@@ -23,7 +23,7 @@
         "readme":                   "https://github.com/ioBroker/ioBroker.mihome-vacuum/blob/master/README.md",
         "keywords":                 ["url", "html", "file", "mihome-vacuum"],
         "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.mihome-vacuum/master/admin/mihome-vacuum.png",
-		"type":                     "common",
+		"type":                     "hardware",
         "config":{
             "minWidth": 800,
             "width ": 1224
