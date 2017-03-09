@@ -52,7 +52,6 @@ adapter.on('stateChange', function (id, state) {
     } else
     if (commands[command]) {
         sendCommand(commands[command], function () {
-        sendCommand("", function () {
             if (command === 'home') {
                 adapter.setForeignState(adapter.namespace + '.state', false, true);
             }
@@ -66,6 +65,7 @@ adapter.on('stateChange', function (id, state) {
         }
     }
 });
+
 adapter.on('unload', function (callback) {
     if (pingTimeout) clearTimeout(pingTimeout);
     adapter.setState('info.connection', false, true);
@@ -134,7 +134,7 @@ function sendCommand(cmd, callback) {
 function main() {
     adapter.setState('info.connection', false, true);
     adapter.config.port         = parseInt(adapter.config.port, 10)         || 54321;
-    //adapter.config.ownPort      = parseInt(adapter.config.ownPort, 10)      || 56363;
+    adapter.config.ownPort      = parseInt(adapter.config.ownPort, 10)      || 56363;
     adapter.config.pingInterval = parseInt(adapter.config.pingInterval, 10) || 20000;
     packet.setToken(Buffer(adapter.config.token,'hex'));
     commands = {
@@ -186,7 +186,7 @@ function main() {
             } else {
 		//hier die Antwort zum decodieren
                 adapter.log.warn('server got: ' + msg.length + ' bytes from ' + rinfo.address + ':' + rinfo.port);
-            }  
+            }
         }
     });
 
