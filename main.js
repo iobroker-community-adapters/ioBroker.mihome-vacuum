@@ -121,6 +121,7 @@ function sendCommand(cmd, callback) {
         message=cmd;
         packet.setHelo();
         var cmdraw=packet.getRaw()
+        adapter.log.info('Sende >>> Helo >>> ' + cmdraw.toString('hex'));
         server.send(cmdraw, 0, cmdraw.length, adapter.config.port, adapter.config.ip, function (err) {
             if (err) adapter.log.error('Cannot send command: ' + err);
             if (typeof callback === 'function') callback(err);
@@ -159,6 +160,7 @@ function main() {
     server.on('message', function (msg, rinfo) {
         if (rinfo.port === adapter.config.port) {
             if (msg.length === 32) {
+		adapter.log.info('Empfangen <<< Helo <<< ' + msg.toString('hex'));
                 packet.setRaw(msg);
                 clearTimeout(pingTimeout);
                 pingTimeout = null;
@@ -173,6 +175,7 @@ function main() {
                         packet.setPlainData('{"id":'+packet.msgCounter+','+message+'}');
                         packet.msgCounter++;
                         var cmdraw=packet.getRaw();
+                        adapter.log.info('Sende >>> {"id":'+packet.msgCounter+','+message+'}' + ' >>> ' + cmdraw.toString('hex'));
                         message="";
                         server.send(cmdraw, 0, cmdraw.length, adapter.config.port, adapter.config.ip, function (err) {
                             if (err) adapter.log.error('Cannot send command: ' + err);
@@ -185,7 +188,9 @@ function main() {
                 }
             } else {
 		//hier die Antwort zum decodieren
-                adapter.log.warn('server got: ' + msg.length + ' bytes from ' + rinfo.address + ':' + rinfo.port);
+                packet.setRaw(msg);
+                adapter.log.info('Empfangen <<< '+packet.getPlainData()+' <<< ' + msg.toString('hex'));
+                //adapter.log.warn('server got: ' + msg.length + ' bytes from ' + rinfo.address + ':' + rinfo.port);
             }
         }
     });
