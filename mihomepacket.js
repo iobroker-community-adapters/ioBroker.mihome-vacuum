@@ -40,12 +40,18 @@ function Packet() {
   }
   
   function getRaw() {
+      var raw;
       if (this.data.length>0) {
         this.len=Buffer(decimalToHex(this.data.length+32,4),'hex');
-        var raw=Buffer(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.token.toString('hex')+this.data.toString('hex'),'hex');
+        raw=Buffer.from(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.token.toString('hex')+this.data.toString('hex'),'hex');
         this.checksum=_md5(raw);
+        //raw=Buffer.from(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.checksum.toString('hex')+this.data.toString('hex'),'hex');
+        raw=str2hex(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.checksum.toString('hex')+this.data.toString('hex'),'hex');
+      } else {
+        //raw=Buffer.from(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.checksum.toString('hex'),'hex'); 
+        raw=str2hex(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.checksum.toString('hex'),'hex'); 
       }
-      return(Buffer(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.checksum.toString('hex')+this.data.toString('hex'),'hex'));
+      return(raw);
   }
   
   function setRaw(raw) {
@@ -93,6 +99,15 @@ function decimalToHex(decimal, chars) {
     return (decimal + Math.pow(16, chars)).toString(16).slice(-chars).toUpperCase();
 }
 
+function str2hex(str) {
+    str = str.replace(/\s/g, '');
+    var buf = new Buffer(str.length / 2);
+
+    for (var i = 0; i < str.length / 2; i++) {
+        buf[i] = parseInt(str[i * 2] + str[i* 2 + 1], 16);
+    }
+    return buf;
+}
 
 exports.Packet = Packet;
 exports.decimalToHex = decimalToHex;

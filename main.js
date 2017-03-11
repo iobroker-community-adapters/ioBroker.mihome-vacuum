@@ -138,19 +138,15 @@ function main() {
     adapter.config.ownPort      = parseInt(adapter.config.ownPort, 10)      || 56363;
     adapter.config.pingInterval = parseInt(adapter.config.pingInterval, 10) || 20000;
 
+    /*var original = "213100500000000002f20d8f58c44dc1cafb3a8f833d5c9ff42ab1ea95a3cdd0f6e1b0838345a54692bc0361794e404ef59b65fd54ea3dd26b6f9c78131b86f5fe6fecb23ddfc484500bfeb2b525ebcc";
+    var tok = "6351394d507672415247364d6a6b4b6d";
+    var nachricht = '{"id":9080,"method":"get_consumable"}';    
+    packet.setToken(str2hex(tok));
+    packet.setRaw(str2hex(original));
+    adapter.log.error(original.toString('hex'));
+    adapter.log.error(packet.getRaw().toString('hex'));*/
 
-/*    packet.setToken(Buffer("34665248426447753954473346777549",'hex'));
-    var cxx="2131005000000000034c85dd58a48d020a8231f7212fea5ba29f37f1155decfb3071ecdf47a0c825393e6e111d9249d70943fe63c31e85c52bffd21f94d63de5eb963da40410183894c2cff7e4205ed7";    
-    packet.setRaw(Buffer(cxx,'hex'));
-    var xxx =packet.getPlainData();
-    packet.setPlainData(xxx);
-    var cx2 = packet.getRaw().toString('hex');  
-    adapter.log.info("Decode$$$: "+packet.getPlainData());
-    adapter.log.info(cxx);
-    adapter.log.info(cx2);
-*/
-
-    packet.setToken(Buffer(adapter.config.token,'hex'));
+    packet.setToken(str2hex(adapter.config.token));
     packet.msgCounter=6430;
     commands = {
         ping:   str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff'),
@@ -189,8 +185,8 @@ function main() {
                         packet.setPlainData('{"id":'+packet.msgCounter+','+message+'}');
                         packet.msgCounter++;
                         var cmdraw=packet.getRaw();
-                        adapter.log.info('Sende >>> {"id":'+packet.msgCounter+','+message+'}');
-                        adapter.log.info(">>> "+cmdraw.toString('hex'));
+                        adapter.log.info('Sende >>> {"id":'+packet.msgCounter+','+message+"} >>> "+cmdraw.toString('hex'));
+                        adapter.log.info(cmdraw.toString('hex'));
                         message="";
                         server.send(cmdraw, 0, cmdraw.length, adapter.config.port, adapter.config.ip, function (err) {
                             if (err) adapter.log.error('Cannot send command: ' + err);
@@ -204,8 +200,7 @@ function main() {
             } else {
 		//hier die Antwort zum decodieren
                 packet.setRaw(msg);
-                adapter.log.info('Empfangen <<< '+packet.getPlainData());
-                adapter.log.info("<<< "+msg.toString('hex'));
+                adapter.log.info('Empfangen <<< '+packet.getPlainData()+"<<< "+msg.toString('hex'));
                 //adapter.log.warn('server got: ' + msg.length + ' bytes from ' + rinfo.address + ':' + rinfo.port);
             }
         }
