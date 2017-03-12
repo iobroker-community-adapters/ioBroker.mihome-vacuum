@@ -40,18 +40,13 @@ function Packet() {
   }
   
   function getRaw() {
-      var raw;
       if (this.data.length>0) {
         this.len=Buffer(decimalToHex(this.data.length+32,4),'hex');
-        raw=Buffer.from(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.token.toString('hex')+this.data.toString('hex'),'hex');
-        this.checksum=_md5(raw);
-        //raw=Buffer.from(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.checksum.toString('hex')+this.data.toString('hex'),'hex');
-        raw=str2hex(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.checksum.toString('hex')+this.data.toString('hex'),'hex');
-      } else {
-        //raw=Buffer.from(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.checksum.toString('hex'),'hex'); 
-        raw=str2hex(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.checksum.toString('hex'),'hex'); 
+        //var zwraw=Buffer(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.token.toString('hex')+this.data.toString('hex'),'hex');
+        var zwraw=Buffer(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+"00000000000000000000000000000000"+this.data.toString('hex'),'hex');
+        this.checksum=_md5(zwraw);
       }
-      return(raw);
+      return(Buffer(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.checksum.toString('hex')+this.data.toString('hex'),'hex'));
   }
   
   function setRaw(raw) {
