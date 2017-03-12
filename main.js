@@ -137,7 +137,7 @@ function main() {
     adapter.config.port         = parseInt(adapter.config.port, 10)         || 54321;
     adapter.config.ownPort      = parseInt(adapter.config.ownPort, 10)      || 56363;
     adapter.config.pingInterval = parseInt(adapter.config.pingInterval, 10) || 20000;
-
+/*
     var helomsg =  "213100200000000002f20d8f58c44dc1ffffffffffffffffffffffffffffffff";
     var original = "213100500000000002f20d8f58c44dc1cafb3a8f833d5c9ff42ab1ea95a3cdd0f6e1b0838345a54692bc0361794e404ef59b65fd54ea3dd26b6f9c78131b86f5fe6fecb23ddfc484500bfeb2b525ebcc";
     var tok =      "6351394d507672415247364d6a6b4b6d";
@@ -147,7 +147,7 @@ function main() {
     adapter.log.error(original.toString('hex'));
     packet.setPlainData(nachricht);
     adapter.log.error(packet.getRaw().toString('hex'));
-
+*/
     packet.setToken(str2hex(adapter.config.token));
     packet.msgCounter=6430;
     commands = {
