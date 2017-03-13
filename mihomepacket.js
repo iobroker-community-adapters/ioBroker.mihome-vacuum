@@ -42,8 +42,8 @@ function Packet() {
   function getRaw() {
       if (this.data.length>0) {
         this.len=Buffer(decimalToHex(this.data.length+32,4),'hex');
-        //var zwraw=Buffer(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.token.toString('hex')+this.data.toString('hex'),'hex');
-        var zwraw=Buffer(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+"00000000000000000000000000000000"+this.data.toString('hex'),'hex');
+        var zwraw=Buffer(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.token.toString('hex')+this.data.toString('hex'),'hex');
+        //var zwraw=Buffer(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+"00000000000000000000000000000000"+this.data.toString('hex'),'hex');
         this.checksum=_md5(zwraw);
       }
       return(Buffer(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.checksum.toString('hex')+this.data.toString('hex'),'hex'));
@@ -58,10 +58,6 @@ function Packet() {
         this.stamp=Buffer(rawhex.substr(   24, 8),'hex');
         this.checksum=Buffer(rawhex.substr(32,32),'hex');
         this.data=Buffer(rawhex.substr(    64),'hex');
-
-        if (this.data.length===0) {
-          this.token=this.checksum;
-        }
   }
   
   function setPlainData(plainData) {
