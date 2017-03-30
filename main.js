@@ -17,6 +17,8 @@ var message = "";
 
 var packet = new miHome.Packet();
 
+server.bind(53723);
+
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
     if (!state || state.ack) return;
@@ -188,6 +190,8 @@ function main() {
                         adapter.log.warn('Cannot send command_: ' + err);
                         if (typeof callback === 'function') callback(err);
                     }
+                } else {
+                    server.close();
                 }
             } else {
 		//hier die Antwort zum decodieren
