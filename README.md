@@ -54,5 +54,8 @@ Die letzten 16 Byte der Antwort sind der gesuchte Token
 
 ## Changelog
 
+### 0.0.2 (2017-04-02)
+* (steinwedel) implement better decoding of packets
+
 ### 0.0.1 (2017-01-16)
 * (bluefox) initial commit
