@@ -1,9 +1,9 @@
 {
     "common": {
         "name":                     "mihome-vacuum",
-        "version": "0.2.0",
+        "version": "0.1.0",
         "news": {
-			"0.2.0": {
+			"0.1.0": {
                 "en": 				"Inital version",
                 "de": 				"Erste Version",
                 "ru": 				"Первая версия"
@@ -52,6 +52,22 @@
             "native": {}
         },
         {
+            "_id":  "info.consumable",
+            "type": "channel",
+            "common": {
+                "name": "Vaccuum consumable"
+            },
+            "native": {}
+        },
+        {
+            "_id":  "control",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
             "_id":  "info.connection",
             "type": "state",
             "common": {
@@ -65,7 +81,7 @@
             "native": {}
         },
         {
-            "_id":  "start",
+            "_id":  "control.start",
             "type": "state",
             "common": {
                 "role":  "button",
@@ -77,7 +93,7 @@
             "native": {}
         },
         {
-            "_id":  "pause",
+            "_id":  "control.pause",
             "type": "state",
             "common": {
                 "role":  "button",
@@ -89,7 +105,7 @@
             "native": {}
         },
         {
-            "_id":  "home",
+            "_id":  "control.home",
             "type": "state",
             "common": {
                 "role":  "button",
@@ -101,7 +117,7 @@
             "native": {}
         },
         {
-            "_id":  "find",
+            "_id":  "control.find",
             "type": "state",
             "common": {
                 "role":  "button",
@@ -113,31 +129,174 @@
             "native": {}
         },
         {
-            "_id":  "state",
-            "type": "state",
-            "common": {
-                "role":  "switch",
-                "name":  "Start/pause",
-                "type":  "boolean",
-                "read":  false,
-                "write": true
-            },
-            "native": {}
+          "_id":  "info.battery",
+          "type": "state",
+          "common": {
+              "name":  "Battery status",
+              "type":  "number",
+              "read":  true,
+              "write": false,
+              "unit":  "%",
+              "min":   0,
+              "max":   100
+          },
+          "native": {}
         },
         {
-            "_id":  "level",
-            "type": "state",
-            "common": {
-                "role":  "state",
-                "name":  "Power level 1-3",
-                "type":  "number",
-                "min":   1,
-                "max":   3,
-                "read":  false,
-                "write": true
-            },
-            "native": {}
-        }
+          "_id":  "info.cleanedarea",
+          "type": "state",
+          "common": {
+              "name":  "Cleaned area",
+              "type":  "number",
+              "read":  true,
+              "write": false,
+              "unit":  "m²",
+              "min":   0
+          },
+          "native": {}
+        },
+        {
+          "_id":  "info.cleanedtime",
+          "type": "state",
+          "common": {
+              "name":  "Cleaning time",
+              "type":  "number",
+              "read":  true,
+              "write": false,
+              "unit":  "min",
+              "min":   0
+          },
+          "native": {}
+        },
+        {
+          "_id":  "control.fan_power",
+          "type": "state",
+          "common": {
+              "name":  "Suction power",
+              "type":  "number",
+              "role":  "level",
+              "read":  true,
+              "write": true,
+              "unit":  "%",
+              "min":   0,
+              "max":    100
+          },
+          "native": {}
+        },
+        {
+        "_id":  "info.state",
+        "type": "state",
+        "common": {
+            "name":  "Vacuum state",
+            "type":  "number",
+            "read":  true,
+            "write": false,
+            "min":   0,
+            "max":   30,
+            "states":  {
+                       "1": "Unknown 1",
+                       "2": "Sleep no Charge",
+                       "3": "Sleep",
+                       "5": "Cleaning",
+                       "6": "Returning home",
+                       "8": "Charging",
+                       "10": "Paused",
+                       "11": "Spot cleaning",
+                       "12": "Error?!"
+                     }
+        },
+        "native": {}
+      },
+      {
+      "_id":  "info.error",
+      "type": "state",
+      "common": {
+          "name":  "Error",
+          "type":  "number",
+          "read":  true,
+          "write": false,
+          "min":   0,
+          "max":   30,
+          "states":  {
+                      "0": "No error",
+                      "1": "Laser distance sensor error",
+                      "2": "Collision sensor error",
+                      "3": "Wheels on top of void, move robot",
+                      "4": "Clean hovering sensors, move robot",
+                      "5": "Clean main brush",
+                      "6": "Clean side brush",
+                      "7": "Main wheel stuck?",
+                      "8": "Device stuck, clean area",
+                      "9": "Dust collector missing",
+                      "10": "Clean filter",
+                      "11": "Stuck in magnetic barrier",
+                      "12": "Low battery",
+                      "13": "Charging fault",
+                      "14": "Battery fault",
+                      "15": "Wall sensors dirty, wipe them",
+                      "16": "Place me on flat surface",
+                      "17": "Side brushes problem, reboot me",
+                      "18": "Suction fan problem",
+                      "19": "Unpowered charging station"
+                    }
+      },
+      "native": {}
+    },
+    {
+      "_id":  "info.dnd",
+      "type": "state",
+      "common": {
+          "name":  "DnD aktiv",
+          "type":  "switch",
+          "role":  "level",
+          "read":  true,
+          "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id":  "info.consumable.main_brush",
+      "type": "state",
+      "common": {
+          "name":  "Main brush",
+          "type":  "number",
+          "role":  "level",
+          "read":  true,
+          "write": false,
+          "unit":  "%",
+          "min":  0
+      },
+      "native": {}
+    },
+    {
+      "_id":  "info.consumable.side_brush",
+      "type": "state",
+      "common": {
+          "name":  "Main brush",
+          "type":  "number",
+          "role":  "level",
+          "read":  true,
+          "write": false,
+          "unit":  "%",
+          "min":  0
+      },
+      "native": {}
+    },
+    {
+      "_id":  "info.consumable.filter",
+      "type": "state",
+      "common": {
+          "name":  "Filter",
+          "type":  "number",
+          "role":  "level",
+          "read":  true,
+          "write": false,
+          "unit":  "%",
+          "min":  0
+      },
+      "native": {}
+    }
+
     ]
-    
+
 }

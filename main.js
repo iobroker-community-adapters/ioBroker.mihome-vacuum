@@ -7,17 +7,26 @@ var utils     = require(__dirname + '/lib/utils'); // Get common adapter utils
 var adapter   = new utils.Adapter('mihome-vacuum');
 var dgram     = require('dgram');
 var miHome    = require("./mihomepacket");
-
+//var devicetype= "vacuum";
+//var device    = require("./" + devicetype);
 var server    = dgram.createSocket('udp4');
+//var testobj = require("./mihome.json");
+
+//var teststate = testobj.device;
 
 var connected = false;
 var commands  = {};
 var pingInterval;
 var message = "";
+var vacbool = true;
+var counter = 8;
+var sendmessage ="";
+var lastID=0;
 
 var packet = new miHome.Packet();
 
-server.bind(53723);
+//var deviceParam = new device.deviceParameter();
+
 
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
@@ -29,34 +38,18 @@ adapter.on('stateChange', function (id, state) {
     // output to parser
     var command = id.split('.').pop();
 
-    if (command === 'level') {
-        state.val = parseInt(state.val, 10);
-        if (state.val < 1)  state.val = 1;
-        if (state.val > 3)  state.val = 3;
-        if (commands['level' + state.val]) {
-            sendCommand(commands['level' + state.val], function () {
-                adapter.setForeignState(adapter.namespace + '.level', state.val, true);
-            });
-        } else {
-            adapter.log.warn('Command level' + state.val + ' is not configured');
-        }
-    } else
-    if (command === 'state') {
-        if (state.val === 'true' || state.val === true || state.val === '1' || state.val === 1) {
-            sendCommand(commands['start'], function () {
-                adapter.setForeignState(adapter.namespace + '.state', true, true);
-            });
-        } else {
-            sendCommand(commands['pause'], function () {
-                adapter.setForeignState(adapter.namespace + '.state', false, true);
-            });
-        }
-    } else
-    if (commands[command]) {
+
+    if (command === 'fan_power') {
+      sendCommand(commands['level']+ state.val +']', function () {
+          adapter.setForeignState(adapter.namespace + '.' +command, state.val, true);
+      });
+    }
+
+    else if (commands[command]) {
         sendCommand(commands[command], function () {
-            if (command === 'home') {
-                adapter.setForeignState(adapter.namespace + '.state', false, true);
-            }
+            //if (command === 'home') {
+            //    adapter.setForeignState(adapter.namespace + '.state', false, true);
+            //}
             adapter.setForeignState(id, false, true);
         });
     } else {
@@ -66,6 +59,7 @@ adapter.on('stateChange', function (id, state) {
             adapter.log.error('Command "' + command + '" is not configured');
         }
     }
+
 });
 
 adapter.on('unload', function (callback) {
@@ -91,9 +85,23 @@ function sendPing() {
     }, 3000);
 
     try {
+        if(counter >= 10){
+          counter=0;
+          packet.msgCounter=1100;
+          message=commands['get_consumable'];
+        }
+        else{
+          packet.msgCounter=1000;
+          message=commands['get_status'];
+          counter++;
+        }
+
+
         server.send(commands.ping, 0, commands.ping.length, adapter.config.port, adapter.config.ip, function (err) {
             if (err) adapter.log.error('Cannot send ping: ' + err)
         });
+
+
     } catch (e) {
         adapter.log.warn('Cannot send ping: ' + e);
         clearTimeout(pingTimeout);
@@ -122,7 +130,7 @@ function sendCommand(cmd, callback) {
         message=cmd;
         packet.setHelo();
         var cmdraw=packet.getRaw()
-        adapter.log.info('Sende >>> Helo >>> ' + cmdraw.toString('hex'));
+        adapter.log.debug('Sende >>> Helo >>> ' + cmdraw.toString('hex'));
         server.send(cmdraw, 0, cmdraw.length, adapter.config.port, adapter.config.ip, function (err) {
             if (err) adapter.log.error('Cannot send command: ' + err);
             if (typeof callback === 'function') callback(err);
@@ -142,16 +150,16 @@ function main() {
     packet.setToken(str2hex(adapter.config.token));
     packet.msgCounter=6430;
     commands = {
-        ping:   str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff'),
-        //start:  '"method":"set_power","params":["on"]',
-        //pause:  '"method":"set_power","params":["off"]',
-        start:  '"method":"app_start"',
-        pause:  '"method":"app_pause"',
-        home:   '"method":"app_charge"',
-        find:   '"method":"find_me","params":[""]',
-        level1: '"method":"set_custom_mode","params":[38]',
-        level2: '"method":"set_custom_mode","params":[60]',
-        level3: '"method":"set_custom_mode","params":[77]'
+        ping:       str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff'),
+        start:         '"method":"app_start"',
+        pause:         '"method":"app_pause"',
+        home:          '"method":"app_charge"',
+        find:          '"method":"find_me","params":[""]',
+        get_status:    '"method":"get_status"',
+        get_consumable:'"method":"get_consumable"',
+        level:         '"method":"set_custom_mode","params":['
+
+
     };
 
     server.on('error', function (err) {
@@ -163,7 +171,7 @@ function main() {
     server.on('message', function (msg, rinfo) {
         if (rinfo.port === adapter.config.port) {
             if (msg.length === 32) {
-		adapter.log.info('Empfangen <<< Helo <<< ' + msg.toString('hex'));
+		            adapter.log.debug('Empfangen <<< Helo <<< ' + msg.toString('hex'));
                 packet.setRaw(msg);
                 clearTimeout(pingTimeout);
                 pingTimeout = null;
@@ -176,28 +184,29 @@ function main() {
                 if (message.length>0) {
                     try {
                         packet.setPlainData('{"id":'+packet.msgCounter+','+message+'}');
-                        adapter.log.info('{"id":'+packet.msgCounter+','+message+'}');
-                        packet.msgCounter++;
+                        adapter.log.debug('{"id":'+packet.msgCounter+','+message+'}');
+
                         var cmdraw=packet.getRaw();
-                        adapter.log.info('Sende >>> {"id":'+packet.msgCounter+','+message+"} >>> "+cmdraw.toString('hex'));
-                        adapter.log.info(cmdraw.toString('hex'));
+                        adapter.log.debug('Sende >>> {"id":'+packet.msgCounter+','+message+"} >>> "+cmdraw.toString('hex'));
+                        adapter.log.debug(cmdraw.toString('hex'));
                         message="";
                         server.send(cmdraw, 0, cmdraw.length, adapter.config.port, adapter.config.ip, function (err) {
                             if (err) adapter.log.error('Cannot send command: ' + err);
                             if (typeof callback === 'function') callback(err);
                         });
+                        packet.msgCounter++;
                     } catch (err) {
                         adapter.log.warn('Cannot send command_: ' + err);
                         if (typeof callback === 'function') callback(err);
                     }
-                } else {
-                    server.close();
                 }
             } else {
 		//hier die Antwort zum decodieren
                 packet.setRaw(msg);
-                adapter.log.info('Empfangen <<< '+packet.getPlainData()+"<<< "+msg.toString('hex'));
+                adapter.log.debug('Empfangen <<< '+packet.getPlainData()+"<<< "+msg.toString('hex'));
                 //adapter.log.warn('server got: ' + msg.length + ' bytes from ' + rinfo.address + ':' + rinfo.port);
+                getStates(packet.getPlainData());
+
             }
         }
     });
@@ -210,4 +219,29 @@ function main() {
     sendPing();
     pingInterval = setInterval(sendPing, adapter.config.pingInterval);
     adapter.subscribeStates('*');
+}
+
+function getStates(message){
+  //Search id in answer
+  var answer = JSON.parse(message);
+  //var ans= answer.result;
+  //adapter.log.info(answer.result[0].state);
+  //adapter.log.info(answer['id']);
+  if(answer.id == 1000){
+    adapter.setState('info.battery', answer.result[0].battery , true);
+    adapter.setState('info.cleanedtime', Math.round(answer.result[0].clean_time/60) , true);
+    adapter.setState('info.cleanedarea', Math.round(answer.result[0].clean_area/10000)/100 , true);
+    adapter.setState('control.fan_power', Math.round(answer.result[0].fan_power) , true);
+    adapter.setState('info.state', answer.result[0].state , true);
+    adapter.setState('info.error', answer.result[0].error_code , true);
+    adapter.setState('info.dnd', answer.result[0].dnd_enabled , true)
+  }
+  else if (answer.id == 1100) {
+    adapter.setState('info.consumable.main_brush', Math.round(answer.result[0].main_brush_work_time/3600/0.82) , true);
+    adapter.setState('info.consumable.side_brush', Math.round(answer.result[0].side_brush_work_time/3600/0.94) , true);
+    adapter.setState('info.consumable.filter', Math.round(answer.result[0].filter_work_time/3600/1.12) , true);
+  }
+
+  //return objresp;
+
 }
