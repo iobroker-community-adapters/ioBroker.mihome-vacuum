@@ -7,26 +7,16 @@ var utils     = require(__dirname + '/lib/utils'); // Get common adapter utils
 var adapter   = new utils.Adapter('mihome-vacuum');
 var dgram     = require('dgram');
 var miHome    = require("./mihomepacket");
-//var devicetype= "vacuum";
-//var device    = require("./" + devicetype);
-var server    = dgram.createSocket('udp4');
-//var testobj = require("./mihome.json");
 
-//var teststate = testobj.device;
+var server    = dgram.createSocket('udp4');
 
 var connected = false;
 var commands  = {};
 var pingInterval;
 var message = "";
-var vacbool = true;
-var counter = 8;
-var sendmessage ="";
-var lastID=0;
+var counter = 9;
 
 var packet = new miHome.Packet();
-
-//var deviceParam = new device.deviceParameter();
-
 
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
@@ -38,18 +28,20 @@ adapter.on('stateChange', function (id, state) {
     // output to parser
     var command = id.split('.').pop();
 
-
-    if (command === 'fan_power') {
-      sendCommand(commands['level']+ state.val +']', function () {
-          adapter.setForeignState(adapter.namespace + '.' +command, state.val, true);
-      });
-    }
-
-    else if (commands[command]) {
+    if (command === 'level') {
+        state.val = parseInt(state.val, 10);
+        if (state.val < 1)  state.val = 1;
+        if (state.val > 3)  state.val = 3;
+        if (command === 'fan_power') {
+          sendCommand(commands['level']+ state.val +']', function () {
+              adapter.setForeignState(adapter.namespace + '.' +command, state.val, true);
+          });
+        } else {
+            adapter.log.warn('Command fan_power' + state.val + ' is not configured');
+        }
+    } else
+    if (commands[command]) {
         sendCommand(commands[command], function () {
-            //if (command === 'home') {
-            //    adapter.setForeignState(adapter.namespace + '.state', false, true);
-            //}
             adapter.setForeignState(id, false, true);
         });
     } else {
@@ -59,7 +51,6 @@ adapter.on('stateChange', function (id, state) {
             adapter.log.error('Command "' + command + '" is not configured');
         }
     }
-
 });
 
 adapter.on('unload', function (callback) {
@@ -95,13 +86,9 @@ function sendPing() {
           message=commands['get_status'];
           counter++;
         }
-
-
         server.send(commands.ping, 0, commands.ping.length, adapter.config.port, adapter.config.ip, function (err) {
             if (err) adapter.log.error('Cannot send ping: ' + err)
         });
-
-
     } catch (e) {
         adapter.log.warn('Cannot send ping: ' + e);
         clearTimeout(pingTimeout);
@@ -130,7 +117,7 @@ function sendCommand(cmd, callback) {
         message=cmd;
         packet.setHelo();
         var cmdraw=packet.getRaw()
-        adapter.log.debug('Sende >>> Helo >>> ' + cmdraw.toString('hex'));
+        adapter.log.info('Sende >>> Helo >>> ' + cmdraw.toString('hex'));
         server.send(cmdraw, 0, cmdraw.length, adapter.config.port, adapter.config.ip, function (err) {
             if (err) adapter.log.error('Cannot send command: ' + err);
             if (typeof callback === 'function') callback(err);
@@ -140,87 +127,6 @@ function sendCommand(cmd, callback) {
         if (typeof callback === 'function') callback(err);
     }
 }
-
-function main() {
-    adapter.setState('info.connection', false, true);
-    adapter.config.port         = parseInt(adapter.config.port, 10)         || 54321;
-    adapter.config.ownPort      = parseInt(adapter.config.ownPort, 10)      || 56363;
-    adapter.config.pingInterval = parseInt(adapter.config.pingInterval, 10) || 20000;
-
-    packet.setToken(str2hex(adapter.config.token));
-    packet.msgCounter=6430;
-    commands = {
-        ping:       str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff'),
-        start:         '"method":"app_start"',
-        pause:         '"method":"app_pause"',
-        home:          '"method":"app_charge"',
-        find:          '"method":"find_me","params":[""]',
-        get_status:    '"method":"get_status"',
-        get_consumable:'"method":"get_consumable"',
-        level:         '"method":"set_custom_mode","params":['
-
-
-    };
-
-    server.on('error', function (err) {
-        adapter.log.error('UDP error: ' + err);
-        server.close();
-        process.exit();
-    });
-
-    server.on('message', function (msg, rinfo) {
-        if (rinfo.port === adapter.config.port) {
-            if (msg.length === 32) {
-		            adapter.log.debug('Empfangen <<< Helo <<< ' + msg.toString('hex'));
-                packet.setRaw(msg);
-                clearTimeout(pingTimeout);
-                pingTimeout = null;
-                if (!connected) {
-                    connected = true;
-                    adapter.log.info('Connected');
-                    adapter.setState('info.connection', true, true);
-                }
-
-                if (message.length>0) {
-                    try {
-                        packet.setPlainData('{"id":'+packet.msgCounter+','+message+'}');
-                        adapter.log.debug('{"id":'+packet.msgCounter+','+message+'}');
-
-                        var cmdraw=packet.getRaw();
-                        adapter.log.debug('Sende >>> {"id":'+packet.msgCounter+','+message+"} >>> "+cmdraw.toString('hex'));
-                        adapter.log.debug(cmdraw.toString('hex'));
-                        message="";
-                        server.send(cmdraw, 0, cmdraw.length, adapter.config.port, adapter.config.ip, function (err) {
-                            if (err) adapter.log.error('Cannot send command: ' + err);
-                            if (typeof callback === 'function') callback(err);
-                        });
-                        packet.msgCounter++;
-                    } catch (err) {
-                        adapter.log.warn('Cannot send command_: ' + err);
-                        if (typeof callback === 'function') callback(err);
-                    }
-                }
-            } else {
-		//hier die Antwort zum decodieren
-                packet.setRaw(msg);
-                adapter.log.debug('Empfangen <<< '+packet.getPlainData()+"<<< "+msg.toString('hex'));
-                //adapter.log.warn('server got: ' + msg.length + ' bytes from ' + rinfo.address + ':' + rinfo.port);
-                getStates(packet.getPlainData());
-
-            }
-        }
-    });
-
-    server.on('listening', function () {
-        var address = server.address();
-        adapter.log.debug('server started on ' + address.address + ':' + address.port);
-    });
-
-    sendPing();
-    pingInterval = setInterval(sendPing, adapter.config.pingInterval);
-    adapter.subscribeStates('*');
-}
-
 function getStates(message){
   //Search id in answer
   var answer = JSON.parse(message);
@@ -244,4 +150,81 @@ function getStates(message){
 
   //return objresp;
 
+}
+function main() {
+    adapter.setState('info.connection', false, true);
+    adapter.config.port         = parseInt(adapter.config.port, 10)         || 54321;
+    adapter.config.ownPort      = parseInt(adapter.config.ownPort, 10)      || 56363;
+    adapter.config.pingInterval = parseInt(adapter.config.pingInterval, 10) || 20000;
+
+    packet.setToken(str2hex(adapter.config.token));
+    packet.msgCounter=6430;
+    commands = {
+        ping:       str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff'),
+        start:         '"method":"app_start"',
+        pause:         '"method":"app_pause"',
+        home:          '"method":"app_charge"',
+        find:          '"method":"find_me","params":[""]',
+        get_status:    '"method":"get_status"',
+        get_consumable:'"method":"get_consumable"',
+        level:         '"method":"set_custom_mode","params":['
+    };
+
+    server.on('error', function (err) {
+        adapter.log.error('UDP error: ' + err);
+        server.close();
+        process.exit();
+    });
+
+    server.on('message', function (msg, rinfo) {
+        if (rinfo.port === adapter.config.port) {
+            if (msg.length === 32) {
+		adapter.log.debug('Empfangen <<< Helo <<< ' + msg.toString('hex'));
+                packet.setRaw(msg);
+                clearTimeout(pingTimeout);
+                pingTimeout = null;
+                if (!connected) {
+                    connected = true;
+                    adapter.log.info('Connected');
+                    adapter.setState('info.connection', true, true);
+                }
+
+                if (message.length>0) {
+                    try {
+                        packet.setPlainData('{"id":'+packet.msgCounter+','+message+'}');
+                        adapter.log.debug('{"id":'+packet.msgCounter+','+message+'}');
+                        packet.msgCounter++;
+                        var cmdraw=packet.getRaw();
+                        adapter.log.debug('Sende >>> {"id":'+packet.msgCounter+','+message+"} >>> "+cmdraw.toString('hex'));
+                        adapter.log.debug(cmdraw.toString('hex'));
+                        message="";
+                        server.send(cmdraw, 0, cmdraw.length, adapter.config.port, adapter.config.ip, function (err) {
+                            if (err) adapter.log.error('Cannot send command: ' + err);
+                            if (typeof callback === 'function') callback(err);
+                        });
+                    } catch (err) {
+                        adapter.log.warn('Cannot send command_: ' + err);
+                        if (typeof callback === 'function') callback(err);
+                    }
+                }
+            } else {
+		//hier die Antwort zum decodieren
+                packet.setRaw(msg);
+                adapter.log.debug('Empfangen <<< '+packet.getPlainData()+"<<< "+msg.toString('hex'));
+                //adapter.log.warn('server got: ' + msg.length + ' bytes from ' + rinfo.address + ':' + rinfo.port);
+                getStates(packet.getPlainData());
+            }
+        }
+    });
+
+    server.on('listening', function () {
+        var address = server.address();
+        adapter.log.debug('server started on ' + address.address + ':' + address.port);
+    });
+
+    server.bind(53421);
+
+    sendPing();
+    pingInterval = setInterval(sendPing, adapter.config.pingInterval);
+    adapter.subscribeStates('*');
 }
