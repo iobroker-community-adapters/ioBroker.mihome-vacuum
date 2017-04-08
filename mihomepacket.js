@@ -38,7 +38,7 @@ function Packet() {
     this.checksum =  Buffer("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",'hex');
     this.data =      Buffer(0);
   }
-  
+
   function getRaw() {
       if (this.data.length>0) {
         this.len=Buffer(decimalToHex(this.data.length+32,4),'hex');
@@ -48,7 +48,7 @@ function Packet() {
       }
       return(Buffer(this.magic.toString('hex')+this.len.toString('hex')+this.unknown.toString('hex')+this.serial.toString('hex')+this.stamp.toString('hex')+this.checksum.toString('hex')+this.data.toString('hex'),'hex'));
   }
-  
+
   function setRaw(raw) {
         var rawhex = raw.toString('hex');
         this.magic=Buffer(rawhex.substr(   0, 4),'hex');
@@ -59,7 +59,7 @@ function Packet() {
         this.checksum=Buffer(rawhex.substr(32,32),'hex');
         this.data=Buffer(rawhex.substr(    64),'hex');
   }
-  
+
   function setPlainData(plainData) {
     var cipher = crypto.createCipheriv('aes-128-cbc', this.key, this.iv);
     var crypted = cipher.update(plainData,'utf8','binary');
@@ -67,18 +67,19 @@ function Packet() {
     crypted = new Buffer(crypted, 'binary');
     this.data = crypted;
   }
-  
+
   function getPlainData() {
     var decipher = crypto.createDecipheriv('aes-128-cbc', this.key, this.iv);
     var dec = decipher.update(this.data,'binary','utf8');
     dec += decipher.final('utf8');
+    dec = dec.substring(0,dec.length -1);
     return dec;
   }
-  
+
   function _md5(data) {
     return new Buffer(crypto.createHash('md5').update(data).digest("hex"),"hex");
   }
-  
+
   function setToken(token) {
     this.token = token;
     this.key = _md5(this.token);
@@ -102,4 +103,3 @@ function str2hex(str) {
 
 exports.Packet = Packet;
 exports.decimalToHex = decimalToHex;
-
