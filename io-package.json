@@ -3,6 +3,11 @@
 		"name": "mihome-vacuum",
 		"version": "0.2.1",
 		"news": {
+			"0.2.1": {
+				"en": "add more states",
+				"de": "Lese mehr information",
+				"ru": "Считывается больше информации"
+			},
 			"0.2.0": {
 				"en": "Inital version",
 				"de": "Erste Version",
@@ -31,12 +36,12 @@
 		"type": "hardware",
 		"config": {
 			"minWidth": 800,
-			"width ": 1224
+			"width ": 	1224
 		}
 	},
 	"native": {
-		"port": 54321,
-		"ownPort": 56363,
+		"port": 		54321,
+		"ownPort": 		53421,
 		"pingInterval": 20000
 	},
   "instanceObjects": [

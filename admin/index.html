@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
 <script type="text/javascript" src="../../js/translate.js"></script>
 <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+<script type="text/javascript" src="words.js"></script>
 
 <style>
     .number {
@@ -27,14 +28,6 @@
 </style>
 
 <script type="text/javascript">
-    systemDictionary = {
-        "MiHome-vacuum adapter settings": {
-            "de": "MiHome-vacuum Adapter Einstellungen",
-            "ru": "Настройки драйвера MiHome пылесоса"
-        },
-        "IP Address:":          {"en": "IP Address",         "de": "Parser Adaptereinstellungen", "ru": "Настройки драйвера Parser"}
-    };
-
     var values = [];
 
     // the function loadSettings has to exist ...
@@ -200,8 +193,12 @@
             <td><input class="value" id="port" size="5" type="number" style="width: 60px;"/></td>
         </tr>
         <tr>
+            <td><label for="port" class="translate">Own port: </label></td>
+            <td><input class="value" id="ownPort" size="5" type="number" style="width: 60px;"/></td>
+        </tr>
+        <tr>
             <td><label for="token" class="translate">Token: </label></td>
-            <td><input class="value" id="token" size="32" type="string" style="width: 60px;"/></td>
+            <td><input class="value" id="token" size="32" maxlength="32"/></td>
         </tr>
     </table>
 </div>

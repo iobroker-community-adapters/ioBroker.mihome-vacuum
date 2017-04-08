@@ -1,4 +1,5 @@
-/* jshint -W097 */// jshint strict:false
+/* jshint -W097 */
+/* jshint strict:false */
 /*jslint node: true */
 'use strict';
 
@@ -6,17 +7,16 @@
 var utils     = require(__dirname + '/lib/utils'); // Get common adapter utils
 var adapter   = new utils.Adapter('mihome-vacuum');
 var dgram     = require('dgram');
-var miHome    = require("./mihomepacket");
+var MiHome    = require(__dirname + '/lib/mihomepacket');
 
 var server    = dgram.createSocket('udp4');
 
 var connected = false;
 var commands  = {};
 var pingInterval;
-var message = "";
-var counter = 9;
-
-var packet = new miHome.Packet();
+var message   = '';
+var counter   = 9;
+var packet;
 
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
@@ -33,8 +33,8 @@ adapter.on('stateChange', function (id, state) {
         if (state.val < 1)  state.val = 1;
         if (state.val > 3)  state.val = 3;
         if (command === 'fan_power') {
-          sendCommand(commands['level']+ state.val +']', function () {
-              adapter.setForeignState(adapter.namespace + '.' +command, state.val, true);
+          sendCommand(commands['level'] + state.val + ']', function () {
+              adapter.setForeignState(adapter.namespace + '.' + command, state.val, true);
           });
         } else {
             adapter.log.warn('Command fan_power' + state.val + ' is not configured');
@@ -77,13 +77,13 @@ function sendPing() {
 
     try {
         if(counter >= 10){
-          counter=0;
-          packet.msgCounter=1100;
-          message=commands['get_consumable'];
+          counter = 0;
+          packet.msgCounter = 1100;
+          message = commands.get_consumable;
         }
         else{
-          packet.msgCounter=1000;
-          message=commands['get_status'];
+          packet.msgCounter = 1000;
+          message = commands.get_status;
           counter++;
         }
         server.send(commands.ping, 0, commands.ping.length, adapter.config.port, adapter.config.ip, function (err) {
@@ -107,16 +107,16 @@ function str2hex(str) {
     var buf = new Buffer(str.length / 2);
 
     for (var i = 0; i < str.length / 2; i++) {
-        buf[i] = parseInt(str[i * 2] + str[i* 2 + 1], 16);
+        buf[i] = parseInt(str[i * 2] + str[i * 2 + 1], 16);
     }
     return buf;
 }
 
 function sendCommand(cmd, callback) {
     try {
-        message=cmd;
+        message = cmd;
         packet.setHelo();
-        var cmdraw=packet.getRaw()
+        var cmdraw = packet.getRaw();
         adapter.log.info('Sende >>> Helo >>> ' + cmdraw.toString('hex'));
         server.send(cmdraw, 0, cmdraw.length, adapter.config.port, adapter.config.ip, function (err) {
             if (err) adapter.log.error('Cannot send command: ' + err);
@@ -128,12 +128,14 @@ function sendCommand(cmd, callback) {
     }
 }
 function getStates(message){
-  //Search id in answer
-  var answer = JSON.parse(message);
-  //var ans= answer.result;
-  //adapter.log.info(answer.result[0].state);
-  //adapter.log.info(answer['id']);
-  if(answer.id == 1000){
+    //Search id in answer
+    var answer = JSON.parse(message);
+    answer.id = parseInt(answer.id, 10);
+    //var ans= answer.result;
+    //adapter.log.info(answer.result[0].state);
+    //adapter.log.info(answer['id']);
+
+    if (answer.id === 1000) {
     adapter.setState('info.battery', answer.result[0].battery , true);
     adapter.setState('info.cleanedtime', Math.round(answer.result[0].clean_time/60) , true);
     adapter.setState('info.cleanedarea', Math.round(answer.result[0].clean_area/10000)/100 , true);
@@ -141,33 +143,39 @@ function getStates(message){
     adapter.setState('info.state', answer.result[0].state , true);
     adapter.setState('info.error', answer.result[0].error_code , true);
     adapter.setState('info.dnd', answer.result[0].dnd_enabled , true)
-  }
-  else if (answer.id == 1100) {
+    } else if (answer.id === 1100) {
     adapter.setState('info.consumable.main_brush', Math.round(answer.result[0].main_brush_work_time/3600/0.82) , true);
     adapter.setState('info.consumable.side_brush', Math.round(answer.result[0].side_brush_work_time/3600/0.94) , true);
     adapter.setState('info.consumable.filter', Math.round(answer.result[0].filter_work_time/3600/1.12) , true);
-  }
+    }
 
-  //return objresp;
+    //return objresp;
 
 }
 function main() {
     adapter.setState('info.connection', false, true);
     adapter.config.port         = parseInt(adapter.config.port, 10)         || 54321;
-    adapter.config.ownPort      = parseInt(adapter.config.ownPort, 10)      || 56363;
+    adapter.config.ownPort      = parseInt(adapter.config.ownPort, 10)      || 53421;
     adapter.config.pingInterval = parseInt(adapter.config.pingInterval, 10) || 20000;
 
-    packet.setToken(str2hex(adapter.config.token));
-    packet.msgCounter=6430;
+    if (!adapter.config.token) {
+        adapter.log.error('Token not specified!');
+        return;
+    }
+
+    var packet = new MiHome.Packet(str2hex(adapter.config.token));
+
+    packet.msgCounter = 6430;
+
     commands = {
-        ping:       str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff'),
-        start:         '"method":"app_start"',
-        pause:         '"method":"app_pause"',
-        home:          '"method":"app_charge"',
-        find:          '"method":"find_me","params":[""]',
-        get_status:    '"method":"get_status"',
-        get_consumable:'"method":"get_consumable"',
-        level:         '"method":"set_custom_mode","params":['
+        ping:           str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff'),
+        start:          '"method":"app_start"',
+        pause:          '"method":"app_pause"',
+        home:           '"method":"app_charge"',
+        find:           '"method":"find_me","params":[""]',
+        get_status:     '"method":"get_status"',
+        get_consumable: '"method":"get_consumable"',
+        level:          '"method":"set_custom_mode","params":['
     };
 
     server.on('error', function (err) {
@@ -179,7 +187,7 @@ function main() {
     server.on('message', function (msg, rinfo) {
         if (rinfo.port === adapter.config.port) {
             if (msg.length === 32) {
-		adapter.log.debug('Empfangen <<< Helo <<< ' + msg.toString('hex'));
+		        adapter.log.debug('Empfangen <<< Helo <<< ' + msg.toString('hex'));
                 packet.setRaw(msg);
                 clearTimeout(pingTimeout);
                 pingTimeout = null;
@@ -189,13 +197,13 @@ function main() {
                     adapter.setState('info.connection', true, true);
                 }
 
-                if (message.length>0) {
+                if (message.length > 0) {
                     try {
-                        packet.setPlainData('{"id":'+packet.msgCounter+','+message+'}');
-                        adapter.log.debug('{"id":'+packet.msgCounter+','+message+'}');
+                        packet.setPlainData('{"id":' + packet.msgCounter + ',' + message + '}');
+                        adapter.log.debug('{"id":' + packet.msgCounter  +',' + message + '}');
                         packet.msgCounter++;
-                        var cmdraw=packet.getRaw();
-                        adapter.log.debug('Sende >>> {"id":'+packet.msgCounter+','+message+"} >>> "+cmdraw.toString('hex'));
+                        var cmdraw = packet.getRaw();
+                        adapter.log.debug('Sende >>> {"id":' + packet.msgCounter+',' + message + "} >>> " + cmdraw.toString('hex'));
                         adapter.log.debug(cmdraw.toString('hex'));
                         message="";
                         server.send(cmdraw, 0, cmdraw.length, adapter.config.port, adapter.config.ip, function (err) {
@@ -208,9 +216,9 @@ function main() {
                     }
                 }
             } else {
-		//hier die Antwort zum decodieren
+		        //hier die Antwort zum decodieren
                 packet.setRaw(msg);
-                adapter.log.debug('Empfangen <<< '+packet.getPlainData()+"<<< "+msg.toString('hex'));
+                adapter.log.debug('Empfangen <<< ' + packet.getPlainData() + "<<< " + msg.toString('hex'));
                 //adapter.log.warn('server got: ' + msg.length + ' bytes from ' + rinfo.address + ':' + rinfo.port);
                 getStates(packet.getPlainData());
             }
@@ -222,7 +230,7 @@ function main() {
         adapter.log.debug('server started on ' + address.address + ':' + address.port);
     });
 
-    server.bind(53421);
+    server.bind(adapter.config.ownPort);
 
     sendPing();
     pingInterval = setInterval(sendPing, adapter.config.pingInterval);

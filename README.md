@@ -9,11 +9,6 @@ ioBroker mihome-vacuum adapter
 
 This adapter allows you control the Xiaomi vacuum cleaner.
 
-### Description
-See here https://github.com/jghaanstra/com.robot.xiaomi-mi
-
-The control commands are 80 bytes long.
-
 ### Install
 
 ```
@@ -26,33 +21,42 @@ iobroker add mihome-vacuum
 Derzeit stellt das Ermitteln des Tokens das größte Problem.
 Token Vorgehen:
 
-#### 1. Roboter resetten
+### 1. Roboter resetten
 Um den Token des Roboters zu bekommen, muss man ihn erstmal aus dem Wlan abmelden.
 Dies geht entweder über die app unter den Einstellungen des Gerätes 
 (genauer kann ich es nicht beschreiben weil ich kein Chinesisch kann). 
 Da steht Remove Device, über diesen Punkt kann man das Gerät Entfernen
 Alternativ kann man auch den Resetknopf am Gerät drücken.
-#### 2. Mit WLAN von Roboter verbinden
+
+### 2. Mit WLAN von Roboter verbinden
 Nun verbindet man sich mit seinem Windows (oder anderem Betriebssystem) Rechner mit dem Wlan des Roboters. Der Rechner muss also WLAN haben
 Die Kennung des Wlan lautet: rockrobo...
-#### 3. Packet Sender
+
+### 3. Packet Sender
 Das Programm "Packet Sender" muss installiert sein und gestartet werden
+
 - Bei müssen folgende Werte eingegeben werden
-- HEX: 21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-(=HALO Nachricht) 
+- HEX: 21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff (=HALO Nachricht) 
 - IP Vacuum 192.168.8.1
 - Port 54321
 - Nachrichtentyp UDP
-#### 5. Packet senden.
-Fenster unten: a) gesetzte Nachricht
+
+### 5. Packet senden.
+Fenster unten: 
+
+a) gesetzte Nachricht
 b) darüber die Antwort von dem Roboter
-#### 6. Antwort auswerten
+
+### 6. Antwort auswerten
 Die letzten 16 Byte der Antwort sind der gesuchte Token
 
 ## Widget
 ![Widget](widgets/img/previewControl.png)
 
 ## Changelog
+
+### 0.2.1 (2017-04-08)
+* (MeisterTR ) add more states
 
 ### 0.0.2 (2017-04-02)
 * (steinwedel) implement better decoding of packets
