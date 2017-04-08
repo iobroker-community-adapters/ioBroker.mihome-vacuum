@@ -1,9 +1,9 @@
 {
 	"common": {
 		"name": "mihome-vacuum",
-		"version": "0.2.1",
+		"version": "0.3.0",
 		"news": {
-			"0.2.1": {
+			"0.3.0": {
 				"en": "add more states",
 				"de": "Lese mehr information",
 				"ru": "Считывается больше информации"

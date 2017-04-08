@@ -76,12 +76,11 @@ function sendPing() {
     }, 3000);
 
     try {
-        if(counter >= 10){
+        if (counter >= 10){
           counter = 0;
           packet.msgCounter = 1100;
           message = commands.get_consumable;
-        }
-        else{
+        } else{
           packet.msgCounter = 1000;
           message = commands.get_status;
           counter++;
@@ -163,7 +162,7 @@ function main() {
         return;
     }
 
-    var packet = new MiHome.Packet(str2hex(adapter.config.token));
+    packet = new MiHome.Packet(str2hex(adapter.config.token));
 
     packet.msgCounter = 6430;
 
