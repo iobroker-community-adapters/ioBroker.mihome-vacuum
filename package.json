@@ -1,7 +1,7 @@
 {
   "name": "iobroker.mihome-vacuum",
   "version": "0.3.0",
-  "description": "Proxy for WEB server.",
+  "description": "Control your mihome vacuum cleaner with ioBroker",
   "author": {
     "name": "bluefox",
     "email": "dogafox@gmail.com"
