@@ -28,17 +28,10 @@ adapter.on('stateChange', function (id, state) {
     // output to parser
     var command = id.split('.').pop();
 
-    if (command === 'level') {
-        state.val = parseInt(state.val, 10);
-        if (state.val < 1)  state.val = 1;
-        if (state.val > 3)  state.val = 3;
-        if (command === 'fan_power') {
+     if (command === 'fan_power') {
           sendCommand(commands['level'] + state.val + ']', function () {
               adapter.setForeignState(adapter.namespace + '.' + command, state.val, true);
           });
-        } else {
-            adapter.log.warn('Command fan_power' + state.val + ' is not configured');
-        }
     } else
     if (commands[command]) {
         sendCommand(commands[command], function () {
