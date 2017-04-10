@@ -1,6 +1,6 @@
 {
   "name": "iobroker.mihome-vacuum",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Control your mihome vacuum cleaner with ioBroker",
   "author": {
     "name": "bluefox",

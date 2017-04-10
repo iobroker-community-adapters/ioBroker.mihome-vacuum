@@ -55,8 +55,12 @@ Die letzten 16 Byte der Antwort sind der gesuchte Token
 
 ## Changelog
 
+### 0.3.1 (2017-04-10)
+* (MeisterTR) fix setting the fan power
+* (bluefox) catch error if port is occupied
+
 ### 0.3.0 (2017-04-08)
-* (MeisterTR ) add more states
+* (MeisterTR) add more states
 
 ### 0.0.2 (2017-04-02)
 * (steinwedel) implement better decoding of packets
