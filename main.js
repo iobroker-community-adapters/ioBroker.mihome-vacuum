@@ -136,9 +136,9 @@ function getStates(message){
         adapter.setState('info.error', answer.result[0].error_code , true);
         adapter.setState('info.dnd', answer.result[0].dnd_enabled , true)
     } else if (answer.id === 1100) {
-        adapter.setState('info.consumable.main_brush', Math.round(answer.result[0].main_brush_work_time/3600/0.82) , true);
-        adapter.setState('info.consumable.side_brush', Math.round(answer.result[0].side_brush_work_time/3600/0.94) , true);
-        adapter.setState('info.consumable.filter', Math.round(answer.result[0].filter_work_time/3600/1.12) , true);
+        adapter.setState('info.consumable.main_brush', 100 - (Math.round(answer.result[0].main_brush_work_time/3600/3)) , true);
+        adapter.setState('info.consumable.side_brush', 100- (Math.round(answer.result[0].side_brush_work_time/3600/2)) , true);
+        adapter.setState('info.consumable.filter', 100 - (Math.round(answer.result[0].filter_work_time/3600/1.5)) , true);
     }
 
     //return objresp;
