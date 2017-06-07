@@ -23,8 +23,8 @@ Token Vorgehen:
 
 ### 1. Roboter resetten
 Um den Token des Roboters zu bekommen, muss man ihn erstmal aus dem Wlan abmelden.
-Dies geht entweder über die app unter den Einstellungen des Gerätes 
-(genauer kann ich es nicht beschreiben weil ich kein Chinesisch kann). 
+Dies geht entweder über die app unter den Einstellungen des Gerätes
+(genauer kann ich es nicht beschreiben weil ich kein Chinesisch kann).
 Da steht Remove Device, über diesen Punkt kann man das Gerät Entfernen
 Alternativ kann man auch den Resetknopf am Gerät drücken.
 
@@ -36,13 +36,13 @@ Die Kennung des Wlan lautet: rockrobo...
 Das Programm "Packet Sender" muss installiert sein und gestartet werden
 
 - Bei müssen folgende Werte eingegeben werden
-- HEX: 21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff (=HALO Nachricht) 
+- HEX: 21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff (=HALO Nachricht)
 - IP Vacuum 192.168.8.1
 - Port 54321
 - Nachrichtentyp UDP
 
 ### 5. Packet senden.
-Fenster unten: 
+Fenster unten:
 
 a) gesetzte Nachricht
 b) darüber die Antwort von dem Roboter
@@ -54,6 +54,8 @@ Die letzten 16 Byte der Antwort sind der gesuchte Token
 ![Widget](widgets/img/previewControl.png)
 
 ## Changelog
+### 0.3.2 (2017-06-07)
+* (MeisterTR) fix no communication after softwareupdate(Vers. 3.3.9)
 
 ### 0.3.1 (2017-04-10)
 * (MeisterTR) fix setting the fan power

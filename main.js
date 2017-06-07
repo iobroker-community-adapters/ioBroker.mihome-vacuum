@@ -17,6 +17,11 @@ var pingInterval;
 var message   = '';
 var counter   = 9;
 var packet;
+var last_ids ={
+  get_consumable: 0,
+  get_status: 0,
+
+};
 
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
@@ -71,11 +76,11 @@ function sendPing() {
     try {
         if (counter >= 10){
           counter = 0;
-          packet.msgCounter = 1100;
           message = commands.get_consumable;
+          last_ids["get_consumable"]= packet.msgCounter;
         } else{
-          packet.msgCounter = 1000;
           message = commands.get_status;
+          last_ids["get_status"]= packet.msgCounter;
           counter++;
         }
         server.send(commands.ping, 0, commands.ping.length, adapter.config.port, adapter.config.ip, function (err) {
@@ -127,7 +132,7 @@ function getStates(message){
     //adapter.log.info(answer.result[0].state);
     //adapter.log.info(answer['id']);
 
-    if (answer.id === 1000) {
+    if (answer.id === last_ids["get_status"]) {
         adapter.setState('info.battery', answer.result[0].battery , true);
         adapter.setState('info.cleanedtime', Math.round(answer.result[0].clean_time/60) , true);
         adapter.setState('info.cleanedarea', Math.round(answer.result[0].clean_area/10000)/100 , true);
@@ -135,7 +140,7 @@ function getStates(message){
         adapter.setState('info.state', answer.result[0].state , true);
         adapter.setState('info.error', answer.result[0].error_code , true);
         adapter.setState('info.dnd', answer.result[0].dnd_enabled , true)
-    } else if (answer.id === 1100) {
+    } else if (answer.id === last_ids["get_consumable"]) {
         adapter.setState('info.consumable.main_brush', 100 - (Math.round(answer.result[0].main_brush_work_time/3600/3)) , true);
         adapter.setState('info.consumable.side_brush', 100- (Math.round(answer.result[0].side_brush_work_time/3600/2)) , true);
         adapter.setState('info.consumable.filter', 100 - (Math.round(answer.result[0].filter_work_time/3600/1.5)) , true);
@@ -157,7 +162,7 @@ function main() {
 
     packet = new MiHome.Packet(str2hex(adapter.config.token));
 
-    packet.msgCounter = 6430;
+    packet.msgCounter = 1;
 
     commands = {
         ping:           str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff'),
@@ -193,7 +198,6 @@ function main() {
                     try {
                         packet.setPlainData('{"id":' + packet.msgCounter + ',' + message + '}');
                         adapter.log.debug('{"id":' + packet.msgCounter  +',' + message + '}');
-                        packet.msgCounter++;
                         var cmdraw = packet.getRaw();
                         adapter.log.debug('Send >>> {"id":' + packet.msgCounter + ',' + message + "} >>> " + cmdraw.toString('hex'));
                         adapter.log.debug(cmdraw.toString('hex'));
@@ -202,6 +206,8 @@ function main() {
                             if (err) adapter.log.error('Cannot send command: ' + err);
                             if (typeof callback === 'function') callback(err);
                         });
+                        packet.msgCounter++;
+                        if(packet.msgCounter >=9999)packet.msgCounter=0;
                     } catch (err) {
                         adapter.log.warn('Cannot send command_: ' + err);
                         if (typeof callback === 'function') callback(err);
