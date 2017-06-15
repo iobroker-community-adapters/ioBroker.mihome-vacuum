@@ -21,6 +21,33 @@ iobroker add mihome-vacuum
 Derzeit stellt das Ermitteln des Tokens das größte Problem.
 Token Vorgehen:
 
+###  Bei Android
+Vorbereitung:
+Wir brauchen ein Android Handy mit der eingerichteteten Mihome App (Sauger auch schon eingerichtet) und einen Windows PC.
+
+- Nun das [MiToolkit](https://github.com/ultrara1n/MiToolkit/releases) downloaden, endpacken und MiToolkit.exe öffnen.
+- USB-Degugging in den Handy-Einstellungen einschalten ([video](https://www.youtube.com/watch?v=aw7D6bNgI1U))
+- Das Handy über ein USB-Kabel mit dem PC verbinden.
+- in dem MiToolkit Auf Verbindung prüfen klicken und Javainstanz testen, beides sollte Fehlerfrei sein.
+- Nun nur noch auf "Token auslesen klicken" und die Meldung auf dem Handy bestätigen.
+
+Auf dem Handy sollte nun die MiHome app geöffnet werden (automatisch) und es wird ein Backup auf den pc gezogen (sollte ein paar Sekunden dauern), das Programm ließt dann aus der Datenbank den Token aus.
+Nun nur in dem geöffneten Fenster nach rockrobo.vaccuum suchen und den 32 Stelligen Token kopieren und in dem Konfigurationsfenster eingeben.
+
+
+###  Bei iOS
+
+Mit Jailbreak:
+- Findet man den Token unter /var/mobile/Containers/Data/Application/514106F3-C854-45E9-A45C-119CB4FFC235/Documents/USERID_mihome.sqlite
+
+Ohne Jailbreak:
+- Muss man einen unverschlüsselten iTunes Backup machen mit z.B. ([Link](http://www.imactools.com/iphonebackupviewer/)).
+- Und dann in den Dateien nach  DB unter RAW, com.xiaomi.home, USERID_mihome.sqlite suchen.
+
+
+Auch hier wird nach dem 32Stelligen Token gesucht
+
+
 ### 1. Roboter resetten
 Um den Token des Roboters zu bekommen, muss man ihn erstmal aus dem Wlan abmelden.
 Dies geht entweder über die app unter den Einstellungen des Gerätes
@@ -51,7 +78,7 @@ b) darüber die Antwort von dem Roboter
 Die letzten 16 Byte der Antwort sind der gesuchte Token
 
 ## Widget
-![Widget](widgets/img/previewControl.png)
+![Widget](widgets/mihome-vacuum/img/previewControl.png)
 
 ## Changelog
 ### 0.3.2 (2017-06-07)
