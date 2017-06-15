@@ -174,6 +174,10 @@
                 obj[$this.attr('id')] = $this.val();
             }
         });
+        if (obj.token.replace(/\s/g, '').length !== 32) {
+            showMessage(_('Invalid token length. Expected 32 HEX chars'));
+            return;
+        }
 
         callback(obj);
     }
