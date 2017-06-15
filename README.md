@@ -78,7 +78,7 @@ b) darüber die Antwort von dem Roboter
 Die letzten 16 Byte der Antwort sind der gesuchte Token
 
 ## Widget
-![Widget](widgets/mihome-vaccum/img/previewControl.png)
+![Widget](widgets/mihome-vacuum/img/previewControl.png)
 
 ## Changelog
 ### 0.3.2 (2017-06-07)
