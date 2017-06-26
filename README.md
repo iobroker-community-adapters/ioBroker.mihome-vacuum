@@ -19,19 +19,19 @@ iobroker add mihome-vacuum
 
 ## Konfiguration
 Derzeit stellt das Ermitteln des Tokens das größte Problem.
-Token Vorgehen:
+Folgende Vorgehensweisen können genutzt werden:
 
 ###  Bei Android
 Vorbereitung:
-Wir brauchen ein Android Handy mit der eingerichteteten Mihome App (Sauger auch schon eingerichtet) und einen Windows PC.
+Benötigt wird ein Android Smartphone mit fertig eingerichteter MiHome App. Der Sauger muss in dieser hinzugefügt und eingerichtet sein.
 
-- Nun das [MiToolkit](https://github.com/ultrara1n/MiToolkit/releases) downloaden, endpacken und MiToolkit.exe öffnen.
-- USB-Degugging in den Handy-Einstellungen einschalten ([video](https://www.youtube.com/watch?v=aw7D6bNgI1U))
-- Das Handy über ein USB-Kabel mit dem PC verbinden.
-- in dem MiToolkit Auf Verbindung prüfen klicken und Javainstanz testen, beides sollte Fehlerfrei sein.
-- Nun nur noch auf "Token auslesen klicken" und die Meldung auf dem Handy bestätigen.
+- Das [MiToolkit](https://github.com/ultrara1n/MiToolkit/releases) herunterladen, entpacken und die MiToolkit.exe starten.
+- USB-Degugging in den Smartphone-Einstellungen einschalten ([video](https://www.youtube.com/watch?v=aw7D6bNgI1U))
+- Das Smartphone über ein USB-Kabel mit dem PC verbinden.
+- Im MiToolkit auf "Verbindung prüfen" klicken und ggf. die Java Installation testen, beide Tests sollten fehlerfrei verlaufen.
+- Auf "Token auslesen" klicken und die Meldung auf dem Smartphone bestätigen (KEIN Passwort vergeben!).
 
-Auf dem Handy sollte nun die MiHome app geöffnet werden (automatisch) und es wird ein Backup auf den pc gezogen (sollte ein paar Sekunden dauern), das Programm ließt dann aus der Datenbank den Token aus.
+Auf dem Smartphone sollte nun die MiHome App geöffnet werden (automatisch) und ein Backup auf den PC gezogen werden (sollte ein paar Sekunden dauern), das Programm liest dann den Token aus der MiHome Datenbank (miio2.db) aus.
 Nun nur in dem geöffneten Fenster nach rockrobo.vaccuum suchen und den 32 Stelligen Token kopieren und in dem Konfigurationsfenster eingeben.
 
 
