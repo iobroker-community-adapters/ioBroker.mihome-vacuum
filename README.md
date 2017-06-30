@@ -9,7 +9,7 @@ ioBroker mihome-vacuum adapter
 
 This adapter allows you control the Xiaomi vacuum cleaner.
 
-### Install
+# Install
 
 ```
 cd /opt/iobroker
