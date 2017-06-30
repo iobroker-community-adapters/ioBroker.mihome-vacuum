@@ -21,6 +21,8 @@ iobroker add mihome-vacuum
     - [mit Android](#bei-android)
     - [mit iOS](#bei-ios)
     - [Adapter konfigurieren](#adapterkonfiguration)
+- [Funtionen](#funktionen)
+    - [Eigene Kommandos](#sende-eigene-kommandos)
 - [Widget](#widget)
 - [Bugs](#bugs)
 - [Changelog](#changelog)
@@ -57,17 +59,31 @@ Auch hier wird nach dem 32 stelligen Token gesucht
 ### Adapterkonfiguration
 - Bei IP-Adresse muss die IP-Adresse des Roboters eingegeben werden im Format "192.168.178.XX"
 - Port des Roboters ist Standardmäßig auf "54321" eingestellt, dies sollte nicht verändert werden
-- Eigener Port, Sollten mehrere Sauger im einsatz sein (mehrere Instanzen), kann hier der eigene Port angepasste werden
+- Eigener Port, Sollten mehrere Sauger im Einsatz sein (mehrere Instanzen), kann hier der eigene Port angepasste werden
 - Abfrageintervall Ist die Zeit in ms in der die Statuswerte des Roboters abgerufen werden (sollte nicht <10000 sein)
 
 - Experimental: Über den Haken bei "Sende eigene Komandos" werden Objekte angelegt, über die man eigene Kommandos an den Roboter senden und empfangen kann.
 
+## Funktionen
+### Sende eigene Kommandos
+Der Roboter unterscheidet bei den Kommandos in Methoden (method) und Parameter(params) die zur spezifizierung der Methoden dienen.
+Under dem Object "mihome-vacuum.X.control.X_send_command" können eigene Kommandos an den Roboter gesendet werden.
+Der Objektaufbau muss dabei wiefolgt aussehen: method;[params]
+
+Unter dem Objekt "mihome-vacuum.X.control.X_get_response" wird nach dem Absenden die Antwort vom Roboter eingetragen. Wurden Parameter abgefragt erscheinen sie hier im JSON Format, wurde nur ein Befehl gesendet, antwortet der Roboter nur mit "0".
+
+Folgende Methoden und Parameter werden unterstützt:
+| method      | params     | Beschreibung                                                                                           |
+|-----------  |-------     |-------------------                                                                                     |
+| logic       | string     |       "and" or "or" logic to combine the conditions \(default: "and"\)                                 |
+|             |            |                                                                                                        |
+| id          | string     |       name ist equal to given one                                                                      |
 ## Widget
 Zur Zeit leider noch nicht fertig.
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
 
 ## Bugs
-- gelegentliche Verbindungsabbrüche dies liegt jedoch nciht am Adapter sonder an den Netzwerken
+- gelegentliche Verbindungsabbrüche dies liegt jedoch nicht am Adapter sondern meistens am eigenen Netzwerke
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
