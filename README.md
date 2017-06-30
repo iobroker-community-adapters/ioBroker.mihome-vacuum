@@ -17,13 +17,13 @@ npm install iobroker.mihome-vacuum
 iobroker add mihome-vacuum
 ```
 ## Inhalt
-- [Einrichtung](#Konfiguration)
-    - [mit Android](#Bei-Android)
-    - [mit iOS](#Bei-iOS)
-    - [Adapter konfigurieren](#Adapterkonfiguration)
-- [Widget](#Widget)
-- [Bugs](#Bugs)
-- [Changelog](#Changelog)
+- [Einrichtung](#konfiguration)
+    - [mit Android](#bei-android)
+    - [mit iOS](#bei-ios)
+    - [Adapter konfigurieren](#adapterkonfiguration)
+- [Widget](#widget)
+- [Bugs](#bugs)
+- [Changelog](#changelog)
 ## Konfiguration
 Derzeit stellt das Ermitteln des Tokens das größte Problem.
 Folgende Vorgehensweisen können genutzt werden:
