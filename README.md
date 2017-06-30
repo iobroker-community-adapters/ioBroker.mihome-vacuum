@@ -18,8 +18,8 @@ iobroker add mihome-vacuum
 ```
 ## Inhalt
 - [Einrichtung](#Konfiguration)
-    - [mit Android](#Bei Android)
-    - [mit iOS](#Bei iOS)
+    - [mit Android](#Bei-Android)
+    - [mit iOS](#Bei-iOS)
     - [Adapter konfigurieren](#Adapterkonfiguration)
 - [Widget](#Widget)
 - [Bugs](#Bugs)
