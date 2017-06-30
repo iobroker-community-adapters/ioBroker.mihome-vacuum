@@ -73,11 +73,13 @@ Der Objektaufbau muss dabei wiefolgt aussehen: method;[params]
 Unter dem Objekt "mihome-vacuum.X.control.X_get_response" wird nach dem Absenden die Antwort vom Roboter eingetragen. Wurden Parameter abgefragt erscheinen sie hier im JSON Format, wurde nur ein Befehl gesendet, antwortet der Roboter nur mit "0".
 
 Folgende Methoden und Parameter werden unterstützt:
+```
 | method      | params     | Beschreibung                                                                                           |
 |-----------  |-------     |-------------------                                                                                     |
 | logic       | string     |       "and" or "or" logic to combine the conditions \(default: "and"\)                                 |
 |             |            |                                                                                                        |
 | id          | string     |       name ist equal to given one                                                                      |
+```
 ## Widget
 Zur Zeit leider noch nicht fertig.
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
