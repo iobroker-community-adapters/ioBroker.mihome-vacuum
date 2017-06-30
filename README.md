@@ -74,12 +74,10 @@ Unter dem Objekt "mihome-vacuum.X.control.X_get_response" wird nach dem Absenden
 
 Folgende Methoden und Parameter werden unterstützt:
 
-#### Timer
-
 | method      | params     | Beschreibung                                                                                           |
 |-----------  |-------     |-------------------                                                                                     |
 | get_timer   |            |       liefert den eingestellten Timer zurück                                                           |
-| set_timer   | [["ZEIT_IN_MS_AUS_GET_TIMER",["30 12 * * 1,2,3,4,5",["start_clean",""]]]]          |                                                                                                        |
+| set_timer   | [["ZEIT_IN_MS",["30 12 * * 1,2,3,4,5",["start_clean",""]]]] |     Einstellen der Saugzeiten                         |
 | id          | string     |       name ist equal to given one                                                                      |
 
 ## Widget
