@@ -1,8 +1,13 @@
 {
 	"common": {
 		"name": "mihome-vacuum",
-		"version": "0.3.2",
+		"version": "0.5.5",
 		"news": {
+			"0.5.5": {
+				"en": "add states, fix communication errors",
+				"de": "Mehr Objekte, verbesserte Kommunikation",
+				"ru": "add states, fix communication errors"
+			},
 			"0.3.2": {
 				"en": "fix Protocol update after 3.3.9",
 				"de": "Korrigiere Protokollupdate nach Version 3.3.9",
@@ -68,6 +73,14 @@
 			"type": "channel",
 			"common": {
 				"name": "Vaccuum consumable"
+			},
+			"native": {}
+		},
+		{
+			"_id": "history",
+			"type": "channel",
+			"common": {
+				"name": "Vaccuum cleaning history"
 			},
 			"native": {}
 		},
@@ -250,10 +263,10 @@
 			"native": {}
 		},
 		{
-			"_id": "info.consumable.main_brush",
+			"_id": "consumable.main_brush",
 			"type": "state",
 			"common": {
-				"name": "Main brush",
+				"name": "Main brush lifetime",
 				"type": "number",
 				"role": "level",
 				"read": true,
@@ -262,10 +275,22 @@
 			"native": {}
 		},
 		{
-			"_id": "info.consumable.side_brush",
+			"_id": "consumable.main_brush_reset",
 			"type": "state",
 			"common": {
-				"name": "Side brush",
+				"role": "button",
+				"name": "Main brush lifetime reset",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {}
+		},
+		{
+			"_id": "consumable.side_brush",
+			"type": "state",
+			"common": {
+				"name": "Side brush lifetime",
 				"type": "number",
 				"role": "level",
 				"read": true,
@@ -274,14 +299,119 @@
 			"native": {}
 		},
 		{
-			"_id": "info.consumable.filter",
+			"_id": "consumable.side_brush_reset",
 			"type": "state",
 			"common": {
-				"name": "Filter",
+				"role": "button",
+				"name": "Side brush lifetime reset",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {}
+		},
+		{
+			"_id": "consumable.filter",
+			"type": "state",
+			"common": {
+				"name": "Filter lifetime",
 				"type": "number",
 				"role": "level",
 				"read": true,
 				"unit": "%"
+			},
+			"native": {}
+		},
+		{
+			"_id": "consumable.filter_reset",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "Filter lifetime reset",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {}
+		},
+		{
+			"_id": "consumable.sensors",
+			"type": "state",
+			"common": {
+				"name": "sensor lifetime",
+				"type": "number",
+				"role": "level",
+				"read": true,
+				"unit": "%"
+			},
+			"native": {}
+		},
+		{
+			"_id": "consumable.sensors_reset",
+			"type": "state",
+			"common": {
+				"role": "button",
+				"name": "Sensors lifetime reset",
+				"type": "boolean",
+				"write": true,
+				"read": true
+			},
+			"native": {}
+		},
+		{
+			"_id": "history.allTableHTML",
+			"type": "state",
+			"common": {
+				"name": "History of clean as THML",
+				"type": "string",
+				"role": "history",
+				"read": true
+			},
+			"native": {}
+		},
+		{
+			"_id": "history.allTableJSON",
+			"type": "state",
+			"common": {
+				"name": "History of clean as JSON",
+				"type": "object",
+				"role": "history",
+				"read": true
+			},
+			"native": {}
+		},
+		{
+			"_id": "history.total_time",
+			"type": "state",
+			"common": {
+				"name": "Total time ",
+				"type": "number",
+				"role": "history",
+				"unit": "min.",
+				"read": true
+			},
+			"native": {}
+		},
+		{
+			"_id": "history.total_area",
+			"type": "state",
+			"common": {
+				"name": "Total area ",
+				"type": "number",
+				"role": "history",
+				"unit": "m²",
+				"read": true
+			},
+			"native": {}
+		},
+		{
+			"_id": "history.total_cleanups",
+			"type": "state",
+			"common": {
+				"name": "Total cleanups ",
+				"type": "number",
+				"role": "history",
+				"read": true
 			},
 			"native": {}
 		}

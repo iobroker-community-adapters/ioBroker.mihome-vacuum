@@ -16,12 +16,19 @@ cd /opt/iobroker
 npm install iobroker.mihome-vacuum
 iobroker add mihome-vacuum
 ```
-
+## Inhalt
+- [Einrichtung](#Konfiguration)
+    - [mit Android](#Bei Android)
+    - [mit iOS](#Bei iOS)
+    - [Adapter konfigurieren](#Adapterkonfiguration)
+- [Widget](#Widget)
+- [Bugs](#Bugs)
+- [Changelog](#Changelog)
 ## Konfiguration
 Derzeit stellt das Ermitteln des Tokens das größte Problem.
 Folgende Vorgehensweisen können genutzt werden:
 
-###  Bei Android
+### Bei Android
 Vorbereitung:
 Benötigt wird ein Android Smartphone mit fertig eingerichteter MiHome App. Der Sauger muss in dieser hinzugefügt und eingerichtet sein.
 
@@ -35,7 +42,7 @@ Auf dem Smartphone sollte nun die MiHome App geöffnet werden (automatisch) und 
 Nun nur in dem geöffneten Fenster nach rockrobo.vaccuum suchen und den 32 Stelligen Token kopieren und in dem Konfigurationsfenster eingeben.
 
 
-###  Bei iOS
+### Bei iOS
 
 Mit Jailbreak:
 - Findet man den Token unter /var/mobile/Containers/Data/Application/514106F3-C854-45E9-A45C-119CB4FFC235/Documents/USERID_mihome.sqlite
@@ -47,10 +54,26 @@ Ohne Jailbreak:
 
 Auch hier wird nach dem 32 stelligen Token gesucht
 
+### Adapterkonfiguration
+- Bei IP-Adresse muss die IP-Adresse des Roboters eingegeben werden im Format "192.168.178.XX"
+- Port des Roboters ist Standardmäßig auf "54321" eingestellt, dies sollte nicht verändert werden
+- Eigener Port, Sollten mehrere Sauger im einsatz sein (mehrere Instanzen), kann hier der eigene Port angepasste werden
+- Abfrageintervall Ist die Zeit in ms in der die Statuswerte des Roboters abgerufen werden (sollte nicht <10000 sein)
+
+- Experimental: Über den Haken bei "Sende eigene Komandos" werden Objekte angelegt, über die man eigene Kommandos an den Roboter senden und empfangen kann.
+
 ## Widget
+Zur Zeit leider noch nicht fertig.
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
 
+## Bugs
+- gelegentliche Verbindungsabbrüche dies liegt jedoch nciht am Adapter sonder an den Netzwerken
+- Widget zur Zeit ohne Funktion
+
 ## Changelog
+### 0.5.5 (2017-06-07)
+* (MeisterTR) add states, fetures, fix communication errors
+
 ### 0.3.2 (2017-06-07)
 * (MeisterTR) fix no communication after softwareupdate(Vers. 3.3.9)
 
