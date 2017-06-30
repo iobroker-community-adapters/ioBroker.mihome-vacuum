@@ -71,7 +71,7 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
-### 0.5.5 (2017-06-07)
+### 0.5.5 (2017-06-30)
 * (MeisterTR) add states, fetures, fix communication errors
 
 ### 0.3.2 (2017-06-07)
