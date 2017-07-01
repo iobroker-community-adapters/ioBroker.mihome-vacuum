@@ -77,8 +77,12 @@ Folgende Methoden und Parameter werden unterstützt:
 | method      | params     | Beschreibung                                                                                           |
 |-----------  |-------     |-------------------                                                                                     |
 | get_timer   |            |       liefert den eingestellten Timer zurück                                                           |
-| set_timer   | [["ZEIT_IN_MS",["30 12 * * 1,2,3,4,5",["start_clean",""]]]] |     Einstellen der Saugzeiten                         |
-| id          | string     |       name ist equal to given one                                                                      |
+| set_timer   | [["ZEIT_IN_MS",["30 12 * * 1,2,3,4,5",["start_clean",""]]]] |     Einstellen der Saugzeiten BSp. 12 Uhr 30 an 5 Tagen |
+| upd_timer   | ["1481997713308","on/off"] |     Timer aktivieren an/aussehen                                                       |
+|             |            |                                                                                                       |
+| get_dnd_timer  |      |       Lifert die Zeiten des Do Not Distrube zurück|
+| close_dnd_timer  |      |       DND Zeiten löschen|
+| set_dnd_timer  |   [22,0,8,0]   |       DND Einstellen h,min,h,min|
 
 ## Widget
 Zur Zeit leider noch nicht fertig.
