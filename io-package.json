@@ -57,7 +57,8 @@
 	"native": {
 		"port": 54321,
 		"ownPort": 53421,
-		"pingInterval": 20000
+		"pingInterval": 20000,
+		"param_pingInterval": 60000
 	},
 	"instanceObjects": [
 		{
