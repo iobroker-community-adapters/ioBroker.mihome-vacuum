@@ -21,6 +21,7 @@ iobroker add mihome-vacuum
     - [mit Android](#bei-android)
     - [mit iOS](#bei-ios)
     - [Adapter konfigurieren](#adapterkonfiguration)
+        - [Zweiter Roboter](#zweiter-roboter)
 - [Funtionen](#funktionen)
     - [Eigene Kommandos](#sende-eigene-kommandos)
 - [Widget](#widget)
@@ -59,10 +60,13 @@ Auch hier wird nach dem 32 stelligen Token gesucht
 ### Adapterkonfiguration
 - Bei IP-Adresse muss die IP-Adresse des Roboters eingegeben werden im Format "192.168.178.XX"
 - Port des Roboters ist Standardmäßig auf "54321" eingestellt, dies sollte nicht verändert werden
-- Eigener Port, Sollten mehrere Sauger im Einsatz sein (mehrere Instanzen), kann hier der eigene Port angepasste werden
+- Eigener Port, sollte nur bei zweiten Roboter geändert werden
 - Abfrageintervall Ist die Zeit in ms in der die Statuswerte des Roboters abgerufen werden (sollte nicht <10000 sein)
 
 - Experimental: Über den Haken bei "Sende eigene Komandos" werden Objekte angelegt, über die man eigene Kommandos an den Roboter senden und empfangen kann.
+
+#### Zweiter Roboter
+sollen zwei Roboter über ioBroker gesteuert werden, müssen zwei Instanzen angelegt werden. Dabei muss bei dem zweiten Roboter der eigene Port (Default: 53421) geändert werden, damit beide Roboter unterschiedliche Ports besitzen.
 
 ## Funktionen
 ### Sende eigene Kommandos
