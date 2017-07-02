@@ -66,6 +66,8 @@ Auch hier wird nach dem 32 stelligen Token gesucht
 
 ## Funktionen
 ### Sende eigene Kommandos
+HINWEIS: Diese Funktion sollte nur von Experten genutzt werden, da durch falsche Kommandos der sauger zu Schaden kommen könnte
+
 Der Roboter unterscheidet bei den Kommandos in Methoden (method) und Parameter(params) die zur spezifizierung der Methoden dienen.
 Under dem Object "mihome-vacuum.X.control.X_send_command" können eigene Kommandos an den Roboter gesendet werden.
 Der Objektaufbau muss dabei wiefolgt aussehen: method;[params]
@@ -86,7 +88,7 @@ Folgende Methoden und Parameter werden unterstützt:
 |             |            |                                                                                                       |
 |app_rc_start|            | Romote Control starten                                                                      |
 |app_rc_end|            | Romote Control beenden                                                                      |
-|app_rc_move|[{"seqnum":'0-1000',"velocity":WERT1,"omega":WERT2,"duration":WERT3}] | Bewegung, sequenznummer muss fortlaufend sein, WERT1(Geschw.) = -0.3 - 0.3, WERT2(Drehung) = -3.1 - 3.1, WERT3(Dauer)|
+|app_rc_move|[{"seqnum":'0-1000',"velocity":WERT1,"omega":WERT2,"duration":WERT3}] | Bewegung. Sequenznummer muss fortlaufend sein, WERT1(Geschw.) = -0.3 - 0.3, WERT2(Drehung) = -3.1 - 3.1, WERT3(Dauer)|
 
 ## Widget
 Zur Zeit leider noch nicht fertig.
