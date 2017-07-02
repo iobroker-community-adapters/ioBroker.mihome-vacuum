@@ -80,19 +80,19 @@ Unter dem Objekt "mihome-vacuum.X.control.X_get_response" wird nach dem Absenden
 
 Folgende Methoden und Parameter werden unterstützt:
 
-| method      | params     | Beschreibung                                                                                           |
-|-----------  |-------     |-------------------                                                                                     |
-| get_timer   |            |       liefert den eingestellten Timer zurück                                                           |
-| set_timer   | [["ZEIT_IN_MS",["30 12 * * 1,2,3,4,5",["start_clean",""]]]] |     Einstellen der Saugzeiten BSp. 12 Uhr 30 an 5 Tagen |
-| upd_timer   | ["1481997713308","on/off"] |     Timer aktivieren an/aussehen                                                       |
-|             |            |                                                                                                       |
-| get_dnd_timer  |      |       Lifert die Zeiten des Do Not Distrube zurück|
-| close_dnd_timer  |      |       DND Zeiten löschen|
-| set_dnd_timer  |   [22,0,8,0]   |       DND Einstellen h,min,h,min|
-|             |            |                                                                                                       |
-|app_rc_start|            | Romote Control starten                                                                      |
-|app_rc_end|            | Romote Control beenden                                                                      |
-|app_rc_move|[{"seqnum":'0-1000',"velocity":WERT1,"omega":WERT2,"duration":WERT3}] | Bewegung. Sequenznummer muss fortlaufend sein, WERT1(Geschw.) = -0.3 - 0.3, WERT2(Drehung) = -3.1 - 3.1, WERT3(Dauer)|
+| method          | params                                                              | Beschreibung                                                                                           |
+|-----------      |-------                                                              |-------------------                                                                                     |
+| get_timer       |                                                                     |       liefert den eingestellten Timer zurück                                                           |
+| set_timer       | [["ZEIT_IN_MS",["30 12 * * 1,2,3,4,5",["start_clean",""]]]]         |     Einstellen der Saugzeiten BSp. 12 Uhr 30 an 5 Tagen                                                |
+| upd_timer       | ["1481997713308","on/off"]                                          |     Timer aktivieren an/aussehen                                                                       |
+|                 |                                                                     |                                                                                                        |
+| get_dnd_timer   |                                                                     |       Lifert die Zeiten des Do Not Distrube zurück                                                     |
+| close_dnd_timer |                                                                     |       DND Zeiten löschen                                                                               |
+| set_dnd_timer   |   [22,0,8,0]                                                        |       DND Einstellen h,min,h,min                                                                       |
+|                 |                                                                     |                                                                                                        |
+|app_rc_start     |                                                                     | Romote Control starten                                                                                 |
+|app_rc_end       |                                                                     | Romote Control beenden                                                                                 |
+|app_rc_move      |[{"seqnum":'0-1000',"velocity":WERT1,"omega":WERT2,"duration":WERT3}]| Bewegung. Sequenznummer muss fortlaufend sein, WERT1(Geschw.) = -0.3 - 0.3, WERT2(Drehung) = -3.1 - 3.1, WERT3(Dauer)|
 
 ## Widget
 Zur Zeit leider noch nicht fertig.
