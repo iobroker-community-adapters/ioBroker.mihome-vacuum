@@ -1,6 +1,7 @@
 ![Logo](admin/mihome-vacuum.png)
 ioBroker mihome-vacuum adapter
 =================
+
 [![NPM version](http://img.shields.io/npm/v/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
 [![Tests](https://travis-ci.org/ioBroker/ioBroker.mihome-vacuum.svg?branch=master)](https://travis-ci.org/ioBroker/ioBroker.mihome-vacuum)
@@ -9,13 +10,6 @@ ioBroker mihome-vacuum adapter
 
 This adapter allows you control the Xiaomi vacuum cleaner.
 
-# Install
-
-```
-cd /opt/iobroker
-npm install iobroker.mihome-vacuum
-iobroker add mihome-vacuum
-```
 ## Inhalt
 - [Einrichtung](#konfiguration)
     - [mit Android](#bei-android)
@@ -27,6 +21,7 @@ iobroker add mihome-vacuum
 - [Widget](#widget)
 - [Bugs](#bugs)
 - [Changelog](#changelog)
+
 ## Konfiguration
 Derzeit stellt das Ermitteln des Tokens das größte Problem.
 Folgende Vorgehensweisen können genutzt werden:
