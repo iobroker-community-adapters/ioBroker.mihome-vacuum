@@ -20,7 +20,7 @@ var pingInterval, param_pingInterval;
 var message = '';
 var packet;
 
-var clean_log = {};
+var clean_log = [];
 var clean_log_html_all_lines = "";
 var clean_log_html_table = "";
 var log_entrys = {},
@@ -34,7 +34,7 @@ var last_id = {
 };
 
 //Tabelleneigenschaften
-var clean_log_html_attr = '<colgroup> <col width="50"> <col width="50"> <col width="70"> <col width="80"> <col width="50"> <col width="50"> </colgroup>';
+var clean_log_html_attr = '<colgroup> <col width="50"> <col width="50"> <col width="80"> <col width="100"> <col width="50"> <col width="50"> </colgroup>';
 var clean_log_html_head = "<tr> <th>Datum</th> <th>Start</th> <th>Saugzeit</th> <th>Fläche</th> <th>???</th> <th>Ende</th></tr>";
 
 // is called if a subscribed state changes
@@ -157,6 +157,7 @@ function reqestParams() {
     setTimeout(function() {
       if (!isEquivalent(log_entrys_new, log_entrys)) {
         log_entrys                = log_entrys_new;
+        clean_log = [];
         clean_log_html_all_lines  = "";
         getLog(function() {
           adapter.setState('history.allTableJSON', JSON.stringify(clean_log), true);
@@ -279,20 +280,19 @@ function getStates(message) {
         min = dates.getMinutes();
       }
 
-      var log_data = [
-        dates.getDate() + "." + (dates.getMonth() + 1),
-        hour + ":" + min,
-        Math.round(answer.result[j][2] / 60) + " min",
-        Math.round(answer.result[j][3] / 10000) / 100 + " m²",
-        answer.result[j][4],
-        answer.result[j][5]
-      ];
+      var log_data = {
+          "Datum"   : dates.getDate() + "." + (dates.getMonth() + 1),
+          "Start"   : hour + ":" + min,
+          "Saugzeit": Math.round(answer.result[j][2] / 60) + " min",
+          "Fläche"  : Math.round(answer.result[j][3] / 10000) / 100 + " m²",
+          "Error"     :answer.result[j][4],
+          "Ende"    :answer.result[j][5]
+        };
 
 
-      if (!clean_log[answer.result[j][0]] || clean_log[answer.result[j][0]] != log_data) {
-        clean_log[answer.result[j][0]] = log_data;
-        clean_log_html_table = makeTable(log_data);
-      }
+    clean_log.push(log_data);
+    clean_log_html_table = makeTable(log_data);
+
 
     }
   }
@@ -352,15 +352,9 @@ function makeTable(line) {
   var head = clean_log_html_head;
   var table = "";
   var html_line = "<tr>";
-  var side = "";
 
-  for (var j = 0; j < line.length; j++) {
-    if (j === 2 || j === 3) side = ' ALIGN="RIGHT"';
-    if (j === 4 || j === 5) side = ' ALIGN="CENTER"';
-    html_line += "<td" + side + ">" + line[j] + "</td>";
-    side = "";
+  html_line += "<td>" + line.Datum + "</td>" + "<td>" + line.Start + "</td>"+ '<td ALIGN="RIGHT">' + line.Saugzeit + "</td>"+ '<td ALIGN="RIGHT">' + line.Fläche + "</td>"+ '<td ALIGN="CENTER">' + line.Error + "</td>" + '<td ALIGN="CENTER">' + line.Ende + "</td>";
 
-  }
   html_line += "</tr>";
 
   clean_log_html_all_lines += html_line;
@@ -368,6 +362,7 @@ function makeTable(line) {
   table = "<table>" + clean_log_html_attr + clean_log_html_head + clean_log_html_all_lines + "</table>";
 
   return table;
+
 }
 
 function enabledExpert() {
