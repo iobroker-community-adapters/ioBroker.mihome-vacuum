@@ -51,10 +51,10 @@ adapter.on('stateChange', function(id, state) {
 
   if (com[command]) {
     var params = com[command].params || "";
-    if (state.val !== true && state.val !== false && state.val !== "true" && state.val !== "false") {
+    if (state.val !== true && state.val !== "true") {
       params = state.val;
     }
-    if (state.val === true || state.val === "true") {
+    if (state.val !== false && state.val !== "false") {
       sendMsg(com[command].method, [params], function() {
         adapter.setForeignState(id, state.val, true);
       });
