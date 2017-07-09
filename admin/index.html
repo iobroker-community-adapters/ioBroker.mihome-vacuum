@@ -185,25 +185,40 @@
 
 <div id="adapter-container">
 
-    <table><tr><td><img src="mihome-vacuum.png"></td><td><h3 class="translate">MiHome-vacuum adapter settings</h3></td></tr></table>
+    <table><tr><td><img src="mihome-vacuum.png" style="width: 128px"/></td><td><h3 class="translate">MiHome-vacuum adapter settings</h3></td></tr></table>
 
-    <table style="width: 100%;">
+     <table style="width: calc(100% - 20px); padding: 5px;">
         <tr>
-            <td style="width: 200px;"><label for="ip" class="translate">IP address: </label></td>
-            <td><input class="value" id="ip" size="15" style="width: 100px;"/></td>
+            <td colspan="4"><h4 class="translate" style="width: 100%">settings</h4></td>
+      </tr>
+      <tr>
+            <td style="width: 300px"><label for="ip" class="translate">IP address:</label></td>
+            <td><input class="value" id="ip" size="15" style="width: 100px"/></td>
         </tr>
         <tr>
-            <td><label for="port" class="translate">Vacuum port: </label></td>
-            <td><input class="value" id="port" size="5" type="number" style="width: 60px;"/></td>
+            <td><label for="port" class="translate">Vacuum port:</label></td>
+            <td><input class="value" id="port" size="5" type="number" style="width: 60px"/></td>
         </tr>
         <tr>
-            <td><label for="port" class="translate">Own port: </label></td>
-            <td><input class="value" id="ownPort" size="5" type="number" style="width: 60px;"/></td>
+            <td><label for="ownPort" class="translate">Own port:</label></td>
+            <td><input class="value" id="ownPort" size="5" type="number" style="width: 60px"/></td>
         </tr>
         <tr>
-            <td><label for="token" class="translate">Token: </label></td>
+            <td><label for="token" class="translate">Token:</label></td>
             <td><input class="value" id="token" size="32" maxlength="32"/></td>
         </tr>
+        <tr>
+            <td><label for="param_pingInterval" class="translate">Request Intervall:</label></td>
+            <td><input class="value" id="param_pingInterval" size="5" type="number" style="width: 60px"/></td>
+        </tr>
+        <tr>
+            <td colspan="4"><h4 class="translate" style="width: 100%">experimental</h4></td>
+      </tr>
+      <tr>
+        <td style="width: 300px"><label for="enableSelfCommands" class="translate title">Send own commands</label></td>
+        <td><input id="enableSelfCommands" class="value" type="checkbox"/></td>
+    </tr>
+
     </table>
 </div>
 </html>
