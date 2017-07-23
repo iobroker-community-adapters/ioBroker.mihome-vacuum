@@ -16,6 +16,7 @@ var server = dgram.createSocket('udp4');
 
 var connected = false;
 var commands = {};
+var stateVal= 0;
 var pingInterval, param_pingInterval;
 var message = '';
 var packet;
@@ -88,7 +89,10 @@ adapter.on('stateChange', function(id, state) {
 
       }
 
-    } else if (com[command] === undefined) {
+    }else if (command === "clean_home") {
+          stateControl(state.val);
+
+    }else if (com[command] === undefined) {
       adapter.log.error('Unknown state "' + id + '"');
     } else {
       adapter.log.error('Command "' + command + '" is not configured');
@@ -137,6 +141,16 @@ function sendPing() {
     }
   }
 
+}
+function stateControl(value){
+  if(value && stateVal !== 5){
+    sendMsg(com.start.method);
+  }else if (!value && stateVal == 5){
+    sendMsg(com.pause.method);
+    setTimeout(function() {
+      sendMsg(com.home.method);
+    }, 1000);
+  }
 }
 
 function reqestParams() {
@@ -241,6 +255,13 @@ function getStates(message) {
     adapter.setState('info.cleanedarea', Math.round(answer.result[0].clean_area / 10000) / 100, true);
     adapter.setState('control.fan_power', Math.round(answer.result[0].fan_power), true);
     adapter.setState('info.state', answer.result[0].state, true);
+    stateVal=answer.result[0].state;
+    if(stateVal === 5 || stateVal === "5"){
+      adapter.setState('control.clean_home', true, true);
+    }
+    else{
+      adapter.setState('control.clean_home', false, true);
+    }
     adapter.setState('info.error', answer.result[0].error_code, true);
     adapter.setState('info.dnd', answer.result[0].dnd_enabled, true)
   } else if (answer.id === last_id["get_consumable"]) {
@@ -398,6 +419,31 @@ function enabledExpert() {
   }
 
 }
+function enabledVoiceControl() {
+  if (adapter.config.enableAlexa) {
+    adapter.log.info('Crate state clean_home for controlling by cloud Adapter');
+
+    adapter.setObjectNotExists('control.clean_home', {
+      type: 'state',
+      common: {
+          name: "Start/Home",
+          type: "boolean",
+          role: "state",
+          read: true,
+          write: true,
+          desc: "Start and go home",
+          smartName: "Staubsauger"
+      },
+      native: {}
+    });
+
+  } else {
+    adapter.log.info('Cloud control disabled');
+    adapter.delObject('control.clean_home');
+
+  }
+
+}
 
 function main() {
   adapter.setState('info.connection', false, true);
@@ -412,6 +458,7 @@ function main() {
   }
 
   enabledExpert();
+  enabledVoiceControl();
   if (!adapter.config.token) {
     adapter.log.error('Token not specified!');
     return;

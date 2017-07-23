@@ -1,8 +1,13 @@
 {
 	"common": {
 		"name": "mihome-vacuum",
-		"version": "0.5.5",
+		"version": "0.5.6",
 		"news": {
+			"0.5.6": {
+				"en": "add option for switch on/off to control by Alexa",
+				"de": "Zusätzlicher Schalter für einfache integration bei Alexa",
+				"ru": "add option for switch on/off to control by Alexa"
+			},
 			"0.5.5": {
 				"en": "add states, fix communication errors",
 				"de": "Mehr Objekte, verbesserte Kommunikation",
