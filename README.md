@@ -98,6 +98,8 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 0.5.6 (2017-07-23)
+* (MeisterTR) add option for crate switch for Alexa control
 ### 0.5.5 (2017-06-30)
 * (MeisterTR) add states, fetures, fix communication errors
 
