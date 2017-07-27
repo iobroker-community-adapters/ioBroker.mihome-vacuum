@@ -14,17 +14,17 @@ ioBroker mihome-vacuum adapter
 This adapter allows you control the Xiaomi vacuum cleaner.
 
 ## Content
-- [Setup] (#configuration)
-    - [with Android] (#on-android)
-    - [with iOS] (#for-ios)
-    - [Configure Adapter] (#adapter-configuration)
-        - [Control via Alexa] (#control-over-alexa)
-        - [Second robot] (#second-robot)
-- [Functions] (#functions)
-    - [Own Commands] (#send-your-own-commands)
-- [widget] (#widget)
-- [bugs] (#bugs)
-- [Changelog] (#changelog)
+- [Setup](#configuration)
+    - [with Android](#on-android)
+    - [with iOS](#for-ios)
+    - [Configure Adapter](#adapter-configuration)
+        - [Control via Alexa](#control-over-alexa)
+        - [Second robot](#second-robot)
+- [Functions](#functions)
+    - [Own Commands](#send-your-own-commands)
+- [widget](#widget)
+- [bugs](#bugs)
+- [Changelog](#changelog)
 
 ## Configuration
 Currently, finding the token is the biggest problem.
