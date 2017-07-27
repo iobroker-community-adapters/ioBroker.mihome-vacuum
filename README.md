@@ -15,6 +15,7 @@ This adapter allows you control the Xiaomi vacuum cleaner.
     - [mit Android](#bei-android)
     - [mit iOS](#bei-ios)
     - [Adapter konfigurieren](#adapterkonfiguration)
+        - [Steuerung über Alexa](#steuerung-über-alexa)
         - [Zweiter Roboter](#zweiter-roboter)
 - [Funtionen](#funktionen)
     - [Eigene Kommandos](#sende-eigene-kommandos)
@@ -58,6 +59,9 @@ Auch hier wird nach dem 32 stelligen Token gesucht
 - Eigener Port, sollte nur bei zweiten Roboter geändert werden
 - Abfrageintervall Ist die Zeit in ms in der die Statuswerte des Roboters abgerufen werden (sollte nicht <10000 sein)
 
+#### Steuerung über Alexa
+In der Konfig add Alexa state aktivieren, ist hier ein Hacken gesetzt wird ein zusätzlicher State erzeugt "clean_home" es ist ein Schalter der bei "true" den Sauger startet und bei "false" fährt er nach Hause, es wird automatisch ein Smartgerät im Cloud Adapter erzeugt mit dem Namen "Staubsauger", dieser kann im Cloud Adapter geändert werden.
+
 - Experimental: Über den Haken bei "Sende eigene Komandos" werden Objekte angelegt, über die man eigene Kommandos an den Roboter senden und empfangen kann.
 
 #### Zweiter Roboter
@@ -98,6 +102,8 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 0.5.6 (2017-07-23)
+* (MeisterTR) add option for crate switch for Alexa control
 ### 0.5.5 (2017-06-30)
 * (MeisterTR) add states, fetures, fix communication errors
 
