@@ -96,7 +96,7 @@ The following methods and parameters are supported:
 
 ## Widget
 Sorry, not yet finished.
-! [Widget] (widgets/mihome-vacuum/img/previewControl.png)
+![Widget](widgets/mihome-vacuum/img/previewControl.png)
 
 ## Bugs
 - occasional disconnections, however, this is not due to the adapter but mostly on its own networks
