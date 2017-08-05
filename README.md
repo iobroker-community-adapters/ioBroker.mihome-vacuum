@@ -1,4 +1,5 @@
 ![Logo](admin/mihome-vacuum.png)
+
 ioBroker mihome-vacuum adapter
 =================
 
@@ -8,102 +9,103 @@ ioBroker mihome-vacuum adapter
 
 [![NPM](https://nodei.co/npm/iobroker.mihome-vacuum.png?downloads=true)](https://nodei.co/npm/iobroker.mihome-vacuum/)
 
+[Deutsche beschreibung hier](README_de.md)
+
 This adapter allows you control the Xiaomi vacuum cleaner.
 
-## Inhalt
-- [Einrichtung](#konfiguration)
-    - [mit Android](#bei-android)
-    - [mit iOS](#bei-ios)
-    - [Adapter konfigurieren](#adapterkonfiguration)
-        - [Steuerung über Alexa](#steuerung-über-alexa)
-        - [Zweiter Roboter](#zweiter-roboter)
-- [Funtionen](#funktionen)
-    - [Eigene Kommandos](#sende-eigene-kommandos)
-- [Widget](#widget)
-- [Bugs](#bugs)
+## Content
+- [Setup](#configuration)
+    - [with Android](#on-android)
+    - [with iOS](#for-ios)
+    - [Configure Adapter](#adapter-configuration)
+        - [Control via Alexa](#control-over-alexa)
+        - [Second robot](#second-robot)
+- [Functions](#functions)
+    - [Own Commands](#send-your-own-commands)
+- [widget](#widget)
+- [bugs](#bugs)
 - [Changelog](#changelog)
 
-## Konfiguration
-Derzeit stellt das Ermitteln des Tokens das größte Problem.
-Folgende Vorgehensweisen können genutzt werden:
+## Configuration
+Currently, finding the token is the biggest problem.
+The following procedures can be used:
 
-### Bei Android
-Vorbereitung:
-Benötigt wird ein Android Smartphone mit fertig eingerichteter MiHome App. Der Sauger muss in dieser hinzugefügt und eingerichtet sein.
+### On Android
+Preparation:
+An Android smartphone with ready-made MiHome app is required. The teat must be added and fitted in it.
 
-- Das [MiToolkit](https://github.com/ultrara1n/MiToolkit/releases) herunterladen, entpacken und die MiToolkit.exe starten.
-- USB-Degugging in den Smartphone-Einstellungen einschalten ([video](https://www.youtube.com/watch?v=aw7D6bNgI1U))
-- Das Smartphone über ein USB-Kabel mit dem PC verbinden.
-- Im MiToolkit auf "Verbindung prüfen" klicken und ggf. die Java Installation testen, beide Tests sollten fehlerfrei verlaufen.
-- Auf "Token auslesen" klicken und die Meldung auf dem Smartphone bestätigen (KEIN Passwort vergeben!).
+- Download and unzip the [MiToolkit] (https://github.com/ultrara1n/MiToolkit/releases) and start MiToolkit.exe.
+- Enable USB debugging in the smartphone settings ([video] (https://www.youtube.com/watch?v=aw7D6bNgI1U))
+- Connect the smartphone to the PC using a USB cable.
+- In the MiToolkit click on "Check connection" and if necessary test the Java installation, both tests should run fault-free.
+- Click on "Read token" and confirm the message on the smartphone (NO give password!).
 
-Auf dem Smartphone sollte nun die MiHome App geöffnet werden (automatisch) und ein Backup auf den PC gezogen werden (sollte ein paar Sekunden dauern), das Programm liest dann den Token aus der MiHome Datenbank (miio2.db) aus.
-Nun nur in dem geöffneten Fenster nach rockrobo.vaccuum suchen und den 32 Stelligen Token kopieren und in dem Konfigurationsfenster eingeben.
+On the smartphone the MiHome app should be opened (automatically) and a backup to the PC should be taken (should take a few seconds), the program then reads the token from the MiHome database (miio2.db).
+Now look for the rockrobo.vaccuum in the open window and copy the 32-digit token and enter it in the configuration window.
 
+### For iOS
 
-### Bei iOS
+With Jailbreak:
+- If the token is found at /var/mobile/Containers/Data/Application/514106F3-C854-45E9-A45C-119CB4FFC235/Documents/USERID_mihome.sqlite
 
-Mit Jailbreak:
-- Findet man den Token unter /var/mobile/Containers/Data/Application/514106F3-C854-45E9-A45C-119CB4FFC235/Documents/USERID_mihome.sqlite
+Without Jailbreak:
+- If you need to make an unencrypted iTunes backup with e.g. ([Link] (http://www.imactools.com/iphonebackupviewer/)).
+- And then look in the files for DB under RAW, com.xiaomi.home, USERID_mihome.sqlite.
 
-Ohne Jailbreak:
-- Muss man einen unverschlüsselten iTunes Backup machen mit z.B. ([Link](http://www.imactools.com/iphonebackupviewer/)).
-- Und dann in den Dateien nach  DB unter RAW, com.xiaomi.home, USERID_mihome.sqlite suchen.
+Again, the 32-character token is searched for
 
+### Adapter Configuration
+- For IP address, the IP address of the robot must be entered in the format "192.168.178.XX"
+- The port of the robot is set to "54321" by default, this should not be changed
+- Own port, should only be changed with second robot
+- Query Interval The time in ms in which the robot's status values are retrieved (should not be <10000)
 
-Auch hier wird nach dem 32 stelligen Token gesucht
+#### Control over Alexa
+In the config add alexa state is activated here is a hack is set an additional state "clean_home" it is a switch which starts at "true" the sucker and at "false" it goes home, it becomes automatically a smart device in the cloud Adapter created with the name "vacuum cleaner", which can be changed in the cloud adapter.
 
-### Adapterkonfiguration
-- Bei IP-Adresse muss die IP-Adresse des Roboters eingegeben werden im Format "192.168.178.XX"
-- Port des Roboters ist Standardmäßig auf "54321" eingestellt, dies sollte nicht verändert werden
-- Eigener Port, sollte nur bei zweiten Roboter geändert werden
-- Abfrageintervall Ist die Zeit in ms in der die Statuswerte des Roboters abgerufen werden (sollte nicht <10000 sein)
+- Experimental: Using the checkbox "Send your own commands" objects are created, via which you can send and receive your own commands to the robot.
 
-#### Steuerung über Alexa
-In der Konfig add Alexa state aktivieren, ist hier ein Hacken gesetzt wird ein zusätzlicher State erzeugt "clean_home" es ist ein Schalter der bei "true" den Sauger startet und bei "false" fährt er nach Hause, es wird automatisch ein Smartgerät im Cloud Adapter erzeugt mit dem Namen "Staubsauger", dieser kann im Cloud Adapter geändert werden.
+#### Second robot
+If two robots are to be controlled via ioBroker, two instances must be created. The second robot must change its own port (default: 53421) so that both robots have different ports.
 
-- Experimental: Über den Haken bei "Sende eigene Komandos" werden Objekte angelegt, über die man eigene Kommandos an den Roboter senden und empfangen kann.
+## Functions
+### Send your own commands
+NOTE: This function should only be used by experts, as the sucker might be damaged by wrong commands
 
-#### Zweiter Roboter
-Sollen zwei Roboter über ioBroker gesteuert werden, müssen zwei Instanzen angelegt werden. Dabei muss bei dem zweiten Roboter der eigene Port (Default: 53421) geändert werden, damit beide Roboter unterschiedliche Ports besitzen.
+The robot distinguishes between the commands in methods (methods) and parameters (params) which serve to specify the methods.
+Under the object "mihome-vacuum.X.control.X_send_command" you can send your own commands to the robot.
+The object structure must look as follows: method; [params]
 
-## Funktionen
-### Sende eigene Kommandos
-HINWEIS: Diese Funktion sollte nur von Experten genutzt werden, da durch falsche Kommandos der sauger zu Schaden kommen könnte
+Under the object "mihome-vacuum.X.control.X_get_response", the response is entered by the robot after sending. If parameters were queried, they appear here in the JSON format. If only one command was sent, the robot responds only with "0".
 
-Der Roboter unterscheidet bei den Kommandos in Methoden (method) und Parameter(params) die zur spezifizierung der Methoden dienen.
-Under dem Object "mihome-vacuum.X.control.X_send_command" können eigene Kommandos an den Roboter gesendet werden.
-Der Objektaufbau muss dabei wiefolgt aussehen: method;[params]
-
-Unter dem Objekt "mihome-vacuum.X.control.X_get_response" wird nach dem Absenden die Antwort vom Roboter eingetragen. Wurden Parameter abgefragt erscheinen sie hier im JSON Format, wurde nur ein Befehl gesendet, antwortet der Roboter nur mit "0".
-
-Folgende Methoden und Parameter werden unterstützt:
+The following methods and parameters are supported:
 
 | method          | params                                                              | Beschreibung                                                                                           |
 |-----------      |-------                                                              |-------------------                                                                                     |
-| get_timer       |                                                                     |       liefert den eingestellten Timer zurück                                                           |
-| set_timer       | [["ZEIT_IN_MS",["30 12 * * 1,2,3,4,5",["start_clean",""]]]]         |     Einstellen der Saugzeiten BSp. 12 Uhr 30 an 5 Tagen                                                |
-| upd_timer       | ["1481997713308","on/off"]                                          |     Timer aktivieren an/aussehen                                                                       |
+| get_timer       |                                                                     | Returns the set timerSetting the suction times BSp. 12 o'clock 30 in 5 days                            |
+| set_timer       | [["TIME_IN_MS",["30 12 * * 1,2,3,4,5",["start_clean",""]]]]         | Enable / disable timer                                                                                 |
+| upd_timer       | ["1481997713308","on/off"]                                          |                                                                                                        |
+|                 |                                                                     | Rescues the times of the Do Not Distrube                                                               |
+| get_dnd_timer   |                                                                     | Delete DND times                                                                                       |
+| close_dnd_timer |                                                                     | DND Setting h, min, h, min                                                                             |
+| set_dnd_timer   | [22,0,8,0]                                                          |                                                                                                        |
 |                 |                                                                     |                                                                                                        |
-| get_dnd_timer   |                                                                     |       Lifert die Zeiten des Do Not Distrube zurück                                                     |
-| close_dnd_timer |                                                                     |       DND Zeiten löschen                                                                               |
-| set_dnd_timer   |   [22,0,8,0]                                                        |       DND Einstellen h,min,h,min                                                                       |
-|                 |                                                                     |                                                                                                        |
-|app_rc_start     |                                                                     | Romote Control starten                                                                                 |
-|app_rc_end       |                                                                     | Romote Control beenden                                                                                 |
-|app_rc_move      |[{"seqnum":'0-1000',"velocity":WERT1,"omega":WERT2,"duration":WERT3}]| Bewegung. Sequenznummer muss fortlaufend sein, WERT1(Geschw.) = -0.3 - 0.3, WERT2(Drehung) = -3.1 - 3.1, WERT3(Dauer)|
+| app_rc_start    |                                                                     | Start Romote Control                                                                                   |
+| app_rc_end      |                                                                     | Finish Remote Control                                                                                  |
+| app_rc_move     |[{"seqnum":'0-1000',"velocity":VALUE1,"omega":VALUE2,"duration":VALUE3}]| Move. Sequence number must be continuous, VALUE1 (speed) = -0.3-0.3, VALUE2 (rotation) = -3.1-3.1, VALUE3 (duration)
 
 ## Widget
-Zur Zeit leider noch nicht fertig.
+Sorry, not yet finished.
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
 
 ## Bugs
-- gelegentliche Verbindungsabbrüche dies liegt jedoch nicht am Adapter sondern meistens am eigenen Netzwerke
-- Widget zur Zeit ohne Funktion
+- occasional disconnections, however, this is not due to the adapter but mostly on its own networks
+- Widget at the time without function
 
 ## Changelog
 ### 0.5.6 (2017-07-23)
 * (MeisterTR) add option for crate switch for Alexa control
+
 ### 0.5.5 (2017-06-30)
 * (MeisterTR) add states, fetures, fix communication errors
 
