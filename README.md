@@ -94,6 +94,9 @@ The following methods and parameters are supported:
 | app_rc_end      |                                                                     | Finish Remote Control                                                                                  |
 | app_rc_move     |[{"seqnum":'0-1000',"velocity":VALUE1,"omega":VALUE2,"duration":VALUE3}]| Move. Sequence number must be continuous, VALUE1 (speed) = -0.3-0.3, VALUE2 (rotation) = -3.1-3.1, VALUE3 (duration)
 
+
+more methods and parameters you can find here  ([Link] (https://github.com/MeisterTR/XiaomiRobotVacuumProtocol)).
+
 ## Widget
 Sorry, not yet finished.
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)

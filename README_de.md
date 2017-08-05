@@ -94,6 +94,8 @@ Folgende Methoden und Parameter werden unterstützt:
 |app_rc_end       |                                                                     | Romote Control beenden                                                                                 |
 |app_rc_move      |[{"seqnum":'0-1000',"velocity":WERT1,"omega":WERT2,"duration":WERT3}]| Bewegung. Sequenznummer muss fortlaufend sein, WERT1(Geschw.) = -0.3 - 0.3, WERT2(Drehung) = -3.1 - 3.1, WERT3(Dauer)|
 
+Mehr Mehtoden und Parameter können sie hier finden:  ([Link] (https://github.com/MeisterTR/XiaomiRobotVacuumProtocol)).
+
 ## Widget
 Zur Zeit leider noch nicht fertig.
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
