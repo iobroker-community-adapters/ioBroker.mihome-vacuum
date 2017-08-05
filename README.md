@@ -34,8 +34,8 @@ The following procedures can be used:
 Preparation:
 An Android smartphone with ready-made MiHome app is required. The teat must be added and fitted in it.
 
-- Download and unzip the [MiToolkit] (https://github.com/ultrara1n/MiToolkit/releases) and start MiToolkit.exe.
-- Enable USB debugging in the smartphone settings ([video] (https://www.youtube.com/watch?v=aw7D6bNgI1U))
+- Download and unzip the [MiToolkit](https://github.com/ultrara1n/MiToolkit/releases) and start MiToolkit.exe.
+- Enable USB debugging in the smartphone settings ([video](https://www.youtube.com/watch?v=aw7D6bNgI1U))
 - Connect the smartphone to the PC using a USB cable.
 - In the MiToolkit click on "Check connection" and if necessary test the Java installation, both tests should run fault-free.
 - Click on "Read token" and confirm the message on the smartphone (NO give password!).
@@ -49,7 +49,7 @@ With Jailbreak:
 - If the token is found at /var/mobile/Containers/Data/Application/514106F3-C854-45E9-A45C-119CB4FFC235/Documents/USERID_mihome.sqlite
 
 Without Jailbreak:
-- If you need to make an unencrypted iTunes backup with e.g. ([Link] (http://www.imactools.com/iphonebackupviewer/)).
+- If you need to make an unencrypted iTunes backup with e.g. ([Link](http://www.imactools.com/iphonebackupviewer/)).
 - And then look in the files for DB under RAW, com.xiaomi.home, USERID_mihome.sqlite.
 
 Again, the 32-character token is searched for
@@ -95,7 +95,7 @@ The following methods and parameters are supported:
 | app_rc_move     |[{"seqnum":'0-1000',"velocity":VALUE1,"omega":VALUE2,"duration":VALUE3}]| Move. Sequence number must be continuous, VALUE1 (speed) = -0.3-0.3, VALUE2 (rotation) = -3.1-3.1, VALUE3 (duration)
 
 
-more methods and parameters you can find here  ([Link] (https://github.com/MeisterTR/XiaomiRobotVacuumProtocol)).
+more methods and parameters you can find here ([Link](https://github.com/MeisterTR/XiaomiRobotVacuumProtocol)).
 
 ## Widget
 Sorry, not yet finished.
