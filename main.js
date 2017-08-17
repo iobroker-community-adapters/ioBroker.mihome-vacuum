@@ -20,6 +20,7 @@ var stateVal= 0;
 var pingInterval, param_pingInterval;
 var message = '';
 var packet;
+var firstSet = true;
 
 var clean_log = [];
 var clean_log_html_all_lines = "";
@@ -145,6 +146,9 @@ function sendPing() {
 function stateControl(value){
   if(value && stateVal !== 5){
     sendMsg(com.start.method);
+    setTimeout(function() {
+      sendMsg(com.get_status.method);
+    }, 500);
   }else if (!value && stateVal == 5){
     sendMsg(com.pause.method);
     setTimeout(function() {
@@ -199,6 +203,7 @@ function sendMsg(method, params, callback) {
       if (typeof callback === 'function') callback(err);
     });
     adapter.log.debug('sendMsg >>> ' + message_str);
+    adapter.log.debug('sendMsgRaw >>> ' + cmdraw.toString('hex'));
   } catch (err) {
     adapter.log.warn('Cannot send message_: ' + err);
     if (typeof callback === 'function') callback(err);
@@ -445,6 +450,14 @@ function enabledVoiceControl() {
 
 }
 
+function checkSetTimeDiff(){
+  var now = parseInt((new Date().getTime()));//.toString(16)
+  var MessageTime = parseInt(packet.stamprec.toString('hex'),16)*1000;
+  if(firstSet)adapter.log.warn('Timedifference between Mihome Vacuum and ioBroker: '+( MessageTime -now)+ ' Milliseconds');
+  packet.timediff= MessageTime - now;
+  if(firstSet)firstSet= false;
+}
+
 function main() {
   adapter.setState('info.connection', false, true);
   adapter.config.port = parseInt(adapter.config.port, 10) || 54321;
@@ -485,6 +498,9 @@ function main() {
       if (msg.length === 32) {
         adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
         packet.setRaw(msg);
+
+        checkSetTimeDiff();
+
         clearTimeout(pingTimeout);
         pingTimeout = null;
         if (!connected) {
