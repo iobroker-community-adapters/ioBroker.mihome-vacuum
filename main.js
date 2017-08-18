@@ -473,16 +473,18 @@ function main() {
   enabledVoiceControl();
   if (!adapter.config.token) {
     adapter.log.error('Token not specified!');
-    return;
+    //return;
+  }
+  else{
+    packet = new MiHome.Packet(str2hex(adapter.config.token));
+
+    packet.msgCounter = 1000;
+
+    commands = {
+      ping: str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+    };
   }
 
-  packet = new MiHome.Packet(str2hex(adapter.config.token));
-
-  packet.msgCounter = 1000;
-
-  commands = {
-    ping: str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
-  };
 
 
   server.on('error', function(err) {
