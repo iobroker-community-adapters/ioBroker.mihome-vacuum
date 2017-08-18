@@ -21,7 +21,6 @@ var pingInterval, param_pingInterval;
 var message = '';
 var packet;
 var firstSet = true;
-
 var clean_log = [];
 var clean_log_html_all_lines = "";
 var clean_log_html_table = "";
@@ -451,10 +450,10 @@ function enabledVoiceControl() {
 }
 
 function checkSetTimeDiff(){
-  var now = parseInt((new Date().getTime()));//.toString(16)
-  var MessageTime = parseInt(packet.stamprec.toString('hex'),16)*1000;
-  if(firstSet)adapter.log.warn('Timedifference between Mihome Vacuum and ioBroker: '+( MessageTime -now)+ ' Milliseconds');
-  packet.timediff= MessageTime - now;
+  var now = Math.round(parseInt((new Date().getTime()))/1000);//.toString(16)
+  var MessageTime = parseInt(packet.stamprec.toString('hex'),16);
+  if(firstSet && (MessageTime - now) !== 0)adapter.log.warn('Timedifference between Mihome Vacuum and ioBroker: '+( MessageTime -now)+ ' Sec');
+  packet.timediff= MessageTime - now ;
   if(firstSet)firstSet= false;
 }
 
