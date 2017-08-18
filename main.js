@@ -147,7 +147,7 @@ function stateControl(value){
     sendMsg(com.start.method);
     setTimeout(function() {
       sendMsg(com.get_status.method);
-    }, 500);
+    }, 2000);
   }else if (!value && stateVal == 5){
     sendMsg(com.pause.method);
     setTimeout(function() {
@@ -477,7 +477,7 @@ function main() {
   else{
     enabledExpert();
     enabledVoiceControl();
-    
+
     packet = new MiHome.Packet(str2hex(adapter.config.token));
 
     packet.msgCounter = 1000;
@@ -485,10 +485,6 @@ function main() {
     commands = {
       ping: str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
     };
-
-
-
-
 
   server.on('error', function(err) {
     adapter.log.error('UDP error: ' + err);
