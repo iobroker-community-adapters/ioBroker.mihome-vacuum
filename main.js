@@ -483,10 +483,10 @@ function main() {
     commands = {
       ping: str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
     };
-  }
 
 
- 
+
+
 
   server.on('error', function(err) {
     adapter.log.error('UDP error: ' + err);
@@ -539,6 +539,6 @@ function main() {
   adapter.subscribeStates('*');
 
 
-
+}
 
 }
