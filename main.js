@@ -469,13 +469,15 @@ function main() {
     adapter.config.param_pingInterval = 10000;
   }
 
-  enabledExpert();
-  enabledVoiceControl();
+
   if (!adapter.config.token) {
     adapter.log.error('Token not specified!');
     //return;
   }
   else{
+    enabledExpert();
+    enabledVoiceControl();
+    
     packet = new MiHome.Packet(str2hex(adapter.config.token));
 
     packet.msgCounter = 1000;
