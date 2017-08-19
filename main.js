@@ -20,7 +20,7 @@ var stateVal= 0;
 var pingInterval, param_pingInterval;
 var message = '';
 var packet;
-
+var firstSet = true;
 var clean_log = [];
 var clean_log_html_all_lines = "";
 var clean_log_html_table = "";
@@ -145,6 +145,9 @@ function sendPing() {
 function stateControl(value){
   if(value && stateVal !== 5){
     sendMsg(com.start.method);
+    setTimeout(function() {
+      sendMsg(com.get_status.method);
+    }, 2000);
   }else if (!value && stateVal == 5){
     sendMsg(com.pause.method);
     setTimeout(function() {
@@ -199,6 +202,7 @@ function sendMsg(method, params, callback) {
       if (typeof callback === 'function') callback(err);
     });
     adapter.log.debug('sendMsg >>> ' + message_str);
+    adapter.log.debug('sendMsgRaw >>> ' + cmdraw.toString('hex'));
   } catch (err) {
     adapter.log.warn('Cannot send message_: ' + err);
     if (typeof callback === 'function') callback(err);
@@ -445,6 +449,14 @@ function enabledVoiceControl() {
 
 }
 
+function checkSetTimeDiff(){
+  var now = Math.round(parseInt((new Date().getTime()))/1000);//.toString(16)
+  var MessageTime = parseInt(packet.stamprec.toString('hex'),16);
+  if(firstSet && (MessageTime - now) !== 0)adapter.log.warn('Timedifference between Mihome Vacuum and ioBroker: '+( MessageTime -now)+ ' Sec');
+  packet.timediff= MessageTime - now ;
+  if(firstSet)firstSet= false;
+}
+
 function main() {
   adapter.setState('info.connection', false, true);
   adapter.config.port = parseInt(adapter.config.port, 10) || 54321;
@@ -457,21 +469,22 @@ function main() {
     adapter.config.param_pingInterval = 10000;
   }
 
-  enabledExpert();
-  enabledVoiceControl();
+
   if (!adapter.config.token) {
     adapter.log.error('Token not specified!');
-    return;
+    //return;
   }
+  else{
+    enabledExpert();
+    enabledVoiceControl();
 
-  packet = new MiHome.Packet(str2hex(adapter.config.token));
+    packet = new MiHome.Packet(str2hex(adapter.config.token));
 
-  packet.msgCounter = 1000;
+    packet.msgCounter = 1000;
 
-  commands = {
-    ping: str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
-  };
-
+    commands = {
+      ping: str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+    };
 
   server.on('error', function(err) {
     adapter.log.error('UDP error: ' + err);
@@ -485,6 +498,9 @@ function main() {
       if (msg.length === 32) {
         adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
         packet.setRaw(msg);
+
+        checkSetTimeDiff();
+
         clearTimeout(pingTimeout);
         pingTimeout = null;
         if (!connected) {
@@ -521,6 +537,6 @@ function main() {
   adapter.subscribeStates('*');
 
 
-
+}
 
 }

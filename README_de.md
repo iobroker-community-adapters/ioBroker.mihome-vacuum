@@ -48,6 +48,7 @@ Mit Jailbreak:
 - Findet man den Token unter /var/mobile/Containers/Data/Application/514106F3-C854-45E9-A45C-119CB4FFC235/Documents/USERID_mihome.sqlite
 
 Ohne Jailbreak:
+- Ausführliche Anleitung finden sie hier: ([Link](http://technikzeugs.de/xiaomi-mirobot-staubsaugroboter-mit-iobroker-und-echo-bzw-alexa-fernsteuern/)).
 - Muss man einen unverschlüsselten iTunes Backup machen mit z.B. ([Link](http://www.imactools.com/iphonebackupviewer/)).
 - Und dann in den Dateien nach  DB unter RAW, com.xiaomi.home, USERID_mihome.sqlite suchen.
 
@@ -105,6 +106,9 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 0.5.7 (2017-08-17)
+* (MeisterTR) compare system time and Robot time (fix no connection if system time is different)
+* (MeisterTR) update values if robot start by cloud
 ### 0.5.6 (2017-07-23)
 * (MeisterTR) add option for crate switch for Alexa control
 ### 0.5.5 (2017-06-30)
