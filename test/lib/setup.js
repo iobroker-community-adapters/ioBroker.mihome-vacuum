@@ -7,9 +7,11 @@ var child_process = require('child_process');
 var rootDir       = path.normalize(__dirname + '/../../');
 var pkg           = require(rootDir + 'package.json');
 var debug         = typeof v8debug === 'object';
+pkg.main = pkg.main || 'main.js';
 
 var adapterName = path.normalize(rootDir).replace(/\\/g, '/').split('/');
 adapterName = adapterName[adapterName.length - 2];
+var adapterStarted = false;
 
 function getAppName() {
     var parts = __dirname.replace(/\\/g, '/').split('/');
@@ -449,6 +451,12 @@ function setupController(cb) {
 }
 
 function startAdapter(objects, states, callback) {
+    if (adapterStarted) {
+        console.log('Adapter already started ...');
+        if (callback) callback(objects, states);
+        return;
+    }
+    adapterStarted = true;
     console.log('startAdapter...');
     if (fs.existsSync(rootDir + 'tmp/node_modules/' + pkg.name + '/' + pkg.main)) {
         try {
@@ -476,6 +484,8 @@ function startAdapter(objects, states, callback) {
 
 function startController(isStartAdapter, onObjectChange, onStateChange, callback) {
     if (typeof isStartAdapter === 'function') {
+        callback = onStateChange;
+        onStateChange = onObjectChange
         onObjectChange = isStartAdapter;
         isStartAdapter = true;
     }
