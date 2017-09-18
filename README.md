@@ -53,7 +53,7 @@ Without Jailbreak:
 - If you need to make an unencrypted iTunes backup with e.g. ([Link](http://www.imactools.com/iphonebackupviewer/)).
 - And then look in the files for DB under RAW, com.xiaomi.home, USERID_mihome.sqlite.
 
-Again, the 32-character token is searched for
+Again, the 32-character token or 96-character token is searched for
 
 ### Adapter Configuration
 - For IP address, the IP address of the robot must be entered in the format "192.168.178.XX"
@@ -107,6 +107,9 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 0.5.8 (2017-09-18)
+* (MeisterTR) use 96 char token from Ios Backup
+* (AlCalzone) add selection of predefined power levels
 ### 0.5.7 (2017-08-17)
 * (MeisterTR) compare system time and Robot time (fix no connection if system time is different)
 * (MeisterTR) update values if robot start by cloud

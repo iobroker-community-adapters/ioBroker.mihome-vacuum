@@ -53,7 +53,7 @@ Ohne Jailbreak:
 - Und dann in den Dateien nach  DB unter RAW, com.xiaomi.home, USERID_mihome.sqlite suchen.
 
 
-Auch hier wird nach dem 32 stelligen Token gesucht
+Auch hier wird nach dem 32 stelligen Token oder bei neueren Versionen ein 96 stelliger Token gesucht
 
 ### Adapterkonfiguration
 - Bei IP-Adresse muss die IP-Adresse des Roboters eingegeben werden im Format "192.168.178.XX"
@@ -106,6 +106,9 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 0.5.8 (2017-09-18)
+* (MeisterTR) use 96 char token from Ios Backup
+* (AlCalzone) add selection of predefined power levels
 ### 0.5.7 (2017-08-17)
 * (MeisterTR) compare system time and Robot time (fix no connection if system time is different)
 * (MeisterTR) update values if robot start by cloud
