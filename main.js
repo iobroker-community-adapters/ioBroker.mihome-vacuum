@@ -187,10 +187,23 @@ function requestParams() {
 }
 
 
-function sendMsg(method, params, callback) {
+function sendMsg(method, params, options, callback) {
 
-    last_id[method] = packet.msgCounter;
-    adapter.log.debug('lastid' + JSON.stringify(last_id));
+    // define optional options
+    if (typeof options === "function") {
+        callback = options;
+        options = null;
+    }
+    // define default options
+    options = options || {};
+    if (options.rememberPacket == undefined) options.rememberPacket = true; // remember packets per default
+
+    // remember packet if not explicitly forbidden
+    // this is used to route the returned package to the sendTo callback
+    if (options.rememberPacket) {
+        last_id[method] = packet.msgCounter;
+        adapter.log.debug('lastid' + JSON.stringify(last_id));
+    }
 
     var message_str = buildMsg(method, params);
 
@@ -288,7 +301,7 @@ function getStates(message) {
         adapter.setState('control.X_get_response', JSON.stringify(answer.result), true);
 
     } else if (answer.id === last_id["get_clean_record"]) {
-
+        
         for (var j = 0; j < answer.result.length; j++) {
             var dates = new Date();
             var hour = "",
@@ -320,6 +333,12 @@ function getStates(message) {
 
 
         }
+
+    } else if (answer.id in sendCommandCallbacks) {
+
+        // invoke the callback from the sendTo handler
+        var callback = sendCommandCallbacks[answer.id];
+        if (typeof callback === "function") callback(answer.result);
     }
 }
 
@@ -540,3 +559,72 @@ function main() {
     }
 
 }
+
+var sendCommandCallbacks = {/* "counter": callback() */};
+adapter.on("message", function (obj) {
+    // responds to the adapter that sent the original message
+    function respond(response) {
+        if (obj.callback) adapter.sendTo(obj.from, obj.command, response, obj.callback);
+    }
+    // some predefined responses so we only have to define them once
+    var predefinedResponses = {
+        ACK: { error: null },
+        OK: { error: null, result: "ok" },
+        ERROR_UNKNOWN_COMMAND: { error: "Unknown command!" },
+        MISSING_PARAMETER: function (paramName) {
+            return { error: 'missing parameter "' + paramName + '"!' };
+        }
+    };
+    // make required parameters easier
+    function requireParams(params /*: string[] */) {
+        if (!(params && params.length)) return true;
+        for (var i = 0; i < params.length; i++) {
+            var param = params[i];
+            if (!(obj.message && obj.message.hasOwnProperty(param))) {
+                respond(predefinedResponses.MISSING_PARAMETER(param));
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function sendCustomCommand(method /*: string */, params /*: string[] */) {      
+        // remember message id
+        var id = packet.msgCounter;
+        // create callback to be called later
+        sendCommandCallbacks[id] = function(response) {
+            // now respond with the result
+            respond({error: null, result: response});
+            // remove the callback from the dict
+            if (sendCommandCallbacks[id] != null) delete sendCommandCallbacks[id];
+        };
+        // send msg to the robo
+        sendMsg(method, params, {rememberPacket: false}, function(err) {
+            // on error, respond immediately
+            if (err) respond({ error: err });
+            // else wait for the callback
+        });
+    }
+
+    // handle the message
+    if (obj) {
+        switch (obj.command) {
+            // call this with 
+            // sendTo("mihome-vacuum.0", "sendCustomCommand", 
+            //     {method: "method_id", params: [...] /* optional*/}, 
+            //     callback
+            // );
+            case "sendCustomCommand":
+                // require the method to be given
+                if (!requireParams(["method"])) return;
+                // params is optional
+               
+                var params = obj.message;
+                sendCustomCommand(params.method, params.params);
+                return;
+            default:
+                respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
+                return;
+        }
+    }
+});
