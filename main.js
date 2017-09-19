@@ -73,16 +73,16 @@ adapter.on('stateChange', function (id, state) {
                 try {
                     params = JSON.parse(values[1]);
                 } catch (e) {
-                    adapter.log.warn('Cold not send this Params because its not a JSON Format: ' + values[1]);
+                    adapter.log.warn('Could not send these params because its not in JSON format: ' + values[1]);
                 } finally {
 
                 }
-                adapter.log.info('send Message: Method: ' + values[0] + " Params: " + values[1]);
+                adapter.log.info('send message: Method: ' + values[0] + " Params: " + values[1]);
                 sendMsg(values[0], params, function () {
                     adapter.setForeignState(id, state.val, true);
                 });
             } else {
-                adapter.log.info('send Message: Method: ' + values[0]);
+                adapter.log.info('send message: Method: ' + values[0]);
                 sendMsg(values[0], [""], function () {
                     adapter.setForeignState(id, state.val, true);
                 });
@@ -156,9 +156,9 @@ function stateControl(value) {
     }
 }
 
-function reqestParams() {
+function requestParams() {
     if (connected) {
-        adapter.log.debug("request params all: " + adapter.config.param_pingInterval / 1000 + " Sec");
+        adapter.log.debug("requesting params every: " + adapter.config.param_pingInterval / 1000 + " Sec");
 
         sendMsg(com.get_status.method);
 
@@ -335,7 +335,7 @@ function getLog(callback) {
             adapter.log.debug("Request log entry: " + log_entrys[i]);
 
         } else {
-            adapter.log.error("Clould not find log entry");
+            adapter.log.error("Could not find log entry");
         }
         i++;
         if (i < log_entrys.length) {
@@ -392,7 +392,7 @@ function makeTable(line) {
 
 function enabledExpert() {
     if (adapter.config.enableSelfCommands) {
-        adapter.log.info('Expretmode enabled, states created');
+        adapter.log.info('Expert mode enabled, states created');
         adapter.setObjectNotExists('control.X_send_command', {
             type: 'state',
             common: {
@@ -416,7 +416,7 @@ function enabledExpert() {
 
 
     } else {
-        adapter.log.info('Expretmode disabled, states deleded');
+        adapter.log.info('Expert mode disabled, states deleded');
         adapter.delObject('control.X_send_command');
         adapter.delObject('control.X_get_response');
 
@@ -425,7 +425,7 @@ function enabledExpert() {
 }
 function enabledVoiceControl() {
     if (adapter.config.enableAlexa) {
-        adapter.log.info('Crate state clean_home for controlling by cloud Adapter');
+        adapter.log.info('Create state clean_home for controlling by cloud adapter');
 
         adapter.setObjectNotExists('control.clean_home', {
             type: 'state',
@@ -452,7 +452,7 @@ function enabledVoiceControl() {
 function checkSetTimeDiff() {
     var now = Math.round(parseInt((new Date().getTime())) / 1000);//.toString(16)
     var MessageTime = parseInt(packet.stamprec.toString('hex'), 16);
-    if (firstSet && (MessageTime - now) !== 0) adapter.log.warn('Timedifference between Mihome Vacuum and ioBroker: ' + (MessageTime - now) + ' Sec');
+    if (firstSet && (MessageTime - now) !== 0) adapter.log.warn('Time difference between Mihome Vacuum and ioBroker: ' + (MessageTime - now) + ' sec');
     packet.timediff = MessageTime - now;
     if (firstSet) firstSet = false;
 }
@@ -533,7 +533,7 @@ function main() {
 
         sendPing();
         pingInterval = setInterval(sendPing, adapter.config.pingInterval);
-        param_pingInterval = setInterval(reqestParams, adapter.config.param_pingInterval);
+        param_pingInterval = setInterval(requestParams, adapter.config.param_pingInterval);
         adapter.subscribeStates('*');
 
 
