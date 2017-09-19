@@ -22,6 +22,7 @@ This adapter allows you control the Xiaomi vacuum cleaner.
         - [Second robot](#second-robot)
 - [Functions](#functions)
     - [Own Commands](#send-your-own-commands)
+    - [sendTo hook](#send-custom-commands-with-sendto)
 - [widget](#widget)
 - [bugs](#bugs)
 - [Changelog](#changelog)
@@ -97,6 +98,16 @@ The following methods and parameters are supported:
 
 
 more methods and parameters you can find here ([Link](https://github.com/MeisterTR/XiaomiRobotVacuumProtocol)).
+
+### Send custom commands with sendTo
+You can also send those custom commands from other adapters with `sendTo`. Usage with `method_id` and `params` as defined above:
+```
+sendTo("mihome-vacuum.0", "sendCustomCommand", 
+    {method: "method_id", params: [...] /* optional*/}, 
+    function (response) { /* do something with the result */}
+);
+```
+The `response` object has two properties: `error` and (if there was no error) `result`.
 
 ## Widget
 Sorry, not yet finished.
