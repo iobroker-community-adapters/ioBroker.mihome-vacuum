@@ -174,8 +174,9 @@
                 obj[$this.attr('id')] = $this.val();
             }
         });
-        if (obj.token.replace(/\s/g, '').length !== 32) {
-            showMessage(_('Invalid token length. Expected 32 HEX chars'));
+        var tokenLength = obj.token.replace(/\s/g, '').length;
+        if (tokenLength !== 32 && tokenLength !== 96) {
+            showMessage(_('Invalid token length. Expected 32 or 96 HEX chars.'));
             return;
         }
 

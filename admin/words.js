@@ -37,5 +37,8 @@ systemDictionary = {
     "en": "Send own commands:",
     "de": "Sende eigene Kommandos:",
     "ru": "Send own commands:"
+  },
+  "Invalid token length. Expected 32 or 96 HEX chars.": {
+    "de": "Ungültige Tokenlänge. 32 oder 96 HEX-Zeichen erwartet."   
   }
 };
