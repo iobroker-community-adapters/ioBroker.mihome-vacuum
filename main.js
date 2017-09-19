@@ -192,7 +192,7 @@ function sendMsg(method, params, callback) {
     last_id[method] = packet.msgCounter;
     adapter.log.debug('lastid' + JSON.stringify(last_id));
 
-    var message_str = bulidMsg(method, params);
+    var message_str = buildMsg(method, params);
 
     try {
         var cmdraw = packet.getRaw_fast(message_str);
@@ -211,7 +211,7 @@ function sendMsg(method, params, callback) {
 }
 
 
-function bulidMsg(method, params) {
+function buildMsg(method, params) {
     var message = {};
     if (method) {
         message.id = packet.msgCounter;
@@ -220,7 +220,7 @@ function bulidMsg(method, params) {
             message.params = params;
         }
     } else {
-        adapter.log.warn('Could not bulid message without arguments');
+        adapter.log.warn('Could not build message without arguments');
     }
     return JSON.stringify(message);
 }
