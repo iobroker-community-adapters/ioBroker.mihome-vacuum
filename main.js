@@ -250,6 +250,99 @@ function str2hex(str) {
     return buf;
 }
 
+/** Parses the answer to a get_clean_summary message */
+function parseCleaningSummary(response) {
+    response = response.result;
+    return {
+        clean_time: response[0], // in seconds
+        total_area: response[1], // in cm^2
+        num_cleanups: response[2],
+        cleaning_record_ids: response[3], // number[]
+    };
+}
+
+/** Parses the answer to a get_clean_record message */
+function parseCleaningRecords(response) {
+    return response.result.map(function(entry) {
+        return {
+            start_time: entry[0], // unix timestamp
+            end_time: entry[1], // unix timestamp
+            duration: entry[2], // in seconds
+            area: entry[3], // in cm^2
+            errors: entry[4], // ?
+            completed: entry[5] === 1, // boolean
+        };
+    });
+}
+
+var statusTexts = {
+    "0": "Unknown",
+    "1": "Initiating",
+    "2": "Sleeping",
+    "3": "Waiting",
+    "4": "?",
+    "5": "Cleaning",
+    "6": "Back to home",
+    "7": "?",
+    "8": "Charging",
+    "9": "Charging Error",
+    "10": "Pause",
+    "11": "Spot Cleaning",
+    "12": "In Error",
+    "13": "Shutting down",
+    "14": "Updating",
+    "15": "Docking",
+    "100": "Full"
+};
+// TODO: deduplicate from io-package.json
+var errorTexts = {
+    "0": "No error",
+    "1": "Laser distance sensor error",
+    "2": "Collision sensor error",
+    "3": "Wheels on top of void, move robot",
+    "4": "Clean hovering sensors, move robot",
+    "5": "Clean main brush",
+    "6": "Clean side brush",
+    "7": "Main wheel stuck?",
+    "8": "Device stuck, clean area",
+    "9": "Dust collector missing",
+    "10": "Clean filter",
+    "11": "Stuck in magnetic barrier",
+    "12": "Low battery",
+    "13": "Charging fault",
+    "14": "Battery fault",
+    "15": "Wall sensors dirty, wipe them",
+    "16": "Place me on flat surface",
+    "17": "Side brushes problem, reboot me",
+    "18": "Suction fan problem",
+    "19": "Unpowered charging station",
+};
+/** Parses the answer to a get_status message */
+function parseStatus(response) {
+    response = response.result[0];
+    return {
+        battery: response.battery,
+        clean_area: response.clean_area,
+        clean_time: response.clean_time,
+        dnd_enabled: response.dnd_enabled === 1,
+        error_code: response.error_code,
+        error_text: errorTexts[response.error_code],
+        fan_power: response.fan_power,
+        in_cleaning: response.in_cleaning === 1,
+        map_present: response.map_present === 1,
+        msg_seq: response.msg_seq,
+        msg_ver: response.msg_ver,
+        state: response.state,
+        state_text: statusTexts[response.state],
+    };
+}
+
+/** Parses the answer to a get_dnd_timer message */
+function parseDNDTimer(response) {
+    response = response.result[0];
+    response.enabled = (response.enabled === 1);
+    return response;
+}
 
 function getStates(message) {
     //Search id in answer
@@ -267,20 +360,21 @@ function getStates(message) {
     //adapter.log.info(answer['id']);
 
     if (answer.id === last_id["get_status"]) {
-        adapter.setState('info.battery', answer.result[0].battery, true);
-        adapter.setState('info.cleanedtime', Math.round(answer.result[0].clean_time / 60), true);
-        adapter.setState('info.cleanedarea', Math.round(answer.result[0].clean_area / 10000) / 100, true);
-        adapter.setState('control.fan_power', Math.round(answer.result[0].fan_power), true);
-        adapter.setState('info.state', answer.result[0].state, true);
-        stateVal = answer.result[0].state;
+        var status = parseStatus(answer);
+        adapter.setState('info.battery', status.battery, true);
+        adapter.setState('info.cleanedtime', Math.round(status.clean_time / 60), true);
+        adapter.setState('info.cleanedarea', Math.round(status.clean_area / 10000) / 100, true);
+        adapter.setState('control.fan_power', Math.round(status.fan_power), true);
+        adapter.setState('info.state', status.state, true);
+        stateVal = status.state;
         if (stateVal === 5 || stateVal === "5") {
             adapter.setState('control.clean_home', true, true);
         }
         else {
             adapter.setState('control.clean_home', false, true);
         }
-        adapter.setState('info.error', answer.result[0].error_code, true);
-        adapter.setState('info.dnd', answer.result[0].dnd_enabled, true)
+        adapter.setState('info.error', status.error_code, true);
+        adapter.setState('info.dnd', status.dnd_enabled, true)
     } else if (answer.id === last_id["get_consumable"]) {
 
         adapter.setState('consumable.main_brush', 100 - (Math.round(answer.result[0].main_brush_work_time / 3600 / 3)), true);
@@ -288,11 +382,11 @@ function getStates(message) {
         adapter.setState('consumable.filter', 100 - (Math.round(answer.result[0].filter_work_time / 3600 / 1.5)), true);
         adapter.setState('consumable.sensors', 100 - (Math.round(answer.result[0].sensor_dirty_time / 3600 / 0.3)), true);
     } else if (answer.id === last_id["get_clean_summary"]) {
-
-        adapter.setState('history.total_time', Math.round(answer.result[0] / 60), true);
-        adapter.setState('history.total_area', Math.round(answer.result[1] / 1000000), true);
-        adapter.setState('history.total_cleanups', Math.round(answer.result[2]), true);
-        log_entrys_new = answer.result[3];
+        var summary = parseCleaningSummary(answer);
+        adapter.setState('history.total_time', Math.round(summary.clean_time / 60), true);
+        adapter.setState('history.total_area', Math.round(summary.total_area / 1000000), true);
+        adapter.setState('history.total_cleanups', summary.num_cleanups, true);
+        log_entrys_new = summary.cleaning_record_ids;
         //adapter.log.info("log_entrya" + JSON.stringify(log_entrys_new));
         //adapter.log.info("log_entry old" + JSON.stringify(log_entrys));
 
@@ -301,12 +395,14 @@ function getStates(message) {
         adapter.setState('control.X_get_response', JSON.stringify(answer.result), true);
 
     } else if (answer.id === last_id["get_clean_record"]) {
-        
-        for (var j = 0; j < answer.result.length; j++) {
+        var records = parseCleaningRecords(answer);
+        for (var j = 0; j < records.length; j++) {
+            var record = records[j];
+
             var dates = new Date();
             var hour = "",
                 min = "";
-            dates.setTime(answer.result[j][0] * 1000);
+            dates.setTime(record.start_time * 1000);
             if (dates.getHours() < 10) {
                 hour = "0" + dates.getHours();
             } else {
@@ -321,10 +417,10 @@ function getStates(message) {
             var log_data = {
                 "Datum": dates.getDate() + "." + (dates.getMonth() + 1),
                 "Start": hour + ":" + min,
-                "Saugzeit": Math.round(answer.result[j][2] / 60) + " min",
-                "Fläche": Math.round(answer.result[j][3] / 10000) / 100 + " m²",
-                "Error": answer.result[j][4],
-                "Ende": answer.result[j][5]
+                "Saugzeit": Math.round(record.duration / 60) + " min",
+                "Fläche": Math.round(record.area / 10000) / 100 + " m²",
+                "Error": record.errors,
+                "Ende": record.completed
             };
 
 
@@ -338,7 +434,7 @@ function getStates(message) {
 
         // invoke the callback from the sendTo handler
         var callback = sendCommandCallbacks[answer.id];
-        if (typeof callback === "function") callback(answer.result);
+        if (typeof callback === "function") callback(answer);
     }
 }
 
@@ -588,11 +684,30 @@ adapter.on("message", function (obj) {
         return true;
     }
 
-    function sendCustomCommand(method /*: string */, params /*: string[] */) {      
+    function sendCustomCommand(
+        method /*: string */, 
+        params /*: (optional) string[] */, 
+        parser /*: (optional) (object) => object */
+    ) {      
+        // parse arguments
+        if (typeof params === "function") {
+            parser = params;
+            params = null;
+        }
+        if (parser != null && typeof parser !== "function") {
+            throw new Error("Parser must be a function");
+        }
         // remember message id
         var id = packet.msgCounter;
         // create callback to be called later
-        sendCommandCallbacks[id] = function(response) {
+        sendCommandCallbacks[id] = function (response) {
+            if (parser != null) {
+                // optionally transform the result
+                response = parser(response);
+            } else {
+                // in any case, only return the result
+                response = response.result;
+            }
             // now respond with the result
             respond({error: null, result: response});
             // remove the callback from the dict
@@ -604,6 +719,11 @@ adapter.on("message", function (obj) {
             if (err) respond({ error: err });
             // else wait for the callback
         });
+    }
+
+    /** Returns the only array element in a response */
+    function returnSingleResult(resp) {
+        return resp.result[0];
     }
 
     // handle the message
@@ -622,6 +742,121 @@ adapter.on("message", function (obj) {
                 var params = obj.message;
                 sendCustomCommand(params.method, params.params);
                 return;
+
+            // ======================================================================
+            // support for the commands mentioned here:
+            // https://github.com/MeisterTR/XiaomiRobotVacuumProtocol#vaccum-commands
+
+            // cleaning commands
+            case "startVacuuming":
+                sendCustomCommand("app_start");
+                return;
+            case "stopVacuuming":
+                sendCustomCommand("app_stop");
+                return;
+            case "cleanSpot":
+                sendCustomCommand("app_spot");
+                return;
+            case "pause":
+                sendCustomCommand("app_pause");
+                return;
+            case "charge":
+                sendCustomCommand("app_charge");
+                return;
+
+            // TODO: What does this do?
+            case "findMe":
+                sendCustomCommand("find_me");
+                return;
+                
+            // get info about the consumables
+            // TODO: parse the results
+            case "getConsumableStatus":
+                sendCustomCommand("get_consumable", returnSingleResult);
+                return;
+            case "resetConsumables":
+                sendCustomCommand("reset_consumable");
+                return;
+
+            // get info about cleanups
+            case "getCleaningSummary":
+                sendCustomCommand("get_clean_summary", parseCleaningSummary);
+                return;
+            case "getCleaningRecord":
+                // require the record id to be given
+                if (!requireParams(["recordId"])) return;
+                // TODO: can we do multiple at once?
+                sendCustomCommand("get_clean_record", [obj.message.recordId], parseCleaningRecords);
+                return;
+
+            // TODO: find out how this works
+            // case "getCleaningRecordMap":
+            //     sendCustomCommand("get_clean_record_map");
+            case "getMap":
+                sendCustomCommand("get_map_v1");
+                return;
+
+            // Basic information
+            case "getStatus":
+                sendCustomCommand("get_status", parseStatus);
+                return;
+            case "getSerialNumber":
+                sendCustomCommand("get_serial_number", function (resp) { return resp.result[0].serial_number; });
+                return;
+            case "getDeviceDetails":
+                sendCustomCommand("miIO.info");
+                return;
+            
+            // Do not disturb
+            case "getDNDTimer":
+                sendCustomCommand("get_dnd_timer", returnSingleResult);
+                return;
+            case "setDNDTimer":
+                // require start and end time to be given
+                if (!requireParams(["startHour", "startMinute", "endHour", "endMinute"])) return;
+                var params = obj.message;
+                sendCustomCommand("set_dnd_timer", [params.startHour, params.startMinute, params.endHour, params.endMinute]);
+                return;
+            case "deleteDNDTimer":
+                sendCustomCommand("close_dnd_timer");
+                return;
+
+            // Fan speed
+            case "getFanSpeed":
+                // require start and end time to be given
+                sendCustomCommand("get_custom_mode", returnSingleResult);
+                return;
+            case "setFanSpeed":
+                // require start and end time to be given
+                if (!requireParams(["fanSpeed"])) return;
+                sendCustomCommand("set_custom_mode", [obj.message.fanSpeed]);
+                return;
+
+            // Remote controls
+            case "startRemoteControl":
+                sendCustomCommand("app_rc_start");
+                return;
+            case "stopRemoteControl":
+                sendCustomCommand("app_rc_end");
+                return;
+            case "move":
+                // require all params to be given
+                if (!requireParams(["velocity", "angularVelocity", "duration", "sequenceNumber"])) return;
+                // TODO: Constrain the params
+                var params = obj.message;
+                // TODO: can we issue multiple commands at once?
+                var args = [{
+                    "omega": params.angularVelocity,
+                    "velocity": params.velocity,
+                    "seqnum": params.sequenceNumber, // <- TODO: make this automatic
+                    "duration": params.duration
+                }];
+                sendCustomCommand("app_rc_move", [args]);
+                return;
+        
+
+    // ======================================================================
+                
             default:
                 respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
                 return;

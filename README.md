@@ -109,6 +109,41 @@ sendTo("mihome-vacuum.0", "sendCustomCommand",
 ```
 The `response` object has two properties: `error` and (if there was no error) `result`.
 
+A couple of predefined commands can also be issued this way:
+```
+sendTo("mihome-vacuum.0", 
+    commandName, 
+    {param1: value1, param2: value2, ...}, 
+    function (response) { /* do something with the result */}
+);
+```
+The supported commands are:
+
+| Description | `commandName` | Required params | Remarks |
+|---|---|---|---|
+| Start the cleaning process | `startVacuuming` | - none - |  |
+| Stop the cleaning process | `stopVacuuming` | - none - |  |
+| Pause the cleaning process | `pause` | - none - |  |
+| Clean a small area around the robot | `cleanSpot` | - none - |  |
+| Go back to the base | `charge` | - none - |  |
+| Say "Hi, I'm over here!" | `findMe` | - none - |  |
+| Check status of consumables (brush, etc.) | `getConsumableStatus` | - none - |  |
+| Reset status of consumables (brush, etc.) | `resetConsumables` | - none - | Call signature unknown |
+| Get a summary of all previous cleaning processes | `getCleaningSummary` | - none - |  |
+| Get a detailed summary of a previous cleaning process | `getCleaningRecord` | `recordId` |  |
+| Get a map | `getMap` | - none - | Unknown what to do with the result |
+| Get the current status of the robot | `getStatus` | - none - |  |
+| Retrieve the robot's serial number | `getSerialNumber` | - none - |  |
+| Get detailed device information | `getDeviceDetails` | - none - |  |
+| Retrieve the *do not disturb* timer | `getDNDTimer` | - none - |  |
+| Set a new *do not disturb* timer | `setDNDTimer` | `startHour`, `startMinute`, `endHour`, `endMinute` |  |
+| Delete the *do not disturb* timer | `deleteDNDTimer` | - none - |  |
+| Retrieve the current fan speed | `getFanSpeed` | - none - |  |
+| Set a new fan speed | `setFanSpeed` | `fanSpeed` | `fanSpeed` is a number between 1 and 100 |
+| Start the remote control function | `startRemoteControl` | - none - |  |
+| Issue a move command for remote control | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | Sequence number must be sequentially, Duration is in ms |
+| End the remote control function | `stopRemoteControl` | - none - |  |
+
 ## Widget
 Sorry, not yet finished.
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
