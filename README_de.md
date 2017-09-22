@@ -128,7 +128,7 @@ Die unterstützten Kommandos sind:
 | Einen kleinen bereich um den Roboter saugen | `cleanSpot` | - keine - |  |
 | Zurück zur Ladestation | `charge` | - keine - |  |
 | "Hi, I'm over here!" sagen | `findMe` | - keine - |  |
-| Status der Verbrauchsmaterialien prüfen (Bürste, etc.) | `getConsumableStatus` | - keine - | Das Ergebnis wird noch nicht geparst |
+| Status der Verbrauchsmaterialien prüfen (Bürste, etc.) | `getConsumableStatus` | - keine - |  |
 | Status der Verbrauchsmaterialien zurücksetzen (Bürste, etc.) | `resetConsumables` | - keine - | Aufrufsignatur unbekannt |
 | Eine Zusammenfassung aller vorheriger Saugvorgänge abrufen | `getCleaningSummary` | - keine - |  |
 | Eine detaillierte Zusammenfassung eines Saugvorgangs abrufen | `getCleaningRecord` | `recordId` |  |
@@ -137,7 +137,7 @@ Die unterstützten Kommandos sind:
 | Seriennummer des Roboters auslesen | `getSerialNumber` | - keine - |  |
 | Detaillierte Geräteinfos auslesen | `getDeviceDetails` | - keine - |  |
 | *Nicht-stören*-Timer abrufen | `getDNDTimer` | - keine - |  |
-| Neuen *Nicht-stören*-Timer festlegen | `setDNDTimer` | `startHour`, `startMinutes`, `endHour`, `endMinutes` |  |
+| Neuen *Nicht-stören*-Timer festlegen | `setDNDTimer` | `startHour`, `startMinute`, `endHour`, `endMinute` |  |
 | *Nicht-stören*-Timer löschen | `deleteDNDTimer` | - keine - |  |
 | Saugstufe abrufen | `getFanSpeed` | - keine - |  |
 | Saugstufe festlegen | `setFanSpeed` | `fanSpeed` | `fanSpeed` ist eine Zahl zwischen 1 und 100 |

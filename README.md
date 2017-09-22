@@ -127,7 +127,7 @@ The supported commands are:
 | Clean a small area around the robot | `cleanSpot` | - none - |  |
 | Go back to the base | `charge` | - none - |  |
 | Say "Hi, I'm over here!" | `findMe` | - none - |  |
-| Check status of consumables (brush, etc.) | `getConsumableStatus` | - none - | The result is not parsed yet |
+| Check status of consumables (brush, etc.) | `getConsumableStatus` | - none - |  |
 | Reset status of consumables (brush, etc.) | `resetConsumables` | - none - | Call signature unknown |
 | Get a summary of all previous cleaning processes | `getCleaningSummary` | - none - |  |
 | Get a detailed summary of a previous cleaning process | `getCleaningRecord` | `recordId` |  |
@@ -136,7 +136,7 @@ The supported commands are:
 | Retrieve the robot's serial number | `getSerialNumber` | - none - |  |
 | Get detailed device information | `getDeviceDetails` | - none - |  |
 | Retrieve the *do not disturb* timer | `getDNDTimer` | - none - |  |
-| Set a new *do not disturb* timer | `setDNDTimer` | `startHour`, `startMinutes`, `endHour`, `endMinutes` |  |
+| Set a new *do not disturb* timer | `setDNDTimer` | `startHour`, `startMinute`, `endHour`, `endMinute` |  |
 | Delete the *do not disturb* timer | `deleteDNDTimer` | - none - |  |
 | Retrieve the current fan speed | `getFanSpeed` | - none - |  |
 | Set a new fan speed | `setFanSpeed` | `fanSpeed` | `fanSpeed` is a number between 1 and 100 |

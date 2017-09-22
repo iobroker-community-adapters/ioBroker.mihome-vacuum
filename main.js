@@ -434,7 +434,7 @@ function getStates(message) {
 
         // invoke the callback from the sendTo handler
         var callback = sendCommandCallbacks[answer.id];
-        if (typeof callback === "function") callback(answer.result);
+        if (typeof callback === "function") callback(answer);
     }
 }
 
@@ -700,7 +700,7 @@ adapter.on("message", function (obj) {
         // remember message id
         var id = packet.msgCounter;
         // create callback to be called later
-        sendCommandCallbacks[id] = function(response) {
+        sendCommandCallbacks[id] = function (response) {
             if (parser != null) {
                 // optionally transform the result
                 response = parser(response);
@@ -772,7 +772,7 @@ adapter.on("message", function (obj) {
             // get info about the consumables
             // TODO: parse the results
             case "getConsumableStatus":
-                sendCustomCommand("get_consumable");
+                sendCustomCommand("get_consumable", returnSingleResult);
                 return;
             case "resetConsumables":
                 sendCustomCommand("reset_consumable");
@@ -815,7 +815,7 @@ adapter.on("message", function (obj) {
                 // require start and end time to be given
                 if (!requireParams(["startHour", "startMinute", "endHour", "endMinute"])) return;
                 var params = obj.message;
-                sendCustomCommand("get_dnd_timer", [params.startHour, params.startMinute, params.endHour, params.endMinute]);
+                sendCustomCommand("set_dnd_timer", [params.startHour, params.startMinute, params.endHour, params.endMinute]);
                 return;
             case "deleteDNDTimer":
                 sendCustomCommand("close_dnd_timer");
