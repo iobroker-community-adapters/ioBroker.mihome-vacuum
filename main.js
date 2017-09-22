@@ -687,7 +687,7 @@ adapter.on("message", function (obj) {
     function sendCustomCommand(
         method /*: string */, 
         params /*: (optional) string[] */, 
-        parser /*: (optional) (object) => object */,
+        parser /*: (optional) (object) => object */
     ) {      
         // parse arguments
         if (typeof params === "function") {
