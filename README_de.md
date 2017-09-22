@@ -110,6 +110,41 @@ mit `method_id` und `params` nach obiger Definition.
 
 Das `response` Objekt hat zwei Eigenschaften: `error` und (sofern kein Fehler aufgetreten ist) `result`.
 
+Eine handvoll vordefinierter Kommandos kann auch folgendermaßen abgesetzt werden:
+```
+sendTo("mihome-vacuum.0", 
+    commandName, 
+    {param1: value1, param2: value2, ...}, 
+    function (response) { /* do something with the result */}
+);
+```
+Die unterstützten Kommandos sind:
+
+| Beschreibung | `commandName` | Erforderliche Parameter | Anmerkungen |
+|---|---|---|---|
+| Saugprozess starten | `startVacuuming` | - keine - |  |
+| Saugprozess beenden | `stopVacuuming` | - keine - |  |
+| Saugprozess pausieren | `pause` | - keine - |  |
+| Einen kleinen bereich um den Roboter saugen | `cleanSpot` | - keine - |  |
+| Zurück zur Ladestation | `charge` | - keine - |  |
+| "Hi, I'm over here!" sagen | `findMe` | - keine - |  |
+| Status der Verbrauchsmaterialien prüfen (Bürste, etc.) | `getConsumableStatus` | - keine - | Das Ergebnis wird noch nicht geparst |
+| Status der Verbrauchsmaterialien zurücksetzen (Bürste, etc.) | `resetConsumables` | - keine - | Aufrufsignatur unbekannt |
+| Eine Zusammenfassung aller vorheriger Saugvorgänge abrufen | `getCleaningSummary` | - keine - |  |
+| Eine detaillierte Zusammenfassung eines Saugvorgangs abrufen | `getCleaningRecord` | `recordId` |  |
+| Karte auslesen | `getMap` | - keine - | Unbekannt, was mit dem Ergebnis getan werden kann |
+| Aktuellen Status des Roboters auslesen | `getStatus` | - keine - |  |
+| Seriennummer des Roboters auslesen | `getSerialNumber` | - keine - |  |
+| Detaillierte Geräteinfos auslesen | `getDeviceDetails` | - keine - |  |
+| *Nicht-stören*-Timer abrufen | `getDNDTimer` | - keine - |  |
+| Neuen *Nicht-stören*-Timer festlegen | `setDNDTimer` | `startHour`, `startMinutes`, `endHour`, `endMinutes` |  |
+| *Nicht-stören*-Timer löschen | `deleteDNDTimer` | - keine - |  |
+| Saugstufe abrufen | `getFanSpeed` | - keine - |  |
+| Saugstufe festlegen | `setFanSpeed` | `fanSpeed` | `fanSpeed` ist eine Zahl zwischen 1 und 100 |
+| Fernsteuerungsfunktion starten | `startRemoteControl` | - keine - |  |
+| Bewegungskommando für Fernsteuerung absetzen | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | sequenceNumber muss sequentiell sein, Dauer ist in ms |
+| Fernsteuerungsfunktion beenden | `stopRemoteControl` | - keine - |  |
+
 ## Widget
 Zur Zeit leider noch nicht fertig.
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)

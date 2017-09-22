@@ -813,11 +813,11 @@ adapter.on("message", function (obj) {
                 return;
             case "setDNDTimer":
                 // require start and end time to be given
-                if (!requireParams(["startHour", "startMinutes", "endHour", "endMinutes"])) return;
+                if (!requireParams(["startHour", "startMinute", "endHour", "endMinute"])) return;
                 var params = obj.message;
-                sendCustomCommand("get_dnd_timer", [params.startHour, params.startMinutes, params.endHour, params.endMinutes]);
+                sendCustomCommand("get_dnd_timer", [params.startHour, params.startMinute, params.endHour, params.endMinute]);
                 return;
-            case "disableDNDTimer":
+            case "deleteDNDTimer":
                 sendCustomCommand("close_dnd_timer");
                 return;
 
