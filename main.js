@@ -120,7 +120,7 @@ function sendPing() {
         pingTimeout = null;
         if (connected) {
             connected = false;
-            adapter.log.info('Disconnect');
+            adapter.log.debug('Disconnect');
             adapter.setState('info.connection', false, true);
         }
     }, 3000);
@@ -136,7 +136,7 @@ function sendPing() {
         pingTimeout = null;
         if (connected) {
             connected = false;
-            adapter.log.info('Disconnect');
+            adapter.log.debug('Disconnect');
             adapter.setState('info.connection', false, true);
         }
     }
@@ -350,7 +350,7 @@ function getStates(message) {
     pingTimeout = null;
     if (!connected) {
         connected = true;
-        adapter.log.info('Connected');
+        adapter.log.debug('Connected');
         adapter.setState('info.connection', true, true);
     }
     var answer = JSON.parse(message);
@@ -620,7 +620,7 @@ function main() {
                     pingTimeout = null;
                     if (!connected) {
                         connected = true;
-                        adapter.log.info('Connected');
+                        adapter.log.debug('Connected');
                         adapter.setState('info.connection', true, true);
                     }
 
