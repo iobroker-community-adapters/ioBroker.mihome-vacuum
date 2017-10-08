@@ -22,6 +22,7 @@ This adapter allows you control the Xiaomi vacuum cleaner.
         - [Second robot](#second-robot)
 - [Functions](#functions)
     - [Own Commands](#send-your-own-commands)
+    - [sendTo hook](#send-custom-commands-with-sendto)
 - [widget](#widget)
 - [bugs](#bugs)
 - [Changelog](#changelog)
@@ -97,6 +98,51 @@ The following methods and parameters are supported:
 
 
 more methods and parameters you can find here ([Link](https://github.com/MeisterTR/XiaomiRobotVacuumProtocol)).
+
+### Send custom commands with sendTo
+You can also send those custom commands from other adapters with `sendTo`. Usage with `method_id` and `params` as defined above:
+```
+sendTo("mihome-vacuum.0", "sendCustomCommand", 
+    {method: "method_id", params: [...] /* optional*/}, 
+    function (response) { /* do something with the result */}
+);
+```
+The `response` object has two properties: `error` and (if there was no error) `result`.
+
+A couple of predefined commands can also be issued this way:
+```
+sendTo("mihome-vacuum.0", 
+    commandName, 
+    {param1: value1, param2: value2, ...}, 
+    function (response) { /* do something with the result */}
+);
+```
+The supported commands are:
+
+| Description | `commandName` | Required params | Remarks |
+|---|---|---|---|
+| Start the cleaning process | `startVacuuming` | - none - |  |
+| Stop the cleaning process | `stopVacuuming` | - none - |  |
+| Pause the cleaning process | `pause` | - none - |  |
+| Clean a small area around the robot | `cleanSpot` | - none - |  |
+| Go back to the base | `charge` | - none - |  |
+| Say "Hi, I'm over here!" | `findMe` | - none - |  |
+| Check status of consumables (brush, etc.) | `getConsumableStatus` | - none - |  |
+| Reset status of consumables (brush, etc.) | `resetConsumables` | - none - | Call signature unknown |
+| Get a summary of all previous cleaning processes | `getCleaningSummary` | - none - |  |
+| Get a detailed summary of a previous cleaning process | `getCleaningRecord` | `recordId` |  |
+| Get a map | `getMap` | - none - | Unknown what to do with the result |
+| Get the current status of the robot | `getStatus` | - none - |  |
+| Retrieve the robot's serial number | `getSerialNumber` | - none - |  |
+| Get detailed device information | `getDeviceDetails` | - none - |  |
+| Retrieve the *do not disturb* timer | `getDNDTimer` | - none - |  |
+| Set a new *do not disturb* timer | `setDNDTimer` | `startHour`, `startMinute`, `endHour`, `endMinute` |  |
+| Delete the *do not disturb* timer | `deleteDNDTimer` | - none - |  |
+| Retrieve the current fan speed | `getFanSpeed` | - none - |  |
+| Set a new fan speed | `setFanSpeed` | `fanSpeed` | `fanSpeed` is a number between 1 and 100 |
+| Start the remote control function | `startRemoteControl` | - none - |  |
+| Issue a move command for remote control | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | Sequence number must be sequentially, Duration is in ms |
+| End the remote control function | `stopRemoteControl` | - none - |  |
 
 ## Widget
 Sorry, not yet finished.

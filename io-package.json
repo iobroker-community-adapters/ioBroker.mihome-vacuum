@@ -2,48 +2,48 @@
 	"common": {
 		"name": "mihome-vacuum",
 		"version": "0.5.8",
-    "news": {
-      "0.5.8": {
-        "en": "selection powerlevel and 96 char token",
-        "de": "Powerlevel auswahl und 96 stelliger token",
-        "ru": "selection powerlevel and 96 char token"
-      },
-      "0.5.7": {
-        "en": "compare system time, update values by cloud command",
-        "de": "Systemzeit wird verglichen und Werte bei Cloudsteuerung aktualisert",
-        "ru": "add option for switch on/off to control by Alexa"
-      },
-      "0.5.6": {
-        "en": "add option for switch on/off to control by Alexa",
-        "de": "Zusätzlicher Schalter für einfache integration bei Alexa",
-        "ru": "add option for switch on/off to control by Alexa"
-      },
-      "0.5.5": {
-        "en": "add states, fix communication errors",
-        "de": "Mehr Objekte, verbesserte Kommunikation",
-        "ru": "add states, fix communication errors"
-      },
-      "0.3.2": {
-        "en": "fix Protocol update after 3.3.9",
-        "de": "Korrigiere Protokollupdate nach Version 3.3.9",
-        "ru": "fix Protocol update after 3.3.9"
-      },
-      "0.3.1": {
-        "en": "fix setting the fan power",
-        "de": "Korrigiere die Steuerung von Fan Power",
-        "ru": "fix setting the fan power"
-      },
-      "0.3.0": {
-        "en": "add more states",
-        "de": "Lese mehr information",
-        "ru": "Считывается больше информации"
-      },
-      "0.2.0": {
-        "en": "Inital version",
-        "de": "Erste Version",
-        "ru": "Первая версия"
-      }
-    },
+		"news": {
+			"0.5.8": {
+				"en": "selection powerlevel and 96 char token",
+				"de": "Powerlevel auswahl und 96 stelliger token",
+				"ru": "selection powerlevel and 96 char token"
+			},
+			"0.5.7": {
+				"en": "compare system time, update values by cloud command",
+				"de": "Systemzeit wird verglichen und Werte bei Cloudsteuerung aktualisert",
+				"ru": "add option for switch on/off to control by Alexa"
+			},
+			"0.5.6": {
+				"en": "add option for switch on/off to control by Alexa",
+				"de": "Zusätzlicher Schalter für einfache integration bei Alexa",
+				"ru": "add option for switch on/off to control by Alexa"
+			},
+			"0.5.5": {
+				"en": "add states, fix communication errors",
+				"de": "Mehr Objekte, verbesserte Kommunikation",
+				"ru": "add states, fix communication errors"
+			},
+			"0.3.2": {
+				"en": "fix Protocol update after 3.3.9",
+				"de": "Korrigiere Protokollupdate nach Version 3.3.9",
+				"ru": "fix Protocol update after 3.3.9"
+			},
+			"0.3.1": {
+				"en": "fix setting the fan power",
+				"de": "Korrigiere die Steuerung von Fan Power",
+				"ru": "fix setting the fan power"
+			},
+			"0.3.0": {
+				"en": "add more states",
+				"de": "Lese mehr information",
+				"ru": "Считывается больше информации"
+			},
+			"0.2.0": {
+				"en": "Inital version",
+				"de": "Erste Version",
+				"ru": "Первая версия"
+			}
+		},
 		"title": "mihome-vacuum Adapter",
 		"desc": "This adapter allows control Xiaomi vacuum cleaner",
 		"authors": [
@@ -67,7 +67,8 @@
 		"config": {
 			"minWidth": 800,
 			"width ": 1224
-		}
+		},
+		"messagebox": true
 	},
 	"native": {
 		"port": 54321,
@@ -208,7 +209,7 @@
 				"write": true,
 				"max": 100,
 				"states": {
-					 "5":  "5%",
+					"5": "5%",
 					"10": "10%",
 					"15": "15%",
 					"20": "20%",

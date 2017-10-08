@@ -20,6 +20,7 @@ This adapter allows you control the Xiaomi vacuum cleaner.
         - [Zweiter Roboter](#zweiter-roboter)
 - [Funtionen](#funktionen)
     - [Eigene Kommandos](#sende-eigene-kommandos)
+    - [sendTo-Hook](#eigene-kommandos-per-sendto-schicken)
 - [Widget](#widget)
 - [Bugs](#bugs)
 - [Changelog](#changelog)
@@ -96,6 +97,53 @@ Folgende Methoden und Parameter werden unterstützt:
 |app_rc_move      |[{"seqnum":'0-1000',"velocity":WERT1,"omega":WERT2,"duration":WERT3}]| Bewegung. Sequenznummer muss fortlaufend sein, WERT1(Geschw.) = -0.3 - 0.3, WERT2(Drehung) = -3.1 - 3.1, WERT3(Dauer)|
 
 Mehr Mehtoden und Parameter können sie hier finden ([Link](https://github.com/MeisterTR/XiaomiRobotVacuumProtocol)).
+
+### Eigene Kommandos per sendTo schicken
+Es ist auch möglich, per `sendTo` eigene Kommandos aus anderen Adaptern zu senden. Die Benutzung ist wie folgt:
+```
+sendTo("mihome-vacuum.0", "sendCustomCommand", 
+    {method: "method_id", params: [...] /* optional*/}, 
+    function (response) { /* Ergebnis auswerten */}
+);
+```
+mit `method_id` und `params` nach obiger Definition.
+
+Das `response` Objekt hat zwei Eigenschaften: `error` und (sofern kein Fehler aufgetreten ist) `result`.
+
+Eine handvoll vordefinierter Kommandos kann auch folgendermaßen abgesetzt werden:
+```
+sendTo("mihome-vacuum.0", 
+    commandName, 
+    {param1: value1, param2: value2, ...}, 
+    function (response) { /* do something with the result */}
+);
+```
+Die unterstützten Kommandos sind:
+
+| Beschreibung | `commandName` | Erforderliche Parameter | Anmerkungen |
+|---|---|---|---|
+| Saugprozess starten | `startVacuuming` | - keine - |  |
+| Saugprozess beenden | `stopVacuuming` | - keine - |  |
+| Saugprozess pausieren | `pause` | - keine - |  |
+| Einen kleinen bereich um den Roboter saugen | `cleanSpot` | - keine - |  |
+| Zurück zur Ladestation | `charge` | - keine - |  |
+| "Hi, I'm over here!" sagen | `findMe` | - keine - |  |
+| Status der Verbrauchsmaterialien prüfen (Bürste, etc.) | `getConsumableStatus` | - keine - |  |
+| Status der Verbrauchsmaterialien zurücksetzen (Bürste, etc.) | `resetConsumables` | - keine - | Aufrufsignatur unbekannt |
+| Eine Zusammenfassung aller vorheriger Saugvorgänge abrufen | `getCleaningSummary` | - keine - |  |
+| Eine detaillierte Zusammenfassung eines Saugvorgangs abrufen | `getCleaningRecord` | `recordId` |  |
+| Karte auslesen | `getMap` | - keine - | Unbekannt, was mit dem Ergebnis getan werden kann |
+| Aktuellen Status des Roboters auslesen | `getStatus` | - keine - |  |
+| Seriennummer des Roboters auslesen | `getSerialNumber` | - keine - |  |
+| Detaillierte Geräteinfos auslesen | `getDeviceDetails` | - keine - |  |
+| *Nicht-stören*-Timer abrufen | `getDNDTimer` | - keine - |  |
+| Neuen *Nicht-stören*-Timer festlegen | `setDNDTimer` | `startHour`, `startMinute`, `endHour`, `endMinute` |  |
+| *Nicht-stören*-Timer löschen | `deleteDNDTimer` | - keine - |  |
+| Saugstufe abrufen | `getFanSpeed` | - keine - |  |
+| Saugstufe festlegen | `setFanSpeed` | `fanSpeed` | `fanSpeed` ist eine Zahl zwischen 1 und 100 |
+| Fernsteuerungsfunktion starten | `startRemoteControl` | - keine - |  |
+| Bewegungskommando für Fernsteuerung absetzen | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | sequenceNumber muss sequentiell sein, Dauer ist in ms |
+| Fernsteuerungsfunktion beenden | `stopRemoteControl` | - keine - |  |
 
 ## Widget
 Zur Zeit leider noch nicht fertig.
