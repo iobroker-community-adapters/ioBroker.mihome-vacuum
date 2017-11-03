@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "0.5.8",
+        "version": "0.5.9",
         "news": {
-            "0.5.8": {
+            "0.5.9": {
                 "en": "selection powerlevel and 96 char token",
                 "de": "Powerlevel auswahl und 96 stelliger token",
                 "ru": "selection powerlevel and 96 char token"
