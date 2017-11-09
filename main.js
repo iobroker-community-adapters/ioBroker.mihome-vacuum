@@ -572,6 +572,13 @@ function checkSetTimeDiff() {
     if (firstSet) firstSet = false;
 }
 
+function checkSetTimeDiff2() {
+      var now = parseInt((new Date().getTime()));//.toString(16)
+      var MessageTime = parseInt(packet.stamprec.toString('hex'), 16) * 1000;
+      if(firstSet) adapter.log.warn('Timedifference between Mihome Vacuum and ioBroker: ' + (MessageTime - now) + ' Milliseconds');
+      packet.timediff2= MessageTime - now;
+    }
+
 function main() {
     adapter.setState('info.connection', false, true);
     adapter.config.port = parseInt(adapter.config.port, 10) || 54321;
@@ -615,6 +622,7 @@ function main() {
                     packet.setRaw(msg);
 
                     checkSetTimeDiff();
+                    checkSetTimeDiff2(); // just for test
 
                     clearTimeout(pingTimeout);
                     pingTimeout = null;
