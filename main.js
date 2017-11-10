@@ -567,18 +567,12 @@ function enabledVoiceControl() {
 function checkSetTimeDiff() {
     var now = Math.round(parseInt((new Date().getTime())) / 1000);//.toString(16)
     var MessageTime = parseInt(packet.stamprec.toString('hex'), 16);
-    if (firstSet && (MessageTime - now) !== 0) adapter.log.warn('Time difference between Mihome Vacuum and ioBroker: ' + (MessageTime - now) + ' sec');
-    packet.timediff = MessageTime - now;
+    packet.timediff = (MessageTime - now) == -1 ? 0 : (MessageTime - now);
+
+    if (firstSet && packet.timediff !== 0) adapter.log.warn('Time difference between Mihome Vacuum and ioBroker: ' + packet.timediff + ' sec');
+    
     if (firstSet) firstSet = false;
 }
-
-function checkSetTimeDiff2() {
-      var now = parseInt((new Date().getTime()));//.toString(16)
-      var MessageTime = parseInt(packet.stamprec.toString('hex'), 16) * 1000;
-      if(firstSet) adapter.log.warn('Timedifference between Mihome Vacuum and ioBroker: ' + (MessageTime - now) + ' Milliseconds');
-      packet.timediff2= MessageTime - now;
-    }
-
 function main() {
     adapter.setState('info.connection', false, true);
     adapter.config.port = parseInt(adapter.config.port, 10) || 54321;
@@ -602,7 +596,7 @@ function main() {
 
         packet = new MiHome.Packet(str2hex(adapter.config.token), adapter);
 
-        packet.msgCounter = 1000;
+        packet.msgCounter = 1;
 
         commands = {
             ping: str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
@@ -622,7 +616,6 @@ function main() {
                     packet.setRaw(msg);
 
                     checkSetTimeDiff();
-                    checkSetTimeDiff2(); // just for test
 
                     clearTimeout(pingTimeout);
                     pingTimeout = null;
@@ -630,7 +623,7 @@ function main() {
                         connected = true;
                         adapter.log.debug('Connected');
                         adapter.setState('info.connection', true, true);
-                    }
+                        requestParams();                    }
 
                 } else {
 
