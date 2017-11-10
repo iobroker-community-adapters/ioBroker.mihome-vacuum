@@ -153,13 +153,15 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
-### 0.5.9 (2017-09-18)
+### 0.5.9 (2017-11-03)
 * (MeisterTR) fix communication error without i-net
 * (MeisterTR) use 96 char token from Ios Backup
 * (AlCalzone) add selection of predefined power levels
+
 ### 0.5.7 (2017-08-17)
 * (MeisterTR) compare system time and Robot time (fix no connection if system time is different)
 * (MeisterTR) update values if robot start by cloud
+
 ### 0.5.6 (2017-07-23)
 * (MeisterTR) add option for crate switch for Alexa control
 
