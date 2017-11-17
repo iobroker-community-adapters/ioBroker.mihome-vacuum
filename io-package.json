@@ -1,12 +1,12 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "0.5.11",
+        "version": "0.6.0",
       "news": {
-        "0.5.11": {
-          "en": "Testversion to find Bug",
-          "de": "Testversion to find Bug",
-          "ru": "selection powerlevel and 96 char token"
+        "0.6.0": {
+          "en": "Fix iostoken Bug finaly",
+          "de": "IOstoken repariert",
+          "ru": "Fix iostoken Bug finaly"
         },
         "0.5.9": {
           "en": "selection powerlevel and 96 char token",
