@@ -154,9 +154,11 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 0.6.0 (2017-11-17)
+* (MeisterTR) use 96 char token from Ios Backup
+* (MeisterTR) faster connection on first use
 ### 0.5.9 (2017-09-18)
 * (MeisterTR) fix communication error without i-net
-* (MeisterTR) use 96 char token from Ios Backup
 * (AlCalzone) add selection of predefined power levels
 ### 0.5.7 (2017-08-17)
 * (MeisterTR) compare system time and Robot time (fix no connection if system time is different)
