@@ -35,6 +35,7 @@ The following procedures can be used:
 Preparation:
 An Android smartphone with ready-made MiHome app is required. The teat must be added and fitted in it.
 
+Non-Rooted Android Phones
 - Download and unzip the [MiToolkit](https://github.com/ultrara1n/MiToolkit/releases) and start MiToolkit.exe.
 - Enable USB debugging in the smartphone settings ([video](https://www.youtube.com/watch?v=aw7D6bNgI1U))
 - Connect the smartphone to the PC using a USB cable.
@@ -43,6 +44,11 @@ An Android smartphone with ready-made MiHome app is required. The teat must be a
 
 On the smartphone the MiHome app should be opened (automatically) and a backup to the PC should be taken (should take a few seconds), the program then reads the token from the MiHome database (miio2.db).
 Now look for the rockrobo.vaccuum in the open window and copy the 32-digit token and enter it in the configuration window.
+
+Rooted Android Phones
+- Install [aSQLiteManager](https://play.google.com/store/apps/details?id=dk.andsen.asqlitemanager) on your phone with MiHome app
+- Made copy /data/data/com.xiaomi.smarthome/databases/miio2.db
+- Open copy of miio2.db with aSQLiteManager and execute the query "select token from devicerecord where localIP is '192.168.89.100'" where you replace the IP address 192.168.89.100 with the IP address of the Xiaomi vacuum cleaner. Copy the 32-digit token and enter it in the configuration window.
 
 ### For iOS
 
