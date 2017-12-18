@@ -263,7 +263,7 @@ function parseCleaningSummary(response) {
 
 /** Parses the answer to a get_clean_record message */
 function parseCleaningRecords(response) {
-    return response.result.map(function(entry) {
+    return response.result.map(function (entry) {
         return {
             start_time: entry[0], // unix timestamp
             end_time: entry[1], // unix timestamp
@@ -564,13 +564,30 @@ function enabledVoiceControl() {
 
 }
 
+//create default states
+function init() {
+    adapter.setObjectNotExists('control.spotclean', {
+        type: 'state',
+        common: {
+            name: "Spot Cleaning",
+            type: "boolean",
+            role: "button",
+            read: true,
+            write: true,
+            desc: "Start Spot Cleaning",
+            smartName: "Spot clean"
+        },
+        native: {}
+    });
+}
+
 function checkSetTimeDiff() {
     var now = Math.round(parseInt((new Date().getTime())) / 1000);//.toString(16)
     var MessageTime = parseInt(packet.stamprec.toString('hex'), 16);
     packet.timediff = (MessageTime - now) == -1 ? 0 : (MessageTime - now);
 
     if (firstSet && packet.timediff !== 0) adapter.log.warn('Time difference between Mihome Vacuum and ioBroker: ' + packet.timediff + ' sec');
-    
+
     if (firstSet) firstSet = false;
 }
 function main() {
@@ -579,6 +596,8 @@ function main() {
     adapter.config.ownPort = parseInt(adapter.config.ownPort, 10) || 53421;
     adapter.config.pingInterval = parseInt(adapter.config.pingInterval, 10) || 20000;
     adapter.config.param_pingInterval = parseInt(adapter.config.param_pingInterval, 10) || 10000;
+
+    init();
 
     // Abfrageintervall mindestens 10 sec.
     if (adapter.config.param_pingInterval < 10000) {
@@ -623,7 +642,8 @@ function main() {
                         connected = true;
                         adapter.log.debug('Connected');
                         adapter.setState('info.connection', true, true);
-                        requestParams();                    }
+                        requestParams();
+                    }
 
                 } else {
 
@@ -657,7 +677,7 @@ function main() {
 
 }
 
-var sendCommandCallbacks = {/* "counter": callback() */};
+var sendCommandCallbacks = {/* "counter": callback() */ };
 adapter.on("message", function (obj) {
     // responds to the adapter that sent the original message
     function respond(response) {
@@ -686,10 +706,10 @@ adapter.on("message", function (obj) {
     }
 
     function sendCustomCommand(
-        method /*: string */, 
-        params /*: (optional) string[] */, 
+        method /*: string */,
+        params /*: (optional) string[] */,
         parser /*: (optional) (object) => object */
-    ) {      
+    ) {
         // parse arguments
         if (typeof params === "function") {
             parser = params;
@@ -710,12 +730,12 @@ adapter.on("message", function (obj) {
                 response = response.result;
             }
             // now respond with the result
-            respond({error: null, result: response});
+            respond({ error: null, result: response });
             // remove the callback from the dict
             if (sendCommandCallbacks[id] != null) delete sendCommandCallbacks[id];
         };
         // send msg to the robo
-        sendMsg(method, params, {rememberPacket: false}, function(err) {
+        sendMsg(method, params, { rememberPacket: false }, function (err) {
             // on error, respond immediately
             if (err) respond({ error: err });
             // else wait for the callback
@@ -739,7 +759,7 @@ adapter.on("message", function (obj) {
                 // require the method to be given
                 if (!requireParams(["method"])) return;
                 // params is optional
-               
+
                 var params = obj.message;
                 sendCustomCommand(params.method, params.params);
                 return;
@@ -769,7 +789,7 @@ adapter.on("message", function (obj) {
             case "findMe":
                 sendCustomCommand("find_me");
                 return;
-                
+
             // get info about the consumables
             // TODO: parse the results
             case "getConsumableStatus":
@@ -807,7 +827,7 @@ adapter.on("message", function (obj) {
             case "getDeviceDetails":
                 sendCustomCommand("miIO.info");
                 return;
-            
+
             // Do not disturb
             case "getDNDTimer":
                 sendCustomCommand("get_dnd_timer", returnSingleResult);
@@ -854,10 +874,10 @@ adapter.on("message", function (obj) {
                 }];
                 sendCustomCommand("app_rc_move", [args]);
                 return;
-        
 
-    // ======================================================================
-                
+
+            // ======================================================================
+
             default:
                 respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
                 return;
