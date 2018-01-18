@@ -1,6 +1,6 @@
-Gruntfile.js
 tasks
 test
 .travis.yml
+ gulpfile.js
 appveyor.yml
 /.vs*

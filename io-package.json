@@ -1,80 +1,101 @@
 {
-    "common": {
-        "name": "mihome-vacuum",
-        "version": "0.6.0",
-      "news": {
-        "0.6.0": {
-          "en": "Fix iostoken Bug finaly",
-          "de": "IOstoken repariert",
-          "ru": "Fix iostoken Bug finaly"
-        },
-        "0.5.9": {
-          "en": "selection powerlevel and 96 char token",
-          "de": "Powerlevel auswahl und 96 stelliger token",
-          "ru": "selection powerlevel and 96 char token"
-        },
-        "0.5.7": {
-          "en": "compare system time, update values by cloud command",
-          "de": "Systemzeit wird verglichen und Werte bei Cloudsteuerung aktualisert",
-          "ru": "add option for switch on/off to control by Alexa"
-        },
-        "0.5.6": {
-          "en": "add option for switch on/off to control by Alexa",
-          "de": "Zusätzlicher Schalter für einfache integration bei Alexa",
-          "ru": "add option for switch on/off to control by Alexa"
-        },
-        "0.5.5": {
-          "en": "add states, fix communication errors",
-          "de": "Mehr Objekte, verbesserte Kommunikation",
-          "ru": "add states, fix communication errors"
-        },
-        "0.3.2": {
-          "en": "fix Protocol update after 3.3.9",
-          "de": "Korrigiere Protokollupdate nach Version 3.3.9",
-          "ru": "fix Protocol update after 3.3.9"
-        },
-        "0.3.1": {
-          "en": "fix setting the fan power",
-          "de": "Korrigiere die Steuerung von Fan Power",
-          "ru": "fix setting the fan power"
-        },
-        "0.3.0": {
-          "en": "add more states",
-          "de": "Lese mehr information",
-          "ru": "Считывается больше информации"
-        },
-        "0.2.0": {
-          "en": "Inital version",
-          "de": "Erste Version",
-          "ru": "Первая версия"
-        }
+  "common": {
+    "name": "mihome-vacuum",
+    "version": "1.0.1",
+    "news": {
+      "1.0.1": {
+        "en": "Add voice level, ready for admin3, add vacuum2",
+        "de": "Sprachlevel hinzufügen, bereit für admin3, add vacuum2",
+        "ru": "Добавить уровень голоса, готовый для admin3, добавить vacuum2",
+        "pt": "Adicione o nível de voz, pronto para admin3, adicione vacuum2",
+        "nl": "Voeg stemniveau toe, klaar voor admin3, voeg vacuum2 toe",
+        "fr": "Ajouter un niveau de voix, prêt pour admin3, ajouter un vide2",
+        "it": "Aggiungi il livello della voce, pronto per admin3, aggiungi vacuum2",
+        "es": "Agregue el nivel de voz, listo para admin3, agregue vacuum2",
+        "pl": "Dodaj poziom głosu, przygotuj się na admin3, dodaj próżnię2"
       },
-        "title": "mihome-vacuum Adapter",
-        "desc": "This adapter allows control Xiaomi vacuum cleaner",
-        "authors": [
-            "bluefox <dogafox@gmail.com>"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "loglevel": "info",
-        "icon": "mihome-vacuum.png",
-        "webExtension": "lib/mihome-vacuum.js",
-        "readme": "https://github.com/ioBroker/ioBroker.mihome-vacuum/blob/master/README.md",
-        "keywords": [
-            "url",
-            "html",
-            "file",
-            "mihome-vacuum"
-        ],
-        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.mihome-vacuum/master/admin/mihome-vacuum.png",
-        "type": "household",
-        "config": {
-            "minWidth": 800,
-            "width ": 1224
-        },
-        "messagebox": true
+      "0.6.0": {
+        "en": "Fix iostoken Bug finaly",
+        "de": "Fix iostoken Bug endlich",
+        "ru": "Исправить ошибку iostoken Bug finaly",
+        "pt": "Corrigir o iostoken Bug finaly",
+        "nl": "Fix iostoken Bug eindelijk",
+        "fr": "Correction d'iostoken Bug finaly",
+        "it": "Risolto il problema con iostoken Bug",
+        "es": "Corregir iostoken Bug finaly",
+        "pl": "Napraw bug iostoken Bug"
+      },
+      "0.5.6": {
+        "en": "add option for switch on/off to control by Alexa",
+        "de": "Option zum Ein- und Ausschalten von Alexa hinzufügen",
+        "ru": "добавить опцию включения / выключения для управления Alexa",
+        "pt": "adicionar opção para ligar / desligar para controlar por Alexa",
+        "nl": "optie toevoegen om aan / uit te zetten naar besturing door Alexa",
+        "fr": "ajouter une option pour activer / désactiver le contrôle par Alexa",
+        "it": "aggiungi l'opzione per accendere / spegnere il controllo di Alexa",
+        "es": "agregar la opción para activar / desactivar para controlar por Alexa",
+        "pl": "dodaj opcję włączania / wyłączania do sterowania przez Alexa"
+      },
+      "0.2.0": {
+        "en": "Inital version",
+        "de": "Erste Version",
+        "ru": "Первоначальная версия",
+        "pt": "Versão inicial",
+        "nl": "Oorspronkelijke versie",
+        "fr": "Version initiale",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Początkowa wersja"
+      }
     },
+    "title": "mihome-vacuum Adapter",
+    "titleLang": {
+      "en": "Xiaomi Vacuum Cleaner control for v1 and v2",
+      "de": "Xiaomi Staubsaugersteuerung für v1 und v2",
+      "ru": "Управление пылесосом Xiaomi для v1 и v2",
+      "pt": "Controle de aspirador de pó Xiaomi para v1 e v2",
+      "nl": "Xiaomi Stofzuigerbediening voor v1 en v2",
+      "fr": "Xiaomi Vacuum Cleaner contrôle pour v1 et v2",
+      "it": "Controllo Xiaomi Aspirapolvere per v1 e v2",
+      "es": "Control de aspiradora Xiaomi para v1 y v2",
+      "pl": "Xiaomi Vacuum Cleaner do kontroli v1 i v2"
+    },
+    "desc": {
+      "en": "This adapter allows control Xiaomi vacuum cleaner",
+      "de": "Dieser Adapter ermöglicht die Steuerung Xiaomi Staubsauger",
+      "ru": "Этот адаптер позволяет контролировать пылесос Xiaomi",
+      "pt": "Este adaptador permite controle Xiaomi aspirador de pó",
+      "nl": "Met deze adapter kunt u de Xiaomi-stofzuiger bedienen",
+      "fr": "Cet adaptateur permet de contrôler l'aspirateur Xiaomi",
+      "it": "Questo adattatore consente il controllo dell'aspirapolvere Xiaomi",
+      "es": "Este adaptador permite el control del aspirador Xiaomi",
+      "pl": "Ten adapter umożliwia kontrolę odkurzacza Xiaomi"
+    },
+    "authors": [
+      "bluefox <dogafox@gmail.com>"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "loglevel": "info",
+    "materialize": true,
+    "icon": "mihome-vacuum.png",
+    "webExtension": "lib/mihome-vacuum.js",
+    "readme": "https://github.com/ioBroker/ioBroker.mihome-vacuum/blob/master/README.md",
+    "keywords": [
+      "url",
+      "html",
+      "file",
+      "mihome-vacuum"
+    ],
+    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.mihome-vacuum/master/admin/mihome-vacuum.png",
+    "type": "household",
+    "config": {
+      "minWidth": 800,
+      "width ": 1224
+    },
+    "messagebox": true
+  },
     "native": {
         "port": 54321,
         "ownPort": 53421,

@@ -1,0 +1,223 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+
+    <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+
+    <script type="text/javascript" src="../../js/translate.js"></script>
+    <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+    <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+    <script type="text/javascript" src="words.js"></script>
+
+    <style>
+        .number {
+            width: 70px
+        }
+
+        .table-values th {
+            background: #686868;
+            color: #FFF;
+            font-weight: bold;
+        }
+
+        .table-values tr:nth-child(even) {
+            background: #d0d0d0;
+        }
+
+        .error {
+            border: 1px solid red;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var values = [];
+
+        // the function loadSettings has to exist ...
+        function load(settings, onChange) {
+            if (!settings) return;
+
+            $('.value').each(function () {
+                var key = $(this).attr('id');
+                var $key = $('#' + key + '.value');
+                if ($key.attr('type') === 'checkbox') {
+                    $key.prop('checked', settings[key]).change(function () {
+                        onChange();
+                    });
+                } else {
+                    $key.val(settings[key]).change(function () {
+                        onChange();
+                    }).keyup(function () {
+                        onChange();
+                    });
+                }
+            });
+
+            onChange(false);
+
+            var namespace = adapter + '.' + instance + '.';
+
+            socket.emit('getObjectView', 'system', 'state', { startkey: namespace, endkey: namespace + '\u9999' }, function (err, res) {
+                if (!err && res) {
+                    var _res = {};
+                    for (var i = 0; i < res.rows.length; i++) {
+                        var obj = res.rows[i].value;
+                        values.push({
+                            name: obj._id.substring(namespace.length),
+                            link: obj.native.link,
+                            read: obj.common.read,
+                            write: obj.common.write,
+                            regex: obj.native.regex,
+                            role: obj.common.role,
+                            type: obj.common.type,
+                            unit: obj.common.unit,
+                            interval: obj.native.interval,
+                            substitute: obj.native.substitute,
+                            offset: obj.native.offset,
+                            factor: obj.native.factor,
+                            obj: obj
+                        });
+                    }
+                }
+
+                var newValues = JSON.parse(JSON.stringify(values));
+                var __values2table;
+                if (typeof values2table !== 'undefined') __values2table = values2table;
+                __values2table = __values2table || _values2table;
+                __values2table('values', newValues, onChange, function () {
+                    if (!newValues.length) {
+                        $('.table-button-add').trigger('click');
+                    }
+
+                    $('.values-input[data-name="name"]').change(function () {
+                        var val = $(this).val();
+                        var error = '';
+                        if (!val) {
+                            error = 'Empty names are not allowed';
+                        } else if (val.indexOf(' ') !== -1) {
+                            error = 'Spaces are not allowed';
+                        }
+                        if (error) {
+                            $(this).addClass(error).attr('title', _(error));
+                        } else {
+                            $(this).removeClass('error').attr('title', '');
+                        }
+                    });
+                    $('.values-input[data-name="type"]').change(function () {
+                        var id = $(this).data('index');
+                        var val = $(this).val();
+                        if (val === 'number') {
+                            $('.values-input[data-name="factor"][data-index="' + id + '"]').show();
+                            $('.values-input[data-name="offset"][data-index="' + id + '"]').show();
+                        } else {
+                            $('.values-input[data-name="factor"][data-index="' + id + '"]').hide();
+                            $('.values-input[data-name="offset"][data-index="' + id + '"]').hide();
+                        }
+                        if (val === 'boolean' || val === 'json') {
+                            $('.values-input[data-name="unit"][data-index="' + id + '"]').hide();
+                        } else {
+                            $('.values-input[data-name="unit"][data-index="' + id + '"]').show();
+                        }
+                    }).each(function () {
+                        var id = $(this).data('index');
+                        var val = $(this).val();
+                        if (val === 'number') {
+                            $('.values-input[data-name="factor"][data-index="' + id + '"]').show();
+                            $('.values-input[data-name="offset"][data-index="' + id + '"]').show();
+                        } else {
+                            $('.values-input[data-name="factor"][data-index="' + id + '"]').hide();
+                            $('.values-input[data-name="offset"][data-index="' + id + '"]').hide();
+                        }
+                        if (val === 'boolean' || val === 'json') {
+                            $('.values-input[data-name="unit"][data-index="' + id + '"]').hide();
+                        } else {
+                            $('.values-input[data-name="unit"][data-index="' + id + '"]').show();
+                        }
+
+                    });
+                });
+            });
+        }
+
+        function processTasks(tasks, cb) {
+            if (!tasks || !tasks.length) {
+                cb && cb();
+                return;
+            }
+
+            var task = tasks.pop();
+
+            if (typeof task === 'object') {
+                socket.emit('setObject', task._id, task, function (err) {
+                    if (err) console.error(err);
+                    setTimeout(function () {
+                        processTasks(tasks, cb);
+                    }, 0);
+                });
+            } else {
+                socket.emit('delState', task, function (err) {
+                    if (err) console.error(err);
+                    socket.emit('delObject', task, function (err) {
+                        if (err) console.error(err);
+                        setTimeout(function () {
+                            processTasks(tasks, cb);
+                        }, 0);
+                    });
+                });
+            }
+        }
+
+        function save(callback) {
+            var obj = {};
+            $('.value').each(function () {
+                var $this = $(this);
+                if ($this.attr('type') === 'checkbox') {
+                    obj[$this.attr('id')] = $this.prop('checked');
+                } else {
+                    obj[$this.attr('id')] = $this.val();
+                }
+            });
+            var tokenLength = obj.token.replace(/\s/g, '').length;
+            if (tokenLength !== 32 && tokenLength !== 96) {
+                showMessage(_('Invalid token length. Expected 32 or 96 HEX chars.'));
+                return;
+            }
+
+            callback(obj);
+        }
+    </script>
+</head>
+<body>
+    <div class="m adapter-container">
+        <div class="row">
+            <div class="col s12 m4 l2">
+                <img src="template.png" class="logo">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <input class="value" id="test1" type="checkbox" /><span class="translate">test1</span>
+                <!-- Important: span must come directly after checkbox input (only by checkbox the span will be used!) -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <input class="value" id="test2" /><label for="test2" class="translate">test2</label>
+                <!-- Important: label must come directly after input. Label is important. -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <select class="value" id="mySelect">
+                    <option value="auto" class="translate">Auto</option>
+                    <option value="manual" class="translate">Manual</option>
+                </select>
+                <label for="mySelect" class="translate">My select</label>
+                <!-- Important: label must come directly after select. Label is important. -->
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
