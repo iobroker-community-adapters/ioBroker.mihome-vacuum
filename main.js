@@ -14,6 +14,9 @@ var com = require(__dirname + '/lib/comands');
 
 var server = dgram.createSocket('udp4');
 
+var device = {};
+var isConnect = false;
+var model = "";
 var connected = false;
 var commands = {};
 var stateVal = 0;
@@ -162,14 +165,24 @@ function requestParams() {
 
         sendMsg(com.get_status.method);
 
+        
+
+        if (model === "") {
+            sendMsg(com.miIO_info.method);
+        }
+
 
         setTimeout(function () {
             sendMsg(com.get_consumable.method);
-        }, 1000);
+        }, 100);
 
         setTimeout(function () {
             sendMsg(com.clean_summary.method);
-        }, 2000);
+        }, 200);
+
+        setTimeout(function () {
+            sendMsg(com.get_sound_volume.method);
+        }, 300);
 
         setTimeout(function () {
             if (!isEquivalent(log_entrys_new, log_entrys)) {
@@ -182,7 +195,7 @@ function requestParams() {
                     adapter.setState('history.allTableHTML', clean_log_html_table, true);
                 });
             }
-        }, 3000);
+        }, 600);
     }
 }
 
@@ -375,6 +388,16 @@ function getStates(message) {
         }
         adapter.setState('info.error', status.error_code, true);
         adapter.setState('info.dnd', status.dnd_enabled, true)
+    } else if (answer.id === last_id["miIO.info"]) {
+        adapter.log.info("device" + JSON.stringify(answer.result));
+        device = answer.result;
+        adapter.setState('info.device_fw', answer.result.fw_ver, true);
+        adapter.setState('info.device_model', answer.result.model, true);
+        model = answer.result.model;
+
+    } else if (answer.id === last_id["get_sound_volume"]) {
+        adapter.setState('control.sound_volume', answer.result[0], true);
+    
     } else if (answer.id === last_id["get_consumable"]) {
 
         adapter.setState('consumable.main_brush', 100 - (Math.round(answer.result[0].main_brush_work_time / 3600 / 3)), true);
@@ -579,6 +602,60 @@ function init() {
         },
         native: {}
     });
+    adapter.setObjectNotExists('control.sound_volume_test', {
+        type: 'state',
+        common: {
+            name: "sound volume test",
+            type: "boolean",
+            role: "button",
+            read: true,
+            write: true,
+            desc: "let the speaker play sound"
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('control.sound_volume', {
+        type: 'state',
+        common: {
+            name: "sound volume",
+            type: "number",
+            role: "level",
+            read: true,
+            write: true,
+            unit: "%",
+            min: 30,
+            max: 100,
+            desc: "Sound volume of the Robot"
+        },
+        native: {}
+    });
+
+    adapter.setObjectNotExists('info.device_model', {
+        type: 'state',
+        common: {
+            name: "device model",
+            type: "string",
+            read: true,
+            write: false,
+            desc: "model of vacuum",
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('info.device_fw', {
+        type: 'state',
+        common: {
+            name: "Firmware",
+            type: "string",
+            read: true,
+            write: false,
+            desc: "Firmware of vacuum",
+        },
+        native: {}
+    });
+
+    // States for Rockrobo S5 (second Generation)
+
+
 }
 
 function checkSetTimeDiff() {
@@ -590,6 +667,7 @@ function checkSetTimeDiff() {
 
     if (firstSet) firstSet = false;
 }
+
 function main() {
     adapter.setState('info.connection', false, true);
     adapter.config.port = parseInt(adapter.config.port, 10) || 54321;
@@ -597,12 +675,13 @@ function main() {
     adapter.config.pingInterval = parseInt(adapter.config.pingInterval, 10) || 20000;
     adapter.config.param_pingInterval = parseInt(adapter.config.param_pingInterval, 10) || 10000;
 
+    adapter.config.param_pingInterval = 10000;
     init();
 
     // Abfrageintervall mindestens 10 sec.
-    if (adapter.config.param_pingInterval < 10000) {
-        adapter.config.param_pingInterval = 10000;
-    }
+    //if (adapter.config.param_pingInterval < 10000) {
+    //  adapter.config.param_pingInterval = 10000;
+    //}
 
 
     if (!adapter.config.token) {
@@ -633,7 +712,7 @@ function main() {
                 if (msg.length === 32) {
                     adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
                     packet.setRaw(msg);
-
+                    isConnect = true;
                     checkSetTimeDiff();
 
                     clearTimeout(pingTimeout);
@@ -670,6 +749,7 @@ function main() {
         sendPing();
         pingInterval = setInterval(sendPing, adapter.config.pingInterval);
         param_pingInterval = setInterval(requestParams, adapter.config.param_pingInterval);
+   
         adapter.subscribeStates('*');
 
 
