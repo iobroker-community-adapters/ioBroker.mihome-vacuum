@@ -58,11 +58,15 @@ systemDictionary = {
         "es": "Longitud de token inválida. Se esperan 32 o 96 caracteres HEX.",
         "pl": "Nieprawidłowa długość tokenu. Oczekiwano 32 lub 96 znaków HEX."
     },
-    "MiHome-vacuum adapter settings": {        "en": "MiHome-vacuum adapter settings",        "de": "MiHome-vacuum Adapter Einstellungen",        "ru": "Настройки адаптера MiHome-vacuum",        "pt": "Configura��es do adaptador MiHome-v�cuo",
-        "nl": "MiHome-vacu�m adapterinstellingen",
-        "fr": "MiHome-param�tres d'adaptateur de vide",
+    "MiHome-vacuum adapter settings": {
+        "en": "MiHome-vacuum adapter settings",
+        "de": "MiHome-Vakuumadaptereinstellungen",
+        "ru": "Настройки адаптера MiHome-vacuum",
+        "pt": "Configurações do adaptador MiHome-vácuo",
+        "nl": "MiHome-vacuüm adapterinstellingen",
+        "fr": "MiHome-paramètres d'adaptateur de vide",
         "it": "Impostazioni dell'adattatore per vuoto MiHome",
-        "es": "Configuraci�n del adaptador MiHome-vacuum",
+        "es": "Configuración del adaptador MiHome-vacuum",
         "pl": "Ustawienia adaptera MiHome-vacuum"
     },
     "Own port:": {
