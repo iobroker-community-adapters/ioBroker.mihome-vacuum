@@ -13,7 +13,16 @@ systemDictionary = {
         "es": "adaptador para el control de la aspiradora Xiaomi V1 y S5",
         "pl": "adapter do sterowania odkurzacza Xiaomi V1 i S5"
     },
-    "IP address:": {        "en": "IP address: ",        "de": "IP-Adresse des Roboters: ",        "ru": "Айпи адрес:",        "pt": "Endereço de IP:",        "nl": "IP adres:",        "fr": "Adresse IP:",        "it": "Indirizzo IP:",        "es": "Dirección IP:",        "pl": "Adres IP:"
+    "IP address:": {
+        "en": "IP address:",
+        "de": "IP Adresse:",
+        "ru": "Айпи адрес:",
+        "pt": "Endereço de IP:",
+        "nl": "IP adres:",
+        "fr": "Adresse IP:",
+        "it": "Indirizzo IP:",
+        "es": "Dirección IP:",
+        "pl": "Adres IP:"
     },
     "connection settings": {
         "en": "connection settings",
@@ -38,7 +47,16 @@ systemDictionary = {
         "pl": "dodatkowe ustawienia"
     },
 
-    "Invalid token length. Expected 32 or 96 HEX chars.": {        "en": "Invalid token length. Expected 32 or 96 HEX chars.",        "de": "Ungültige Tokenlänge. 32 oder 96 HEX-Zeichen erwartet.",        "ru": "Недопустимая длина токена. Ожидаемые 32 или 96 символов HEX.",        "pt": "Comprimento de token inválido. Esperava 32 ou 96 caracteres HEX.",        "nl": "Ongeldige tokenlengte. Verwachte 32 of 96 HEX-tekens.",        "fr": "Longueur de jeton incorrecte Caractères HEX attendus 32 ou 96.",        "it": "Lunghezza del token non valida. Previsti 32 o 96 caratteri HEX.",        "es": "Longitud de token inválida. Se esperan 32 o 96 caracteres HEX.",        "pl": "Nieprawid?owa d?ugo?? tokenu. Oczekiwano 32 lub 96 znak�w HEX."
+    "Invalid token length. Expected 32 or 96 HEX chars.": {
+        "en": "Invalid token length. Expected 32 or 96 HEX chars.",
+        "de": "Ungültige Tokenlänge Erwartete 32 oder 96 HEX-Zeichen.",
+        "ru": "Недопустимая длина токена. Ожидаемые 32 или 96 символов HEX.",
+        "pt": "Comprimento de token inválido. Esperava 32 ou 96 caracteres HEX.",
+        "nl": "Ongeldige tokenlengte. Verwachte 32 of 96 HEX-tekens.",
+        "fr": "Longueur de jeton incorrecte Caractères HEX attendus 32 ou 96.",
+        "it": "Lunghezza del token non valida. Previsti 32 o 96 caratteri HEX.",
+        "es": "Longitud de token inválida. Se esperan 32 o 96 caracteres HEX.",
+        "pl": "Nieprawidłowa długość tokenu. Oczekiwano 32 lub 96 znaków HEX."
     },
     "MiHome-vacuum adapter settings": {        "en": "MiHome-vacuum adapter settings",        "de": "MiHome-vacuum Adapter Einstellungen",        "ru": "Настройки адаптера MiHome-vacuum",        "pt": "Configura��es do adaptador MiHome-v�cuo",
         "nl": "MiHome-vacu�m adapterinstellingen",
@@ -47,14 +65,16 @@ systemDictionary = {
         "es": "Configuraci�n del adaptador MiHome-vacuum",
         "pl": "Ustawienia adaptera MiHome-vacuum"
     },
-    "Own port:": {        "en": "Own port: ",        "de": "Eigener Port: ",
+    "Own port:": {
+        "en": "Own port:",
+        "de": "Eigener Port:",
         "ru": "Собственный порт:",
         "pt": "Porta própria:",
         "nl": "Eigen poort:",
         "fr": "Propre port:",
         "it": "Porto proprio:",
         "es": "Puerto propio:",
-        "pl": "W?asny port:"
+        "pl": "Własny port:"
     },
     "Request Intervall": {
         "en": "Request Intervall in ms ",
@@ -67,11 +87,15 @@ systemDictionary = {
         "es": "Solicitar Intervall en ms",
         "pl": "Popro? Intervall w ms"
     },
-    "Send own commands": {        "en": "Send own commands",        "de": "Sende eigene Kommandos",        "ru": "Отправить собственные команды",        "pt": "Mandar comandos pr�prios",
+    "Send own commands": {
+        "en": "Send own commands",
+        "de": "Sende eigene Befehle",
+        "ru": "Отправить собственные команды",
+        "pt": "Mandar comandos próprios",
         "nl": "Stuur eigen commando's",
         "fr": "Envoyer ses propres commandes",
-        "it": "Invia i propri comandi",
-        "es": "Envía tus propios comandos",
+        "it": "Invia i tuoi comandi",
+        "es": "Enviar los propios comandos",
         "pl": "Wyślij własne polecenia"
     },
     "Token": {
@@ -100,9 +124,9 @@ systemDictionary = {
         "en": "settings",
         "de": "Einstellungen",
         "ru": "настройки",
-        "pt": "configura��es",
+        "pt": "configurações",
         "nl": "instellingen",
-        "fr": "param�tres",
+        "fr": "paramètres",
         "it": "impostazioni",
         "es": "ajustes",
         "pl": "ustawienia"

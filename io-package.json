@@ -50,15 +50,15 @@
     },
     "title": "mihome-vacuum Adapter",
     "titleLang": {
-      "en": "Xiaomi Vacuum Cleaner control for v1 and v2",
-      "de": "Xiaomi Staubsaugersteuerung für v1 und v2",
-      "ru": "Управление пылесосом Xiaomi для v1 и v2",
-      "pt": "Controle de aspirador de pó Xiaomi para v1 e v2",
-      "nl": "Xiaomi Stofzuigerbediening voor v1 en v2",
-      "fr": "Xiaomi Vacuum Cleaner contrôle pour v1 et v2",
-      "it": "Controllo Xiaomi Aspirapolvere per v1 e v2",
-      "es": "Control de aspiradora Xiaomi para v1 y v2",
-      "pl": "Xiaomi Vacuum Cleaner do kontroli v1 i v2"
+      "en": "Xiaomi Vacuum Cleaner control for v1 and s5",
+      "de": "Xiaomi Staubsaugersteuerung für v1 und s5",
+      "ru": "Управление пылесосом Xiaomi для v1 и s5",
+      "pt": "Controle de aspirador de pó Xiaomi para v1 e s5",
+      "nl": "Xiaomi Stofzuigerbediening voor v1 en s5",
+      "fr": "Xiaomi Vacuum Cleaner contrôle pour v1 et s5",
+      "it": "Controllo Xiaomi Aspirapolvere per v1 e s5",
+      "es": "Control de aspiradora Xiaomi para v1 y s5",
+      "pl": "Xiaomi Vacuum Cleaner do kontroli v1 i s5 "
     },
     "desc": {
       "en": "This adapter allows control Xiaomi vacuum cleaner",
