@@ -21,19 +21,19 @@ This adapter allows you control the Xiaomi vacuum cleaner.
         - [Control via Alexa](#control-over-alexa)
         - [Second robot](#second-robot)
 - [Functions](#functions)
-    - [S50 Commands](#Commands-of-the-S50)
-	        - [GoTo](#GoTo)
-			- [zoneClean](#zoneClean)
+    - [S50 Commands](#commands-of-the-s50)
+    	- [Go To](#goto)
+	- [zone Clean](#zoneclean)
     - [Own Commands](#send-your-own-commands)
     - [sendTo hook](#send-custom-commands-with-sendto)
 - [widget](#widget)
 - [bugs](#bugs)
 - [Changelog](#changelog)
-
+ 
 ## Configuration
 Currently, finding the token is the biggest problem.
 The following procedures can be used:
-
+ 
 ### On Android
 Preparation:
 An Android smartphone with ready-made MiHome app is required. The teat must be added and fitted in it.
@@ -114,7 +114,7 @@ Example:
 ```
 [24117,26005,25767,27205,1], [24320,24693,25970,25843,1]]}
 ```
-
+ 
 ### Send your own commands
 NOTE: This function should only be used by experts, as the sucker might be damaged by wrong commands
 
