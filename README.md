@@ -33,7 +33,7 @@ This adapter allows you control the Xiaomi vacuum cleaner.
 ## Configuration
 Currently, finding the token is the biggest problem.
 The following procedures can be used:
-
+ 
 ### On Android
 Preparation:
 An Android smartphone with ready-made MiHome app is required. The teat must be added and fitted in it.
