@@ -432,7 +432,7 @@ function getStates(message) {
         adapter.setState('info.dnd', status.dnd_enabled, true)
     } else if (answer.id === last_id["miIO.info"]) {
 
-        adapter.log.info("device" + JSON.stringify(answer.result));
+        //adapter.log.info("device" + JSON.stringify(answer.result));
         device = answer.result;
         adapter.setState('info.device_fw', answer.result.fw_ver, true);
         adapter.setState('info.device_model', answer.result.model, true);
