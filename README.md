@@ -22,7 +22,7 @@ This adapter allows you control the Xiaomi vacuum cleaner.
         - [Second robot](#second-robot)
 - [Functions](#functions)
     - [S50 Commands](#Commands-of-the-S50)
-	        - [GoTo](#GoTo)
+    		- [GoTo](#GoTo)
 		- [zoneClean](#zoneClean)
     - [Own Commands](#send-your-own-commands)
     - [sendTo hook](#send-custom-commands-with-sendto)
