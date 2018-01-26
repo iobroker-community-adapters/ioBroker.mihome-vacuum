@@ -197,9 +197,9 @@ function parseGoTo(params) {
         var xVal = coordinates[0];
         var yVal = coordinates[1];
 
-        if (!isNA(yVal) && !isNAN(xVal)) {
+        if (!isNaN(yVal) && !isNaN(xVal)) {
             //send goTo request with koordinates
-            sendMsg("app_goto_target", [xVal, yVal]);
+            sendMsg("app_goto_target", [parseInt(xVal), parseInt(yVal)]);
         }
         else adapter.log.error("GoTo need two koordinates with type number");
         adapter.log.info('xVAL: ' + xVal + "  yVal:  " + yVal);
@@ -432,7 +432,7 @@ function getStates(message) {
         adapter.setState('info.dnd', status.dnd_enabled, true)
     } else if (answer.id === last_id["miIO.info"]) {
 
-        adapter.log.info("device" + JSON.stringify(answer.result));
+        //adapter.log.info("device" + JSON.stringify(answer.result));
         device = answer.result;
         adapter.setState('info.device_fw', answer.result.fw_ver, true);
         adapter.setState('info.device_model', answer.result.model, true);
