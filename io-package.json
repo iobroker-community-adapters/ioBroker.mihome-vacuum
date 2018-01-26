@@ -112,10 +112,10 @@
             "native": {}
         },
         {
-            "_id": "info.consumable",
+            "_id": "consumable",
             "type": "channel",
             "common": {
-                "name": "Vaccuum consumable"
+                "name": "Vacuum consumable"
             },
             "native": {}
         },
@@ -123,7 +123,7 @@
             "_id": "history",
             "type": "channel",
             "common": {
-                "name": "Vaccuum cleaning history"
+                "name": "Vacuumcleaning history"
             },
             "native": {}
         },
@@ -193,35 +193,38 @@
         {
             "_id": "info.battery",
             "type": "state",
-            "common": {
-                "name": "Battery status",
-                "type": "number",
-                "read": true,
-                "unit": "%",
-                "max": 100
-            },
+          "common": {
+            "name": "Battery status",
+            "type": "number",
+            "read": true,
+            "write": false,
+            "unit": "%",
+            "max": 100
+          },
             "native": {}
         },
         {
             "_id": "info.cleanedarea",
             "type": "state",
-            "common": {
-                "name": "Cleaned area",
-                "type": "number",
-                "read": true,
-                "unit": "m²"
-            },
+          "common": {
+            "name": "Cleaned area",
+            "type": "number",
+            "read": true,
+            "write": false,
+            "unit": "m²"
+          },
             "native": {}
         },
         {
             "_id": "info.cleanedtime",
             "type": "state",
-            "common": {
-                "name": "Cleaning time",
-                "type": "number",
-                "read": true,
-                "unit": "min"
-            },
+          "common": {
+            "name": "Cleaning time",
+            "type": "number",
+            "read": true,
+            "write": false,
+            "unit": "min"
+          },
             "native": {}
         },
         {
@@ -264,57 +267,59 @@
         {
             "_id": "info.state",
             "type": "state",
-            "common": {
-                "name": "Vacuum state",
-                "type": "number",
-                "read": true,
-                "max": 30,
-                "states": {
-                    "1": "Unknown 1",
-                    "2": "Sleep no Charge",
-                    "3": "Sleep",
-                    "5": "Cleaning",
-                    "6": "Returning home",
-                    "7": "Manuell mode",
-                    "8": "Charging",
-                    "10": "Paused",
-                    "11": "Spot cleaning",
-                    "12": "Error?!"
-                }
-            },
+          "common": {
+            "name": "Vacuum state",
+            "type": "number",
+            "read": true,
+            "write": false,
+            "max": 30,
+            "states": {
+              "1": "Unknown 1",
+              "2": "Sleep no Charge",
+              "3": "Sleep",
+              "5": "Cleaning",
+              "6": "Returning home",
+              "7": "Manuell mode",
+              "8": "Charging",
+              "10": "Paused",
+              "11": "Spot cleaning",
+              "12": "Error?!"
+            }
+          },
             "native": {}
         },
         {
             "_id": "info.error",
             "type": "state",
-            "common": {
-                "name": "Error",
-                "type": "number",
-                "read": true,
-                "max": 30,
-                "states": {
-                    "0": "No error",
-                    "1": "Laser distance sensor error",
-                    "2": "Collision sensor error",
-                    "3": "Wheels on top of void, move robot",
-                    "4": "Clean hovering sensors, move robot",
-                    "5": "Clean main brush",
-                    "6": "Clean side brush",
-                    "7": "Main wheel stuck?",
-                    "8": "Device stuck, clean area",
-                    "9": "Dust collector missing",
-                    "10": "Clean filter",
-                    "11": "Stuck in magnetic barrier",
-                    "12": "Low battery",
-                    "13": "Charging fault",
-                    "14": "Battery fault",
-                    "15": "Wall sensors dirty, wipe them",
-                    "16": "Place me on flat surface",
-                    "17": "Side brushes problem, reboot me",
-                    "18": "Suction fan problem",
-                    "19": "Unpowered charging station"
-                }
-            },
+          "common": {
+            "name": "Error",
+            "type": "number",
+            "read": true,
+            "write": false,
+            "max": 30,
+            "states": {
+              "0": "No error",
+              "1": "Laser distance sensor error",
+              "2": "Collision sensor error",
+              "3": "Wheels on top of void, move robot",
+              "4": "Clean hovering sensors, move robot",
+              "5": "Clean main brush",
+              "6": "Clean side brush",
+              "7": "Main wheel stuck?",
+              "8": "Device stuck, clean area",
+              "9": "Dust collector missing",
+              "10": "Clean filter",
+              "11": "Stuck in magnetic barrier",
+              "12": "Low battery",
+              "13": "Charging fault",
+              "14": "Battery fault",
+              "15": "Wall sensors dirty, wipe them",
+              "16": "Place me on flat surface",
+              "17": "Side brushes problem, reboot me",
+              "18": "Suction fan problem",
+              "19": "Unpowered charging station"
+            }
+          },
             "native": {}
         },
         {
@@ -331,13 +336,14 @@
         {
             "_id": "consumable.main_brush",
             "type": "state",
-            "common": {
-                "name": "Main brush lifetime",
-                "type": "number",
-                "role": "level",
-                "read": true,
-                "unit": "%"
-            },
+          "common": {
+            "name": "Main brush lifetime",
+            "type": "number",
+            "role": "level",
+            "read": true,
+            "write": false,
+            "unit": "%"
+          },
             "native": {}
         },
         {
@@ -355,13 +361,14 @@
         {
             "_id": "consumable.side_brush",
             "type": "state",
-            "common": {
-                "name": "Side brush lifetime",
-                "type": "number",
-                "role": "level",
-                "read": true,
-                "unit": "%"
-            },
+          "common": {
+            "name": "Side brush lifetime",
+            "type": "number",
+            "role": "level",
+            "read": true,
+            "write": false,
+            "unit": "%"
+          },
             "native": {}
         },
         {
@@ -379,13 +386,14 @@
         {
             "_id": "consumable.filter",
             "type": "state",
-            "common": {
-                "name": "Filter lifetime",
-                "type": "number",
-                "role": "level",
-                "read": true,
-                "unit": "%"
-            },
+          "common": {
+            "name": "Filter lifetime",
+            "type": "number",
+            "role": "level",
+            "read": true,
+            "write": false,
+            "unit": "%"
+          },
             "native": {}
         },
         {
@@ -403,13 +411,14 @@
         {
             "_id": "consumable.sensors",
             "type": "state",
-            "common": {
-                "name": "sensor lifetime",
-                "type": "number",
-                "role": "level",
-                "read": true,
-                "unit": "%"
-            },
+          "common": {
+            "name": "sensor lifetime",
+            "type": "number",
+            "role": "level",
+            "read": true,
+            "write": false,
+            "unit": "%"
+          },
             "native": {}
         },
         {
@@ -427,12 +436,13 @@
         {
             "_id": "history.allTableHTML",
             "type": "state",
-            "common": {
-                "name": "History of clean as THML",
-                "type": "string",
-                "role": "history",
-                "read": true
-            },
+          "common": {
+            "name": "History of clean as THML",
+            "type": "string",
+            "role": "history",
+            "read": true
+           
+          },
             "native": {}
         },
         {
