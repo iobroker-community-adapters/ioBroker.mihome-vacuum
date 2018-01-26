@@ -29,7 +29,7 @@ This adapter allows you control the Xiaomi vacuum cleaner.
 - [widget](#widget)
 - [bugs](#bugs)
 - [Changelog](#changelog)
-
+ 
 ## Configuration
 Currently, finding the token is the biggest problem.
 The following procedures can be used:
