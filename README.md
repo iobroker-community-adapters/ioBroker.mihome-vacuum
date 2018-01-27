@@ -21,16 +21,19 @@ This adapter allows you control the Xiaomi vacuum cleaner.
         - [Control via Alexa](#control-over-alexa)
         - [Second robot](#second-robot)
 - [Functions](#functions)
+    - [S50 Commands](#commands-of-the-s50)
+    	- [Go To](#goto)
+	- [zone Clean](#zoneclean)
     - [Own Commands](#send-your-own-commands)
     - [sendTo hook](#send-custom-commands-with-sendto)
 - [widget](#widget)
 - [bugs](#bugs)
 - [Changelog](#changelog)
-
+ 
 ## Configuration
 Currently, finding the token is the biggest problem.
 The following procedures can be used:
-
+ 
 ### On Android
 Preparation:
 An Android smartphone with ready-made MiHome app is required. The teat must be added and fitted in it.
@@ -43,7 +46,7 @@ Non-Rooted Android Phones
 - Click on "Read token" and confirm the message on the smartphone (NO give password!).
 
 On the smartphone the MiHome app should be opened (automatically) and a backup to the PC should be taken (should take a few seconds), the program then reads the token from the MiHome database (miio2.db).
-Now look for the rockrobo.vaccuum in the open window and copy the 32-digit token and enter it in the configuration window.
+Now look for the rockrobo.vacuum in the open window and copy the 32-digit token and enter it in the configuration window.
 
 Rooted Android Phones
 - Install [aSQLiteManager](https://play.google.com/store/apps/details?id=dk.andsen.asqlitemanager) on your phone with MiHome app
@@ -77,6 +80,41 @@ In the config add alexa state is activated here is a hack is set an additional s
 If two robots are to be controlled via ioBroker, two instances must be created. The second robot must change its own port (default: 53421) so that both robots have different ports.
 
 ## Functions
+### Commands of the S50 (second generation)
+The card size is always 52000mm x 52000mm thus values ​​from 0 to 51999mm are possible.
+Unfortunately, the position and location of the card can not be queried, this can change from suction to suction. Used as a basis is always the last suction card, as well as in the app.
+If the robot only picks up one area and always builds the map the same way, you can reliably send it to places or have the area vacuumed.
+
+#### GoTo
+In order to drive the vacuum cleaner to a point, the "goTo" object must be filled as follows:
+```
+xVal, yval
+```
+The values ​​must satisfy the above scope and indicate the x and y coordinates on the map.
+
+Example:
+```
+24,850.26500
+```
+
+
+#### zoneClean
+To vacuum a zone, ZoneClean must be filled as follows:
+```
+[X1, y1, x2, x2, count]
+```
+Where x and y are the coordinates of the rectangular area and "count" the cleaning operations.
+You can also let several areas suck at once:
+
+```
+[X1, y1, x2, x2, count], [x3, y3, x4, x4, count2]
+```
+
+Example:
+```
+[24117,26005,25767,27205,1], [24320,24693,25970,25843,1]]}
+```
+ 
 ### Send your own commands
 NOTE: This function should only be used by experts, as the sucker might be damaged by wrong commands
 
@@ -159,6 +197,11 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 1.0.1 (2018-01-26)
+* (MeisterTR) ready for admin3
+* (MeisterTR) support SpotClean and voice level (v1)
+* (MeisterTR) support second generation (S50)
+* (MeisterTR) Speed up data requests
 ### 0.6.0 (2017-11-17)
 * (MeisterTR) use 96 char token from Ios Backup
 * (MeisterTR) faster connection on first use

@@ -14,6 +14,9 @@ var com = require(__dirname + '/lib/comands');
 
 var server = dgram.createSocket('udp4');
 
+var device = {};
+var isConnect = false;
+var model = "";
 var connected = false;
 var commands = {};
 var stateVal = 0;
@@ -33,6 +36,15 @@ var last_id = {
     get_clean_record: 0,
     X_send_command: 0,
 };
+
+var reqParams = [
+    com.get_status.method,
+    com.miIO_info.method,
+    com.get_consumable.method,
+    com.clean_summary.method,
+    com.get_sound_volume.method,
+    com.get_carpet_mode.method
+]
 
 //Tabelleneigenschaften
 var clean_log_html_attr = '<colgroup> <col width="50"> <col width="50"> <col width="80"> <col width="100"> <col width="50"> <col width="50"> </colgroup>';
@@ -91,6 +103,29 @@ adapter.on('stateChange', function (id, state) {
 
         } else if (command === "clean_home") {
             stateControl(state.val);
+
+        } else if (command === "carpet_mode") {
+            //when carpetmode change
+            if (state.val === true || state.val === "true") {
+                sendMsg("set_carpet_mode", [{ "enable": 1 }], function () {
+                    adapter.setForeignState(id, state.val, true);
+                });
+            }
+            else {
+                sendMsg("set_carpet_mode", [{ "enable": 0 }], function () {
+                    adapter.setForeignState(id, false, true);
+                });
+            }
+
+        } else if (command === "goTo") {
+            //changeMowerCfg(id, state.val);
+            //goto function wit error catch
+            parseGoTo(state.val);
+
+        } else if (command === "zoneClean") {
+            sendMsg("app_zoned_clean", [state.val], function () {
+                adapter.setForeignState(id, state.val, true);
+            });
 
         } else if (com[command] === undefined) {
             adapter.log.error('Unknown state "' + id + '"');
@@ -155,21 +190,41 @@ function stateControl(value) {
         }, 1000);
     }
 }
+//funktion to control goto params
+function parseGoTo(params) {
+    var coordinates = params.split(',');
+    if (coordinates.length === 2) {
+        var xVal = coordinates[0];
+        var yVal = coordinates[1];
+
+        if (!isNaN(yVal) && !isNaN(xVal)) {
+            //send goTo request with koordinates
+            sendMsg("app_goto_target", [parseInt(xVal), parseInt(yVal)]);
+        }
+        else adapter.log.error("GoTo need two koordinates with type number");
+        adapter.log.info('xVAL: ' + xVal + "  yVal:  " + yVal);
+
+    } else {
+        adapter.log.error("GoTo only work with two arguments seperated by ','");
+    }
+}
+
 
 function requestParams() {
     if (connected) {
         adapter.log.debug("requesting params every: " + adapter.config.param_pingInterval / 1000 + " Sec");
 
-        sendMsg(com.get_status.method);
+        var i = 0;
 
+        function f() {
+            sendMsg(reqParams[i]);
 
-        setTimeout(function () {
-            sendMsg(com.get_consumable.method);
-        }, 1000);
-
-        setTimeout(function () {
-            sendMsg(com.clean_summary.method);
-        }, 2000);
+            i++;
+            if (i < reqParams.length) {
+                setTimeout(f, 200);
+            }
+        }
+        f();
 
         setTimeout(function () {
             if (!isEquivalent(log_entrys_new, log_entrys)) {
@@ -182,7 +237,7 @@ function requestParams() {
                     adapter.setState('history.allTableHTML', clean_log_html_table, true);
                 });
             }
-        }, 3000);
+        }, 2000);
     }
 }
 
@@ -263,7 +318,7 @@ function parseCleaningSummary(response) {
 
 /** Parses the answer to a get_clean_record message */
 function parseCleaningRecords(response) {
-    return response.result.map(function(entry) {
+    return response.result.map(function (entry) {
         return {
             start_time: entry[0], // unix timestamp
             end_time: entry[1], // unix timestamp
@@ -375,6 +430,23 @@ function getStates(message) {
         }
         adapter.setState('info.error', status.error_code, true);
         adapter.setState('info.dnd', status.dnd_enabled, true)
+    } else if (answer.id === last_id["miIO.info"]) {
+
+        //adapter.log.info("device" + JSON.stringify(answer.result));
+        device = answer.result;
+        adapter.setState('info.device_fw', answer.result.fw_ver, true);
+        adapter.setState('info.device_model', answer.result.model, true);
+        adapter.setState('info.wifi_signal', answer.result.ap.rssi, true);
+        if (model === "") model = newGen(answer.result.model); // create new States for the V2
+
+
+
+    } else if (answer.id === last_id["get_sound_volume"]) {
+        adapter.setState('control.sound_volume', answer.result[0], true);
+
+    } else if (answer.id === last_id["get_carpet_mode"]) {
+        adapter.setState('control.carpet_mode', answer.result[0].enable === 1, true);
+
     } else if (answer.id === last_id["get_consumable"]) {
 
         adapter.setState('consumable.main_brush', 100 - (Math.round(answer.result[0].main_brush_work_time / 3600 / 3)), true);
@@ -454,7 +526,7 @@ function getLog(callback) {
         }
         i++;
         if (i < log_entrys.length) {
-            setTimeout(f, 500);
+            setTimeout(f, 200);
         }
     }
     f();
@@ -564,15 +636,147 @@ function enabledVoiceControl() {
 
 }
 
+//create default states
+function init() {
+    adapter.setObjectNotExists('control.spotclean', {
+        type: 'state',
+        common: {
+            name: "Spot Cleaning",
+            type: "boolean",
+            role: "button",
+            read: true,
+            write: true,
+            desc: "Start Spot Cleaning",
+            smartName: "Spot clean"
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('control.sound_volume_test', {
+        type: 'state',
+        common: {
+            name: "sound volume test",
+            type: "boolean",
+            role: "button",
+            read: true,
+            write: true,
+            desc: "let the speaker play sound"
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('control.sound_volume', {
+        type: 'state',
+        common: {
+            name: "sound volume",
+            type: "number",
+            role: "level",
+            read: true,
+            write: true,
+            unit: "%",
+            min: 30,
+            max: 100,
+            desc: "Sound volume of the Robot"
+        },
+        native: {}
+    });
+
+    adapter.setObjectNotExists('info.wifi_signal', {
+        type: 'state',
+        common: {
+            name: "Wifi RSSI",
+            type: "number",
+            role: "level",
+            read: true,
+            write: false,
+            unit: "dBm",
+            desc: "Wifi signal of the  vacuum"
+        },
+        native: {}
+    });
+
+    adapter.setObjectNotExists('info.device_model', {
+        type: 'state',
+        common: {
+            name: "device model",
+            type: "string",
+            read: true,
+            write: false,
+            desc: "model of vacuum",
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('info.device_fw', {
+        type: 'state',
+        common: {
+            name: "Firmware",
+            type: "string",
+            read: true,
+            write: false,
+            desc: "Firmware of vacuum",
+        },
+        native: {}
+    });
+
+    // States for Rockrobo S5 (second Generation)
+
+
+}
+
+
+var newGen = function (model) {
+    if (model === "roborock.vacuum.s5") {
+        adapter.log.info('New generation detected, create new states');
+        adapter.setObjectNotExists('control.goTo', {
+            type: 'state',
+            common: {
+                name: "Go to point",
+                type: "string",
+                read: true,
+                write: true,
+                desc: "let the vacuum go to a point on the map",
+            },
+            native: {}
+        });
+        adapter.setObjectNotExists('control.zoneClean', {
+            type: 'state',
+            common: {
+                name: "Clean a zone",
+                type: "string",
+                read: true,
+                write: true,
+                desc: "let the vacuum go to a point and clean a zone",
+            },
+            native: {}
+        });
+        adapter.setObjectNotExists('control.carpet_mode', {
+            type: 'state',
+            common: {
+                name: "Carpet mode",
+                type: "boolean",
+                read: true,
+                write: true,
+                desc: "Fanspeed is Max on carpets",
+            },
+            native: {}
+        });
+    }
+    else if (!model === "roborock.vacuum.s5"){
+        adapter.deleteState(adapter.namespace, "control", "goTo");
+        adapter.deleteState(adapter.namespace, "control", "zoneClean");
+        adapter.deleteState(adapter.namespace, "control", "carpet_mode");
+    }
+    return model;
+}
+
 function checkSetTimeDiff() {
     var now = Math.round(parseInt((new Date().getTime())) / 1000);//.toString(16)
     var MessageTime = parseInt(packet.stamprec.toString('hex'), 16);
     packet.timediff = (MessageTime - now) == -1 ? 0 : (MessageTime - now);
 
     if (firstSet && packet.timediff !== 0) adapter.log.warn('Time difference between Mihome Vacuum and ioBroker: ' + packet.timediff + ' sec');
-    
+
     if (firstSet) firstSet = false;
 }
+
 function main() {
     adapter.setState('info.connection', false, true);
     adapter.config.port = parseInt(adapter.config.port, 10) || 54321;
@@ -580,9 +784,11 @@ function main() {
     adapter.config.pingInterval = parseInt(adapter.config.pingInterval, 10) || 20000;
     adapter.config.param_pingInterval = parseInt(adapter.config.param_pingInterval, 10) || 10000;
 
+    init();
+
     // Abfrageintervall mindestens 10 sec.
-    if (adapter.config.param_pingInterval < 10000) {
-        adapter.config.param_pingInterval = 10000;
+    if (adapter.config.param_pingInterval < 7000) {
+      adapter.config.param_pingInterval = 7000;
     }
 
 
@@ -614,7 +820,7 @@ function main() {
                 if (msg.length === 32) {
                     adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
                     packet.setRaw(msg);
-
+                    isConnect = true;
                     checkSetTimeDiff();
 
                     clearTimeout(pingTimeout);
@@ -623,7 +829,8 @@ function main() {
                         connected = true;
                         adapter.log.debug('Connected');
                         adapter.setState('info.connection', true, true);
-                        requestParams();                    }
+                        requestParams();
+                    }
 
                 } else {
 
@@ -650,6 +857,7 @@ function main() {
         sendPing();
         pingInterval = setInterval(sendPing, adapter.config.pingInterval);
         param_pingInterval = setInterval(requestParams, adapter.config.param_pingInterval);
+
         adapter.subscribeStates('*');
 
 
@@ -657,7 +865,7 @@ function main() {
 
 }
 
-var sendCommandCallbacks = {/* "counter": callback() */};
+var sendCommandCallbacks = {/* "counter": callback() */ };
 adapter.on("message", function (obj) {
     // responds to the adapter that sent the original message
     function respond(response) {
@@ -686,10 +894,10 @@ adapter.on("message", function (obj) {
     }
 
     function sendCustomCommand(
-        method /*: string */, 
-        params /*: (optional) string[] */, 
+        method /*: string */,
+        params /*: (optional) string[] */,
         parser /*: (optional) (object) => object */
-    ) {      
+    ) {
         // parse arguments
         if (typeof params === "function") {
             parser = params;
@@ -710,12 +918,12 @@ adapter.on("message", function (obj) {
                 response = response.result;
             }
             // now respond with the result
-            respond({error: null, result: response});
+            respond({ error: null, result: response });
             // remove the callback from the dict
             if (sendCommandCallbacks[id] != null) delete sendCommandCallbacks[id];
         };
         // send msg to the robo
-        sendMsg(method, params, {rememberPacket: false}, function(err) {
+        sendMsg(method, params, { rememberPacket: false }, function (err) {
             // on error, respond immediately
             if (err) respond({ error: err });
             // else wait for the callback
@@ -739,7 +947,7 @@ adapter.on("message", function (obj) {
                 // require the method to be given
                 if (!requireParams(["method"])) return;
                 // params is optional
-               
+
                 var params = obj.message;
                 sendCustomCommand(params.method, params.params);
                 return;
@@ -769,7 +977,7 @@ adapter.on("message", function (obj) {
             case "findMe":
                 sendCustomCommand("find_me");
                 return;
-                
+
             // get info about the consumables
             // TODO: parse the results
             case "getConsumableStatus":
@@ -807,7 +1015,7 @@ adapter.on("message", function (obj) {
             case "getDeviceDetails":
                 sendCustomCommand("miIO.info");
                 return;
-            
+
             // Do not disturb
             case "getDNDTimer":
                 sendCustomCommand("get_dnd_timer", returnSingleResult);
@@ -854,10 +1062,10 @@ adapter.on("message", function (obj) {
                 }];
                 sendCustomCommand("app_rc_move", [args]);
                 return;
-        
 
-    // ======================================================================
-                
+
+            // ======================================================================
+
             default:
                 respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
                 return;

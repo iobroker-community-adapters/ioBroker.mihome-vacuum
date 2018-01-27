@@ -19,6 +19,9 @@ This adapter allows you control the Xiaomi vacuum cleaner.
         - [Steuerung über Alexa](#steuerung-über-alexa)
         - [Zweiter Roboter](#zweiter-roboter)
 - [Funtionen](#funktionen)
+    - [S50 Kommandos](#Komandos-des-S50)
+	        - [GoTo](#GoTo)
+			- [zoneClean](#zoneClean)
     - [Eigene Kommandos](#sende-eigene-kommandos)
     - [sendTo-Hook](#eigene-kommandos-per-sendto-schicken)
 - [Widget](#widget)
@@ -40,7 +43,7 @@ Benötigt wird ein Android Smartphone mit fertig eingerichteter MiHome App. Der 
 - Auf "Token auslesen" klicken und die Meldung auf dem Smartphone bestätigen (KEIN Passwort vergeben!).
 
 Auf dem Smartphone sollte nun die MiHome App geöffnet werden (automatisch) und ein Backup auf den PC gezogen werden (sollte ein paar Sekunden dauern), das Programm liest dann den Token aus der MiHome Datenbank (miio2.db) aus.
-Nun nur in dem geöffneten Fenster nach rockrobo.vaccuum suchen und den 32 Stelligen Token kopieren und in dem Konfigurationsfenster eingeben.
+Nun nur in dem geöffneten Fenster nach rockrobo.vacuum suchen und den 32 Stelligen Token kopieren und in dem Konfigurationsfenster eingeben.
 
 
 ### Bei iOS
@@ -71,6 +74,42 @@ In der Konfig add Alexa state aktivieren, ist hier ein Hacken gesetzt wird ein z
 Sollen zwei Roboter über ioBroker gesteuert werden, müssen zwei Instanzen angelegt werden. Dabei muss bei dem zweiten Roboter der eigene Port (Default: 53421) geändert werden, damit beide Roboter unterschiedliche Ports besitzen.
 
 ## Funktionen
+
+### Komandos des S50 (second Generation)
+Die die Kartengröße immer 52000mm x 52000mm somit sind Werte von 0 bis 51999mm möglich.
+Leider kann die Position und die und die Lage der Karte nciht abgefragt werden, dieses kann sich von Saugvorgang zu Saugvorgang ändern. Genutzt als basis wird immer die letzte Saugkarte, wie auch in der App.
+Saugt der Roboter nur ein Bereich und baut die Karte immer gleich auf, kann man ihn zuverlässig zu Orten schicken oder Bereich eSaugen lassen.
+
+#### GoTo
+Um dem Staubsauger zu einem Punkt fahren zu lassen muss das Objekt "goTo" wie folgt befüllt werden:
+```
+xVal,yVal
+```
+Die Werte müssen den oben genannten Gültigkeitsbereich erfüllen und geben die x und y Koordinate auf der Karte an.
+
+Beispiel:
+```
+24850,26500
+```
+
+
+#### zoneClean
+Zum Saugen einer Zone muss ZoneClean wie folgt befüllt werden:
+```
+[x1,y1,x2,x2,count]
+```
+Wobei x und y die Koordinaten des Rechteckigen Bereiches sind und "count" die Reinigunsvorgänge.
+Man kann auch mehrere Bereiche auf einmal saugen lassen:
+
+```
+[x1,y1,x2,x2,count],[x3,y3,x4,x4,count2]
+```
+
+Beispiel:
+```
+[24117,26005,25767,27205,1],[24320,24693,25970,25843,1]]}
+```
+
 ### Sende eigene Kommandos
 HINWEIS: Diese Funktion sollte nur von Experten genutzt werden, da durch falsche Kommandos der sauger zu Schaden kommen könnte
 
@@ -154,6 +193,11 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 1.0.1 (2018-01-26)
+* (MeisterTR) ready for admin3
+* (MeisterTR) support SpotClean and voice level (v1)
+* (MeisterTR) support second generation (S50)
+* (MeisterTR) Speed up data requests
 ### 0.6.0 (2017-11-17)
 * (MeisterTR) use 96 char token from Ios Backup
 * (MeisterTR) faster connection on first use

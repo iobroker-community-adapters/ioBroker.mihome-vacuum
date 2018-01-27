@@ -1,0 +1,20 @@
+{
+  "S5_example": {
+    "hw_ver": "Linux",
+    "fw_ver": "3.3.9_001168",
+    "ap": {
+      "ssid": "wlan_name",
+      "bssid": "AE:0E:14:DF:0D:73",
+      "rssi": -46
+    },
+    "netif": {
+      "localIp": "192.168.178.00",
+      "mask": "255.255.255.0",
+      "gw": "192.168.178.1"
+    },
+    "model": "roborock.vacuum.s5",
+    "mac": "AE:0E:14:DF:0D:73",
+    "token": "703632303446723a546b4230566d7347",
+    "life": 61011
+  }
+}
