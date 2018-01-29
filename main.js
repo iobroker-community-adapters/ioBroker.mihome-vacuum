@@ -444,7 +444,7 @@ function getStates(message) {
     } else if (answer.id === last_id["get_sound_volume"]) {
         adapter.setState('control.sound_volume', answer.result[0], true);
 
-    } else if (answer.id === last_id["get_carpet_mode"]) {
+    } else if (answer.id === last_id["get_carpet_mode"] && model === "roborock.vacuum.s5" ) {
         adapter.setState('control.carpet_mode', answer.result[0].enable === 1, true);
 
     } else if (answer.id === last_id["get_consumable"]) {
