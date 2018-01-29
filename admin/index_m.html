@@ -187,69 +187,71 @@
 <body>
     <div class="m adapter-container" style= "background-image: url('S5.png'); background-repeat: no-repeat; background-position: 20px 110px;  background-size: 520px ;">
         <div class="row">
-            <div class="col s12 m2 l1">
-                <img src="mihome-vacuum.png" class="logo">
+            <div class="row">
+                <div class="col s12 m2 l1">
+                    <img src="mihome-vacuum.png" class="logo">
+
+                </div>
+                <div class="col s12 m8 l10">
+                    <h6 class="translate">title</h6>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="row" style="background-color: #64b5f6;">
+                <div class="col s12">
+                    <span class="translate">connection settings</span>
+                    <!-- Important: span must come directly after checkbox input (only by checkbox the span will be used!) -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <input class="value" id="token" size="60" maxlength="96" />
+                    <label for="token" class="translate">Token</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m4 l2">
+                    <input class="value" id="ip" size="15" />
+                    <label class="translate" for="ip">IP address:</label>
+                </div>
+
+                <div class="col s12 m3 l1 offset-m1 offset-l1">
+                    <input class="value number" id="port" size="5" maxlength="5" type="number" />
+                    <label class="translate" for="port">Vacuum port:</label>
+                </div>
+
+                <div class="col s12 m3 l1 offset-m1 offset-l1">
+                    <input class="value number" id="ownPort" size="5" maxlength="5" type="number" />
+                    <label class="translate" for="ownPort">Own port:</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m4 l2">
+                    <input class="value" id="param_pingInterval" size="15" />
+                    <label class="translate" for="param_pingInterval">Request Intervall</label>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="row" style="background-color: #64b5f6;">
+                <div class="col s12">
+                    <span class="translate">additional settings</span>
+                    <!-- Important: span must come directly after checkbox input (only by checkbox the span will be used!) -->
+                </div>
 
             </div>
-            <div class="col s12 m8 l10">
-                <h6 class="translate">title</h6>
-            </div>
-        </div>
-        <div class="divider"></div>
-        <div class="row" style="background-color: #64b5f6;">
-            <div class="col s12">
-                <span class="translate">connection settings</span>
-                <!-- Important: span must come directly after checkbox input (only by checkbox the span will be used!) -->
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s12">
-                <input class="value" id="token" size="60" maxlength="96" />
-                <label for="token" class="translate">Token</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s12 m4 l2">
-                <input class="value" id="ip" size="15" />
-                <label class="translate" for="ip">IP address:</label>
-            </div>
-
-            <div class="col s12 m3 l1 offset-m1 offset-l1">
-                <input class="value number" id="port" size="5" maxlength="5" type="number" />
-                <label class="translate" for="port">Vacuum port:</label>
-            </div>
-
-            <div class="col s12 m3 l1 offset-m1 offset-l1">
-                <input class="value number" id="ownPort" size="5" maxlength="5" type="number" />
-                <label class="translate" for="ownPort">Own port:</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s12 m4 l2">
-                <input class="value" id="param_pingInterval" size="15" />
-                <label class="translate" for="param_pingInterval">Request Intervall</label>
-            </div>
-        </div>
-        <div class="divider"></div>
-        <div class="row" style="background-color: #64b5f6;">
-            <div class="col s12">
-                <span class="translate">additional settings</span>
-                <!-- Important: span must come directly after checkbox input (only by checkbox the span will be used!) -->
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col s12">
-                <input class="value" id="enableAlexa" type="checkbox" /><span class="translate">add a state for Alexa</span>
-                <!-- Important: span must come directly after checkbox input (only by checkbox the span will be used!) -->
-            </div>
-            <div class="col s12">
-                <input class="value" id="enableSelfCommands" type="checkbox" /><span class="translate">Send own commands</span>
-                <!-- Important: span must come directly after checkbox input (only by checkbox the span will be used!) -->
+            <div class="row">
+                <div class="col s12">
+                    <input class="value" id="enableAlexa" type="checkbox" /><span class="translate">add a state for Alexa</span>
+                    <!-- Important: span must come directly after checkbox input (only by checkbox the span will be used!) -->
+                </div>
+                <div class="col s12">
+                    <input class="value" id="enableSelfCommands" type="checkbox" /><span class="translate">Send own commands</span>
+                    <!-- Important: span must come directly after checkbox input (only by checkbox the span will be used!) -->
+                </div>
             </div>
         </div>
     </div>
-    </div>
+ 
 
 </body>
 </html>
