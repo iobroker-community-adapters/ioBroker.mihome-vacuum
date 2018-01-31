@@ -221,8 +221,9 @@ function requestParams() {
 
             i++;
             if (i < reqParams.length) {
-                setTimeout(f, 200);
+                setTimeout(f, 400);
             }
+           
         }
         f();
 
@@ -237,7 +238,7 @@ function requestParams() {
                     adapter.setState('history.allTableHTML', clean_log_html_table, true);
                 });
             }
-        }, 2000);
+        }, 4000);
     }
 }
 
