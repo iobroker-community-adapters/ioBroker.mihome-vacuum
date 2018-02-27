@@ -49,6 +49,7 @@ On the smartphone the MiHome app should be opened (automatically) and a backup t
 Now look for the rockrobo.vacuum in the open window and copy the 32-digit token and enter it in the configuration window.
 
 Rooted Android Phones
+- You must use MiHome app 4.xx-5.029. Higher versions of the Mihome application do not contain a token in database.
 - Install [aSQLiteManager](https://play.google.com/store/apps/details?id=dk.andsen.asqlitemanager) on your phone with MiHome app
 - Made copy /data/data/com.xiaomi.smarthome/databases/miio2.db
 - Open copy of miio2.db with aSQLiteManager and execute the query "select token from devicerecord where localIP is '192.168.89.100'" where you replace the IP address 192.168.89.100 with the IP address of the Xiaomi vacuum cleaner. Copy the 32-digit token and enter it in the configuration window.
