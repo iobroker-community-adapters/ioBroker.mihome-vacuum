@@ -33,7 +33,13 @@ This adapter allows you control the Xiaomi vacuum cleaner.
 ## Configuration
 Currently, finding the token is the biggest problem.
 The following procedures can be used:
- 
+
+### Easy token discovery on Android
+Just uninstall official MiHome App and install this one from [this page(russian)](http://www.kapiba.ru/2017/11/mi-home.html): 
+- [Link APK](https://cloud.mail.ru/public/55AA/RF3DYidFf/MiHome_5.1.19_vevs.apk) or [Mirror](https://drive.google.com/open?id=1IyjvIWiGaeD7iLWWtBlb6jSEHTLg9XGj)
+
+After installation and login with the same settings as by officiall app, you will find the token in the "Network information" for the device.
+
 ### On Android
 Preparation:
 An Android smartphone with ready-made MiHome app is required. The teat must be added and fitted in it.
