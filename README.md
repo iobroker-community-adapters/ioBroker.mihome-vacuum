@@ -33,7 +33,13 @@ This adapter allows you control the Xiaomi vacuum cleaner.
 ## Configuration
 Currently, finding the token is the biggest problem.
 The following procedures can be used:
- 
+
+### Easy token discovery on Android
+Just uninstall official MiHome App and install this one from [this page(russian)](http://www.kapiba.ru/2017/11/mi-home.html): 
+- [Link APK](https://cloud.mail.ru/public/55AA/RF3DYidFf/MiHome_5.1.19_vevs.apk) or [Mirror](https://drive.google.com/open?id=1IyjvIWiGaeD7iLWWtBlb6jSEHTLg9XGj)
+
+After installation and login with the same settings as by officiall app, you will find the token in the "Network information" for the device.
+
 ### On Android
 Preparation:
 An Android smartphone with ready-made MiHome app is required. The teat must be added and fitted in it.
@@ -49,6 +55,7 @@ On the smartphone the MiHome app should be opened (automatically) and a backup t
 Now look for the rockrobo.vacuum in the open window and copy the 32-digit token and enter it in the configuration window.
 
 Rooted Android Phones
+- You must use MiHome app 4.xx-5.029. Higher versions of the Mihome application do not contain a token in database.
 - Install [aSQLiteManager](https://play.google.com/store/apps/details?id=dk.andsen.asqlitemanager) on your phone with MiHome app
 - Made copy /data/data/com.xiaomi.smarthome/databases/miio2.db
 - Open copy of miio2.db with aSQLiteManager and execute the query "select token from devicerecord where localIP is '192.168.89.100'" where you replace the IP address 192.168.89.100 with the IP address of the Xiaomi vacuum cleaner. Copy the 32-digit token and enter it in the configuration window.
