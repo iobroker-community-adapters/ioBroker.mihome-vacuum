@@ -1,8 +1,19 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "news": {
+      "1.1.0": {
+          "en": "Finished the widget",
+          "de": "Beendet das Widget",
+          "ru": "Закончил виджет",
+          "pt": "Terminou o widget",
+          "nl": "De widget is voltooid",
+          "fr": "Terminé le widget",
+          "it": "Finito il widget",
+          "es": "Terminado el widget",
+          "pl": "Ukończyłem widget"
+      },
       "1.0.1": {
         "en": "Add voice level, ready for admin3, add vacuum2",
         "de": "Sprachlevel hinzufügen, bereit für admin3, add vacuum2",
