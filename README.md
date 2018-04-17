@@ -203,6 +203,8 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 1.1.1 (2018-04-17)
+* (MeisterTR) error catched , added states for new fw
 ### 1.1.0 (2018-04-10)
 * (mswiege) Finished the widget
 

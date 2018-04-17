@@ -17,6 +17,7 @@ var server = dgram.createSocket('udp4');
 var device = {};
 var isConnect = false;
 var model = "";
+var fw = "";
 var connected = false;
 var commands = {};
 var stateVal = 0;
@@ -408,105 +409,113 @@ function getStates(message) {
         adapter.log.debug('Connected');
         adapter.setState('info.connection', true, true);
     }
-    var answer = JSON.parse(message);
-    answer.id = parseInt(answer.id, 10);
-    //var ans= answer.result;
-    //adapter.log.info(answer.result.length);
-    //adapter.log.info(answer['id']);
 
-    if (answer.id === last_id["get_status"]) {
-        var status = parseStatus(answer);
-        adapter.setState('info.battery', status.battery, true);
-        adapter.setState('info.cleanedtime', Math.round(status.clean_time / 60), true);
-        adapter.setState('info.cleanedarea', Math.round(status.clean_area / 10000) / 100, true);
-        adapter.setState('control.fan_power', Math.round(status.fan_power), true);
-        adapter.setState('info.state', status.state, true);
-        stateVal = status.state;
-        if (stateVal === 5 || stateVal === "5") {
-            adapter.setState('control.clean_home', true, true);
-        }
-        else {
-            adapter.setState('control.clean_home', false, true);
-        }
-        adapter.setState('info.error', status.error_code, true);
-        adapter.setState('info.dnd', status.dnd_enabled, true)
-    } else if (answer.id === last_id["miIO.info"]) {
+    try {
+        var answer = JSON.parse(message);
+        answer.id = parseInt(answer.id, 10);
+        //var ans= answer.result;
+        //adapter.log.info(answer.result.length);
+        //adapter.log.info(answer['id']);
 
-        //adapter.log.info("device" + JSON.stringify(answer.result));
-        device = answer.result;
-        adapter.setState('info.device_fw', answer.result.fw_ver, true);
-        adapter.setState('info.device_model', answer.result.model, true);
-        adapter.setState('info.wifi_signal', answer.result.ap.rssi, true);
-        if (model === "") model = newGen(answer.result.model); // create new States for the V2
-
-
-
-    } else if (answer.id === last_id["get_sound_volume"]) {
-        adapter.setState('control.sound_volume', answer.result[0], true);
-
-    } else if (answer.id === last_id["get_carpet_mode"] && model === "roborock.vacuum.s5" ) {
-        adapter.setState('control.carpet_mode', answer.result[0].enable === 1, true);
-
-    } else if (answer.id === last_id["get_consumable"]) {
-
-        adapter.setState('consumable.main_brush', 100 - (Math.round(answer.result[0].main_brush_work_time / 3600 / 3)), true);
-        adapter.setState('consumable.side_brush', 100 - (Math.round(answer.result[0].side_brush_work_time / 3600 / 2)), true);
-        adapter.setState('consumable.filter', 100 - (Math.round(answer.result[0].filter_work_time / 3600 / 1.5)), true);
-        adapter.setState('consumable.sensors', 100 - (Math.round(answer.result[0].sensor_dirty_time / 3600 / 0.3)), true);
-    } else if (answer.id === last_id["get_clean_summary"]) {
-        var summary = parseCleaningSummary(answer);
-        adapter.setState('history.total_time', Math.round(summary.clean_time / 60), true);
-        adapter.setState('history.total_area', Math.round(summary.total_area / 1000000), true);
-        adapter.setState('history.total_cleanups', summary.num_cleanups, true);
-        log_entrys_new = summary.cleaning_record_ids;
-        //adapter.log.info("log_entrya" + JSON.stringify(log_entrys_new));
-        //adapter.log.info("log_entry old" + JSON.stringify(log_entrys));
-
-
-    } else if (answer.id === last_id["X_send_command"]) {
-        adapter.setState('control.X_get_response', JSON.stringify(answer.result), true);
-
-    } else if (answer.id === last_id["get_clean_record"]) {
-        var records = parseCleaningRecords(answer);
-        for (var j = 0; j < records.length; j++) {
-            var record = records[j];
-
-            var dates = new Date();
-            var hour = "",
-                min = "";
-            dates.setTime(record.start_time * 1000);
-            if (dates.getHours() < 10) {
-                hour = "0" + dates.getHours();
-            } else {
-                hour = dates.getHours();
+        if (answer.id === last_id["get_status"]) {
+            var status = parseStatus(answer);
+            adapter.setState('info.battery', status.battery, true);
+            adapter.setState('info.cleanedtime', Math.round(status.clean_time / 60), true);
+            adapter.setState('info.cleanedarea', Math.round(status.clean_area / 10000) / 100, true);
+            adapter.setState('control.fan_power', Math.round(status.fan_power), true);
+            adapter.setState('info.state', status.state, true);
+            stateVal = status.state;
+            if (stateVal === 5 || stateVal === "5") {
+                adapter.setState('control.clean_home', true, true);
             }
-            if (dates.getMinutes() < 10) {
-                min = "0" + dates.getMinutes();
-            } else {
-                min = dates.getMinutes();
+            else {
+                adapter.setState('control.clean_home', false, true);
+            }
+            adapter.setState('info.error', status.error_code, true);
+            adapter.setState('info.dnd', status.dnd_enabled, true)
+        } else if (answer.id === last_id["miIO.info"]) {
+
+            //adapter.log.info("device" + JSON.stringify(answer.result));
+            device = answer.result;
+            adapter.setState('info.device_fw', answer.result.fw_ver, true);
+            fw = answer.result.fw_ver;
+            adapter.setState('info.device_model', answer.result.model, true);
+            adapter.setState('info.wifi_signal', answer.result.ap.rssi, true);
+            if (model === "") model = newGen(answer.result.model); // create new States for the V2
+            
+
+
+
+        } else if (answer.id === last_id["get_sound_volume"]) {
+            adapter.setState('control.sound_volume', answer.result[0], true);
+
+        } else if (answer.id === last_id["get_carpet_mode"] && model === "roborock.vacuum.s5") {
+            adapter.setState('control.carpet_mode', answer.result[0].enable === 1, true);
+
+        } else if (answer.id === last_id["get_consumable"]) {
+
+            adapter.setState('consumable.main_brush', 100 - (Math.round(answer.result[0].main_brush_work_time / 3600 / 3)), true);
+            adapter.setState('consumable.side_brush', 100 - (Math.round(answer.result[0].side_brush_work_time / 3600 / 2)), true);
+            adapter.setState('consumable.filter', 100 - (Math.round(answer.result[0].filter_work_time / 3600 / 1.5)), true);
+            adapter.setState('consumable.sensors', 100 - (Math.round(answer.result[0].sensor_dirty_time / 3600 / 0.3)), true);
+        } else if (answer.id === last_id["get_clean_summary"]) {
+            var summary = parseCleaningSummary(answer);
+            adapter.setState('history.total_time', Math.round(summary.clean_time / 60), true);
+            adapter.setState('history.total_area', Math.round(summary.total_area / 1000000), true);
+            adapter.setState('history.total_cleanups', summary.num_cleanups, true);
+            log_entrys_new = summary.cleaning_record_ids;
+            //adapter.log.info("log_entrya" + JSON.stringify(log_entrys_new));
+            //adapter.log.info("log_entry old" + JSON.stringify(log_entrys));
+
+
+        } else if (answer.id === last_id["X_send_command"]) {
+            adapter.setState('control.X_get_response', JSON.stringify(answer.result), true);
+
+        } else if (answer.id === last_id["get_clean_record"]) {
+            var records = parseCleaningRecords(answer);
+            for (var j = 0; j < records.length; j++) {
+                var record = records[j];
+
+                var dates = new Date();
+                var hour = "",
+                    min = "";
+                dates.setTime(record.start_time * 1000);
+                if (dates.getHours() < 10) {
+                    hour = "0" + dates.getHours();
+                } else {
+                    hour = dates.getHours();
+                }
+                if (dates.getMinutes() < 10) {
+                    min = "0" + dates.getMinutes();
+                } else {
+                    min = dates.getMinutes();
+                }
+
+                var log_data = {
+                    "Datum": dates.getDate() + "." + (dates.getMonth() + 1),
+                    "Start": hour + ":" + min,
+                    "Saugzeit": Math.round(record.duration / 60) + " min",
+                    "Fläche": Math.round(record.area / 10000) / 100 + " m²",
+                    "Error": record.errors,
+                    "Ende": record.completed
+                };
+
+
+                clean_log.push(log_data);
+                clean_log_html_table = makeTable(log_data);
+
+
             }
 
-            var log_data = {
-                "Datum": dates.getDate() + "." + (dates.getMonth() + 1),
-                "Start": hour + ":" + min,
-                "Saugzeit": Math.round(record.duration / 60) + " min",
-                "Fläche": Math.round(record.area / 10000) / 100 + " m²",
-                "Error": record.errors,
-                "Ende": record.completed
-            };
+        } else if (answer.id in sendCommandCallbacks) {
 
-
-            clean_log.push(log_data);
-            clean_log_html_table = makeTable(log_data);
-
-
+            // invoke the callback from the sendTo handler
+            var callback = sendCommandCallbacks[answer.id];
+            if (typeof callback === "function") callback(answer);
         }
-
-    } else if (answer.id in sendCommandCallbacks) {
-
-        // invoke the callback from the sendTo handler
-        var callback = sendCommandCallbacks[answer.id];
-        if (typeof callback === "function") callback(answer);
+    }
+    catch (err) {
+        adapter.log.debug("The answer from thr robot is not coorect!");
     }
 }
 
@@ -723,8 +732,8 @@ function init() {
 
 
 var newGen = function (model) {
-    if (model === "roborock.vacuum.s5") {
-        adapter.log.info('New generation detected, create new states');
+    if (model === "roborock.vacuum.s5" || fw === "3.3.9_003194") {
+        adapter.log.info('New generation or new fw detected, create new states');
         adapter.setObjectNotExists('control.goTo', {
             type: 'state',
             common: {
@@ -747,6 +756,10 @@ var newGen = function (model) {
             },
             native: {}
         });
+    }
+    if (model === "roborock.vacuum.s5"){
+
+
         adapter.setObjectNotExists('control.carpet_mode', {
             type: 'state',
             common: {
@@ -759,7 +772,7 @@ var newGen = function (model) {
             native: {}
         });
     }
-    else if (!model === "roborock.vacuum.s5"){
+    else if (!model === "roborock.vacuum.s5" && fw !== "3.3.9_003194" ) {
         adapter.deleteState(adapter.namespace, "control", "goTo");
         adapter.deleteState(adapter.namespace, "control", "zoneClean");
         adapter.deleteState(adapter.namespace, "control", "carpet_mode");
@@ -788,7 +801,7 @@ function main() {
 
     // Abfrageintervall mindestens 10 sec.
     if (adapter.config.param_pingInterval < 7000) {
-      adapter.config.param_pingInterval = 7000;
+        adapter.config.param_pingInterval = 7000;
     }
 
 
