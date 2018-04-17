@@ -193,6 +193,8 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 1.1.1 (2018-04-17)
+* (MeisterTR) Fehler abgefangen, Objekte für neue fw hinzugefügt
 ### 1.0.1 (2018-01-26)
 * (MeisterTR) ready for admin3
 * (MeisterTR) support SpotClean and voice level (v1)

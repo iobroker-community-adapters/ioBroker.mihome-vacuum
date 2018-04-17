@@ -1,18 +1,29 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "news": {
+      "1.1.1": {
+        "en": "error catched , added states for new fw",
+        "de": "Fehler eingefangen, Status für neues fw hinzugefügt",
+        "ru": "ошибка уловлена, добавлены состояния для нового fw",
+        "pt": "erro apanhado, estados adicionados para novo fw",
+        "nl": "fout gemaakt, staten toegevoegd voor nieuwe fw",
+        "fr": "erreur détectée, les états ajoutés pour les nouveaux fw",
+        "it": "errore rilevato, stati aggiunti per nuovi fw",
+        "es": "error atrapado, estados agregados para nuevo fw",
+        "pl": "błąd catched, dodano stany dla nowego fw"
+      },
       "1.1.0": {
-          "en": "Finished the widget",
-          "de": "Beendet das Widget",
-          "ru": "Закончил виджет",
-          "pt": "Terminou o widget",
-          "nl": "De widget is voltooid",
-          "fr": "Terminé le widget",
-          "it": "Finito il widget",
-          "es": "Terminado el widget",
-          "pl": "Ukończyłem widget"
+        "en": "Finished the widget",
+        "de": "Beendet das Widget",
+        "ru": "Закончил виджет",
+        "pt": "Terminou o widget",
+        "nl": "De widget is voltooid",
+        "fr": "Terminé le widget",
+        "it": "Finito il widget",
+        "es": "Terminado el widget",
+        "pl": "Ukończyłem widget"
       },
       "1.0.1": {
         "en": "Add voice level, ready for admin3, add vacuum2",
