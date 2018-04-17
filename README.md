@@ -1,6 +1,5 @@
 ![Logo](admin/mihome-vacuum.png)
-
-ioBroker mihome-vacuum adapter
+# ioBroker mihome-vacuum adapter
 =================
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
@@ -204,14 +203,19 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 1.1.0 (2018-04-10)
+* (mswiege) Finished the widget
+
 ### 1.0.1 (2018-01-26)
 * (MeisterTR) ready for admin3
 * (MeisterTR) support SpotClean and voice level (v1)
 * (MeisterTR) support second generation (S50)
 * (MeisterTR) Speed up data requests
+
 ### 0.6.0 (2017-11-17)
 * (MeisterTR) use 96 char token from Ios Backup
 * (MeisterTR) faster connection on first use
+
 ### 0.5.9 (2017-11-03)
 * (MeisterTR) fix communication error without i-net
 * (AlCalzone) add selection of predefined power levels
