@@ -35,7 +35,7 @@ The following procedures can be used:
 
 ### Easy token discovery on Android
 Just uninstall official MiHome App and install this one from [this page(russian)](http://www.kapiba.ru/2017/11/mi-home.html): 
-- [Link APK](https://cloud.mail.ru/public/55AA/RF3DYidFf/MiHome_5.1.19_vevs.apk) or [Mirror](https://drive.google.com/open?id=1IyjvIWiGaeD7iLWWtBlb6jSEHTLg9XGj)
+- [Link APK](https://cloud.mail.ru/public/55AA/RF3DYidFf/MiHome_5.1.30_vevs.apk) or [Mirror](https://drive.google.com/open?id=1IyjvIWiGaeD7iLWWtBlb6jSEHTLg9XGj)
 
 After installation and login with the same settings as by officiall app, you will find the token in the "Network information" for the device.
 
