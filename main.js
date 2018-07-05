@@ -731,7 +731,7 @@ function init() {
 }
 
 
-var newGen = function (model) {
+function newGen(model) {
     if (model === "roborock.vacuum.s5" || fw === "3.3.9_003194") {
         adapter.log.info('New generation or new fw detected, create new states');
         adapter.setObjectNotExists('control.goTo', {
