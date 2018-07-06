@@ -203,8 +203,12 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 1.1.2 (2018-07-05)
+* (BuZZy1337) fixed detection of new Firmware / Second generation Vacuum
+
 ### 1.1.1 (2018-04-17)
 * (MeisterTR) error catched , added states for new fw
+
 ### 1.1.0 (2018-04-10)
 * (mswiege) Finished the widget
 

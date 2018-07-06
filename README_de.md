@@ -193,24 +193,33 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 1.1.2 (2018-07-05)
+* (BuZZy1337) Fehler in Erkennung von neuer Firmware / zweiter Generation Roboter behoben
+
 ### 1.1.1 (2018-04-17)
 * (MeisterTR) Fehler abgefangen, Objekte für neue fw hinzugefügt
+
 ### 1.0.1 (2018-01-26)
 * (MeisterTR) ready for admin3
 * (MeisterTR) support SpotClean and voice level (v1)
 * (MeisterTR) support second generation (S50)
 * (MeisterTR) Speed up data requests
+
 ### 0.6.0 (2017-11-17)
 * (MeisterTR) use 96 char token from Ios Backup
 * (MeisterTR) faster connection on first use
+
 ### 0.5.9 (2017-09-18)
 * (MeisterTR) fix communication error without i-net
 * (AlCalzone) add selection of predefined power levels
+
 ### 0.5.7 (2017-08-17)
 * (MeisterTR) compare system time and Robot time (fix no connection if system time is different)
 * (MeisterTR) update values if robot start by cloud
+
 ### 0.5.6 (2017-07-23)
 * (MeisterTR) add option for crate switch for Alexa control
+
 ### 0.5.5 (2017-06-30)
 * (MeisterTR) add states, fetures, fix communication errors
 
