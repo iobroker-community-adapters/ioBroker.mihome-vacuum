@@ -291,7 +291,7 @@ function buildMsg(method, params) {
     } else {
         adapter.log.warn('Could not build message without arguments');
     }
-    return JSON.stringify(message);
+    return JSON.stringify(message).replace('["[', '[[').replace(']"]', ']]');
 }
 
 
@@ -442,7 +442,7 @@ function getStates(message) {
             adapter.setState('info.device_model', answer.result.model, true);
             adapter.setState('info.wifi_signal', answer.result.ap.rssi, true);
             if (model === "") model = newGen(answer.result.model); // create new States for the V2
-            
+
 
 
 
@@ -757,7 +757,7 @@ function newGen(model) {
             native: {}
         });
     }
-    if (model === "roborock.vacuum.s5"){
+    if (model === "roborock.vacuum.s5") {
 
 
         adapter.setObjectNotExists('control.carpet_mode', {
@@ -772,7 +772,7 @@ function newGen(model) {
             native: {}
         });
     }
-    else if (!model === "roborock.vacuum.s5" && fw !== "3.3.9_003194" ) {
+    else if (!model === "roborock.vacuum.s5" && fw !== "3.3.9_003194") {
         adapter.deleteState(adapter.namespace, "control", "goTo");
         adapter.deleteState(adapter.namespace, "control", "zoneClean");
         adapter.deleteState(adapter.namespace, "control", "carpet_mode");
