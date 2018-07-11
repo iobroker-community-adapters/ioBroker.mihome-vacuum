@@ -203,6 +203,9 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 1.1.3 (2018-07-11)
+* (BuZZy1337) fixed zoneCleanup state not working (vacuum was only leaving the dock, saying "Finished ZoneCleanup", and returned immediately back to the dock)
+
 ### 1.1.2 (2018-07-05)
 * (BuZZy1337) fixed detection of new Firmware / Second generation Vacuum
 
