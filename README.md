@@ -65,27 +65,27 @@ With Jailbreak:
 - If the token is found at /var/mobile/Containers/Data/Application/514106F3-C854-45E9-A45C-119CB4FFC235/Documents/USERID_mihome.sqlite
 
 Without Jailbreak:
-• First read the required token via iPhone backup
-• To do this, first set up the xiaomi on your  iPhone
-• Create a backup with iTunes or 3utools
-• Then install the [iphonebackupviewer](http://www.imactools.com/iphonebackupviewer/)
-• go to the Tree View (top right)
-• go to the path AppDomain-com.xiaomi.mihome\Documents\
-• download the file xxxxxxxxxx_mihome.sqlite
-• If the file / folder is not found, backup with iTunes instead of using 3utools
-• Open these with [DB Browser for SQLite](https://github.com/sqlitebrowser/sqlitebrowser/releases/download/v3.10.1/SQLiteDatabaseBrowserPortable_3.10.1_English.paf.exe)
-• The 96-digit hex key can be found under Browse Data  Table ZDEVICE  in the right-most column ZTOKEN
-• The 96-digit Hex Key must now be converted to a 32-digit key
-• Enter the following via the [link](http://aes.online-domain-tools.com/) here
-• Input type: Text
-• Input text: the 96-digit key
-• Hex
-• Autodetect: ON
-• Function: AES
-• Mode: ECB (electronic codebook)
-• Key: 00000000000000000000000000000000 * must be 32 digits
-• Hex
-• Now click on Decrypt and remove the 32-digit key from the decrypted text at the far right
+- First read the required token via iPhone backup
+- To do this, first set up the xiaomi on your  iPhone
+- Create a backup with iTunes or 3utools
+- Then install the [iphonebackupviewer](http://www.imactools.com/iphonebackupviewer/)
+- go to the Tree View (top right)
+- go to the path AppDomain-com.xiaomi.mihome\Documents\
+- download the file xxxxxxxxxx_mihome.sqlite
+-If the file / folder is not found, backup with iTunes instead of using 3utools
+- Open these with [DB Browser for SQLite](https://github.com/sqlitebrowser/sqlitebrowser/releases/download/v3.10.1/SQLiteDatabaseBrowserPortable_3.10.1_English.paf.exe)
+- The 96-digit hex key can be found under Browse Data  Table ZDEVICE  in the right-most column ZTOKEN
+- The 96-digit Hex Key must now be converted to a 32-digit key
+- Enter the following via the [link](http://aes.online-domain-tools.com/) here
+- Input type: Text
+- Input text: the 96-digit key
+- Hex
+- Autodetect: ON
+- Function: AES
+- Mode: ECB (electronic codebook)
+- Key: 00000000000000000000000000000000 * must be 32 digits
+- Hex
+- Now click on Decrypt and remove the 32-digit key from the decrypted text at the far right
 
 
 ### Adapter Configuration
