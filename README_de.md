@@ -52,12 +52,27 @@ Mit Jailbreak:
 - Findet man den Token unter /var/mobile/Containers/Data/Application/514106F3-C854-45E9-A45C-119CB4FFC235/Documents/USERID_mihome.sqlite
 
 Ohne Jailbreak:
-- Ausführliche Anleitung finden sie hier: ([Link](http://technikzeugs.de/xiaomi-mirobot-staubsaugroboter-mit-iobroker-und-echo-bzw-alexa-fernsteuern/)).
-- Muss man einen unverschlüsselten iTunes Backup machen mit z.B. ([Link](http://www.imactools.com/iphonebackupviewer/)).
-- Und dann in den Dateien nach  DB unter RAW, com.xiaomi.home, USERID_mihome.sqlite suchen.
-
-
-Auch hier wird nach dem 32 stelligen Token oder bei neueren Versionen ein 96 stelliger Token gesucht
+-	Zuerst muss der benötigte Token (über iPhone backup) ausgelesen werden
+-	Hierzu zuerst den xiaomi auf dem iPhone einrichten
+-	Backup mit iTunes oder 3utools erstellen
+-	Anschließend den [iphonebackupviewer](http://www.imactools.com/iphonebackupviewer/) installieren
+-	in den Tree View (oben rechts) gehen
+-	in den Pfad AppDomain-com.xiaomi.mihome\Documents\ gehen
+-	die Datei xxxxxxxxxx_mihome.sqlite herunterladen
+-	Sollte die Datei / der Ordner nicht zu finden sein, Backup mit iTunes statt mit 3utools machen
+-	Diese mit [DB Browser for SQLite](https://github.com/sqlitebrowser/sqlitebrowser/releases/download/v3.10.1/SQLiteDatabaseBrowserPortable_3.10.1_English.paf.exe) öffnen
+-	Der 96-Stellige Hex Key befindet sich unter Browse Data  Table ZDEVICE  in der Spalte ganz Rechts ZTOKEN
+-	Der 96-Stellige Hex Key muss nun in ein 32-Stelligen Key umgewandelt werden 
+-	Über den [link](http://aes.online-domain-tools.com/) hier folgendes eintragen (Nur copy/paste, zwischenspeichern kann das Ergenis verfälschen)
+-	Input type: Text
+-	Input text: der 96-stellige Key
+-	Hex
+-	Autodetect: ON
+-	Function: AES
+-	Mode: ECB (electronic codebook)
+-	Key: 00000000000000000000000000000000 *muss 32-stellig sein
+-	Hex
+-	Nun auf Decrypt klicken und den 32-stelligen Key aus dem Decrypted Text ganz rechts entnehmen
 
 ### Adapterkonfiguration
 - Bei IP-Adresse muss die IP-Adresse des Roboters eingegeben werden im Format "192.168.178.XX"
