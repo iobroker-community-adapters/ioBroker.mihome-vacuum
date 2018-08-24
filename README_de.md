@@ -208,6 +208,9 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 1.1.4 (2018-08-24)
+* (BuZZy1337) Funktion zum Fortsetzen einer vorher pausierten Zonenreinigung hinzugefügt. (State: mihome-vacuum.X.control.resumeZoneClean)
+
 ### 1.1.3 (2018-07-11)
 * (BuZZy1337) Fehler im ZoneCleanup state behoben (Roboter fuhr nur kurz von der Ladestation, meldete "Zonecleanup Finished" und fuhr sofort wieder zurück zur Ladestation)
 

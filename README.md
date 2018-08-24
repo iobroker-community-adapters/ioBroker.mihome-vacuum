@@ -220,6 +220,9 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 1.1.4 (2018-08-24)
+* (BuZZy1337) Added possibility to resume a paused zoneclean (State: mihome-vacuum.X.control.resumeZoneClean)
+
 ### 1.1.3 (2018-07-11)
 * (BuZZy1337) fixed zoneCleanup state not working (vacuum was only leaving the dock, saying "Finished ZoneCleanup", and returned immediately back to the dock)
 

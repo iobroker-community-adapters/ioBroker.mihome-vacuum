@@ -17,6 +17,7 @@ let device = {};
 let isConnect = false;
 let model = '';
 let fw = '';
+let fwNew = false;
 let connected = false;
 let commands = {};
 let stateVal = 0;
@@ -127,6 +128,9 @@ adapter.on('stateChange', function (id, state) {
             sendMsg('app_zoned_clean', [state.val], function () {
                 adapter.setForeignState(id, state.val, true);
             });
+
+        } else if (command === "resumeZoneClean") {
+            sendMsg("resume_zoned_clean");
 
         } else if (com[command] === undefined) {
             adapter.log.error('Unknown state "' + id + '"');
@@ -428,12 +432,15 @@ function getStates(message) {
             }
             adapter.setState('info.error', status.error_code, true);
             adapter.setState('info.dnd', status.dnd_enabled, true)
-        } else if (answer.id === last_id.miIO.info) {
+        } else if (answer.id === last_id['miIO.info']) {
 
             //adapter.log.info('device' + JSON.stringify(answer.result));
             device = answer.result;
             adapter.setState('info.device_fw', answer.result.fw_ver, true);
-            fw = answer.result.fw_ver;
+            fw = answer.result.fw_ver.split('_');   // Splitting the FW into [Version, Build] array.
+            if (parseInt(fw[0].replace(/\./g, ''), 10) > 339 || (parseInt(fw[0].replace(/\./g, ''), 10) === 339 && parseInt(fw[1], 10) >= 3194)) {
+                fwNew = true;
+            }
             adapter.setState('info.device_model', answer.result.model, true);
             adapter.setState('info.wifi_signal', answer.result.ap.rssi, true);
             if (model === '') {
@@ -509,7 +516,7 @@ function getStates(message) {
         }
     }
     catch (err) {
-        adapter.log.debug('The answer from thr robot is not correct!');
+        adapter.log.debug('The answer from the robot is not correct! (' + err + ')');
     }
 }
 
@@ -519,15 +526,16 @@ function getLog(callback, i) {
 
     if (!logEntries || i >= logEntries.length) {
         callback && callback();
-    } else {}
-    if (logEntries[i] !== null || logEntries[i] !== 'null') {
-        adapter.log.debug('Request log entry: ' + logEntries[i]);
-        sendMsg('get_clean_record', [logEntries[i]], () => {
-            setTimeout(getLog, 200, callback, i + 1);
-        });
     } else {
-        adapter.log.error('Could not find log entry');
-        setImmediate(getLog, callback, i + 1);
+        if (logEntries[i] !== null || logEntries[i] !== 'null') {
+            adapter.log.debug('Request log entry: ' + logEntries[i]);
+            sendMsg('get_clean_record', [logEntries[i]], () => {
+                setTimeout(getLog, 200, callback, i + 1);
+            });
+        } else {
+            adapter.log.error('Could not find log entry');
+            setImmediate(getLog, callback, i + 1);
+        }
     }
 }
 
@@ -720,7 +728,7 @@ function init() {
 
 
 function newGen(model) {
-    if (model === 'roborock.vacuum.s5' || fw === '3.3.9_003194') {
+    if (model === 'roborock.vacuum.s5' || fwNew) {
         adapter.log.info('New generation or new fw detected, create new states');
         adapter.setObjectNotExists('control.goTo', {
             type: 'state',
@@ -744,6 +752,18 @@ function newGen(model) {
             },
             native: {}
         });
+        adapter.setObjectNotExists('control.resumeZoneClean', {
+            type: 'state',
+            common: {
+                name: "Resume paused zoneClean",
+                type: "boolean",
+                role: "button",
+                read: true,
+                write: true,
+                desc: "resume zoneClean that has been paused before",
+            },
+            native: {}
+        });
     }
     if (model === 'roborock.vacuum.s5') {
 
@@ -760,10 +780,11 @@ function newGen(model) {
             native: {}
         });
     }
-    else if (!model === 'roborock.vacuum.s5' && fw !== '3.3.9_003194') {
+    else if (!model === 'roborock.vacuum.s5' && !fwNew) {
         adapter.deleteState(adapter.namespace, 'control', 'goTo');
         adapter.deleteState(adapter.namespace, 'control', 'zoneClean');
         adapter.deleteState(adapter.namespace, 'control', 'carpet_mode');
+        adapter.deleteState(adapter.namespace, 'control', 'resumeZoneClean');
     }
     return model;
 }
@@ -792,8 +813,8 @@ function main() {
     init();
 
     // Abfrageintervall mindestens 10 sec.
-    if (adapter.config.paramPingInterval < 7000) {
-        adapter.config.paramPingInterval = 7000;
+    if (adapter.config.paramPingInterval < 10000) {
+        adapter.config.paramPingInterval = 10000;
     }
 
 
