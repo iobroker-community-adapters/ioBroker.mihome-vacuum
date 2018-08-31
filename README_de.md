@@ -122,7 +122,7 @@ Man kann auch mehrere Bereiche auf einmal saugen lassen:
 
 Beispiel:
 ```
-[24117,26005,25767,27205,1],[24320,24693,25970,25843,1]]}
+[24117,26005,25767,27205,1],[24320,24693,25970,25843,1]
 ```
 
 ### Sende eigene Kommandos
