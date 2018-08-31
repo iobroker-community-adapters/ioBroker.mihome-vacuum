@@ -135,7 +135,7 @@ You can also let several areas suck at once:
 
 Example:
 ```
-[24117,26005,25767,27205,1], [24320,24693,25970,25843,1]]}
+[24117,26005,25767,27205,1], [24320,24693,25970,25843,1]
 ```
  
 ### Send your own commands
