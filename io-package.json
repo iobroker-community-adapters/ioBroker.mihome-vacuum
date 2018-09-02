@@ -1,8 +1,19 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "1.1.4",
+        "version": "1.1.5",
         "news": {
+            "1.1.5": {
+                "en": "Added setting for automatic resume of paused zonecleaning",
+                "de": "Einstellung für automatische Fortsetzung der pausierten Zonenreinigung hinzugefügt",
+                "ru": "Добавлена ​​настройка автоматического возобновления приостановленной zonecleaning",
+                "pt": "Configuração adicionada para o resumo automático de zonecleaning em pausa",
+                "nl": "Instelling toegevoegd voor automatisch hervatten van onderbroken zonecleaning",
+                "fr": "Ajout du réglage pour la reprise automatique du nettoyage en mode pause",
+                "it": "Aggiunta l'impostazione per il ripristino automatico della pausa in pausa",
+                "es": "Configuración añadida para el resumen automático de la zona de limpieza pausada",
+                "pl": "Dodano ustawienie automatycznego wznowienia wstrzymanego procesu oczyszczania"
+            },
             "1.1.4": {
                 "en": "added possibility to resume zone cleaning",
                 "de": "Möglichkeit zur Fortsetzung der Zonenreinigung hinzugefügt",
@@ -338,7 +349,9 @@
                     "8": "Charging",
                     "10": "Paused",
                     "11": "Spot cleaning",
-                    "12": "Error?!"
+                    "12": "Error?!",
+                    "16": "Going to Spot",
+                    "17": "Zone cleaning"
                 }
             },
             "native": {}

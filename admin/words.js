@@ -46,7 +46,6 @@ systemDictionary = {
         "es": "ajustes adicionales",
         "pl": "dodatkowe ustawienia"
     },
-
     "Invalid token length. Expected 32 or 96 HEX chars.": {
         "en": "Invalid token length. Expected 32 or 96 HEX chars.",
         "de": "Ungültige Tokenlänge Erwartete 32 oder 96 HEX-Zeichen.",
@@ -145,5 +144,16 @@ systemDictionary = {
         "it": "aggiungi uno stato per Alexa",
         "es": "agregar un estado para Alexa",
         "pl": "dodaj stan dla Alexy"
+    },
+    "Resume paused zonecleaning with start button": {
+        "en": "Resume paused zonecleaning with start button",
+        "de": "Zonenreinigung nach pausierung fortsetzen",
+        "ru": "Возобновление приостановки zonecleaning с кнопкой запуска",
+        "pt": "Retomar o zonecleaning pausado com o botão Iniciar",
+        "nl": "Pauzeer zonecleaning opnieuw met de startknop",
+        "fr": "Reprendre le nettoyage en mode pause avec le bouton Démarrer",
+        "it": "Riprendi zonecleaning in pausa con il pulsante di avvio",
+        "es": "Reanudar la zona de limpieza en pausa con el botón de inicio",
+        "pl": "Wznów wstrzymanie procesu oczyszczania za pomocą przycisku Start"
     }
 };
