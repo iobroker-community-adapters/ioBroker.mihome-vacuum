@@ -97,6 +97,11 @@ Without Jailbreak:
 #### Control over Alexa
 In the config add alexa state is activated here is a hack is set an additional state "clean_home" it is a switch which starts at "true" the sucker and at "false" it goes home, it becomes automatically a smart device in the cloud Adapter created with the name "vacuum cleaner", which can be changed in the cloud adapter.
 
+#### Resume paused zonecleaning with start button
+With this option enabled, the Vacuum will resume the zonecleaning when setting the "start" state to true if it was paused during a running zoneclean.
+If this option is disabled, the vacuum will start a new "normal cleaning" when you send the start command, even if it was paused during a running zoneclean.
+
+
 - Experimental: Using the checkbox "Send your own commands" objects are created, via which you can send and receive your own commands to the robot.
 
 #### Second robot
@@ -220,6 +225,10 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 1.1.5 (2018-09-02)
+* (BuZZy1337) Added description for Status 16 and 17 (goTo and zonecleaning).
+* (BuZZy1337) Added setting for automatic resume of paused zonecleaning.
+
 ### 1.1.4 (2018-08-24)
 * (BuZZy1337) Added possibility to resume a paused zoneclean (State: mihome-vacuum.X.control.resumeZoneClean)
 

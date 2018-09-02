@@ -30,6 +30,7 @@ let cleanLogHtmlAllLines = '';
 let clean_log_html_table = '';
 let logEntries = {};
 let logEntriesNew = {};
+let zoneCleanActive = false;
 
 const last_id = {
     get_status: 0,
@@ -71,9 +72,14 @@ adapter.on('stateChange', function (id, state) {
             params = state.val;
         }
         if (state.val !== false && state.val !== 'false') {
-            sendMsg(com[command].method, [params], function () {
-                adapter.setForeignState(id, state.val, true);
-            });
+            if (command === 'start' && zoneCleanActive && adapter.config.enableResumeZone) {
+                adapter.log.debug('Resuming paused zoneclean.');
+                sendMsg('resume_zoned_clean');
+            } else {
+                sendMsg(com[command].method, [params], function () {
+                    adapter.setForeignState(id, state.val, true);
+                });
+            }
         }
 
     } else {
@@ -128,9 +134,10 @@ adapter.on('stateChange', function (id, state) {
             sendMsg('app_zoned_clean', [state.val], function () {
                 adapter.setForeignState(id, state.val, true);
             });
+            zoneCleanActive = true;
 
-        } else if (command === "resumeZoneClean") {
-            sendMsg("resume_zoned_clean");
+        } else if (command === 'resumeZoneClean') {
+            sendMsg('resume_zoned_clean');
 
         } else if (com[command] === undefined) {
             adapter.log.error('Unknown state "' + id + '"');
@@ -182,12 +189,13 @@ function sendPing() {
 }
 
 function stateControl(value) {
-    if (value && stateVal !== 5) {
+    if (value && stateVal !== 5 && stateVal !== 17) {
         sendMsg(com.start.method);
         setTimeout(() => sendMsg(com.get_status.method), 2000);
-    } else if (!value && stateVal === 5) {
+    } else if (!value && (stateVal === 5 || stateVal === 17)) {
         sendMsg(com.pause.method);
         setTimeout(() => sendMsg(com.home.method), 1000);
+        zoneCleanActive = false;
     }
 }
 
@@ -424,11 +432,14 @@ function getStates(message) {
             adapter.setState('control.fan_power', Math.round(status.fan_power), true);
             adapter.setState('info.state', status.state, true);
             stateVal = status.state;
-            if (stateVal === 5 || stateVal === '5') {
-                stateVal = 5;
+            if (stateVal === 5 || stateVal === 17) {
+                if (stateVal === 17) zoneCleanActive = true;
                 adapter.setState('control.clean_home', true, true);
             } else {
                 adapter.setState('control.clean_home', false, true);
+            }
+            if ([2,3,5,6,8,11,16].indexOf(stateVal) > -1) {
+                 zoneCleanActive = false;
             }
             adapter.setState('info.error', status.error_code, true);
             adapter.setState('info.dnd', status.dnd_enabled, true)
@@ -752,22 +763,24 @@ function newGen(model) {
             },
             native: {}
         });
-        adapter.setObjectNotExists('control.resumeZoneClean', {
-            type: 'state',
-            common: {
-                name: "Resume paused zoneClean",
-                type: "boolean",
-                role: "button",
-                read: true,
-                write: true,
-                desc: "resume zoneClean that has been paused before",
-            },
-            native: {}
-        });
+        if (!adapter.config.enableResumeZone) {
+            adapter.setObjectNotExists('control.resumeZoneClean', {
+                type: 'state',
+                common: {
+                    name: "Resume paused zoneClean",
+                    type: "boolean",
+                    role: "button",
+                    read: true,
+                    write: true,
+                    desc: "resume zoneClean that has been paused before",
+                },
+                native: {}
+            });
+        } else {
+            adapter.deleteState(adapter.namespace, 'control', 'resumeZoneClean');
+        }
     }
     if (model === 'roborock.vacuum.s5') {
-
-
         adapter.setObjectNotExists('control.carpet_mode', {
             type: 'state',
             common: {

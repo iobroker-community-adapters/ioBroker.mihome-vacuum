@@ -83,6 +83,10 @@ Ohne Jailbreak:
 #### Steuerung über Alexa
 In der Konfig add Alexa state aktivieren, ist hier ein Hacken gesetzt wird ein zusätzlicher State erzeugt "clean_home" es ist ein Schalter der bei "true" den Sauger startet und bei "false" fährt er nach Hause, es wird automatisch ein Smartgerät im Cloud Adapter erzeugt mit dem Namen "Staubsauger", dieser kann im Cloud Adapter geändert werden.
 
+#### Zonenreinigung nach pausierung fortsetzen
+Wenn diese Option aktiviert ist, wird die Zonenreinigung durch senden des "start" Kommandos automatisch fortzgesetzt.
+Wenn die Option deaktiviert ist, wird durch senden von "start" eine neue Komplettreinigung gestartet, auch wenn der Sauger während einer Zonenreinigung pausiert wurde.
+
 - Experimental: Über den Haken bei "Sende eigene Komandos" werden Objekte angelegt, über die man eigene Kommandos an den Roboter senden und empfangen kann.
 
 #### Zweiter Roboter
@@ -208,6 +212,10 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 1.1.5 (2018-09-02)
+* (BuZZy1337) Beschreibung für Status 16 and 17 hinzugefügt (goTo und zonecleaning).
+* (BuZZy1337) Einstellung für automatische Fortsetzung einer pausierten Zonenreinigung hinzugefügt.
+
 ### 1.1.4 (2018-08-24)
 * (BuZZy1337) Funktion zum Fortsetzen einer vorher pausierten Zonenreinigung hinzugefügt. (State: mihome-vacuum.X.control.resumeZoneClean)
 
