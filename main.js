@@ -128,7 +128,9 @@ adapter.on('stateChange', function (id, state) {
         } else if (command === 'goTo') {
             //changeMowerCfg(id, state.val);
             //goto function wit error catch
-            parseGoTo(state.val);
+            parseGoTo(state.val, function() {
+                adapter.setForeignState(id, state.val, true);
+            });
 
         } else if (command === 'zoneClean') {
             sendMsg('app_zoned_clean', [state.val], function () {
@@ -200,7 +202,7 @@ function stateControl(value) {
 }
 
 // function to control goto params
-function parseGoTo(params) {
+function parseGoTo(params, callback) {
     const coordinates = params.split(',');
     if (coordinates.length === 2) {
         const xVal = coordinates[0];
@@ -209,6 +211,7 @@ function parseGoTo(params) {
         if (!isNaN(yVal) && !isNaN(xVal)) {
             //send goTo request with koordinates
             sendMsg('app_goto_target', [parseInt(xVal), parseInt(yVal)]);
+            callback();
         }
         else adapter.log.error('GoTo need two koordinates with type number');
         adapter.log.info('xVAL: ' + xVal + '  yVal:  ' + yVal);
