@@ -225,6 +225,9 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 1.1.6 (2018-12-06)
+* (JoJ123) Added fan speed for MOP (S50+).
+
 ### 1.1.5 (2018-09-02)
 * (BuZZy1337) Added description for Status 16 and 17 (goTo and zonecleaning).
 * (BuZZy1337) Added setting for automatic resume of paused zonecleaning.

@@ -212,6 +212,9 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 1.1.6 (2018-12-06)
+* (JoJ123) Saugleistung für Wischmodus hinzugefügt (S50+).
+
 ### 1.1.5 (2018-09-02)
 * (BuZZy1337) Beschreibung für Status 16 and 17 hinzugefügt (goTo und zonecleaning).
 * (BuZZy1337) Einstellung für automatische Fortsetzung einer pausierten Zonenreinigung hinzugefügt.
