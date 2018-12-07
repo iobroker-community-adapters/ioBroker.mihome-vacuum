@@ -800,7 +800,7 @@ function newGen(model) {
                 max: 105,
                 states: {
                   105: "MOP"
-                },
+                }
             }
         });
     }
