@@ -795,6 +795,14 @@ function newGen(model) {
             },
             native: {}
         });
+        adapter.extendObject('control.fan_power', {
+            common: {
+                max: 105,
+                states: {
+                  105: "MOP"
+                },
+            }
+        });
     }
     else if (!model === 'roborock.vacuum.s5' && !fwNew) {
         adapter.deleteState(adapter.namespace, 'control', 'goTo');
