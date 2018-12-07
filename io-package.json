@@ -1,8 +1,19 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "1.1.5",
+        "version": "1.1.6",
         "news": {
+            "1.1.6": {
+                "en": "Added fan speed for MOP (S50+)",
+                "de": "Saugleistung für Wischmodus hinzugefügt (S50+)",
+                "ru": "Добавлена ​​мощность всасывания для режима очистки (S50+)",
+                "pt": "Adicionado poder de sucção para o modo de limpeza (S50+)",
+                "nl": "Zuigkracht toegevoegd voor de wismodus (S50+)",
+                "fr": "Puissance d'aspiration ajoutée pour le mode de balayage (S50+)",
+                "it": "Aggiunta potenza di aspirazione per la modalità tendina (S50+)",
+                "es": "Mayor potencia de succión para el modo de limpieza (S50+)",
+                "pl": "Dodano siłę ssania dla trybu wycierania (S50+)"
+            },
             "1.1.5": {
                 "en": "Added setting for automatic resume of paused zonecleaning",
                 "de": "Einstellung für automatische Fortsetzung der pausierten Zonenreinigung hinzugefügt",
