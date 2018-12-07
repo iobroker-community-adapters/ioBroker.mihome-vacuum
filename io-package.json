@@ -313,7 +313,7 @@
                 "role": "level",
                 "read": true,
                 "write": true,
-                "max": 105,
+                "max": 100,
                 "states": {
                     "5": "5%",
                     "10": "10%",
