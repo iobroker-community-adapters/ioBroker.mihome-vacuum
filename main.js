@@ -621,7 +621,7 @@ function enabledExpert() {
 
 
     } else {
-        adapter.log.info('Expert mode disabled, states deleded');
+        adapter.log.info('Expert mode disabled, states deleted');
         adapter.delObject('control.X_send_command');
         adapter.delObject('control.X_get_response');
 
