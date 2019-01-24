@@ -12,7 +12,8 @@
                 "fr": "Puissance d'aspiration ajoutée pour le mode de balayage (S50+)",
                 "it": "Aggiunta potenza di aspirazione per la modalità tendina (S50+)",
                 "es": "Mayor potencia de succión para el modo de limpieza (S50+)",
-                "pl": "Dodano siłę ssania dla trybu wycierania (S50+)"
+                "pl": "Dodano siłę ssania dla trybu wycierania (S50+)",
+                "zh-cn": "增加了MOP的风扇速度（S50 +）"
             },
             "1.1.5": {
                 "en": "Added setting for automatic resume of paused zonecleaning",
@@ -23,7 +24,8 @@
                 "fr": "Ajout du réglage pour la reprise automatique du nettoyage en mode pause",
                 "it": "Aggiunta l'impostazione per il ripristino automatico della pausa in pausa",
                 "es": "Configuración añadida para el resumen automático de la zona de limpieza pausada",
-                "pl": "Dodano ustawienie automatycznego wznowienia wstrzymanego procesu oczyszczania"
+                "pl": "Dodano ustawienie automatycznego wznowienia wstrzymanego procesu oczyszczania",
+                "zh-cn": "添加了自动恢复暂停区域清理的设置"
             },
             "1.1.4": {
                 "en": "added possibility to resume zone cleaning",
@@ -34,7 +36,8 @@
                 "fr": "possibilité de reprendre le nettoyage de la zone",
                 "it": "aggiunta possibilità di riprendere la pulizia delle zone",
                 "es": "posibilidad añadida de reanudar la limpieza de zonas",
-                "pl": "dodano możliwość wznowienia czyszczenia strefy"
+                "pl": "dodano możliwość wznowienia czyszczenia strefy",
+                "zh-cn": "增加恢复区域清洁的可能性"
             },
             "1.1.3": {
                 "en": "fixed zone cleanup state not working",
@@ -45,7 +48,8 @@
                 "fr": "état de nettoyage de zone fixe ne fonctionne pas",
                 "it": "stato di pulizia zona fissa non funzionante",
                 "es": "el estado de limpieza de zona fija no funciona",
-                "pl": "naprawiony stan czyszczenia strefy nie działa"
+                "pl": "naprawiony stan czyszczenia strefy nie działa",
+                "zh-cn": "固定区域清理状态不起作用"
             },
             "1.1.2": {
                 "en": "Detection of new Firmware fixed",
@@ -56,7 +60,8 @@
                 "fr": "Détection du nouveau firmware corrigé",
                 "it": "Rilevato nuovo firmware",
                 "es": "Detección de nuevo Firmware arreglado",
-                "pl": "Wykryto nowe oprogramowanie sprzętowe"
+                "pl": "Wykryto nowe oprogramowanie sprzętowe",
+                "zh-cn": "检测到固定的新固件"
             },
             "1.1.1": {
                 "en": "error catched , added states for new fw",
@@ -67,7 +72,8 @@
                 "fr": "erreur détectée, les états ajoutés pour les nouveaux fw",
                 "it": "errore rilevato, stati aggiunti per nuovi fw",
                 "es": "error atrapado, estados agregados para nuevo fw",
-                "pl": "błąd catched, dodano stany dla nowego fw"
+                "pl": "błąd catched, dodano stany dla nowego fw",
+                "zh-cn": "错误被捕获，为新fw添加了状态"
             },
             "1.1.0": {
                 "en": "Finished the widget",
@@ -78,7 +84,8 @@
                 "fr": "Terminé le widget",
                 "it": "Finito il widget",
                 "es": "Terminado el widget",
-                "pl": "Ukończyłem widget"
+                "pl": "Ukończyłem widget",
+                "zh-cn": "完成了小部件"
             },
             "1.0.1": {
                 "en": "Add voice level, ready for admin3, add vacuum2",
@@ -89,7 +96,8 @@
                 "fr": "Ajouter un niveau de voix, prêt pour admin3, ajouter un vide2",
                 "it": "Aggiungi il livello della voce, pronto per admin3, aggiungi vacuum2",
                 "es": "Agregue el nivel de voz, listo para admin3, agregue vacuum2",
-                "pl": "Dodaj poziom głosu, przygotuj się na admin3, dodaj próżnię2"
+                "pl": "Dodaj poziom głosu, przygotuj się na admin3, dodaj próżnię2",
+                "zh-cn": "添加语音级别，为admin3做好准备，添加vacuum2"
             },
             "0.6.0": {
                 "en": "Fix iostoken Bug finaly",
@@ -100,7 +108,8 @@
                 "fr": "Correction d'iostoken Bug finaly",
                 "it": "Risolto il problema con iostoken Bug",
                 "es": "Corregir iostoken Bug finaly",
-                "pl": "Napraw bug iostoken Bug"
+                "pl": "Napraw bug iostoken Bug",
+                "zh-cn": "最终修复iostoken Bug"
             },
             "0.5.6": {
                 "en": "add option for switch on/off to control by Alexa",
@@ -111,7 +120,8 @@
                 "fr": "ajouter une option pour activer / désactiver le contrôle par Alexa",
                 "it": "aggiungi l'opzione per accendere / spegnere il controllo di Alexa",
                 "es": "agregar la opción para activar / desactivar para controlar por Alexa",
-                "pl": "dodaj opcję włączania / wyłączania do sterowania przez Alexa"
+                "pl": "dodaj opcję włączania / wyłączania do sterowania przez Alexa",
+                "zh-cn": "通过Alexa添加开启/关闭选项以进行控制"
             },
             "0.2.0": {
                 "en": "Inital version",
@@ -122,7 +132,8 @@
                 "fr": "Version initiale",
                 "it": "Versione iniziale",
                 "es": "Versión inicial",
-                "pl": "Początkowa wersja"
+                "pl": "Początkowa wersja",
+                "zh-cn": "初始版"
             }
         },
         "title": "mihome-vacuum Adapter",
@@ -135,7 +146,8 @@
             "fr": "Xiaomi Vacuum Cleaner contrôle pour v1 et s5",
             "it": "Controllo Xiaomi Aspirapolvere per v1 e s5",
             "es": "Control de aspiradora Xiaomi para v1 y s5",
-            "pl": "Xiaomi Vacuum Cleaner do kontroli v1 i s5 "
+            "pl": "Xiaomi Vacuum Cleaner do kontroli v1 i s5 ",
+            "zh-cn": "小米吸尘器控制v1和s5"
         },
         "desc": {
             "en": "This adapter allows control Xiaomi vacuum cleaner",
@@ -146,7 +158,8 @@
             "fr": "Cet adaptateur permet de contrôler l'aspirateur Xiaomi",
             "it": "Questo adattatore consente il controllo dell'aspirapolvere Xiaomi",
             "es": "Este adaptador permite el control del aspirador Xiaomi",
-            "pl": "Ten adapter umożliwia kontrolę odkurzacza Xiaomi"
+            "pl": "Ten adapter umożliwia kontrolę odkurzacza Xiaomi",
+            "zh-cn": "这款适配器可以控制小米吸尘器"
         },
         "authors": [
             "bluefox <dogafox@gmail.com>"
