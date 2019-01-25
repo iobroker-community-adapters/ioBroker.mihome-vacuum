@@ -1,0 +1,16 @@
+{
+    "IP address:": "Adresse IP:",
+    "Invalid token length. Expected 32 or 96 HEX chars.": "Longueur de jeton incorrecte Caractères HEX attendus 32 ou 96.",
+    "MiHome-vacuum adapter settings": "MiHome-paramètres d'adaptateur de vide",
+    "Own port:": "Propre port:",
+    "Request Intervall": "Demander Intervall en ms",
+    "Resume paused zonecleaning with start button": "Reprendre le nettoyage en mode pause avec le bouton Démarrer",
+    "Send own commands": "Envoyer ses propres commandes",
+    "Token": "Jeton",
+    "Vacuum port:": "Port de vide:",
+    "adapter for control of Xiaomi vacuum cleaner V1 and S5": "adaptateur pour le contrôle de l'aspirateur Xiaomi V1 et S5",
+    "add a state for Alexa": "ajouter un état pour Alexa",
+    "additional settings": "paramètres additionnels",
+    "connection settings": "paramètres de connexion",
+    "settings": "paramètres"
+}
