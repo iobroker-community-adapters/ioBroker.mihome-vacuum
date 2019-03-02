@@ -1,3 +1,5 @@
+# Moved to https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum
+
 ![Logo](admin/mihome-vacuum.png)
 # ioBroker mihome-vacuum adapter
 =================
