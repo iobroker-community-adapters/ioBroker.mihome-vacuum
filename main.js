@@ -833,6 +833,7 @@ function newGen(model) {
             },
             native: {}
         });
+    }
     return model;
 }
 
