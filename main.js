@@ -348,7 +348,7 @@ const statusTexts = {
     '4': '?',
     '5': 'Cleaning',
     '6': 'Back to home',
-    '7': '?',
+    '7': 'Manuell mode',
     '8': 'Charging',
     '9': 'Charging Error',
     '10': 'Pause',
@@ -357,6 +357,9 @@ const statusTexts = {
     '13': 'Shutting down',
     '14': 'Updating',
     '15': 'Docking',
+    '16': 'Going to Spot',
+    '17': 'Zone cleaning',
+    '18': 'Room cleaning',
     '100': 'Full'
 };
 // TODO: deduplicate from io-package.json
@@ -663,7 +666,7 @@ function init() {
             name: 'Spot Cleaning',
             type: 'boolean',
             role: 'button',
-            read: true,
+            read: false,
             write: true,
             desc: 'Start Spot Cleaning',
             smartName: 'Spot clean'
@@ -676,7 +679,7 @@ function init() {
             name: 'sound volume test',
             type: 'boolean',
             role: 'button',
-            read: true,
+            read: false,
             write: true,
             desc: 'let the speaker play sound'
         },
@@ -773,7 +776,7 @@ function newGen(model) {
                     name: "Resume paused zoneClean",
                     type: "boolean",
                     role: "button",
-                    read: true,
+                    read: false,
                     write: true,
                     desc: "resume zoneClean that has been paused before",
                 },
@@ -810,6 +813,26 @@ function newGen(model) {
         adapter.deleteState(adapter.namespace, 'control', 'carpet_mode');
         adapter.deleteState(adapter.namespace, 'control', 'resumeZoneClean');
     }
+    else if (model === 'roborock.vacuum.m1s') {
+        adapter.setObject('control.fan_power', {
+            type: 'state',
+            common: {
+                name: 'Suction power',
+                type: 'number',
+                role: 'level',
+                read: true,
+                write: true,
+                min: 101,
+                max: 104,
+                states: {
+                    101: 'QUIET',
+                    102: 'BALANCED',
+                    103: 'TURBO',
+                    104: 'MAXIMUM'
+                }
+            },
+            native: {}
+        });
     return model;
 }
 
