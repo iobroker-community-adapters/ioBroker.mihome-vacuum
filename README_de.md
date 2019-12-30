@@ -52,12 +52,27 @@ Mit Jailbreak:
 - Findet man den Token unter /var/mobile/Containers/Data/Application/514106F3-C854-45E9-A45C-119CB4FFC235/Documents/USERID_mihome.sqlite
 
 Ohne Jailbreak:
-- Ausführliche Anleitung finden sie hier: ([Link](http://technikzeugs.de/xiaomi-mirobot-staubsaugroboter-mit-iobroker-und-echo-bzw-alexa-fernsteuern/)).
-- Muss man einen unverschlüsselten iTunes Backup machen mit z.B. ([Link](http://www.imactools.com/iphonebackupviewer/)).
-- Und dann in den Dateien nach  DB unter RAW, com.xiaomi.home, USERID_mihome.sqlite suchen.
-
-
-Auch hier wird nach dem 32 stelligen Token oder bei neueren Versionen ein 96 stelliger Token gesucht
+-	Zuerst muss der benötigte Token (über iPhone backup) ausgelesen werden
+-	Hierzu zuerst den xiaomi auf dem iPhone einrichten
+-	Backup mit iTunes oder 3utools erstellen
+-	Anschließend den [iphonebackupviewer](http://www.imactools.com/iphonebackupviewer/) installieren
+-	in den Tree View (oben rechts) gehen
+-	in den Pfad AppDomain-com.xiaomi.mihome\Documents\ gehen
+-	die Datei xxxxxxxxxx_mihome.sqlite herunterladen
+-	Sollte die Datei / der Ordner nicht zu finden sein, Backup mit iTunes statt mit 3utools machen
+-	Diese mit [DB Browser for SQLite](https://github.com/sqlitebrowser/sqlitebrowser/releases/download/v3.10.1/SQLiteDatabaseBrowserPortable_3.10.1_English.paf.exe) öffnen
+-	Der 96-Stellige Hex Key befindet sich unter Browse Data  Table ZDEVICE  in der Spalte ganz Rechts ZTOKEN
+-	Der 96-Stellige Hex Key muss nun in ein 32-Stelligen Key umgewandelt werden 
+-	Über den [link](http://aes.online-domain-tools.com/) hier folgendes eintragen (Nur copy/paste, zwischenspeichern kann das Ergenis verfälschen)
+-	Input type: Text
+-	Input text: der 96-stellige Key
+-	Hex
+-	Autodetect: ON
+-	Function: AES
+-	Mode: ECB (electronic codebook)
+-	Key: 00000000000000000000000000000000 *muss 32-stellig sein
+-	Hex
+-	Nun auf Decrypt klicken und den 32-stelligen Key aus dem Decrypted Text ganz rechts entnehmen
 
 ### Adapterkonfiguration
 - Bei IP-Adresse muss die IP-Adresse des Roboters eingegeben werden im Format "192.168.178.XX"
@@ -67,6 +82,10 @@ Auch hier wird nach dem 32 stelligen Token oder bei neueren Versionen ein 96 ste
 
 #### Steuerung über Alexa
 In der Konfig add Alexa state aktivieren, ist hier ein Hacken gesetzt wird ein zusätzlicher State erzeugt "clean_home" es ist ein Schalter der bei "true" den Sauger startet und bei "false" fährt er nach Hause, es wird automatisch ein Smartgerät im Cloud Adapter erzeugt mit dem Namen "Staubsauger", dieser kann im Cloud Adapter geändert werden.
+
+#### Zonenreinigung nach pausierung fortsetzen
+Wenn diese Option aktiviert ist, wird die Zonenreinigung durch senden des "start" Kommandos automatisch fortzgesetzt.
+Wenn die Option deaktiviert ist, wird durch senden von "start" eine neue Komplettreinigung gestartet, auch wenn der Sauger während einer Zonenreinigung pausiert wurde.
 
 - Experimental: Über den Haken bei "Sende eigene Komandos" werden Objekte angelegt, über die man eigene Kommandos an den Roboter senden und empfangen kann.
 
@@ -107,7 +126,7 @@ Man kann auch mehrere Bereiche auf einmal saugen lassen:
 
 Beispiel:
 ```
-[24117,26005,25767,27205,1],[24320,24693,25970,25843,1]]}
+[24117,26005,25767,27205,1],[24320,24693,25970,25843,1]
 ```
 
 ### Sende eigene Kommandos
@@ -193,24 +212,46 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 1.1.6 (2018-12-06)
+* (JoJ123) Saugleistung für Wischmodus hinzugefügt (S50+).
+
+### 1.1.5 (2018-09-02)
+* (BuZZy1337) Beschreibung für Status 16 and 17 hinzugefügt (goTo und zonecleaning).
+* (BuZZy1337) Einstellung für automatische Fortsetzung einer pausierten Zonenreinigung hinzugefügt.
+
+### 1.1.4 (2018-08-24)
+* (BuZZy1337) Funktion zum Fortsetzen einer vorher pausierten Zonenreinigung hinzugefügt. (State: mihome-vacuum.X.control.resumeZoneClean)
+
+### 1.1.3 (2018-07-11)
+* (BuZZy1337) Fehler im ZoneCleanup state behoben (Roboter fuhr nur kurz von der Ladestation, meldete "Zonecleanup Finished" und fuhr sofort wieder zurück zur Ladestation)
+
+### 1.1.2 (2018-07-05)
+* (BuZZy1337) Fehler in Erkennung von neuer Firmware / zweiter Generation Roboter behoben
+
 ### 1.1.1 (2018-04-17)
 * (MeisterTR) Fehler abgefangen, Objekte für neue fw hinzugefügt
+
 ### 1.0.1 (2018-01-26)
 * (MeisterTR) ready for admin3
 * (MeisterTR) support SpotClean and voice level (v1)
 * (MeisterTR) support second generation (S50)
 * (MeisterTR) Speed up data requests
+
 ### 0.6.0 (2017-11-17)
 * (MeisterTR) use 96 char token from Ios Backup
 * (MeisterTR) faster connection on first use
+
 ### 0.5.9 (2017-09-18)
 * (MeisterTR) fix communication error without i-net
 * (AlCalzone) add selection of predefined power levels
+
 ### 0.5.7 (2017-08-17)
 * (MeisterTR) compare system time and Robot time (fix no connection if system time is different)
 * (MeisterTR) update values if robot start by cloud
+
 ### 0.5.6 (2017-07-23)
 * (MeisterTR) add option for crate switch for Alexa control
+
 ### 0.5.5 (2017-06-30)
 * (MeisterTR) add states, fetures, fix communication errors
 

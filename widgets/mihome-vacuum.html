@@ -101,8 +101,8 @@
 <%
     function isRunning(data) {
         var val= vis.states.attr(data['oid-state'] + '.val');
-        // 5 = Cleaning, 6 = Returning home, 11 = Spot cleaning
-        return (val == 5 || val == 6 || val == 11);
+        // 5 = Cleaning, 6 = Returning home, 11 = Spot cleaning, 17 = Zone cleaning
+        return (val == 5 || val == 6 || val == 11 || val == 17);
     }
 %>
     <div class="vis-widget <%== this.data.attr('class') %>" style="width: 130px; height: 130px;" id="<%= this.data.attr('wid') %>">

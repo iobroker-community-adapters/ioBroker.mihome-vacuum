@@ -1,8 +1,7 @@
 ![Logo](admin/mihome-vacuum.png)
 # ioBroker mihome-vacuum adapter
-=================
 
-[![NPM version](http://img.shields.io/npm/v/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
+![Number of Installations](http://iobroker.live/badges/mihome-vacuum-installed.svg) ![Number of Installations](http://iobroker.live/badges/mihome-vacuum-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
 [![Tests](https://travis-ci.org/ioBroker/ioBroker.mihome-vacuum.svg?branch=master)](https://travis-ci.org/ioBroker/ioBroker.mihome-vacuum)
 
@@ -35,7 +34,7 @@ The following procedures can be used:
 
 ### Easy token discovery on Android
 Just uninstall official MiHome App and install this one from [this page(russian)](http://www.kapiba.ru/2017/11/mi-home.html): 
-- [Link APK](https://cloud.mail.ru/public/55AA/RF3DYidFf/MiHome_5.1.19_vevs.apk) or [Mirror](https://drive.google.com/open?id=1IyjvIWiGaeD7iLWWtBlb6jSEHTLg9XGj)
+- [Link APK](https://cloud.mail.ru/public/BSos/7YJhcLB2W/MiHome_5.4.13_vevs.apk).
 
 After installation and login with the same settings as by officiall app, you will find the token in the "Network information" for the device.
 
@@ -65,11 +64,28 @@ With Jailbreak:
 - If the token is found at /var/mobile/Containers/Data/Application/514106F3-C854-45E9-A45C-119CB4FFC235/Documents/USERID_mihome.sqlite
 
 Without Jailbreak:
-- A long discription you can find here: ([Link](http://technikzeugs.de/xiaomi-mirobot-staubsaugroboter-mit-iobroker-und-echo-bzw-alexa-fernsteuern/)).
-- If you need to make an unencrypted iTunes backup with e.g. ([Link](http://www.imactools.com/iphonebackupviewer/)).
-- And then look in the files for DB under RAW, com.xiaomi.home, USERID_mihome.sqlite.
+- First read the required token via iPhone backup
+- To do this, first set up the xiaomi on your  iPhone
+- Create a backup with iTunes or 3utools
+- Then install the [iphonebackupviewer](http://www.imactools.com/iphonebackupviewer/)
+- go to the Tree View (top right)
+- go to the path AppDomain-com.xiaomi.mihome\Documents\
+- download the file xxxxxxxxxx_mihome.sqlite
+-If the file / folder is not found, backup with iTunes instead of using 3utools
+- Open these with [DB Browser for SQLite](https://github.com/sqlitebrowser/sqlitebrowser/releases/download/v3.10.1/SQLiteDatabaseBrowserPortable_3.10.1_English.paf.exe)
+- The 96-digit hex key can be found under Browse Data  Table ZDEVICE  in the right-most column ZTOKEN
+- The 96-digit Hex Key must now be converted to a 32-digit key
+- Enter the following via the [link](http://aes.online-domain-tools.com/) here
+- Input type: Text
+- Input text: the 96-digit key
+- Hex
+- Autodetect: ON
+- Function: AES
+- Mode: ECB (electronic codebook)
+- Key: 00000000000000000000000000000000 * must be 32 digits
+- Hex
+- Now click on Decrypt and remove the 32-digit key from the decrypted text at the far right
 
-Again, the 32-character token or 96-character token is searched for
 
 ### Adapter Configuration
 - For IP address, the IP address of the robot must be entered in the format "192.168.178.XX"
@@ -79,6 +95,11 @@ Again, the 32-character token or 96-character token is searched for
 
 #### Control over Alexa
 In the config add alexa state is activated here is a hack is set an additional state "clean_home" it is a switch which starts at "true" the sucker and at "false" it goes home, it becomes automatically a smart device in the cloud Adapter created with the name "vacuum cleaner", which can be changed in the cloud adapter.
+
+#### Resume paused zonecleaning with start button
+With this option enabled, the Vacuum will resume the zonecleaning when setting the "start" state to true if it was paused during a running zoneclean.
+If this option is disabled, the vacuum will start a new "normal cleaning" when you send the start command, even if it was paused during a running zoneclean.
+
 
 - Experimental: Using the checkbox "Send your own commands" objects are created, via which you can send and receive your own commands to the robot.
 
@@ -118,7 +139,7 @@ You can also let several areas suck at once:
 
 Example:
 ```
-[24117,26005,25767,27205,1], [24320,24693,25970,25843,1]]}
+[24117,26005,25767,27205,1], [24320,24693,25970,25843,1]
 ```
  
 ### Send your own commands
@@ -203,8 +224,25 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 1.1.6 (2018-12-06)
+* (JoJ123) Added fan speed for MOP (S50+).
+
+### 1.1.5 (2018-09-02)
+* (BuZZy1337) Added description for Status 16 and 17 (goTo and zonecleaning).
+* (BuZZy1337) Added setting for automatic resume of paused zonecleaning.
+
+### 1.1.4 (2018-08-24)
+* (BuZZy1337) Added possibility to resume a paused zoneclean (State: mihome-vacuum.X.control.resumeZoneClean)
+
+### 1.1.3 (2018-07-11)
+* (BuZZy1337) fixed zoneCleanup state not working (vacuum was only leaving the dock, saying "Finished ZoneCleanup", and returned immediately back to the dock)
+
+### 1.1.2 (2018-07-05)
+* (BuZZy1337) fixed detection of new Firmware / Second generation Vacuum
+
 ### 1.1.1 (2018-04-17)
 * (MeisterTR) error catched , added states for new fw
+
 ### 1.1.0 (2018-04-10)
 * (mswiege) Finished the widget
 

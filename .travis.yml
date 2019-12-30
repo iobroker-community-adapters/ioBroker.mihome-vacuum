@@ -1,19 +1,25 @@
 os:
   - linux
   - osx
+  - windows
 language: node_js
 node_js:
-  - '4'
-  - '6'
   - '8'
+  - '10'
+  - '12'
 before_script:
-  - npm install winston@2.3.1
-  - 'npm install https://github.com/ioBroker/ioBroker.js-controller/tarball/master --production'
+  - export NPMVERSION=$(echo "$($(which npm) -v)"|cut -c1)
+  - 'if [[ $NPMVERSION == 5 ]]; then npm install -g npm@5; fi'
+  - npm -v
 env:
-  - CXX=g++-4.8
+  - CXX=g++-6
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - g++-4.8
+      - g++-6
+script:
+  - 'npm run test:package'
+  - 'npm run test:unit'
+  - 'npm run test:integration'
