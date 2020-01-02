@@ -27,11 +27,47 @@
         .error {
             border: 1px solid red;
         }
+
         .cbox {
-            width: 50px;
-            height: 50px;
-            background: {color1};
-            border-color: {color1};
+            width: 350px;
+            height: 150px;
+            background: grey;
+            border-width: 2px;
+            border-style: solid;
+            border-color: green;
+            z-index: 0;
+            margin: 8px;
+        }
+
+        .cbox2 {
+            width: 70px;
+            height: 70px;
+            border-width: 2px;
+            border-style: solid;
+            background: none;
+            border-color: green;
+            z-index: 1;
+            margin-top: -2px;
+            margin-left: -2px;
+        }
+        .robot {
+           position:relative;
+            left: 180px;
+            top: -164px;
+            z-index: 10;
+            transform: rotate(90deg);
+        }
+        .path{
+            position: relative;
+            left: 100px;
+            top: -32px;
+            width: 90px;
+            height: 108px;
+            background: none;
+            z-index: 5;
+          border-width: 4px 0px 0px 4px;
+          border-style: solid ;
+
         }
     </style>
     <script type="text/javascript">
@@ -56,6 +92,32 @@
                     });
                 }
             });
+            $(".cbox").css("background", ($(".colorFloor").val()));
+            $(".cbox").css("border-color", ($(".colorWall").val()));
+            $(".cbox2").css("border-color", ($(".colorWall").val()));
+            $(".path").css("border-color", ($(".colorPath").val()));
+            $(".robot").attr('src',''+ $(".robotSel").val() + '.png');;
+            console.log("run all....")
+
+            $(".colorFloor").change(function () {
+                console.log("changed...." + $(this).val())
+                $(".cbox").css("background", ($(this).val()));
+            });
+            $(".colorWall").change(function () {
+                console.log("changed...." + $(this).val())
+                $(".cbox").css("border-color", ($(this).val()));
+                $(".cbox2").css("border-color", ($(this).val()));
+            });
+            $(".colorPath").change(function () {
+                console.log("changed...." + $(this).val())
+                $(".path").css("border-color", ($(this).val()));
+            });
+            $(".robotSel").change(function () {
+                console.log("changed....Pic" + $(this).val())
+                $(".robot").attr('src',''+ $(this).val() + '.png');;
+            });
+
+
 
             onChange(false);
 
@@ -297,23 +359,51 @@
             <!-- Tabs Valetudo -->
             <div id="tab-valetudo" class="col s12 page">
                 <div class="row">
-                <div class="col s12 m4 l2">
-                    <input class="value" id="color1" size="15" />
-                    <label class="translate" for="ip">Color:</label>
+                    <div class="col s6 m4 l2">
+                        <img src="valetudo_logo_small.svg" class="logo">
+                    </div>
                 </div>
-                <div class="col s12 m6">
-                    <input class="value"  style="background-color: {{color1}}" id="enableValetudo" type="checkbox" />
-                    <span class="translate">Enable Valetudo</span>
+                <div class="row">
+                    <div class="col s12 m6">
+                        <input class="value" id="enableValetudo" type="checkbox" />
+                        <span class="translate">Enable Valetudo</span>
+                    </div>
                 </div>
-            </div>
-                <div class="input-field col s12 m6">
-                    <select class="value" id="robot_select">
-                      <option value="" disabled selected>Choose your option</option>
-                      <option value="" data-icon="./robot.png">Robot 1</option>
-                      <option value="" data-icon="./robot1.png">Robot 2</option>
-                    </select>
-                    <label>Images in select</label>
-                  </div>
+                <div class="row">
+                    <div class="col s12 m4 l2">
+                        <input class="value colorFloor" id="valetudo_color_floor" size="15"/>
+                        <label class="translate" for="valetudo_color_floor">Color floor:</label>
+                    </div>
+                    <div class="col s12 m4 l2">
+                        <input class="value colorWall" id="valetudo_color_wall" size="15"/>
+                        <label class="translate" for="valetudo_color_wall">Color wall:</label>
+                    </div>
+                    <div class="col s12 m4 l2">
+                        <input class="value colorPath" id="valetudo_color_path" size="15"/>
+                        <label class="translate" for="valetudo_color_path">Color path:</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m5 l3">
+                        <select class="value robotSel" id="robot_select">
+                            <option value="" disabled selected class="translate">Choose your robot</option>
+                            <option value="robot" data-icon="./robot.png">Robot 1</option>
+                            <option value="robot1" data-icon="./robot1.png">Robot 2</option>
+                        </select>
+                        <label class="translate">Robot images</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="translate">Map preview</label>
+                    <div class="cbox">
+                        <div class="cbox2">                            
+                        </div>
+                        <div class="path">                            
+                        </div>
+                        <img class="robot" src="./robot1.png" height="42" width="42">
+                    </div>
+                </div>
+
 
             </div>
 
