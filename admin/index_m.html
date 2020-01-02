@@ -27,6 +27,12 @@
         .error {
             border: 1px solid red;
         }
+        .cbox {
+            width: 50px;
+            height: 50px;
+            background: {color1};
+            border-color: {color1};
+        }
     </style>
     <script type="text/javascript">
         var values = [];
@@ -55,7 +61,10 @@
 
             var namespace = adapter + '.' + instance + '.';
 
-            socket.emit('getObjectView', 'system', 'state', { startkey: namespace, endkey: namespace + '\u9999' }, function (err, res) {
+            socket.emit('getObjectView', 'system', 'state', {
+                startkey: namespace,
+                endkey: namespace + '\u9999'
+            }, function (err, res) {
                 if (!err && res) {
                     var _res = {};
                     for (var i = 0; i < res.rows.length; i++) {
@@ -105,31 +114,43 @@
                         var id = $(this).data('index');
                         var val = $(this).val();
                         if (val === 'number') {
-                            $('.values-input[data-name="factor"][data-index="' + id + '"]').show();
-                            $('.values-input[data-name="offset"][data-index="' + id + '"]').show();
+                            $('.values-input[data-name="factor"][data-index="' + id + '"]')
+                                .show();
+                            $('.values-input[data-name="offset"][data-index="' + id + '"]')
+                                .show();
                         } else {
-                            $('.values-input[data-name="factor"][data-index="' + id + '"]').hide();
-                            $('.values-input[data-name="offset"][data-index="' + id + '"]').hide();
+                            $('.values-input[data-name="factor"][data-index="' + id + '"]')
+                                .hide();
+                            $('.values-input[data-name="offset"][data-index="' + id + '"]')
+                                .hide();
                         }
                         if (val === 'boolean' || val === 'json') {
-                            $('.values-input[data-name="unit"][data-index="' + id + '"]').hide();
+                            $('.values-input[data-name="unit"][data-index="' + id + '"]')
+                                .hide();
                         } else {
-                            $('.values-input[data-name="unit"][data-index="' + id + '"]').show();
+                            $('.values-input[data-name="unit"][data-index="' + id + '"]')
+                                .show();
                         }
                     }).each(function () {
                         var id = $(this).data('index');
                         var val = $(this).val();
                         if (val === 'number') {
-                            $('.values-input[data-name="factor"][data-index="' + id + '"]').show();
-                            $('.values-input[data-name="offset"][data-index="' + id + '"]').show();
+                            $('.values-input[data-name="factor"][data-index="' + id + '"]')
+                                .show();
+                            $('.values-input[data-name="offset"][data-index="' + id + '"]')
+                                .show();
                         } else {
-                            $('.values-input[data-name="factor"][data-index="' + id + '"]').hide();
-                            $('.values-input[data-name="offset"][data-index="' + id + '"]').hide();
+                            $('.values-input[data-name="factor"][data-index="' + id + '"]')
+                                .hide();
+                            $('.values-input[data-name="offset"][data-index="' + id + '"]')
+                                .hide();
                         }
                         if (val === 'boolean' || val === 'json') {
-                            $('.values-input[data-name="unit"][data-index="' + id + '"]').hide();
+                            $('.values-input[data-name="unit"][data-index="' + id + '"]')
+                                .hide();
                         } else {
-                            $('.values-input[data-name="unit"][data-index="' + id + '"]').show();
+                            $('.values-input[data-name="unit"][data-index="' + id + '"]')
+                                .show();
                         }
 
                     });
@@ -187,73 +208,116 @@
 </head>
 
 <body>
-    <div class="m adapter-container" style="background-image: url('S5.png'); background-repeat: no-repeat; background-position: 20px 110px;  background-size: 520px ;">
+    <div class="m adapter-container"
+        style="background-image: url('S5.png'); background-repeat: no-repeat; background-position: 20px 110px;  background-size: 520px ;">
+
         <div class="row">
-            <div class="row">
-                <div class="col s12 m2 l1">
-                    <img src="mihome-vacuum.png" class="logo">
-                </div>
-                <div class="col s12 m8 l10">
-                    <h6 class="translate">adapter for control of Xiaomi vacuum cleaner V1 and S5</h6>
+            <!-- Tabs navigation -->
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s2">
+                        <a href="#tab-main" class="translate" data-lang="Main">Options</a>
+                    </li>
+                    <li class="tab col s2">
+                        <a href="#tab-valetudo" class="translate" data-lang="Valetudo">Devices</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="tab-main" class="col s12 page">
+
+                <div class="row">
+                    <div class="row">
+                        <div class="col s12 m2 l1">
+                            <img src="mihome-vacuum.png" class="logo">
+                        </div>
+                        <div class="col s12 m8 l10">
+                            <h6 class="translate">adapter for control of Xiaomi vacuum cleaner V1 and S5</h6>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="row" style="background-color: #64b5f6;">
+                        <div class="col s12">
+                            <span class="translate">connection settings</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <input class="value" id="token" size="60" maxlength="96" />
+                            <label for="token" class="translate">Token</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m4 l2">
+                            <input class="value" id="ip" size="15" />
+                            <label class="translate" for="ip">IP address:</label>
+                        </div>
+
+                        <div class="col s12 m3 l1 offset-m1 offset-l1">
+                            <input class="value number" id="port" size="5" maxlength="5" type="number" />
+                            <label class="translate" for="port">Vacuum port:</label>
+                        </div>
+
+                        <div class="col s12 m3 l1 offset-m1 offset-l1">
+                            <input class="value number" id="ownPort" size="5" maxlength="5" type="number" />
+                            <label class="translate" for="ownPort">Own port:</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m4 l2">
+                            <input class="value" id="param_pingInterval" size="15" />
+                            <label class="translate" for="param_pingInterval">Request Intervall</label>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="row" style="background-color: #64b5f6;">
+                        <div class="col s12">
+                            <span class="translate">additional settings</span>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m6">
+                            <input class="value" id="enableAlexa" type="checkbox" />
+                            <span class="translate">add a state for Alexa</span>
+                        </div>
+                        <div class="col s12 m6">
+                            <input class="value" id="enableSelfCommands" type="checkbox" />
+                            <span class="translate">Send own commands</span>
+                        </div>
+                        <div class="col s4">
+                            <input class="value" id="enableResumeZone" type="checkbox"
+                                data-link="resume-paused-zonecleaning-with-start-button" />
+                            <span class="translate">Resume paused zonecleaning with start button</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="divider"></div>
-            <div class="row" style="background-color: #64b5f6;">
-                <div class="col s12">
-                    <span class="translate">connection settings</span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12">
-                    <input class="value" id="token" size="60" maxlength="96" />
-                    <label for="token" class="translate">Token</label>
-                </div>
-            </div>
-            <div class="row">
+
+            <!-- Tabs Valetudo -->
+            <div id="tab-valetudo" class="col s12 page">
+                <div class="row">
                 <div class="col s12 m4 l2">
-                    <input class="value" id="ip" size="15" />
-                    <label class="translate" for="ip">IP address:</label>
-                </div>
-
-                <div class="col s12 m3 l1 offset-m1 offset-l1">
-                    <input class="value number" id="port" size="5" maxlength="5" type="number" />
-                    <label class="translate" for="port">Vacuum port:</label>
-                </div>
-
-                <div class="col s12 m3 l1 offset-m1 offset-l1">
-                    <input class="value number" id="ownPort" size="5" maxlength="5" type="number" />
-                    <label class="translate" for="ownPort">Own port:</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12 m4 l2">
-                    <input class="value" id="param_pingInterval" size="15" />
-                    <label class="translate" for="param_pingInterval">Request Intervall</label>
-                </div>
-            </div>
-            <div class="divider"></div>
-            <div class="row" style="background-color: #64b5f6;">
-                <div class="col s12">
-                    <span class="translate">additional settings</span>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col s12 m6">
-                    <input class="value" id="enableAlexa" type="checkbox" />
-                    <span class="translate">add a state for Alexa</span>
+                    <input class="value" id="color1" size="15" />
+                    <label class="translate" for="ip">Color:</label>
                 </div>
                 <div class="col s12 m6">
-                    <input class="value" id="enableSelfCommands" type="checkbox" />
-                    <span class="translate">Send own commands</span>
-                </div>
-                <div class="col s4">
-                    <input class="value" id="enableResumeZone" type="checkbox" data-link="resume-paused-zonecleaning-with-start-button" />
-                    <span class="translate">Resume paused zonecleaning with start button</span>
+                    <input class="value"  style="background-color: {{color1}}" id="enableValetudo" type="checkbox" />
+                    <span class="translate">Enable Valetudo</span>
                 </div>
             </div>
+                <div class="input-field col s12 m6">
+                    <select class="value" id="robot_select">
+                      <option value="" disabled selected>Choose your option</option>
+                      <option value="" data-icon="./robot.png">Robot 1</option>
+                      <option value="" data-icon="./robot1.png">Robot 2</option>
+                    </select>
+                    <label>Images in select</label>
+                  </div>
+
+            </div>
+
         </div>
-    </div>
 
 
 </body>

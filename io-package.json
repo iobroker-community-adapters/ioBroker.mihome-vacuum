@@ -190,7 +190,13 @@
         "port": 54321,
         "ownPort": 53421,
         "pingInterval": 20000,
-        "param_pingInterval": 60000
+        "param_pingInterval": 60000,
+        "valetude_enable":false,
+        "valetude_color_wall": "#222222",
+        "valetude_color_ground": "#FF0000",
+        "valetude_color_path": "#FFFFFF",
+        "valetude_robot": ""
+
     },
     "instanceObjects": [
         {
