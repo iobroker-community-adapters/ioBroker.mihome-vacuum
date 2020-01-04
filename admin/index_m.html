@@ -364,9 +364,17 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s12 m6">
-                        <input class="value" id="enableValetudo" type="checkbox" />
+                    <div class="col s12 m6 l2">
+                        <input class="value" id="valetudo_enable" type="checkbox" />
                         <span class="translate">Enable Valetudo</span>
+                    </div>
+                    <div class="col s12 m4 l2">
+                        <input class="value" id="valetudo_requestIntervall" size="15" />
+                        <label class="translate" for="valetudo_requestIntervall">Request Intervall</label>
+                    </div>
+                    <div class="col s12 m4 l2">
+                        <input class="value" id="valetudo_MapsaveIntervall" size="15" />
+                        <label class="translate" for="valetudo_MapsaveIntervall">Map save intervall</label>
                     </div>
                 </div>
                 <div class="row">
@@ -389,6 +397,8 @@
                             <option value="" disabled selected class="translate">Choose your robot</option>
                             <option value="robot" data-icon="./robot.png">Robot 1</option>
                             <option value="robot1" data-icon="./robot1.png">Robot 2</option>
+                            <option value="tank" data-icon="./tank.png">Tank</option>
+                            <option value="spaceship" data-icon="./spaceship.png">Space ship</option>
                         </select>
                         <label class="translate">Robot images</label>
                     </div>

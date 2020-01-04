@@ -11,6 +11,8 @@ const dgram = require('dgram');
 const MiHome = require(__dirname + '/lib/mihomepacket');
 const com = require(__dirname + '/lib/comands');
 
+const ValetudoHelper = require(__dirname + '/lib/ValetudoHelper');
+
 const server = dgram.createSocket('udp4');
 
 let device = {};
@@ -31,6 +33,8 @@ let clean_log_html_table = '';
 let logEntries = {};
 let logEntriesNew = {};
 let zoneCleanActive = false;
+
+const VALETUDO = function () {}; // init Valetudo
 
 const last_id = {
     get_status: 0,
@@ -115,12 +119,15 @@ adapter.on('stateChange', function (id, state) {
         } else if (command === 'carpet_mode') {
             //when carpetmode change
             if (state.val === true || state.val === 'true') {
-                sendMsg('set_carpet_mode', [{enable: 1}], function () {
+                sendMsg('set_carpet_mode', [{
+                    enable: 1
+                }], function () {
                     adapter.setForeignState(id, state.val, true);
                 });
-            }
-            else {
-                sendMsg('set_carpet_mode', [{enable: 0}], function () {
+            } else {
+                sendMsg('set_carpet_mode', [{
+                    enable: 0
+                }], function () {
                     adapter.setForeignState(id, false, true);
                 });
             }
@@ -128,7 +135,7 @@ adapter.on('stateChange', function (id, state) {
         } else if (command === 'goTo') {
             //changeMowerCfg(id, state.val);
             //goto function wit error catch
-            parseGoTo(state.val, function() {
+            parseGoTo(state.val, function () {
                 adapter.setForeignState(id, state.val, true);
             });
 
@@ -212,12 +219,11 @@ function parseGoTo(params, callback) {
             //send goTo request with koordinates
             sendMsg('app_goto_target', [parseInt(xVal), parseInt(yVal)]);
             callback();
-        }
-        else adapter.log.error('GoTo need two koordinates with type number');
+        } else adapter.log.error('GoTo need two koordinates with type number');
         adapter.log.info('xVAL: ' + xVal + '  yVal:  ' + yVal);
 
     } else {
-        adapter.log.error('GoTo only work with two arguments seperated by ','');
+        adapter.log.error('GoTo only work with two arguments seperated by ', '');
     }
 }
 
@@ -331,11 +337,11 @@ function parseCleaningRecords(response) {
     return response.result.map(entry => {
         return {
             start_time: entry[0], // unix timestamp
-            end_time:   entry[1], // unix timestamp
-            duration:   entry[2], // in seconds
-            area:       entry[3], // in cm^2
-            errors:     entry[4], // ?
-            completed:  entry[5] === 1, // boolean
+            end_time: entry[1], // unix timestamp
+            duration: entry[2], // in seconds
+            area: entry[3], // in cm^2
+            errors: entry[4], // ?
+            completed: entry[5] === 1, // boolean
         };
     });
 }
@@ -390,19 +396,19 @@ const errorTexts = {
 function parseStatus(response) {
     response = response.result[0];
     return {
-        battery:        response.battery,
-        clean_area:     response.clean_area,
-        clean_time:     response.clean_time,
-        dnd_enabled:    response.dnd_enabled === 1,
-        error_code:     response.error_code,
-        error_text:     errorTexts[response.error_code],
-        fan_power:      response.fan_power,
-        in_cleaning:    response.in_cleaning === 1,
-        map_present:    response.map_present === 1,
-        msg_seq:        response.msg_seq,
-        msg_ver:        response.msg_ver,
-        state:          response.state,
-        state_text:     statusTexts[response.state],
+        battery: response.battery,
+        clean_area: response.clean_area,
+        clean_time: response.clean_time,
+        dnd_enabled: response.dnd_enabled === 1,
+        error_code: response.error_code,
+        error_text: errorTexts[response.error_code],
+        fan_power: response.fan_power,
+        in_cleaning: response.in_cleaning === 1,
+        map_present: response.map_present === 1,
+        msg_seq: response.msg_seq,
+        msg_ver: response.msg_ver,
+        state: response.state,
+        state_text: statusTexts[response.state],
     };
 }
 
@@ -444,9 +450,16 @@ function getStates(message) {
             } else {
                 adapter.setState('control.clean_home', false, true);
             }
-            if ([2,3,5,6,8,11,16].indexOf(stateVal) > -1) {
-                 zoneCleanActive = false;
+            if ([2, 3, 5, 6, 8, 11, 16].indexOf(stateVal) > -1) {
+                zoneCleanActive = false;
             }
+            // set valetudo map getter to tru if..
+            if ([5, 6, 11, 16, 17, 18].indexOf(stateVal) > -1) {
+                VALETUDO.StartMapPoll();
+            } else {
+                VALETUDO.GETMAP = false;
+            }
+
             adapter.setState('info.error', status.error_code, true);
             adapter.setState('info.dnd', status.dnd_enabled, true)
         } else if (answer.id === last_id['miIO.info']) {
@@ -454,7 +467,7 @@ function getStates(message) {
             //adapter.log.info('device' + JSON.stringify(answer.result));
             device = answer.result;
             adapter.setState('info.device_fw', answer.result.fw_ver, true);
-            fw = answer.result.fw_ver.split('_');   // Splitting the FW into [Version, Build] array.
+            fw = answer.result.fw_ver.split('_'); // Splitting the FW into [Version, Build] array.
             if (parseInt(fw[0].replace(/\./g, ''), 10) > 339 || (parseInt(fw[0].replace(/\./g, ''), 10) === 339 && parseInt(fw[1], 10) >= 3194)) {
                 fwNew = true;
             }
@@ -531,8 +544,7 @@ function getStates(message) {
             const callback = sendCommandCallbacks[answer.id];
             if (typeof callback === 'function') callback(answer);
         }
-    }
-    catch (err) {
+    } catch (err) {
         adapter.log.debug('The answer from the robot is not correct! (' + err + ')');
     }
 }
@@ -737,10 +749,6 @@ function init() {
         },
         native: {}
     });
-
-    // States for Rockrobo S5 (second Generation)
-
-
 }
 
 
@@ -802,18 +810,16 @@ function newGen(model) {
             common: {
                 max: 105,
                 states: {
-                  105: "MOP"
+                    105: "MOP"
                 }
             }
         });
-    }
-    else if (!model === 'roborock.vacuum.s5' && !fwNew) {
+    } else if (!model === 'roborock.vacuum.s5' && !fwNew) {
         adapter.deleteState(adapter.namespace, 'control', 'goTo');
         adapter.deleteState(adapter.namespace, 'control', 'zoneClean');
         adapter.deleteState(adapter.namespace, 'control', 'carpet_mode');
         adapter.deleteState(adapter.namespace, 'control', 'resumeZoneClean');
-    }
-    else if (model === 'roborock.vacuum.m1s') {
+    } else if (model === 'roborock.vacuum.m1s') {
         adapter.setObject('control.fan_power', {
             type: 'state',
             common: {
@@ -838,7 +844,7 @@ function newGen(model) {
 }
 
 function checkSetTimeDiff() {
-    const now = Math.round(parseInt((new Date().getTime())) / 1000);//.toString(16)
+    const now = Math.round(parseInt((new Date().getTime())) / 1000); //.toString(16)
     const messageTime = parseInt(packet.stamprec.toString('hex'), 16);
     packet.timediff = (messageTime - now) === -1 ? 0 : (messageTime - now); // may be (messageTime < now) ? 0...
 
@@ -857,6 +863,7 @@ function main() {
     adapter.config.ownPort = parseInt(adapter.config.ownPort, 10) || 53421;
     adapter.config.pingInterval = parseInt(adapter.config.pingInterval, 10) || 20000;
     adapter.config.paramPingInterval = parseInt(adapter.config.paramPingInterval, 10) || 10000;
+    //adapter.log.info(JSON.stringify(adapter.config));
 
     init();
 
@@ -872,6 +879,18 @@ function main() {
     } else {
         enabledExpert();
         enabledVoiceControl();
+
+        // Valetudo initial
+        VALETUDO.ENABLED = adapter.config.valetudo_enable;
+        VALETUDO.COLOR_OPTIONS = {
+            'FLOORCOLOR': adapter.config.valetudo_color_floor,
+            'WALLCOLOR': adapter.config.valetudo_color_wall,
+            'PATHCOLOR': adapter.config.valetudo_color_path,
+            'ROBOT': adapter.config.robot_select
+        };
+        VALETUDO.MAPSAFEINTERVALL = parseInt(adapter.config.valetudo_MapsaveIntervall, 10) || 5000;
+        VALETUDO.POLLMAPINTERVALL = parseInt(adapter.config.valetudo_requestIntervall, 10) || 1000;
+        VALETUDO.Init();
 
         packet = new MiHome.Packet(str2hex(adapter.config.token), adapter);
 
@@ -938,7 +957,8 @@ function main() {
 
 }
 
-const sendCommandCallbacks = {/* "counter": callback() */};
+const sendCommandCallbacks = {
+    /* "counter": callback() */ };
 
 /** Returns the only array element in a response */
 function returnSingleResult(resp) {
@@ -953,16 +973,25 @@ adapter.on('message', function (obj) {
 
     // some predefined responses so we only have to define them once
     const predefinedResponses = {
-        ACK: {error: null},
-        OK: {error: null, result: 'ok'},
-        ERROR_UNKNOWN_COMMAND: {error: 'Unknown command!'},
+        ACK: {
+            error: null
+        },
+        OK: {
+            error: null,
+            result: 'ok'
+        },
+        ERROR_UNKNOWN_COMMAND: {
+            error: 'Unknown command!'
+        },
         MISSING_PARAMETER: paramName => {
-            return {error: 'missing parameter "' + paramName + '"!'};
+            return {
+                error: 'missing parameter "' + paramName + '"!'
+            };
         }
     };
 
     // make required parameters easier
-    function requireParams(params /*: string[] */) {
+    function requireParams(params /*: string[] */ ) {
         if (!(params && params.length)) return true;
         for (let i = 0; i < params.length; i++) {
             const param = params[i];
@@ -976,8 +1005,8 @@ adapter.on('message', function (obj) {
 
     // use jsdoc here
     function sendCustomCommand(
-        method /*: string */,
-        params /*: (optional) string[] */,
+        method /*: string */ ,
+        params /*: (optional) string[] */ ,
         parser /*: (optional) (object) => object */
     ) {
         // parse arguments
@@ -1000,16 +1029,23 @@ adapter.on('message', function (obj) {
                 response = response.result;
             }
             // now respond with the result
-            respond({error: null, result: response});
+            respond({
+                error: null,
+                result: response
+            });
             // remove the callback from the dict
             if (sendCommandCallbacks[id] !== null) {
                 delete sendCommandCallbacks[id];
             }
         };
         // send msg to the robo
-        sendMsg(method, params, {rememberPacket: false}, err => {
+        sendMsg(method, params, {
+            rememberPacket: false
+        }, err => {
             // on error, respond immediately
-            if (err) respond({error: err});
+            if (err) respond({
+                error: err
+            });
             // else wait for the callback
         });
     }
@@ -1033,11 +1069,11 @@ adapter.on('message', function (obj) {
                 sendCustomCommand(params.method, params.params);
                 return;
 
-            // ======================================================================
-            // support for the commands mentioned here:
-            // https://github.com/MeisterTR/XiaomiRobotVacuumProtocol#vaccum-commands
+                // ======================================================================
+                // support for the commands mentioned here:
+                // https://github.com/MeisterTR/XiaomiRobotVacuumProtocol#vaccum-commands
 
-            // cleaning commands
+                // cleaning commands
             case 'startVacuuming':
                 sendCustomCommand('app_start');
                 return;
@@ -1054,13 +1090,13 @@ adapter.on('message', function (obj) {
                 sendCustomCommand('app_charge');
                 return;
 
-            // TODO: What does this do?
+                // TODO: What does this do?
             case 'findMe':
                 sendCustomCommand('find_me');
                 return;
 
-            // get info about the consumables
-            // TODO: parse the results
+                // get info about the consumables
+                // TODO: parse the results
             case 'getConsumableStatus':
                 sendCustomCommand('get_consumable', returnSingleResult);
                 return;
@@ -1068,7 +1104,7 @@ adapter.on('message', function (obj) {
                 sendCustomCommand('reset_consumable');
                 return;
 
-            // get info about cleanups
+                // get info about cleanups
             case 'getCleaningSummary':
                 sendCustomCommand('get_clean_summary', parseCleaningSummary);
                 return;
@@ -1079,14 +1115,14 @@ adapter.on('message', function (obj) {
                 sendCustomCommand('get_clean_record', [obj.message.recordId], parseCleaningRecords);
                 return;
 
-            // TODO: find out how this works
-            // case 'getCleaningRecordMap':
-            //     sendCustomCommand('get_clean_record_map');
+                // TODO: find out how this works
+                // case 'getCleaningRecordMap':
+                //     sendCustomCommand('get_clean_record_map');
             case 'getMap':
                 sendCustomCommand('get_map_v1');
                 return;
 
-            // Basic information
+                // Basic information
             case 'getStatus':
                 sendCustomCommand('get_status', parseStatus);
                 return;
@@ -1099,7 +1135,7 @@ adapter.on('message', function (obj) {
                 sendCustomCommand('miIO.info');
                 return;
 
-            // Do not disturb
+                // Do not disturb
             case 'getDNDTimer':
                 sendCustomCommand('get_dnd_timer', returnSingleResult);
                 return;
@@ -1113,7 +1149,7 @@ adapter.on('message', function (obj) {
                 sendCustomCommand('close_dnd_timer');
                 return;
 
-            // Fan speed
+                // Fan speed
             case 'getFanSpeed':
                 // require start and end time to be given
                 sendCustomCommand('get_custom_mode', returnSingleResult);
@@ -1124,7 +1160,7 @@ adapter.on('message', function (obj) {
                 sendCustomCommand('set_custom_mode', [obj.message.fanSpeed]);
                 return;
 
-            // Remote controls
+                // Remote controls
             case 'startRemoteControl':
                 sendCustomCommand('app_rc_start');
                 return;
@@ -1147,7 +1183,7 @@ adapter.on('message', function (obj) {
                 return;
 
 
-            // ======================================================================
+                // ======================================================================
 
             default:
                 respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
@@ -1155,3 +1191,98 @@ adapter.on('message', function (obj) {
         }
     }
 });
+
+
+//------------------------------------------------------Valetudo Section
+
+VALETUDO.GETMAP = false;
+VALETUDO.ENABLED = false;
+VALETUDO.COLOR_OPTIONS = {};
+VALETUDO.LASTMAPSAVE;
+VALETUDO.POLLMAPINTERVALL = 2000;
+VALETUDO.MAPSAFEINTERVALL = 5000;
+
+
+VALETUDO.Init = function () {
+    if (this.ENABLED) {
+        adapter.setObjectNotExists('valetudo.map64', {
+            type: 'state',
+            common: {
+                name: 'Map64',
+                type: 'string',
+                read: true,
+                write: false,
+                desc: 'Map in a decoded Base64 PNG',
+            },
+            native: {}
+        });
+        adapter.setObjectNotExists('valetudo.mapURL', {
+            type: 'state',
+            common: {
+                name: 'MapURL',
+                type: 'string',
+                read: true,
+                write: false,
+                desc: 'Path to actual PNG File',
+            },
+            native: {}
+        });
+
+        ValetudoHelper.getMapBase64(adapter.config.ip, this.COLOR_OPTIONS).then(function (data) {
+                adapter.setState('valetudo.map64', '<img src="' + data.toDataURL() + '" /style="width: auto ;height: 100%;">', true);
+                var buf = data.toBuffer();
+                adapter.writeFile('mihome-vacuum.admin', 'actualMap.png', buf, function (error) {
+                    if (error) {
+                        adapter.log.error('Fehler beim Speichern der Karte');
+                    } else {
+                        adapter.setState('valetudo.mapURL', "/mihome-vacuum.admin/actualMap.png", true);
+
+                    }
+                    VALETUDO.LASTMAPSAVE = Date.now();
+                });
+            })
+            .catch(err => adapter.log.error(err))
+    }
+}
+
+VALETUDO.StartMapPoll = function () {
+    if (!this.GETMAP && this.ENABLED) {
+        this.GETMAP = true;
+        this._MapPoll();
+    }
+}
+
+VALETUDO._MapPoll = function () {
+    ValetudoHelper.getMapBase64(adapter.config.ip, this.COLOR_OPTIONS).then(function (data) {
+            adapter.setState('valetudo.map64', '<img src="' + data.toDataURL() + '" /style="width: auto ;height: 100%;">', true);
+
+            if (Date.now() - VALETUDO.LASTMAPSAVE > VALETUDO.MAPSAFEINTERVALL) {
+                var buf = data.toBuffer();
+                adapter.writeFile('mihome-vacuum.admin', 'actualMap.png', buf, function (error) {
+                    if (error) {
+                        adapter.log.error('Fehler beim Speichern der Karte');
+                    } else {
+                        adapter.setState('valetudo.mapURL', "/mihome-vacuum.admin/actualMap.png", true);
+
+                    }
+                    VALETUDO.LASTMAPSAVE = Date.now();
+                })
+            };
+
+            if (VALETUDO.GETMAP) {
+                //adapter.log.info(VALETUDO.POLLMAPINTERVALL)
+                setTimeout(function () {
+                    VALETUDO._MapPoll();
+                }, VALETUDO.POLLMAPINTERVALL);
+            }
+
+
+        })
+        .catch(err => {
+            adapter.log.error(err);
+            if (VALETUDO.GETMAP) setTimeout(function () {
+                VALETUDO._MapPoll();
+            }, VALETUDO.POLLMAPINTERVALL);
+        })
+
+}

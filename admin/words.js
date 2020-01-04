@@ -253,6 +253,18 @@ systemDictionary = {
         "es": "Vista previa del mapa",
         "pl": "Podgląd mapy",
         "zh-cn": "地图预览"
+      },
+      "Map save intervall": {
+        "en": "Map save intervall",
+        "de": "Karte speichern Intervall",
+        "ru": "Карта сохранить интервал",
+        "pt": "Intervalo de salvamento do mapa",
+        "nl": "Kaart opslaan intervall",
+        "fr": "Carte enregistrer l'intervalle",
+        "it": "Intervallo di salvataggio della mappa",
+        "es": "Mapa guardar intervalo",
+        "pl": "Interwał zapisu mapy",
+        "zh-cn": "地图保存间隔"
       }
 
 };

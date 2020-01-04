@@ -1,6 +1,6 @@
 {
   "name": "iobroker.mihome-vacuum",
-  "version": "1.1.6",
+  "version": "1.9.1",
   "description": "Control your mihome vacuum cleaner with ioBroker",
   "keywords": [
     "ioBroker",
@@ -29,9 +29,7 @@
   "dependencies": {
     "@iobroker/adapter-core": "^1.0.3",
     "zlib": "^1.0.5",
-    "canvas":"^2.6.1",
-    "jimp": "^0.9.3"
-
+    "canvas":"^2.6.1"
   },
   "devDependencies": {
     "gulp": "^4.0.0",
