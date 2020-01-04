@@ -195,9 +195,10 @@
         "valetudo_color_floor": "#56affc",
         "valetudo_color_wall": "#b3edff",
         "valetudo_color_path": "#FFFFFF",
-        "robot_select": "robot"
-
-    },
+        "robot_select": "robot",
+        "valetudo_requestIntervall": 2000,
+        "valetudo_MapsaveIntervall": 5000
+      },
     "instanceObjects": [
         {
             "_id": "info",
