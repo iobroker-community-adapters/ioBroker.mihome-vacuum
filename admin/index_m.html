@@ -27,6 +27,48 @@
         .error {
             border: 1px solid red;
         }
+
+        .cbox {
+            width: 350px;
+            height: 150px;
+            background: grey;
+            border-width: 2px;
+            border-style: solid;
+            border-color: green;
+            z-index: 0;
+            margin: 8px;
+        }
+
+        .cbox2 {
+            width: 70px;
+            height: 70px;
+            border-width: 2px;
+            border-style: solid;
+            background: none;
+            border-color: green;
+            z-index: 1;
+            margin-top: -2px;
+            margin-left: -2px;
+        }
+        .robot {
+           position:relative;
+            left: 180px;
+            top: -164px;
+            z-index: 10;
+            transform: rotate(90deg);
+        }
+        .path{
+            position: relative;
+            left: 100px;
+            top: -32px;
+            width: 90px;
+            height: 108px;
+            background: none;
+            z-index: 5;
+          border-width: 4px 0px 0px 4px;
+          border-style: solid ;
+
+        }
     </style>
     <script type="text/javascript">
         var values = [];
@@ -50,12 +92,41 @@
                     });
                 }
             });
+            $(".cbox").css("background", ($(".colorFloor").val()));
+            $(".cbox").css("border-color", ($(".colorWall").val()));
+            $(".cbox2").css("border-color", ($(".colorWall").val()));
+            $(".path").css("border-color", ($(".colorPath").val()));
+            $(".robot").attr('src',''+ $(".robotSel").val() + '.png');;
+            console.log("run all....")
+
+            $(".colorFloor").change(function () {
+                console.log("changed...." + $(this).val())
+                $(".cbox").css("background", ($(this).val()));
+            });
+            $(".colorWall").change(function () {
+                console.log("changed...." + $(this).val())
+                $(".cbox").css("border-color", ($(this).val()));
+                $(".cbox2").css("border-color", ($(this).val()));
+            });
+            $(".colorPath").change(function () {
+                console.log("changed...." + $(this).val())
+                $(".path").css("border-color", ($(this).val()));
+            });
+            $(".robotSel").change(function () {
+                console.log("changed....Pic" + $(this).val())
+                $(".robot").attr('src',''+ $(this).val() + '.png');;
+            });
+
+
 
             onChange(false);
 
             var namespace = adapter + '.' + instance + '.';
 
-            socket.emit('getObjectView', 'system', 'state', { startkey: namespace, endkey: namespace + '\u9999' }, function (err, res) {
+            socket.emit('getObjectView', 'system', 'state', {
+                startkey: namespace,
+                endkey: namespace + '\u9999'
+            }, function (err, res) {
                 if (!err && res) {
                     var _res = {};
                     for (var i = 0; i < res.rows.length; i++) {
@@ -105,31 +176,43 @@
                         var id = $(this).data('index');
                         var val = $(this).val();
                         if (val === 'number') {
-                            $('.values-input[data-name="factor"][data-index="' + id + '"]').show();
-                            $('.values-input[data-name="offset"][data-index="' + id + '"]').show();
+                            $('.values-input[data-name="factor"][data-index="' + id + '"]')
+                                .show();
+                            $('.values-input[data-name="offset"][data-index="' + id + '"]')
+                                .show();
                         } else {
-                            $('.values-input[data-name="factor"][data-index="' + id + '"]').hide();
-                            $('.values-input[data-name="offset"][data-index="' + id + '"]').hide();
+                            $('.values-input[data-name="factor"][data-index="' + id + '"]')
+                                .hide();
+                            $('.values-input[data-name="offset"][data-index="' + id + '"]')
+                                .hide();
                         }
                         if (val === 'boolean' || val === 'json') {
-                            $('.values-input[data-name="unit"][data-index="' + id + '"]').hide();
+                            $('.values-input[data-name="unit"][data-index="' + id + '"]')
+                                .hide();
                         } else {
-                            $('.values-input[data-name="unit"][data-index="' + id + '"]').show();
+                            $('.values-input[data-name="unit"][data-index="' + id + '"]')
+                                .show();
                         }
                     }).each(function () {
                         var id = $(this).data('index');
                         var val = $(this).val();
                         if (val === 'number') {
-                            $('.values-input[data-name="factor"][data-index="' + id + '"]').show();
-                            $('.values-input[data-name="offset"][data-index="' + id + '"]').show();
+                            $('.values-input[data-name="factor"][data-index="' + id + '"]')
+                                .show();
+                            $('.values-input[data-name="offset"][data-index="' + id + '"]')
+                                .show();
                         } else {
-                            $('.values-input[data-name="factor"][data-index="' + id + '"]').hide();
-                            $('.values-input[data-name="offset"][data-index="' + id + '"]').hide();
+                            $('.values-input[data-name="factor"][data-index="' + id + '"]')
+                                .hide();
+                            $('.values-input[data-name="offset"][data-index="' + id + '"]')
+                                .hide();
                         }
                         if (val === 'boolean' || val === 'json') {
-                            $('.values-input[data-name="unit"][data-index="' + id + '"]').hide();
+                            $('.values-input[data-name="unit"][data-index="' + id + '"]')
+                                .hide();
                         } else {
-                            $('.values-input[data-name="unit"][data-index="' + id + '"]').show();
+                            $('.values-input[data-name="unit"][data-index="' + id + '"]')
+                                .show();
                         }
 
                     });
@@ -187,73 +270,154 @@
 </head>
 
 <body>
-    <div class="m adapter-container" style="background-image: url('S5.png'); background-repeat: no-repeat; background-position: 20px 110px;  background-size: 520px ;">
+    <div class="m adapter-container"
+        style="background-image: url('S5.png'); background-repeat: no-repeat; background-position: 20px 110px;  background-size: 520px ;">
+
         <div class="row">
-            <div class="row">
-                <div class="col s12 m2 l1">
-                    <img src="mihome-vacuum.png" class="logo">
-                </div>
-                <div class="col s12 m8 l10">
-                    <h6 class="translate">adapter for control of Xiaomi vacuum cleaner V1 and S5</h6>
+            <!-- Tabs navigation -->
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s2">
+                        <a href="#tab-main" class="translate" data-lang="Main">Options</a>
+                    </li>
+                    <li class="tab col s2">
+                        <a href="#tab-valetudo" class="translate" data-lang="Valetudo">Devices</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="tab-main" class="col s12 page">
+
+                <div class="row">
+                    <div class="row">
+                        <div class="col s12 m2 l1">
+                            <img src="mihome-vacuum.png" class="logo">
+                        </div>
+                        <div class="col s12 m8 l10">
+                            <h6 class="translate">adapter for control of Xiaomi vacuum cleaner V1 and S5</h6>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="row" style="background-color: #64b5f6;">
+                        <div class="col s12">
+                            <span class="translate">connection settings</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12">
+                            <input class="value" id="token" size="60" maxlength="96" />
+                            <label for="token" class="translate">Token</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m4 l2">
+                            <input class="value" id="ip" size="15" />
+                            <label class="translate" for="ip">IP address:</label>
+                        </div>
+
+                        <div class="col s12 m3 l1 offset-m1 offset-l1">
+                            <input class="value number" id="port" size="5" maxlength="5" type="number" />
+                            <label class="translate" for="port">Vacuum port:</label>
+                        </div>
+
+                        <div class="col s12 m3 l1 offset-m1 offset-l1">
+                            <input class="value number" id="ownPort" size="5" maxlength="5" type="number" />
+                            <label class="translate" for="ownPort">Own port:</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m4 l2">
+                            <input class="value" id="param_pingInterval" size="15" />
+                            <label class="translate" for="param_pingInterval">Request Intervall</label>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="row" style="background-color: #64b5f6;">
+                        <div class="col s12">
+                            <span class="translate">additional settings</span>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m6">
+                            <input class="value" id="enableAlexa" type="checkbox" />
+                            <span class="translate">add a state for Alexa</span>
+                        </div>
+                        <div class="col s12 m6">
+                            <input class="value" id="enableSelfCommands" type="checkbox" />
+                            <span class="translate">Send own commands</span>
+                        </div>
+                        <div class="col s4">
+                            <input class="value" id="enableResumeZone" type="checkbox"
+                                data-link="resume-paused-zonecleaning-with-start-button" />
+                            <span class="translate">Resume paused zonecleaning with start button</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="divider"></div>
-            <div class="row" style="background-color: #64b5f6;">
-                <div class="col s12">
-                    <span class="translate">connection settings</span>
+
+            <!-- Tabs Valetudo -->
+            <div id="tab-valetudo" class="col s12 page">
+                <div class="row">
+                    <div class="col s6 m4 l2">
+                        <img src="valetudo_logo_small.svg" class="logo">
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col s12">
-                    <input class="value" id="token" size="60" maxlength="96" />
-                    <label for="token" class="translate">Token</label>
+                <div class="row">
+                    <div class="col s12 m6 l2">
+                        <input class="value" id="valetudo_enable" type="checkbox" />
+                        <span class="translate">Enable Valetudo</span>
+                    </div>
+                    <div class="col s12 m4 l2">
+                        <input class="value" id="valetudo_requestIntervall" size="15" />
+                        <label class="translate" for="valetudo_requestIntervall">Request Intervall</label>
+                    </div>
+                    <div class="col s12 m4 l2">
+                        <input class="value" id="valetudo_MapsaveIntervall" size="15" />
+                        <label class="translate" for="valetudo_MapsaveIntervall">Map save intervall</label>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col s12 m4 l2">
-                    <input class="value" id="ip" size="15" />
-                    <label class="translate" for="ip">IP address:</label>
+                <div class="row">
+                    <div class="col s12 m4 l2">
+                        <input class="value colorFloor" id="valetudo_color_floor" size="15"/>
+                        <label class="translate" for="valetudo_color_floor">Color floor:</label>
+                    </div>
+                    <div class="col s12 m4 l2">
+                        <input class="value colorWall" id="valetudo_color_wall" size="15"/>
+                        <label class="translate" for="valetudo_color_wall">Color wall:</label>
+                    </div>
+                    <div class="col s12 m4 l2">
+                        <input class="value colorPath" id="valetudo_color_path" size="15"/>
+                        <label class="translate" for="valetudo_color_path">Color path:</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m5 l3">
+                        <select class="value robotSel" id="robot_select">
+                            <option value="" disabled selected class="translate">Choose your robot</option>
+                            <option value="robot" data-icon="./robot.png">Robot 1</option>
+                            <option value="robot1" data-icon="./robot1.png">Robot 2</option>
+                            <option value="tank" data-icon="./tank.png">Tank</option>
+                            <option value="spaceship" data-icon="./spaceship.png">Space ship</option>
+                        </select>
+                        <label class="translate">Robot images</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="translate">Map preview</label>
+                    <div class="cbox">
+                        <div class="cbox2">                            
+                        </div>
+                        <div class="path">                            
+                        </div>
+                        <img class="robot" src="./robot1.png" height="42" width="42">
+                    </div>
                 </div>
 
-                <div class="col s12 m3 l1 offset-m1 offset-l1">
-                    <input class="value number" id="port" size="5" maxlength="5" type="number" />
-                    <label class="translate" for="port">Vacuum port:</label>
-                </div>
-
-                <div class="col s12 m3 l1 offset-m1 offset-l1">
-                    <input class="value number" id="ownPort" size="5" maxlength="5" type="number" />
-                    <label class="translate" for="ownPort">Own port:</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12 m4 l2">
-                    <input class="value" id="param_pingInterval" size="15" />
-                    <label class="translate" for="param_pingInterval">Request Intervall</label>
-                </div>
-            </div>
-            <div class="divider"></div>
-            <div class="row" style="background-color: #64b5f6;">
-                <div class="col s12">
-                    <span class="translate">additional settings</span>
-                </div>
 
             </div>
-            <div class="row">
-                <div class="col s12 m6">
-                    <input class="value" id="enableAlexa" type="checkbox" />
-                    <span class="translate">add a state for Alexa</span>
-                </div>
-                <div class="col s12 m6">
-                    <input class="value" id="enableSelfCommands" type="checkbox" />
-                    <span class="translate">Send own commands</span>
-                </div>
-                <div class="col s4">
-                    <input class="value" id="enableResumeZone" type="checkbox" data-link="resume-paused-zonecleaning-with-start-button" />
-                    <span class="translate">Resume paused zonecleaning with start button</span>
-                </div>
-            </div>
+
         </div>
-    </div>
 
 
 </body>

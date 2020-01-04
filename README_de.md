@@ -13,11 +13,10 @@ This adapter allows you control the Xiaomi vacuum cleaner.
 
 ## Inhalt
 - [Einrichtung](#konfiguration)
-    - [mit Android](#bei-android)
-    - [mit iOS](#bei-ios)
     - [Adapter konfigurieren](#adapterkonfiguration)
         - [Steuerung über Alexa](#steuerung-über-alexa)
         - [Zweiter Roboter](#zweiter-roboter)
+    - [Einrichtung Valetudo](#valetudo-einrichtung)
 - [Funtionen](#funktionen)
     - [S50 Kommandos](#Komandos-des-S50)
 	        - [GoTo](#GoTo)
@@ -30,49 +29,9 @@ This adapter allows you control the Xiaomi vacuum cleaner.
 
 ## Konfiguration
 Derzeit stellt das Ermitteln des Tokens das größte Problem.
-Folgende Vorgehensweisen können genutzt werden:
+Am besten folgt man der Anleitung des folgenden Links:
 
-### Bei Android
-Vorbereitung:
-Benötigt wird ein Android Smartphone mit fertig eingerichteter MiHome App. Der Sauger muss in dieser hinzugefügt und eingerichtet sein.
-
-- Das [MiToolkit](https://github.com/ultrara1n/MiToolkit/releases) herunterladen, entpacken und die MiToolkit.exe starten.
-- USB-Degugging in den Smartphone-Einstellungen einschalten ([video](https://www.youtube.com/watch?v=aw7D6bNgI1U))
-- Das Smartphone über ein USB-Kabel mit dem PC verbinden.
-- Im MiToolkit auf "Verbindung prüfen" klicken und ggf. die Java Installation testen, beide Tests sollten fehlerfrei verlaufen.
-- Auf "Token auslesen" klicken und die Meldung auf dem Smartphone bestätigen (KEIN Passwort vergeben!).
-
-Auf dem Smartphone sollte nun die MiHome App geöffnet werden (automatisch) und ein Backup auf den PC gezogen werden (sollte ein paar Sekunden dauern), das Programm liest dann den Token aus der MiHome Datenbank (miio2.db) aus.
-Nun nur in dem geöffneten Fenster nach rockrobo.vacuum suchen und den 32 Stelligen Token kopieren und in dem Konfigurationsfenster eingeben.
-
-
-### Bei iOS
-
-Mit Jailbreak:
-- Findet man den Token unter /var/mobile/Containers/Data/Application/514106F3-C854-45E9-A45C-119CB4FFC235/Documents/USERID_mihome.sqlite
-
-Ohne Jailbreak:
--	Zuerst muss der benötigte Token (über iPhone backup) ausgelesen werden
--	Hierzu zuerst den xiaomi auf dem iPhone einrichten
--	Backup mit iTunes oder 3utools erstellen
--	Anschließend den [iphonebackupviewer](http://www.imactools.com/iphonebackupviewer/) installieren
--	in den Tree View (oben rechts) gehen
--	in den Pfad AppDomain-com.xiaomi.mihome\Documents\ gehen
--	die Datei xxxxxxxxxx_mihome.sqlite herunterladen
--	Sollte die Datei / der Ordner nicht zu finden sein, Backup mit iTunes statt mit 3utools machen
--	Diese mit [DB Browser for SQLite](https://github.com/sqlitebrowser/sqlitebrowser/releases/download/v3.10.1/SQLiteDatabaseBrowserPortable_3.10.1_English.paf.exe) öffnen
--	Der 96-Stellige Hex Key befindet sich unter Browse Data  Table ZDEVICE  in der Spalte ganz Rechts ZTOKEN
--	Der 96-Stellige Hex Key muss nun in ein 32-Stelligen Key umgewandelt werden 
--	Über den [link](http://aes.online-domain-tools.com/) hier folgendes eintragen (Nur copy/paste, zwischenspeichern kann das Ergenis verfälschen)
--	Input type: Text
--	Input text: der 96-stellige Key
--	Hex
--	Autodetect: ON
--	Function: AES
--	Mode: ECB (electronic codebook)
--	Key: 00000000000000000000000000000000 *muss 32-stellig sein
--	Hex
--	Nun auf Decrypt klicken und den 32-stelligen Key aus dem Decrypted Text ganz rechts entnehmen
+[Token Vorgehensweise](https://www.smarthomeassistent.de/token-auslesen-roborock-s6-roborock-s5-xiaomi-mi-robot-xiaowa/).
 
 ### Adapterkonfiguration
 - Bei IP-Adresse muss die IP-Adresse des Roboters eingegeben werden im Format "192.168.178.XX"
@@ -91,6 +50,33 @@ Wenn die Option deaktiviert ist, wird durch senden von "start" eine neue Komplet
 
 #### Zweiter Roboter
 Sollen zwei Roboter über ioBroker gesteuert werden, müssen zwei Instanzen angelegt werden. Dabei muss bei dem zweiten Roboter der eigene Port (Default: 53421) geändert werden, damit beide Roboter unterschiedliche Ports besitzen.
+
+## Vaetudo Einrichten
+
+Hierfür muss der Roboter gerootet und Valetudo installiert sein. dafür nutzt man am besten folgende Versionen:
+[Valetudo RE](https://github.com/rand256/valetudo) oder das normale [Valetudo](https://github.com/Hypfer/Valetudo)
+
+![Konfig](admin/valetudo_conf.png)
+- Aktiviere Valetudo, aktiviert das Mapinterface
+- Abrufintervall muss mindestens 1000ms sein, damit wird der Abrufintervall der html Map angegeben
+- Map Intervall ist der Intervall für das Map PNG File, welches für Telegramm oder vis genutzt werden kann , hier muss es mindestens 5000ms betragen
+- Farben sidn für die Karte folgende Typen können genutzt werden:
+```
+- #2211FF
+- rbg(255,200,190)
+- rgba(255,100,100,0.5) //for Transparent
+- green
+```
+- Unter Roboter Bilder kann man verschiedene Bilder auswählen die in der Karte angezeigt werden sollen
+
+### Map Widget
+ Am besten kann man die map über ein html widget einbinden einfach den Datempunk binden mit {mihome-vacuum.0.valetudo.map64} wie im unteren Beispiel:
+
+```
+[{"tpl":"tplHtml","data":{"g_fixed":false,"g_visibility":false,"g_css_font_text":false,"g_css_background":false,"g_css_shadow_padding":false,"g_css_border":false,"g_gestures":false,"g_signals":false,"g_last_change":false,"visibility-cond":"==","visibility-val":1,"visibility-groups-action":"hide","refreshInterval":"0","signals-cond-0":"==","signals-val-0":true,"signals-icon-0":"/vis/signals/lowbattery.png","signals-icon-size-0":0,"signals-blink-0":false,"signals-horz-0":0,"signals-vert-0":0,"signals-hide-edit-0":false,"signals-cond-1":"==","signals-val-1":true,"signals-icon-1":"/vis/signals/lowbattery.png","signals-icon-size-1":0,"signals-blink-1":false,"signals-horz-1":0,"signals-vert-1":0,"signals-hide-edit-1":false,"signals-cond-2":"==","signals-val-2":true,"signals-icon-2":"/vis/signals/lowbattery.png","signals-icon-size-2":0,"signals-blink-2":false,"signals-horz-2":0,"signals-vert-2":0,"signals-hide-edit-2":false,"lc-type":"last-change","lc-is-interval":true,"lc-is-moment":false,"lc-format":"","lc-position-vert":"top","lc-position-horz":"right","lc-offset-vert":0,"lc-offset-horz":0,"lc-font-size":"12px","lc-font-family":"","lc-font-style":"","lc-bkg-color":"","lc-color":"","lc-border-width":"0","lc-border-style":"","lc-border-color":"","lc-border-radius":10,"lc-zindex":0,"html":"{mihome-vacuum.0.valetudo.map64}"},"style":{"left":"0","top":"0","width":"100%","height":"100%"},"widgetSet":"basic"}]
+```
+
+Der zweite Weg ist über ein src img Widget, hier einfach den Datenpunkt PNG auswählen, dieses wird aber nicht so oft aktualisiert wie die html Version.
 
 ## Funktionen
 
