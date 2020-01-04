@@ -29,7 +29,8 @@
   "dependencies": {
     "@iobroker/adapter-core": "^1.0.3",
     "zlib": "^1.0.5",
-    "canvas":"^2.6.1"
+    "canvas":"^2.6.1",
+    "request":"^2.88.0"
   },
   "devDependencies": {
     "gulp": "^4.0.0",
