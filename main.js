@@ -819,7 +819,7 @@ function newGen(model) {
         adapter.deleteState(adapter.namespace, 'control', 'zoneClean');
         adapter.deleteState(adapter.namespace, 'control', 'carpet_mode');
         adapter.deleteState(adapter.namespace, 'control', 'resumeZoneClean');
-    } else if (model === 'roborock.vacuum.m1s') {
+    } else if (model === 'roborock.vacuum.m1s' || model === 'roborock.vacuum.s6') {
         adapter.setObject('control.fan_power', {
             type: 'state',
             common: {
