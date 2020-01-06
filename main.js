@@ -240,7 +240,7 @@ function send(reqParams, cb, i) {
 
 function requestParams() {
     if (connected) {
-        adapter.log.debug('requesting params every: ' + adapter.config.paramPingInterval / 1000 + ' Sec');
+        adapter.log.debug('requesting params every: ' + adapter.config.param_pingInterval / 1000 + ' Sec');
 
         send(reqParams, () => {
             if (!isEquivalent(logEntriesNew, logEntries)) {
@@ -862,14 +862,14 @@ function main() {
     adapter.config.port = parseInt(adapter.config.port, 10) || 54321;
     adapter.config.ownPort = parseInt(adapter.config.ownPort, 10) || 53421;
     adapter.config.pingInterval = parseInt(adapter.config.pingInterval, 10) || 20000;
-    adapter.config.paramPingInterval = parseInt(adapter.config.paramPingInterval, 10) || 10000;
+    adapter.config.param_pingInterval = parseInt(adapter.config.param_pingInterval, 10) || 10000;
     //adapter.log.info(JSON.stringify(adapter.config));
 
     init();
 
     // Abfrageintervall mindestens 10 sec.
-    if (adapter.config.paramPingInterval < 10000) {
-        adapter.config.paramPingInterval = 10000;
+    if (adapter.config.param_pingInterval < 10000) {
+        adapter.config.param_pingInterval = 10000;
     }
 
 
@@ -948,7 +948,7 @@ function main() {
 
         sendPing();
         pingInterval = setInterval(sendPing, adapter.config.pingInterval);
-        paramPingInterval = setInterval(requestParams, adapter.config.paramPingInterval);
+        paramPingInterval = setInterval(requestParams, adapter.config.param_pingInterval);
 
         adapter.subscribeStates('*');
 
