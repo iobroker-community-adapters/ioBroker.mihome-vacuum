@@ -36,7 +36,8 @@ let features= {
        zoneClean: false,    // would be initialised in parseMiIO_info
        mob: false,          // would be initialised in parseMiIO_info
     water_box: null,        // would be initialised in parseStatus
-    carpetMode: null        // would be initialised in parseCarpetMode
+    carpetMode: null,       // would be initialised in parseCarpetMode
+    roomMapping: null       // would be initialised in handleRoomMaping
 }
 
 const VALETUDO = function () {}; // init Valetudo
@@ -152,6 +153,24 @@ adapter.on('stateChange', function (id, state) {
         } else if (command === 'resumeZoneClean') {
             sendMsg('resume_zoned_clean');
 
+        } else if (command === 'loadRooms') {
+            sendMsg('get_room_mapping');
+
+        } else if (command === 'roomClean'){
+            adapter.getState(id.replace('roomClean', 'mapIndex'),function(err,objState){
+                if (objState && parseInt(objState.val,10) != isNaN){
+                    adapter.getState(id.replace('roomClean', 'roomFanPower'),function(err,fanPower){
+                        adapter.setState("control.fan_power",fanPower.val);
+                        sendMsg('app_segment_clean', [objState.val], function () {
+                            adapter.setForeignState(id, state.val, true);
+                        });
+                    })
+                } else
+                    adapter.log.error("could not clean " + id + ", because mapIndex is invalid")
+            })
+        } else if (command === 'roomFanPower'){
+            // do nothing, only set fan power for next roomClean
+            adapter.setForeignState(id, state.val, true);
         } else if (com[command] === undefined) {
             adapter.log.error('Unknown state "' + id + '"');
         } else {
@@ -436,7 +455,8 @@ function parseMiIO_info(response){
                 }
             }
         }); // use time, if is new set above
-        sendMsg(com.get_carpet_mode.method) // test,if is supported
+        sendMsg(com.get_carpet_mode.method) // test,if supported
+        setTimeout(sendMsg,3000,'get_room_mapping'); // test, if supported, but wait for extending 'control.fan_power'
     } 
     return response.result;
 }
@@ -468,6 +488,97 @@ function parseCarpetMode(response){
     return response.result[0];
     //"result":[{"enable":1,"current_integral":450,"current_high":500,"current_low":400,"stall_time":10}]
 }
+
+
+/** Parses the answer of get_room_mapping */
+function handleRoomMaping(response){
+    if (features.roomMapping === null){
+        features.roomMapping= true;
+        adapter.setObjectNotExists('rooms.loadRooms', {
+            type: 'state',
+            common: {
+                name: "Load rooms",
+                type: "boolean",
+                role: "button",
+                read: false,
+                write: true,
+                desc: "loads id's from stored rooms",
+            },
+            native: {}
+        });
+    }
+    const rooms= {}
+    let room;
+    for (let r in response.result) {
+        room= response.result[r];
+        rooms[room[1]]= room[0];
+    }
+    adapter.getChannelsOf("rooms", function(err,roomObjs){
+        const roomClean= {
+            type: 'state',
+            common: {
+                name: 'clean Room',
+                type: 'boolean',
+                role: 'button',
+                read: false,
+                write: true,
+                desc: 'Start Room Cleaning'
+            },
+            native: {}
+        }
+        for (let r in roomObjs){
+            let roomObj= roomObjs[r];
+            let extRoomId= roomObj._id.split(".").pop();
+            room= rooms[extRoomId];
+            if (!room){
+                adapter.setState(roomObj._id + '.mapIndex', 'unused',true);
+                adapter.delObject(roomObj._id + '.roomClean');
+            }else{
+                adapter.setState(roomObj._id + '.mapIndex', room,true);
+                adapter.setObjectNotExists(roomObj._id + '.roomClean',roomClean);
+                delete rooms[extRoomId];
+            }
+        }
+        for (let extRoomId in rooms){
+            adapter.getObject("rooms." + extRoomId, function(err, roomObj){
+                if (roomObj){
+                    adapter.setState(roomObj._id + '.mapIndex', rooms[extRoomId],true);
+                } else{
+                    adapter.createChannel("rooms", extRoomId, function(err,roomObj){
+                        adapter.setObjectNotExists(roomObj.id + '.mapIndex', {
+                            type: 'state',
+                            common: {
+                                name: 'map index',
+                                type: 'number',
+                                role: 'value',
+                                read: false,
+                                write: false,
+                                desc: 'index of assigned map'
+                            },
+                            native: {}
+                        },function(err,obj){
+                            adapter.setState(obj.id, rooms[extRoomId],true);
+                        });
+                        
+                        adapter.setObjectNotExists(roomObj.id + '.roomClean',roomClean);
+                        adapter.getObject("control.fan_power",function(err, obj){
+                            obj && adapter.getState(obj._id, function(err, comonState){
+                                adapter.setObjectNotExists(roomObj.id + '.roomFanPower', {
+                                    type: 'state',
+                                    common: obj.common,
+                                    native: {}
+                                },function(err, state){
+                                    adapter.setState(state.id, comonState.val ,!true);
+                                });
+                            })
+                        })
+                    });
+                }
+            })
+        }   
+    })
+}
+
 
 const statusTexts = {
     '0': 'Unknown',
@@ -688,6 +799,8 @@ function getStates(message) {
 
 
             }
+        } else if (answer.id == last_id.get_room_mapping){
+            handleRoomMaping(answer);
 
         } else if (answer.id in sendCommandCallbacks) {
 
@@ -1242,7 +1355,7 @@ adapter.on('message', function (obj) {
                 sendCustomCommand('app_rc_move', [args]);
                 return;
 
-
+                
                 // ======================================================================
 
             default:
