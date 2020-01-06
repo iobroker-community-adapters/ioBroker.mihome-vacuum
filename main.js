@@ -15,11 +15,7 @@ const ValetudoHelper = require(__dirname + '/lib/ValetudoHelper');
 
 const server = dgram.createSocket('udp4');
 
-let device = {};
 let isConnect = false;
-let model = '';
-let fw = '';
-let fwNew = false;
 let connected = false;
 let commands = {};
 let stateVal = 0;
@@ -33,6 +29,15 @@ let clean_log_html_table = '';
 let logEntries = {};
 let logEntriesNew = {};
 let zoneCleanActive = false;
+// new features are initial false and shold be enabled, if result from robot is available
+let features= {
+    model : null,           // would be initialised in parseMiIO_info
+       goto: false,         // would be initialised in parseMiIO_info
+       zoneClean: false,    // would be initialised in parseMiIO_info
+       mob: false,          // would be initialised in parseMiIO_info
+    water_box: null,        // would be initialised in parseStatus
+    carpetMode: null        // would be initialised in parseCarpetMode
+}
 
 const VALETUDO = function () {}; // init Valetudo
 
@@ -44,13 +49,12 @@ const last_id = {
     X_send_command: 0,
 };
 
-const reqParams = [
+let reqParams = [
     com.get_status.method,
     com.miIO_info.method,
     com.get_consumable.method,
     com.clean_summary.method,
-    com.get_sound_volume.method,
-    com.get_carpet_mode.method
+    com.get_sound_volume.method
 ];
 
 //Tabelleneigenschaften
@@ -346,6 +350,125 @@ function parseCleaningRecords(response) {
     });
 }
 
+/** Parses the answer from miIO.info 
+ *  response= {"result":{"hw_ver":"Linux","fw_ver":"3.5.4_0850",
+               "ap":{"ssid":"xxxxx","bssid":"xx:xx:xx:xx:xx:xx","rssi":-46},
+               "netif":{"localIp":"192.168.1.154","mask":"255.255.255.0","gw":"192.168.1.1"},
+               "model":"roborock.vacuum.s6","mac":"yy:yy:yy:yy:yy:yy","token":"xxxxxxxxxxxxxxxxxxxxxxxxx","life":59871}
+*/    
+function parseMiIO_info(response){
+    if (features.model === null) {
+        features.model = response.result.model;
+        features.mob= (features.model === 'roborock.vacuum.s5' || features.model === 'roborock.vacuum.s6')
+        let fw = response.result.fw_ver.split('_'); // Splitting the FW into [Version, Build] array.
+        if (parseInt(fw[0].replace(/\./g, ''), 10) > 339 || (parseInt(fw[0].replace(/\./g, ''), 10) === 339 && parseInt(fw[1], 10) >= 3194)) {
+            adapter.log.info('New generation or new fw detected, create new states');
+            features.goto = true;
+            features.zoneClean= true;
+            features.mob= true;
+        }
+        features.goto && adapter.setObjectNotExists('control.goTo', {
+            type: 'state',
+            common: {
+                name: 'Go to point',
+                type: 'string',
+                read: true,
+                write: true,
+                desc: 'let the vacuum go to a point on the map',
+            },
+            native: {}
+        });
+        if (features.zoneClean){
+            adapter.setObjectNotExists('control.zoneClean', {
+                type: 'state',
+                common: {
+                    name: 'Clean a zone',
+                    type: 'string',
+                    read: true,
+                    write: true,
+                    desc: 'let the vacuum go to a point and clean a zone',
+                },
+                native: {}
+            });
+            if (!adapter.config.enableResumeZone) {
+                adapter.setObjectNotExists('control.resumeZoneClean', {
+                    type: 'state',
+                    common: {
+                        name: "Resume paused zoneClean",
+                        type: "boolean",
+                        role: "button",
+                        read: false,
+                        write: true,
+                        desc: "resume zoneClean that has been paused before",
+                    },
+                    native: {}
+                });
+            } else {
+                adapter.deleteState(adapter.namespace, 'control', 'resumeZoneClean');
+            }
+        }
+        if (features.model === 'roborock.vacuum.m1s' || features.model === 'roborock.vacuum.s6') {
+            adapter.setObject('control.fan_power', {
+                type: 'state',
+                common: {
+                    name: 'Suction power',
+                    type: 'number',
+                    role: 'level',
+                    read: true,
+                    write: true,
+                    min: 101,
+                    max: 104,
+                    states: {
+                        101: 'QUIET',
+                        102: 'BALANCED',
+                        103: 'TURBO',
+                        104: 'MAXIMUM'
+                    }
+                },
+                native: {}
+            });
+        }
+        features.mob && setTimeout(adapter.extendObject,2000,'control.fan_power', {
+            common: {
+                max: 105,
+                states: {
+                    105: "MOP"
+                }
+            }
+        }); // use time, if is new set above
+        sendMsg(com.get_carpet_mode.method) // test,if is supported
+    } 
+    return response.result;
+}
+
+/** Parses the answer of get_consumable
+ *  response= {"result":[{"main_brush_work_time":11472,"side_brush_work_time":11472,"filter_work_time":11472,"filter_element_work_time":3223,"sensor_dirty_time":11253}]}
+ */
+function parseConsumable(response){
+    return response.result[0];
+}
+
+/** Parses the answer from get_carpet_mode */
+function parseCarpetMode(response){
+    if (features.carpetMode === null){
+        features.carpetMode= true
+        adapter.setObjectNotExists('control.carpet_mode', {
+            type: 'state',
+            common: {
+                name: 'Carpet mode',
+                type: 'boolean',
+                read: true,
+                write: true,
+                desc: 'Fanspeed is Max on carpets',
+            },
+            native: {}
+        });
+        reqParams.push(com.get_carpet_mode.method); // from now, it should be checked always 
+    }
+    return response.result[0];
+    //"result":[{"enable":1,"current_integral":450,"current_high":500,"current_low":400,"stall_time":10}]
+}
+
 const statusTexts = {
     '0': 'Unknown',
     '1': 'Initiating',
@@ -392,24 +515,60 @@ const errorTexts = {
     '19': 'Unpowered charging station',
 };
 
-/** Parses the answer to a get_status message */
+/** Parses the answer to a get_status message 
+ * response =  {"result":[{"msg_ver":2,"msg_seq":5680,"state":8,"battery":100,"clean_time":8,"clean_area":0,
+ *                          "error_code":0,"map_present":1,"in_cleaning":0,"in_returning":0,"in_fresh_state":1,
+ *                          "lab_status":1,"water_box_status":0,"fan_power":103,"dnd_enabled":0,"map_status":3,"lock_status":0}]
+*/
 function parseStatus(response) {
     response = response.result[0];
-    return {
-        battery: response.battery,
-        clean_area: response.clean_area,
-        clean_time: response.clean_time,
-        dnd_enabled: response.dnd_enabled === 1,
-        error_code: response.error_code,
-        error_text: errorTexts[response.error_code],
-        fan_power: response.fan_power,
-        in_cleaning: response.in_cleaning === 1,
-        map_present: response.map_present === 1,
-        msg_seq: response.msg_seq,
-        msg_ver: response.msg_ver,
-        state: response.state,
-        state_text: statusTexts[response.state],
-    };
+    if (features.water_box === null){
+        features.water_box = typeof response.water_box_status == "number";
+        if (features.water_box){
+            adapter.setObjectNotExists('info.water_box', {
+                type: "state",
+                common: {
+                    name: "water box installed",
+                    type: "switch",
+                    role: "level",
+                    read: true,
+                    write: false
+                },
+                native: {}
+            });
+            adapter.setObjectNotExists('consumable.water_filter', {
+                type: "state",
+                common: {
+                    name: "clean water Filter",
+                    type: "number",
+                    role: "level",
+                    read: true,
+                    write: false,
+                    unit: "%"
+                },
+                native: {}
+            });
+            adapter.setObjectNotExists('consumable.water_filter_reset', {
+                type: "state",
+                common: {
+                    name: "water filter reset",
+                    type: "boolean",
+                    role: "button",
+                    read: false,
+                    write: true,
+                    unit: "%"
+                },
+                native: {}
+            });            
+        }
+    }
+    response.dnd_enabled= response.dnd_enabled === 1;
+    response.error_text= errorTexts[response.error_code];
+    response.in_cleaning= response.in_cleaning === 1;
+    response.map_present= response.map_present === 1;
+    response.state_text= statusTexts[response.state];
+    response.water_box_status= response.water_box_status === 1;
+    return response;
 }
 
 /** Parses the answer to a get_dnd_timer message */
@@ -461,34 +620,26 @@ function getStates(message) {
             }
 
             adapter.setState('info.error', status.error_code, true);
-            adapter.setState('info.dnd', status.dnd_enabled, true)
+            adapter.setState('info.dnd', status.dnd_enabled, true);
+            features.water_box && adapter.setState('info.water_box', status.water_box_status, true);
         } else if (answer.id === last_id['miIO.info']) {
-
-            //adapter.log.info('device' + JSON.stringify(answer.result));
-            device = answer.result;
-            adapter.setState('info.device_fw', answer.result.fw_ver, true);
-            fw = answer.result.fw_ver.split('_'); // Splitting the FW into [Version, Build] array.
-            if (parseInt(fw[0].replace(/\./g, ''), 10) > 339 || (parseInt(fw[0].replace(/\./g, ''), 10) === 339 && parseInt(fw[1], 10) >= 3194)) {
-                fwNew = true;
-            }
-            adapter.setState('info.device_model', answer.result.model, true);
-            adapter.setState('info.wifi_signal', answer.result.ap.rssi, true);
-            if (model === '') {
-                model = newGen(answer.result.model);
-            } // create new States for the V2
+            const info= parseMiIO_info(answer);
+            adapter.setState('info.device_fw', info.fw_ver, true);
+            adapter.setState('info.wifi_signal', info.ap.rssi, true);
+            adapter.setState('info.device_model', info.model, true);
 
         } else if (answer.id === last_id.get_sound_volume) {
             adapter.setState('control.sound_volume', answer.result[0], true);
 
-        } else if (answer.id === last_id.get_carpet_mode && model === 'roborock.vacuum.s5') {
-            adapter.setState('control.carpet_mode', answer.result[0].enable === 1, true);
-
+        } else if (answer.id === last_id.get_carpet_mode) {
+            adapter.setState('control.carpet_mode', parseCarpetMode(answer).enable === 1, true);
         } else if (answer.id === last_id.get_consumable) {
-
-            adapter.setState('consumable.main_brush', 100 - (Math.round(answer.result[0].main_brush_work_time / 3600 / 3)), true);
-            adapter.setState('consumable.side_brush', 100 - (Math.round(answer.result[0].side_brush_work_time / 3600 / 2)), true);
-            adapter.setState('consumable.filter', 100 - (Math.round(answer.result[0].filter_work_time / 3600 / 1.5)), true);
-            adapter.setState('consumable.sensors', 100 - (Math.round(answer.result[0].sensor_dirty_time / 3600 / 0.3)), true);
+            const consumable= answer.result[0] //parseConsumable(answer)
+            adapter.setState('consumable.main_brush', 100 - (Math.round(consumable.main_brush_work_time / 3600 / 3)), true);    // 300h
+            adapter.setState('consumable.side_brush', 100 - (Math.round(consumable.side_brush_work_time / 3600 / 2)), true);    // 200h
+            adapter.setState('consumable.filter', 100 - (Math.round(consumable.filter_work_time / 3600 / 1.5)), true);          // 150h
+            adapter.setState('consumable.sensors', 100 - (Math.round(consumable.sensor_dirty_time / 3600 / 0.3)), true);        // 30h
+            features.water_box && adapter.setState('consumable.water_filter', 100 - (Math.round(consumable.filter_element_work_time / 3600 )), true);          // 100h
         } else if (answer.id === last_id.get_clean_summary) {
             const summary = parseCleaningSummary(answer);
             adapter.setState('history.total_time', Math.round(summary.clean_time / 60), true);
@@ -751,97 +902,6 @@ function init() {
     });
 }
 
-
-function newGen(model) {
-    if (model === 'roborock.vacuum.s5' || fwNew) {
-        adapter.log.info('New generation or new fw detected, create new states');
-        adapter.setObjectNotExists('control.goTo', {
-            type: 'state',
-            common: {
-                name: 'Go to point',
-                type: 'string',
-                read: true,
-                write: true,
-                desc: 'let the vacuum go to a point on the map',
-            },
-            native: {}
-        });
-        adapter.setObjectNotExists('control.zoneClean', {
-            type: 'state',
-            common: {
-                name: 'Clean a zone',
-                type: 'string',
-                read: true,
-                write: true,
-                desc: 'let the vacuum go to a point and clean a zone',
-            },
-            native: {}
-        });
-        if (!adapter.config.enableResumeZone) {
-            adapter.setObjectNotExists('control.resumeZoneClean', {
-                type: 'state',
-                common: {
-                    name: "Resume paused zoneClean",
-                    type: "boolean",
-                    role: "button",
-                    read: false,
-                    write: true,
-                    desc: "resume zoneClean that has been paused before",
-                },
-                native: {}
-            });
-        } else {
-            adapter.deleteState(adapter.namespace, 'control', 'resumeZoneClean');
-        }
-    }
-    if (model === 'roborock.vacuum.s5') {
-        adapter.setObjectNotExists('control.carpet_mode', {
-            type: 'state',
-            common: {
-                name: 'Carpet mode',
-                type: 'boolean',
-                read: true,
-                write: true,
-                desc: 'Fanspeed is Max on carpets',
-            },
-            native: {}
-        });
-        adapter.extendObject('control.fan_power', {
-            common: {
-                max: 105,
-                states: {
-                    105: "MOP"
-                }
-            }
-        });
-    } else if (!model === 'roborock.vacuum.s5' && !fwNew) {
-        adapter.deleteState(adapter.namespace, 'control', 'goTo');
-        adapter.deleteState(adapter.namespace, 'control', 'zoneClean');
-        adapter.deleteState(adapter.namespace, 'control', 'carpet_mode');
-        adapter.deleteState(adapter.namespace, 'control', 'resumeZoneClean');
-    } else if (model === 'roborock.vacuum.m1s' || model === 'roborock.vacuum.s6') {
-        adapter.setObject('control.fan_power', {
-            type: 'state',
-            common: {
-                name: 'Suction power',
-                type: 'number',
-                role: 'level',
-                read: true,
-                write: true,
-                min: 101,
-                max: 104,
-                states: {
-                    101: 'QUIET',
-                    102: 'BALANCED',
-                    103: 'TURBO',
-                    104: 'MAXIMUM'
-                }
-            },
-            native: {}
-        });
-    }
-    return model;
-}
 
 function checkSetTimeDiff() {
     const now = Math.round(parseInt((new Date().getTime())) / 1000); //.toString(16)
