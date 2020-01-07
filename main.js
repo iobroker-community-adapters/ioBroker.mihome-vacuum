@@ -29,16 +29,198 @@ let clean_log_html_table = '';
 let logEntries = {};
 let logEntriesNew = {};
 let zoneCleanActive = false;
+
 // new features are initial false and shold be enabled, if result from robot is available
-let features= {
-    model : null,           // would be initialised in parseMiIO_info
-       goto: false,         // would be initialised in parseMiIO_info
-       zoneClean: false,    // would be initialised in parseMiIO_info
-       mob: false,          // would be initialised in parseMiIO_info
-    water_box: null,        // would be initialised in parseStatus
-    carpetMode: null,       // would be initialised in parseCarpetMode
-    roomMapping: null       // would be initialised in handleRoomMaping
+class FeatureManager {
+    
+    constructor(){
+        this.firmware = null
+        this.model = null           // would be initialised in parseMiIO_info
+        this.goto= false         // would be initialised in parseMiIO_info
+        this.zoneClean= false    // would be initialised in parseMiIO_info
+        this.mob= false          // would be initialised in parseMiIO_info
+        this.water_box= null        // would be initialised in parseStatus
+        this.carpetMode= null       // would be initialised in parseCarpetMode
+        this.roomMapping= null       // would be initialised in handleRoomMaping
+    }
+
+    init(){
+        //adapter.states
+        adapter.getState('info.device_model',function(err,state){
+            state && state.val && features.setModel(state.val);
+        });
+        adapter.getState('info.device_model',function(err,state){
+            state && state.val && features.setModel(state.val);
+        });
+        // we get miIO.info only, if the robot is connected to the internet, so we init with unavailable
+        adapter.setState('info.wifi_signal', "unavailable", true); 
+
+        sendMsg(com.get_carpet_mode.method) // test, if supported
+        setTimeout(sendMsg,3000,'get_room_mapping'); // test, if supported, but wait for extending 'control.fan_power'
+    }
+    
+    setModel(model){
+        if (this.model != model) {
+            adapter.setState('info.device_model', model, true);
+            this.model = model;
+            this.mob= (model === 'roborock.vacuum.s5' || model === 'roborock.vacuum.s6')
+
+            if (model === 'roborock.vacuum.m1s' || model === 'roborock.vacuum.s6') {
+                adapter.log.info('change states from State control.fan_power');
+                adapter.setObject('control.fan_power', {
+                    type: 'state',
+                    common: {
+                        name: 'Suction power',
+                        type: 'number',
+                        role: 'level',
+                        read: true,
+                        write: true,
+                        min: 101,
+                        max: 104,
+                        states: {
+                            101: 'QUIET',
+                            102: 'BALANCED',
+                            103: 'TURBO',
+                            104: 'MAXIMUM'
+                        }
+                    },
+                    native: {}
+                });
+            }
+            if (this.mob){ 
+                adapter.log.info('extend state mop for State control.fan_power');
+                setTimeout(adapter.extendObject,2000,'control.fan_power', {
+                    common: {
+                        max: 105,
+                        states: {
+                            105: "MOP"
+                        }
+                    }
+                }); // need time, until the new setting above
+            } 
+        } 
+    }
+
+    setFirmware(fw_ver){
+        if (this.firmware != fw_ver){
+            adapter.setState('info.device_fw', fw_ver, true);
+
+            let fw = fw_ver.split('_'); // Splitting the FW into [Version, Build] array.
+            if (parseInt(fw[0].replace(/\./g, ''), 10) > 339 || (parseInt(fw[0].replace(/\./g, ''), 10) === 339 && parseInt(fw[1], 10) >= 3194)) {
+                adapter.log.info('New generation or new fw detected, create new states goto and zoneclean');
+                this.goto = true;
+                this.zoneClean= true;
+            }
+            this.goto && adapter.setObjectNotExists('control.goTo', {
+                type: 'state',
+                common: {
+                    name: 'Go to point',
+                    type: 'string',
+                    read: true,
+                    write: true,
+                    desc: 'let the vacuum go to a point on the map',
+                },
+                native: {}
+            });
+            if (this.zoneClean){
+                adapter.setObjectNotExists('control.zoneClean', {
+                    type: 'state',
+                    common: {
+                        name: 'Clean a zone',
+                        type: 'string',
+                        read: true,
+                        write: true,
+                        desc: 'let the vacuum go to a point and clean a zone',
+                    },
+                    native: {}
+                });
+                if (!adapter.config.enableResumeZone) {
+                    adapter.setObjectNotExists('control.resumeZoneClean', {
+                        type: 'state',
+                        common: {
+                            name: "Resume paused zoneClean",
+                            type: "boolean",
+                            role: "button",
+                            read: false,
+                            write: true,
+                            desc: "resume zoneClean that has been paused before",
+                        },
+                        native: {}
+                    });
+                } else {
+                    adapter.deleteState(adapter.namespace, 'control', 'resumeZoneClean');
+                }
+            }
+        }
+    }
+
+    setCarpetMode(enabled){
+        if (this.carpetMode === null){
+            this.carpetMode= true
+            adapter.log.info('create state for carpet_mode');
+            adapter.setObjectNotExists('control.carpet_mode', {
+                type: 'state',
+                common: {
+                    name: 'Carpet mode',
+                    type: 'boolean',
+                    read: true,
+                    write: true,
+                    desc: 'Fanspeed is Max on carpets',
+                },
+                native: {}
+            });
+            reqParams.push(com.get_carpet_mode.method); // from now, it should be checked always 
+        }
+        adapter.setState('control.carpet_mode', enable === 1, true);
+    }
+
+    setWaterBox(water_box_status){
+        if (this.water_box === null){ // todo: check if filter_element_work_time depends on water_box_status and 
+            this.water_box = typeof water_box_status == "number";
+            if (this.water_box){
+                adapter.log.info('create states for water box');
+                adapter.setObjectNotExists('info.water_box', {
+                    type: "state",
+                    common: {
+                        name: "water box installed",
+                        type: "switch",
+                        role: "level",
+                        read: true,
+                        write: false
+                    },
+                    native: {}
+                });
+                adapter.log.info('create states for water box filter');
+                adapter.setObjectNotExists('consumable.water_filter', {
+                    type: "state",
+                    common: {
+                        name: "clean water Filter",
+                        type: "number",
+                        role: "level",
+                        read: true,
+                        write: false,
+                        unit: "%"
+                    },
+                    native: {}
+                });
+                adapter.setObjectNotExists('consumable.water_filter_reset', {
+                    type: "state",
+                    common: {
+                        name: "water filter reset",
+                        type: "boolean",
+                        role: "button",
+                        read: false,
+                        write: true,
+                        unit: "%"
+                    },
+                    native: {}
+                });            
+            }
+        }
+        this.water_box && adapter.setState('info.water_box', water_box_status === 1, true);
+    }
 }
+const features= new FeatureManager();
 
 const VALETUDO = function () {}; // init Valetudo
 
@@ -62,6 +244,9 @@ let reqParams = [
 // TODO: Translate
 const clean_log_html_attr = '<colgroup> <col width="50"> <col width="50"> <col width="80"> <col width="100"> <col width="50"> <col width="50"> </colgroup>';
 const clean_log_html_head = '<tr> <th>Datum</th> <th>Start</th> <th>Saugzeit</th> <th>Fläche</th> <th>???</th> <th>Ende</th></tr>';
+
+
+
 
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
@@ -374,126 +559,32 @@ function parseCleaningRecords(response) {
                "ap":{"ssid":"xxxxx","bssid":"xx:xx:xx:xx:xx:xx","rssi":-46},
                "netif":{"localIp":"192.168.1.154","mask":"255.255.255.0","gw":"192.168.1.1"},
                "model":"roborock.vacuum.s6","mac":"yy:yy:yy:yy:yy:yy","token":"xxxxxxxxxxxxxxxxxxxxxxxxx","life":59871}
-*/    
+   
 function parseMiIO_info(response){
-    if (features.model === null) {
-        features.model = response.result.model;
-        features.mob= (features.model === 'roborock.vacuum.s5' || features.model === 'roborock.vacuum.s6')
-        let fw = response.result.fw_ver.split('_'); // Splitting the FW into [Version, Build] array.
-        if (parseInt(fw[0].replace(/\./g, ''), 10) > 339 || (parseInt(fw[0].replace(/\./g, ''), 10) === 339 && parseInt(fw[1], 10) >= 3194)) {
-            adapter.log.info('New generation or new fw detected, create new states');
-            features.goto = true;
-            features.zoneClean= true;
-            features.mob= true;
-        }
-        features.goto && adapter.setObjectNotExists('control.goTo', {
-            type: 'state',
-            common: {
-                name: 'Go to point',
-                type: 'string',
-                read: true,
-                write: true,
-                desc: 'let the vacuum go to a point on the map',
-            },
-            native: {}
-        });
-        if (features.zoneClean){
-            adapter.setObjectNotExists('control.zoneClean', {
-                type: 'state',
-                common: {
-                    name: 'Clean a zone',
-                    type: 'string',
-                    read: true,
-                    write: true,
-                    desc: 'let the vacuum go to a point and clean a zone',
-                },
-                native: {}
-            });
-            if (!adapter.config.enableResumeZone) {
-                adapter.setObjectNotExists('control.resumeZoneClean', {
-                    type: 'state',
-                    common: {
-                        name: "Resume paused zoneClean",
-                        type: "boolean",
-                        role: "button",
-                        read: false,
-                        write: true,
-                        desc: "resume zoneClean that has been paused before",
-                    },
-                    native: {}
-                });
-            } else {
-                adapter.deleteState(adapter.namespace, 'control', 'resumeZoneClean');
-            }
-        }
-        if (features.model === 'roborock.vacuum.m1s' || features.model === 'roborock.vacuum.s6') {
-            adapter.setObject('control.fan_power', {
-                type: 'state',
-                common: {
-                    name: 'Suction power',
-                    type: 'number',
-                    role: 'level',
-                    read: true,
-                    write: true,
-                    min: 101,
-                    max: 104,
-                    states: {
-                        101: 'QUIET',
-                        102: 'BALANCED',
-                        103: 'TURBO',
-                        104: 'MAXIMUM'
-                    }
-                },
-                native: {}
-            });
-        }
-        features.mob && setTimeout(adapter.extendObject,2000,'control.fan_power', {
-            common: {
-                max: 105,
-                states: {
-                    105: "MOP"
-                }
-            }
-        }); // use time, if is new set above
-        sendMsg(com.get_carpet_mode.method) // test,if supported
-        setTimeout(sendMsg,3000,'get_room_mapping'); // test, if supported, but wait for extending 'control.fan_power'
-    } 
     return response.result;
 }
-
+*/ 
 /** Parses the answer of get_consumable
  *  response= {"result":[{"main_brush_work_time":11472,"side_brush_work_time":11472,"filter_work_time":11472,"filter_element_work_time":3223,"sensor_dirty_time":11253}]}
- */
+
 function parseConsumable(response){
     return response.result[0];
 }
+ */
 
-/** Parses the answer from get_carpet_mode */
+ /** Parses the answer from get_carpet_mode 
 function parseCarpetMode(response){
-    if (features.carpetMode === null){
-        features.carpetMode= true
-        adapter.setObjectNotExists('control.carpet_mode', {
-            type: 'state',
-            common: {
-                name: 'Carpet mode',
-                type: 'boolean',
-                read: true,
-                write: true,
-                desc: 'Fanspeed is Max on carpets',
-            },
-            native: {}
-        });
-        reqParams.push(com.get_carpet_mode.method); // from now, it should be checked always 
-    }
-    return response.result[0];
+    let result= response.result[0];
+    return result;
     //"result":[{"enable":1,"current_integral":450,"current_high":500,"current_low":400,"stall_time":10}]
 }
-
+*/
 
 /** Parses the answer of get_room_mapping */
 function handleRoomMaping(response){
     if (features.roomMapping === null){
         features.roomMapping= true;
+        adapter.log.info("add room handling")
         adapter.setObjectNotExists('rooms.loadRooms', {
             type: 'state',
             common: {
@@ -522,7 +613,8 @@ function handleRoomMaping(response){
                 role: 'button',
                 read: false,
                 write: true,
-                desc: 'Start Room Cleaning'
+                desc: 'Start Room Cleaning',
+                smartName: 'Room clean'
             },
             native: {}
         }
@@ -531,9 +623,11 @@ function handleRoomMaping(response){
             let extRoomId= roomObj._id.split(".").pop();
             room= rooms[extRoomId];
             if (!room){
+                adapter.log.info("room: " + extRoomId + ' does not longer mapped')
                 adapter.setState(roomObj._id + '.mapIndex', 'unused',true);
                 adapter.delObject(roomObj._id + '.roomClean');
             }else{
+                adapter.log.info("room: " + extRoomId + ' new mapped with ' + room)
                 adapter.setState(roomObj._id + '.mapIndex', room,true);
                 adapter.setObjectNotExists(roomObj._id + '.roomClean',roomClean);
                 delete rooms[extRoomId];
@@ -544,6 +638,7 @@ function handleRoomMaping(response){
                 if (roomObj){
                     adapter.setState(roomObj._id + '.mapIndex', rooms[extRoomId],true);
                 } else{
+                    adapter.log.info("create new room: " + extRoomId)
                     adapter.createChannel("rooms", extRoomId, function(err,roomObj){
                         adapter.setObjectNotExists(roomObj.id + '.mapIndex', {
                             type: 'state',
@@ -633,52 +728,11 @@ const errorTexts = {
 */
 function parseStatus(response) {
     response = response.result[0];
-    if (features.water_box === null){
-        features.water_box = typeof response.water_box_status == "number";
-        if (features.water_box){
-            adapter.setObjectNotExists('info.water_box', {
-                type: "state",
-                common: {
-                    name: "water box installed",
-                    type: "switch",
-                    role: "level",
-                    read: true,
-                    write: false
-                },
-                native: {}
-            });
-            adapter.setObjectNotExists('consumable.water_filter', {
-                type: "state",
-                common: {
-                    name: "clean water Filter",
-                    type: "number",
-                    role: "level",
-                    read: true,
-                    write: false,
-                    unit: "%"
-                },
-                native: {}
-            });
-            adapter.setObjectNotExists('consumable.water_filter_reset', {
-                type: "state",
-                common: {
-                    name: "water filter reset",
-                    type: "boolean",
-                    role: "button",
-                    read: false,
-                    write: true,
-                    unit: "%"
-                },
-                native: {}
-            });            
-        }
-    }
     response.dnd_enabled= response.dnd_enabled === 1;
     response.error_text= errorTexts[response.error_code];
     response.in_cleaning= response.in_cleaning === 1;
     response.map_present= response.map_present === 1;
     response.state_text= statusTexts[response.state];
-    response.water_box_status= response.water_box_status === 1;
     return response;
 }
 
@@ -732,18 +786,19 @@ function getStates(message) {
 
             adapter.setState('info.error', status.error_code, true);
             adapter.setState('info.dnd', status.dnd_enabled, true);
-            features.water_box && adapter.setState('info.water_box', status.water_box_status, true);
+            features.setWaterBox(status.water_box_status);
         } else if (answer.id === last_id['miIO.info']) {
-            const info= parseMiIO_info(answer);
-            adapter.setState('info.device_fw', info.fw_ver, true);
+            const info= answer.result //parseMiIO_info(answer);
+            features.setFirmware(info.fw_ver)
+            features.setModel(info.model)
             adapter.setState('info.wifi_signal', info.ap.rssi, true);
-            adapter.setState('info.device_model', info.model, true);
 
         } else if (answer.id === last_id.get_sound_volume) {
             adapter.setState('control.sound_volume', answer.result[0], true);
 
         } else if (answer.id === last_id.get_carpet_mode) {
-            adapter.setState('control.carpet_mode', parseCarpetMode(answer).enable === 1, true);
+            features.setCarpetMode(answer.result[0].enable)
+            
         } else if (answer.id === last_id.get_consumable) {
             const consumable= answer.result[0] //parseConsumable(answer)
             adapter.setState('consumable.main_brush', 100 - (Math.round(consumable.main_brush_work_time / 3600 / 3)), true);    // 300h
@@ -1119,12 +1174,13 @@ function main() {
             return;
         }
 
+        features.init()
+ 
         sendPing();
         pingInterval = setInterval(sendPing, adapter.config.pingInterval);
         paramPingInterval = setInterval(requestParams, adapter.config.param_pingInterval);
 
         adapter.subscribeStates('*');
-
 
     }
 
