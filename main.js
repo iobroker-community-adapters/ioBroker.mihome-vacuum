@@ -103,6 +103,7 @@ class FeatureManager {
 
     setFirmware(fw_ver){
         if (this.firmware != fw_ver){
+            this.firmware = fw_ver
             adapter.setState('info.device_fw', fw_ver, true);
 
             let fw = fw_ver.split('_'); // Splitting the FW into [Version, Build] array.
