@@ -35,6 +35,9 @@ let zoneCleanActive = false;
 let zoneCleanQueue = [];
 let timerManager = null
 
+const TIMER_DISABLED = -1
+const TIMER_SKIP = 0
+const TIMER_START = 2
 const weekDaysFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 const i18n = {
     notAvailable : "not available",
@@ -379,11 +382,11 @@ adapter.on('stateChange', function (id, state) {
             })
         } else if (command === 'multiRoomClean' || parent === 'timer') {
             if (parent === 'timer') {
-                adapter.setForeignState(id, state.val === 0 || state.val == -1 ? state.val : 1, true, function () {
-                    if (state.val !== 0) // skip
+                adapter.setForeignState(id, state.val === TIMER_SKIP || state.val == TIMER_DISABLED ? state.val : 1, true, function () {
+                    if (state.val !== TIMER_SKIP) // skip
                         timerManager.calcNextProcess()    
                 });
-                if (state.val != 'start') return
+                if (state.val != TIMER_START) return
             }
              // search for assigned roomObjs
             adapter.getForeignObjects(id,'state','rooms',function(err,states){
@@ -815,7 +818,13 @@ function getStates(message) {
         //const ans= answer.result;
         //adapter.log.info(answer.result.length);
         //adapter.log.info(answer['id']);
-
+        if (answer.error) {
+            let name= "unknown"
+            for (let i in last_id)
+                if (last_id[i] == answer.id)
+                    name= i
+            return adapter.log.error("[" + answer.id + "](" + name + ") -> " + answer.error.message)
+        }
         if (answer.id === last_id.get_status) {
             const status = parseStatus(answer);
             adapter.setState('info.battery', status.battery, true);
@@ -923,7 +932,7 @@ function getStates(message) {
             // invoke the callback from the sendTo handler
             const callback = sendCommandCallbacks[answer.id];
             if (typeof callback === 'function') callback(answer);
-        }
+        } 
     } catch (err) {
         adapter.log.debug('The answer from the robot is not correct! (' + err + ') ' + JSON.stringify(message));
     }
@@ -1385,12 +1394,17 @@ adapter.on('message', function (obj) {
             case 'cleanSegments':
                 if (!obj.message) return
                 if (zoneCleanActive){
-                    adapter.log.debug("should trigger cleaning segment " + obj.message + ", but is currently active. Add to queue")
+                    adapter.log.info("should trigger cleaning segment " + obj.message + ", but is currently active. Add to queue")
                     zoneCleanQueue.push(obj)
                 } else {
                     zoneCleanActive = true;
                     adapter.log.debug("trigger cleaning segment " + obj.message)
-                    sendCustomCommand('app_segment_clean',[obj.message])
+                    let map = obj.message
+                    if (typeof map == "string") {
+                        map = obj.message.split(",")
+                        for (let i in map) map[i]= parseInt(map[i],10)
+                    }
+                    sendCustomCommand('app_segment_clean',map)
                 }
                 return;
             case 'cleanRooms':
@@ -1639,7 +1653,7 @@ class TimerManager {
                 timerManager.calcNextProcess()
             } else {
                 adapter.log.info("start cleaning by timer " + this.nextTimerId)
-                adapter.setForeignState(this.nextTimerId, 'start', false, function (err, obj) {
+                adapter.setForeignState(this.nextTimerId, TIMER_START, false, function (err, obj) {
                     if (!obj) // obj not exist anymore, so we need recalc, otherwise it would be triggerd by stateChange
                         timerManager.calcNextProcess()
                 });
@@ -1678,8 +1692,11 @@ class TimerManager {
             }
             if (nextProcessTime != timerObj.common.nextProcessTime) {
                 let name = ''
-                for (let d in day)
-                    name += weekDaysFull[day[d]] + ' '
+                if (day.length > 0)
+                    for (let d in day)
+                        name += weekDaysFull[day[d]].substr(0,2) + ' '
+                else 
+                    name += weekDaysFull[day[0]] + ' '
                 name += "0".concat(hour).slice(-2) + ':' + "0".concat(minute).slice(-2)
                 timerObj.common.name = name
                 timerObj.common.nextProcessTime = nextProcessTime
@@ -1704,7 +1721,7 @@ class TimerManager {
                 adapter.getStates('timer.*', function (err, timerStates) {
                     let timerState
                     for (let t in timerStates) {
-                        if (timerStates[t].val != -1 && timers[t] < timerManager.nextProcessTime) {
+                        if (timerStates[t].val != TIMER_DISABLED && timers[t] < timerManager.nextProcessTime) {
                             timerManager.nextProcessTime = timers[t]
                             timerManager.nextTimerId = t;
                         }

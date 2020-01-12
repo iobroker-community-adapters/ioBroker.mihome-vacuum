@@ -198,7 +198,7 @@
         "robot_select": "robot",
         "valetudo_requestIntervall": 2000,
         "valetudo_MapsaveIntervall": 5000
-      },
+    },
     "instanceObjects": [
         {
             "_id": "info",

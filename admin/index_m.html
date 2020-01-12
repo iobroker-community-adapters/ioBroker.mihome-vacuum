@@ -147,11 +147,11 @@
 
                     for (t in timerObjs) {
                         let terms = t.split('.').pop().split('_')
-                        timer.push({
+                        terms.length > 2 && timer.push({
                             enabled: timerObjs[t].val != -1,
-                            minute:  parseInt(terms.pop(),10),
-                            hour: parseInt(terms.pop(),10),
-                            day: terms.pop().split(''),
+                            minute:  parseInt(terms[2],10),
+                            hour: parseInt(terms[1],10),
+                            day: terms[0].split(''),
                             room: timerObjs[t].room || []
                         })
                     }
@@ -348,15 +348,18 @@
                         type: 'state',
                         common: {
                             name: tn,
-                            type: 'string',
+                            type: 'number',
                             role: 'value',
                             read: true,
                             write: true,
+                            min: -1,
+                            max: 2,
                             desc: 'timer',
                             states: {
                                 "1": _("enabled"),
                                 "-1": _("disabled"),
-                                "0": _("Skip Timer")
+                                "0": _("Skip Timer"),
+                                "2": _("start now")
                             }
                         },
                         native: {}
