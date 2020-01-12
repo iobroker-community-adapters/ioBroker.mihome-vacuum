@@ -91,7 +91,7 @@ class FeatureManager {
             this.model = model;
             this.mob= (model === 'roborock.vacuum.s5' || model === 'roborock.vacuum.s6')
 
-            if (model === 'roborock.vacuum.m1s' || model === 'roborock.vacuum.s6') {
+            if (model === 'roborock.vacuum.m1s' || model === 'roborock.vacuum.s5' || model === 'roborock.vacuum.s6') {
                 adapter.log.info('change states from State control.fan_power');
                 adapter.setObject('control.fan_power', {
                     type: 'state',
@@ -102,12 +102,13 @@ class FeatureManager {
                         read: true,
                         write: true,
                         min: 101,
-                        max: 104,
+                        max: 106,
                         states: {
                             101: 'QUIET',
                             102: 'BALANCED',
                             103: 'TURBO',
-                            104: 'MAXIMUM'
+                            104: 'MAXIMUM',
+                            106: 'CUSTOM'       // setting for rooms will be used
                         }
                     },
                     native: {}
@@ -119,7 +120,7 @@ class FeatureManager {
                     common: {
                         max: 105,
                         states: {
-                            105: "MOP"
+                            105: "MOP"      // no vacuum, only mop
                         }
                     }
                 }); // need time, until the new setting above
