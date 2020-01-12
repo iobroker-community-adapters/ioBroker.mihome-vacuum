@@ -379,7 +379,7 @@ adapter.on('stateChange', function (id, state) {
             })
         } else if (command === 'multiRoomClean' || parent === 'timer') {
             if (parent === 'timer') {
-                adapter.setForeignState(id, state.val === 0 || state.val === -1 ? state.val : 1, true, function () {
+                adapter.setForeignState(id, state.val === 0 || state.val == -1 ? state.val : 1, true, function () {
                     if (state.val !== 0) // skip
                         timerManager.calcNextProcess()    
                 });
@@ -1714,7 +1714,7 @@ class TimerManager {
                         common: { name: i18n.nextTimer + ': ' + (timerManager.nextTimerId ? weekDaysFull[timerManager.nextProcessTime.getDay()] + ' ' + adapter.formatDate(timerManager.nextProcessTime, "hh:mm") : i18n.notAvailable) }
                     }
                     adapter.setObject('timer', timerFolder)
-                    adapter.log.debug("next Timer will run " + timerFolder.common.name)
+                    adapter.log.debug("set " + timerFolder.common.name)
                 })
             } catch (error) {
                 adapter.log.error('Could not calculate next timer ' + error)
