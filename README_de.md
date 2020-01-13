@@ -21,6 +21,8 @@ This adapter allows you control the Xiaomi vacuum cleaner.
     - [S50 Kommandos](#Komandos-des-S50)
 	        - [GoTo](#GoTo)
 			- [zoneClean](#zoneClean)
+            - [Räume](#Räume)
+            - [Timer](#Timer)
     - [Eigene Kommandos](#sende-eigene-kommandos)
     - [sendTo-Hook](#eigene-kommandos-per-sendto-schicken)
 - [Widget](#widget)
@@ -115,20 +117,21 @@ Beispiel:
 [24117,26005,25767,27205,1],[24320,24693,25970,25843,1]
 ```
 #### Räume
-neuere Saugerunterstützen mit der neuesten mit Home App die Definition von Räumen, siehe 
+neuere Sauger unterstützen mit der neuesten miHome App die Definition von Räumen, siehe 
 [Video](https://www.youtube.com/watch?v=vEiUZzoXfPg)
 
-Dabei hat jeder Raum in der aktuellen Karte einen Index.Dieser wird dann dem Raum aus der App zugewiesen.
+Dabei hat jeder Raum in der aktuellen Karte einen Index. Dieser wird dann dem Raum aus der App zugewiesen.
 Vom Roboter bekommen wir dann nur ein Mapping mit Raumnummer und Index.
 Der Adapter fragt diese Räume jedesmal beim Adapter start ab und erstellt für jeden Raum einen channel, der dann den aktuellen RaumIndex kennt. Manuell passiert dasselbe mit dem Button loadRooms.
-Dieser channel kann dann den ioBroker Räumen zugeordnet werden. Wenn dann der Button roomClean gedrück wird, wird der Index der Karte ermittelt und dieser dann an den Roboter geschickt, so dass der dann gezielt diesen Raum saugt. Vorher wird bei Einzelraum Saugung noch die FAN-Power eingestellt.
-Wenn man in der App die Möglichkeit zum Benennen der Räume noch nicht hat, gibt es noch die Möglicheit manuell einen solchen channel zu erzeugen indem man den Map Index angibt.
-Wenn man spontan mal mehrere Räume reinigen will, kann man das über multiRoomClean tun, indem man diesem Datenpunkt die ioBroker Räume zuweist und dann den Butten drückt.
+Dieser channel kann dann den ioBroker-Räumen zugeordnet werden. Wenn dann der Button roomClean gedrück wird, wird der Index der Karte ermittelt und dieser dann an den Roboter geschickt, so dass der dann gezielt diesen Raum saugt. Vorher wird bei Einzelraum Saugung noch die FAN-Power eingestellt.
+Wenn man in der App die Möglichkeit zum Benennen der Räume noch nicht hat, gibt es noch die Möglicheit manuell solche channel zu erzeugen indem man den Map Index angibt.
+Wenn man spontan mal mehrere Räume reinigen will, kann man das über multiRoomClean tun, indem man diesem Datenpunkt die ioBroker-Räume zuweist und dann den Butten drückt.
 
 #### Timer
-Sobald der Sauger die Raumfunktion (siehe oben) unterstützt, kann man auch Timer erstellen, die dann die entsprechenden Raumchannel antriggert, bzw. dessen mapIndexes ermittelt.
+Sobald der Sauger die Raumfunktion (siehe oben) unterstützt, kann man auch Timer erstellen, die dann die entsprechenden Raum-channel antriggert, bzw. dessen mapIndex ermittelt.
 Die Timer selber werden über den config Bereich erstellt, wird dann aber zu einem Datenpunkt. Dort kann jeder Timer dann aktiviert/deaktiviert werden oder auch einmalig übersprungen werden. Auch ein direkt Start ist möglich.
-Der Vorteil der ioBroker timer sind zum einen, dass die auch in der VIS angezeigt bzw. dort genutzt werden können und man kann den Roboter auch vom Internet trennen, da die Timer der App auch China getriggert werden.
+
+Der Vorteil der ioBroker timer sind zum einen, dass die auch in der VIS angezeigt bzw. dort genutzt werden können und der Roboter auch vom Internet getrennt werden, da die Timer der App aus China getriggert werden.
 
 ### Sende eigene Kommandos
 HINWEIS: Diese Funktion sollte nur von Experten genutzt werden, da durch falsche Kommandos der sauger zu Schaden kommen könnte
@@ -204,7 +207,7 @@ Die unterstützten Kommandos sind:
 | Bewegungskommando für Fernsteuerung absetzen | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | sequenceNumber muss sequentiell sein, Dauer ist in ms |
 | Fernsteuerungsfunktion beenden | `stopRemoteControl` | - keine - |  |
 | Raum/Räume saugen | `cleanRooms` | `rooms` | `rooms` ist ein komma separierter String mit enum.rooms.XXX |
-| Segment saugen | `cleanSegments` | `rooms` | `rooms`ist Array mit mapIndex oder komma separierter String mit mapIndex |
+| Segment saugen | `cleanSegments` | `rooms` | `rooms` ist Array mit mapIndex oder komma separierter String mit mapIndex |
 
 ## Widget
 Zur Zeit leider noch nicht fertig.
