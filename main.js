@@ -1638,7 +1638,7 @@ class RoomManager{
                     if (roomObj)
                         adapter.setState(roomObj._id + '.mapIndex', rooms[extRoomId], true);
                     else
-                        roomManager.createRoom(extRoomId, rooms[roomId])
+                        roomManager.createRoom(extRoomId, rooms[extRoomId])
                 })
             }
         })
