@@ -20,11 +20,14 @@
     "adapter for control of Xiaomi vacuum cleaner V1 and S5": "用于控制小米吸尘器V1和S5的适配器",
     "add a state for Alexa": "为Alexa添加状态",
     "additional settings": "其他设置",
+    "clean Room": "整理房间",
+    "clean water Filter": "净水过滤器",
     "connection settings": "连接设置",
     "day": "天",
     "disabled": "残障人士",
     "enabled": "已启用",
     "hour": "小时",
+    "load rooms from robot": "从机器人装载室",
     "minute": "分钟",
     "next timer": "下一个计时器",
     "not available": "无法使用",
@@ -32,5 +35,6 @@
     "same starttime of 2 timer not possible": "相同的2个计时器开始时间",
     "settings": "设置",
     "start now": "现在开始",
-    "weekDaysFull": "周日，周一，周二，周三，周四，周五，周六"
+    "water box installed": "水箱安装",
+    "water filter reset": "滤水器重置"
 }

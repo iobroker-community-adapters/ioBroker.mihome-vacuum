@@ -72,7 +72,6 @@
         }
     </style>
     <script type="text/javascript">
-        //var values = [];
         var namespace;
         var rooms = {}
 
@@ -123,7 +122,6 @@
 
             socket.emit('getForeignStates', namespace + "timer.*", function (err, timerObjs) {
                 let timer = []
-
                 socket.emit('getObjectView', 'system', 'enum', {
                     startkey: 'enum.rooms.',
                     endkey: 'enum.rooms.' + '\u9999'
@@ -160,137 +158,7 @@
             })
 
             onChange(false);
-
-
-            /* // what did this code do for us? I think, it is not needed?
-                        var namespace = adapter + '.' + instance + '.';
-            
-                        socket.emit('getObjectView', 'system', 'state', {
-                            startkey: namespace,
-                            endkey: namespace + '\u9999'
-                        }, function (err, res) {
-                            if (!err && res) {
-                                var _res = {};
-                                for (var i = 0; i < res.rows.length; i++) {
-                                    var obj = res.rows[i].value;
-                                    values.push({
-                                        name: obj._id.substring(namespace.length),
-                                        link: obj.native.link,
-                                        read: obj.common.read,
-                                        write: obj.common.write,
-                                        regex: obj.native.regex,
-                                        role: obj.common.role,
-                                        type: obj.common.type,
-                                        unit: obj.common.unit,
-                                        interval: obj.native.interval,
-                                        substitute: obj.native.substitute,
-                                        offset: obj.native.offset,
-                                        factor: obj.native.factor,
-                                        obj: obj
-                                    });
-                                }
-                            }
-            
-                            var newValues = JSON.parse(JSON.stringify(values));
-                            var __values2table;
-                            if (typeof values2table !== 'undefined') __values2table = values2table;
-                            __values2table = __values2table || _values2table;
-                            __values2table('values', newValues, onChange, function () {
-                                if (!newValues.length) {
-                                    $('.table-button-add').trigger('click');
-                                }
-            
-                                $('.values-input[data-name="name"]').change(function () {
-                                    var val = $(this).val();
-                                    var error = '';
-                                    if (!val) {
-                                        error = 'Empty names are not allowed';
-                                    } else if (val.indexOf(' ') !== -1) {
-                                        error = 'Spaces are not allowed';
-                                    }
-                                    if (error) {
-                                        $(this).addClass(error).attr('title', _(error));
-                                    } else {
-                                        $(this).removeClass('error').attr('title', '');
-                                    }
-                                });
-                                $('.values-input[data-name="type"]').change(function () {
-                                    var id = $(this).data('index');
-                                    var val = $(this).val();
-                                    if (val === 'number') {
-                                        $('.values-input[data-name="factor"][data-index="' + id + '"]')
-                                            .show();
-                                        $('.values-input[data-name="offset"][data-index="' + id + '"]')
-                                            .show();
-                                    } else {
-                                        $('.values-input[data-name="factor"][data-index="' + id + '"]')
-                                            .hide();
-                                        $('.values-input[data-name="offset"][data-index="' + id + '"]')
-                                            .hide();
-                                    }
-                                    if (val === 'boolean' || val === 'json') {
-                                        $('.values-input[data-name="unit"][data-index="' + id + '"]')
-                                            .hide();
-                                    } else {
-                                        $('.values-input[data-name="unit"][data-index="' + id + '"]')
-                                            .show();
-                                    }
-                                }).each(function () {
-                                    var id = $(this).data('index');
-                                    var val = $(this).val();
-                                    if (val === 'number') {
-                                        $('.values-input[data-name="factor"][data-index="' + id + '"]')
-                                            .show();
-                                        $('.values-input[data-name="offset"][data-index="' + id + '"]')
-                                            .show();
-                                    } else {
-                                        $('.values-input[data-name="factor"][data-index="' + id + '"]')
-                                            .hide();
-                                        $('.values-input[data-name="offset"][data-index="' + id + '"]')
-                                            .hide();
-                                    }
-                                    if (val === 'boolean' || val === 'json') {
-                                        $('.values-input[data-name="unit"][data-index="' + id + '"]')
-                                            .hide();
-                                    } else {
-                                        $('.values-input[data-name="unit"][data-index="' + id + '"]')
-                                            .show();
-                                    }
-            
-                                });
-                            });
-                        });
-            */
         }
-        /*// what did this code do for us? I think, it is not needed?
-        function processTasks(tasks, cb) {
-            if (!tasks || !tasks.length) {
-                cb && cb();
-                return;
-            }
-
-            var task = tasks.pop();
-
-            if (typeof task === 'object') {
-                socket.emit('setObject', task._id, task, function (err) {
-                    if (err) console.error(err);
-                    setTimeout(function () {
-                        processTasks(tasks, cb);
-                    }, 0);
-                });
-            } else {
-                socket.emit('delState', task, function (err) {
-                    if (err) console.error(err);
-                    socket.emit('delObject', task, function (err) {
-                        if (err) console.error(err);
-                        setTimeout(function () {
-                            processTasks(tasks, cb);
-                        }, 0);
-                    });
-                });
-            }
-        }
-        */
 
         function save(callback) {
             var obj = {};
@@ -320,27 +188,30 @@
                 timerList[name] = timer
             }
             socket.emit('getForeignStates', namespace + "timer.*", function (err, timerObjs) {
-                for (let t in timerObjs) {
-                    let timerObj = timerObjs[t];
-                    name = t.split(".").pop();
-                    timer = timerList[name];
-                    if (!timer) {
-                        socket.emit('delObject', t);
-                        for (let r in rooms)
-                            if (rooms[r].states.indexOf(t) >= 0)
-                                rooms[r].del.push(t);
-                    } else {
-                        if (!timer.enabled && timerObj.val != -1)
-                            socket.emit('setState', t, -1);
-                        for (let r in rooms)
-                            if (rooms[r].states.indexOf(t) >= 0) {
-                                if (timer.room.indexOf(t) == -1)
+                if (!err && timerObjs){
+                    for (let t in timerObjs) {
+                        let timerObj = timerObjs[t];
+                        name = t.split(".").pop();
+                        timer = timerList[name];
+                        if (!timer) {
+                            socket.emit('delObject', t);
+                            for (let r in rooms)
+                                if (rooms[r].states.indexOf(t) >= 0)
                                     rooms[r].del.push(t);
-                            } else if (timer.room.indexOf(t) >= 0)
-                                rooms[r].add.push(t);
-                        delete timerList[name];
+                        } else {
+                            if (!timer.enabled && timerObj.val != -1)
+                                socket.emit('setState', t, -1);
+                            for (let r in rooms)
+                                if (rooms[r].states.indexOf(t) >= 0) {
+                                    if (timer.room.indexOf(t) == -1)
+                                        rooms[r].del.push(t);
+                                } else if (timer.room.indexOf(t) >= 0)
+                                    rooms[r].add.push(t);
+                            delete timerList[name];
+                        }
                     }
                 }
+                
                 for (let tn in timerList) {
                     timer = timerList[tn]
                     let stateId = namespace + "timer." + tn

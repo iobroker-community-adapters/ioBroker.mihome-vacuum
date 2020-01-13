@@ -9,7 +9,7 @@
     "Resume paused zonecleaning with start button": "Zonenreinigung nach pausierung fortsetzen",
     "Saturday": "Samstag",
     "Send own commands": "Sende eigene Befehle",
-    "Skip Timer": "Timer überspringen",
+    "Skip Timer": "Timer aussetzen",
     "Sunday": "Sonntag",
     "Thursday": "Donnerstag",
     "Timer": "Timer",
@@ -20,11 +20,14 @@
     "adapter for control of Xiaomi vacuum cleaner V1 and S5": "Adapter zur Steuerung von Xiaomi Staubsauger V1 und S5",
     "add a state for Alexa": "Füge einen Status für Alexa hinzu",
     "additional settings": "zusätzliche Einstellungen",
+    "clean Room": "sauge Zimmer",
+    "clean water Filter": "säubere Wasser Filter",
     "connection settings": "Verbindungseinstellungen",
     "day": "Tag",
     "disabled": "deaktiviert",
     "enabled": "aktiviert",
     "hour": "Stunde",
+    "load rooms from robot": "Laderäume vom Roboter",
     "minute": "Minute",
     "next timer": "nächster Timer",
     "not available": "Nicht verfügbar",
@@ -32,5 +35,6 @@
     "same starttime of 2 timer not possible": "gleiche Startzeit von 2 Timer nicht möglich",
     "settings": "Einstellungen",
     "start now": "Jetzt anfangen",
-    "weekDaysFull": "Sonntag Montag Dienstag Mittwoch Donnerstag Freitag Samstag"
+    "water box installed": "Wischeinheit installiert",
+    "water filter reset": "Wasser Filter zurücksetzen"
 }

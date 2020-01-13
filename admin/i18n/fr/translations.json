@@ -20,11 +20,14 @@
     "adapter for control of Xiaomi vacuum cleaner V1 and S5": "adaptateur pour le contrôle de l'aspirateur Xiaomi V1 et S5",
     "add a state for Alexa": "ajouter un état pour Alexa",
     "additional settings": "paramètres additionnels",
+    "clean Room": "chambre propre",
+    "clean water Filter": "Filtre à eau propre",
     "connection settings": "paramètres de connexion",
     "day": "journée",
     "disabled": "désactivée",
     "enabled": "activée",
     "hour": "heure",
+    "load rooms from robot": "salles de chargement du robot",
     "minute": "minute",
     "next timer": "minuterie suivante",
     "not available": "indisponible",
@@ -32,5 +35,6 @@
     "same starttime of 2 timer not possible": "même heure de démarrage de 2 minuteries impossible",
     "settings": "paramètres",
     "start now": "commencez maintenant",
-    "weekDaysFull": "Dimanche Lundi Mardi Mercredi Jeudi Vendredi Samedi"
+    "water box installed": "boîte à eau installée",
+    "water filter reset": "réinitialisation du filtre à eau"
 }
