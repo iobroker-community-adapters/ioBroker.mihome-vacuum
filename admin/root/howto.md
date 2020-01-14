@@ -1,0 +1,1 @@
+Das Rooten beschränkt sich aktuell auf die Saugroboter V1 und S5/50 ebenso darf die aktulle Firmware beim S50 nicht größer as 1900 sein da hier ein Schutz mit eingebaut wurde, dass man keine kleiner FW flashen kann (hier muss dann ggf erst einmal auf Werkseinst ellung resetten werden).
