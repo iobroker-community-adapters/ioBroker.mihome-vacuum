@@ -831,7 +831,7 @@ function getStates(message) {
             }
         } else if (answer.id == last_id.get_room_mapping) {
             if (!roomManager)
-                roomManager= new roomManager()
+                roomManager= new RoomManager()
             roomManager.processRoomMaping(answer);
 
         } else if (answer.id in sendCommandCallbacks) {
@@ -1709,7 +1709,7 @@ class TimerManager {
     }
 
     // calculate the nexttime, when the timer (state) should running
-    _calcNextProcessTime(timerObj, now) {
+    _calcNextProcessTime(timerObj, now, onlyCalc) {
         let nextProcessTime = timerObj.common.nextProcessTime ? new Date(timerObj.common.nextProcessTime) : 0
         if (!nextProcessTime || nextProcessTime < now) {
             let terms = timerObj._id.split('.').pop().split('_')
@@ -1737,12 +1737,12 @@ class TimerManager {
                 }
                 nextProcessTime.setDate(now.getDate() + dayDiff)
             }
-            if (nextProcessTime != timerObj.common.nextProcessTime) {
+            if ((nextProcessTime != timerObj.common.nextProcessTime) && !onlyCalc) {
                 let name = ''
                 if (day.length > 0)
                     for (let d in day)
-                        name += weekDaysFull[day[d]].substr(0,2) + ' '
-                else 
+                        name += weekDaysFull[day[d]].substr(0, 2) + ' '
+                else
                     name += weekDaysFull[day[0]] + ' '
                 name += "0".concat(hour).slice(-2) + ':' + "0".concat(minute).slice(-2)
                 timerObj.common.name = name
@@ -1763,15 +1763,22 @@ class TimerManager {
             try {
                 let timers = {}
                 for (let t in timerObjects) {
-                    timers[timerObjects[t]._id] = timerManager._calcNextProcessTime(timerObjects[t], now)
+                    timers[timerObjects[t]._id] = {
+                        obj: timerObjects[t],
+                        time: timerManager._calcNextProcessTime(timerObjects[t], now)
+                    }
                 }
                 adapter.getStates('timer.*', function (err, timerStates) {
                     let timerState
                     for (let t in timerStates) {
-                        if (timerStates[t].val == TIMER_ENABLED && timers[t] < timerManager.nextProcessTime) {
-                            timerManager.nextProcessTime = timers[t]
-                            timerManager.nextTimerId = t;
-                        }
+                        if (timerStates[t].val != TIMER_DISABLED) {
+                            if (timerStates[t].val == TIMER_SKIP)
+                                timers[t].time = timerManager._calcNextProcessTime(timers[t].obj, new Date(timers[t].time.setMinutes(1)),true)
+                            if (timers[t].time < timerManager.nextProcessTime) {
+                                timerManager.nextProcessTime = timers[t].time
+                                timerManager.nextTimerId = t;
+                            }
+                        } 
                     }
                     let timerFolder = {
                         id: adapter.namespace + '.timer', type: 'channel', native: {},
