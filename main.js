@@ -1721,21 +1721,24 @@ class TimerManager {
             else {
                 nextProcessTime = new Date(now)
                 nextProcessTime.setHours(hour, minute, 0, 0)
-                let nowDay = now.getDay();
+                if (hour < now.getHours() || (hour == now.getHours() && minute < now.getMinutes()))
+                    nextProcessTime.setDate(nextProcessTime.getDate() + 1)
+                let nowDay = nextProcessTime.getDay();
                 let dayDiff = -99
+                
                 for (let i = day.length - 1; i >= 0 && day[i] >= nowDay; i--)
                     dayDiff = day[i] - nowDay;
                 if (dayDiff < 0)
                     dayDiff = (day[0] - nowDay) + 7
-                else if (dayDiff == 0) {
+                /*else if (dayDiff == 0) {
                     if (hour < now.getHours())
                         dayDiff++
                     else if (hour == now.getHours()) {
                         if (minute < now.getMinutes())
                             dayDiff++
                     }
-                }
-                nextProcessTime.setDate(now.getDate() + dayDiff)
+                }*/
+                dayDiff && nextProcessTime.setDate(nextProcessTime.getDate() + dayDiff)
             }
             if ((nextProcessTime != timerObj.common.nextProcessTime) && !onlyCalc) {
                 let name = ''
