@@ -418,7 +418,10 @@ adapter.on('stateChange', function (id, state) {
                     let rooms= ""
                     for ( let r in states[id].enums)
                         rooms += r
-                    rooms.length > 0 && adapter.sendTo(adapter.namespace, "cleanRooms",rooms)
+                    if (rooms.length > 0)
+                        adapter.sendTo(adapter.namespace, "cleanRooms", rooms)
+                    else
+                        adapter.log.warn("no room found for " + id)
                 }
             })
         } else if (command === 'roomFanPower'){
@@ -1710,6 +1713,7 @@ class TimerManager {
                 adapter.log.info("timer was to old, skipped")
                 timerManager.calcNextProcess()
             } else {
+                adapter.log.debug("timmer will trigger soon...")
                 this.nextProcessTime = new Date(this.nextProcessTime.getTime() + 3600000);
                 setTimeout(function () {
                     adapter.log.info("start cleaning by timer " + timerManager.nextTimerId)
