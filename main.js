@@ -1705,15 +1705,19 @@ class TimerManager {
 
     check() {
         if (this.nextProcessTime > 0 && this.nextProcessTime < new Date()) {
-            if ((new Date() - this.nextProcessTime) > 3600000) {
+            let diff = (new Date() - this.nextProcessTime)
+            if (diff > 3600000) {
                 adapter.log.info("timer was to old, skipped")
                 timerManager.calcNextProcess()
             } else {
-                adapter.log.info("start cleaning by timer " + this.nextTimerId)
-                adapter.setForeignState(this.nextTimerId, TIMER_START, false, function (err, obj) {
-                    if (!obj) // obj not exist anymore, so we need recalc, otherwise it would be triggerd by stateChange
-                        timerManager.calcNextProcess()
-                });
+                this.nextProcessTime = new Date(this.nextProcessTime.getTime() + 3600000);
+                setTimeout(function () {
+                    adapter.log.info("start cleaning by timer " + timerManager.nextTimerId)
+                    adapter.setForeignState(timerManager.nextTimerId, TIMER_START, false, function (err, obj) {
+                        if (!obj) // obj not exist anymore, so we need recalc, otherwise it would be triggerd by stateChange
+                            timerManager.calcNextProcess()
+                    });
+                }, adapter.config.param_pingInterval - diff)
             }
         }
     }
@@ -1788,6 +1792,7 @@ class TimerManager {
                         id: adapter.namespace + '.timer', type: 'channel', native: {},
                         common: { name: i18n.nextTimer + ': ' + (timerManager.nextTimerId ? weekDaysFull[timerManager.nextProcessTime.getDay()] + ' ' + adapter.formatDate(timerManager.nextProcessTime, "hh:mm") : i18n.notAvailable) }
                     }
+                    timerManager.nextProcessTime = new Date(timerManager.nextProcessTime.getTime() - adapter.config.param_pingInterval)
                     adapter.setObject('timer', timerFolder)
                     adapter.log.info("set " + timerFolder.common.name)
                 })
