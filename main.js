@@ -11,9 +11,19 @@ const dgram = require('dgram');
 const MiHome = require(__dirname + '/lib/mihomepacket');
 const com = require(__dirname + '/lib/comands');
 global.systemDictionary = {}
-require(__dirname + '/admin/words.js')
+require(__dirname + '/admin/words.js')   
 
-const ValetudoHelper = require(__dirname + '/lib/ValetudoHelper');
+let ValetudoHelper = {
+    load: function (callback) {
+        try {
+            ValetudoHelper = require(__dirname + '/lib/ValetudoHelper')
+            return true
+        } catch (error) {
+            adapter.log.error(error)
+            return false
+        }
+    }
+} 
 
 const server = dgram.createSocket('udp4');
 
@@ -1463,7 +1473,7 @@ VALETUDO.MAPSAFEINTERVALL = 5000;
 
 
 VALETUDO.Init = function () {
-    if (this.ENABLED) {
+    if (this.ENABLED && ValetudoHelper.load()){
         adapter.setObjectNotExists('valetudo.map64', {
             type: 'state',
             common: {
@@ -1725,19 +1735,10 @@ class TimerManager {
                     nextProcessTime.setDate(nextProcessTime.getDate() + 1)
                 let nowDay = nextProcessTime.getDay();
                 let dayDiff = -99
-                
                 for (let i = day.length - 1; i >= 0 && day[i] >= nowDay; i--)
                     dayDiff = day[i] - nowDay;
                 if (dayDiff < 0)
                     dayDiff = (day[0] - nowDay) + 7
-                /*else if (dayDiff == 0) {
-                    if (hour < now.getHours())
-                        dayDiff++
-                    else if (hour == now.getHours()) {
-                        if (minute < now.getMinutes())
-                            dayDiff++
-                    }
-                }*/
                 dayDiff && nextProcessTime.setDate(nextProcessTime.getDate() + dayDiff)
             }
             if ((nextProcessTime != timerObj.common.nextProcessTime) && !onlyCalc) {
