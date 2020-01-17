@@ -1312,7 +1312,7 @@ adapter.on('message', function (obj) {
                 sendCustomCommand('app_spot');
                 return;
             case 'cleanSegments':
-                if (!obj.message) return
+                if (!obj.message) return adapter.log.warn("cleanSegments needs paramter mapIndex")
                 if (zoneCleanActive){
                     adapter.log.info("should trigger cleaning segment " + obj.message + ", but is currently active. Add to queue")
                     zoneCleanQueue.push(obj)
@@ -1330,7 +1330,8 @@ adapter.on('message', function (obj) {
                 return;
             case 'cleanRooms':
                 let rooms= obj.message // comma separated String with enum.rooms.XXX
-                rooms && adapter.getForeignObjects(adapter.namespace + '.rooms.*.mapIndex', 'state', 'rooms',function(err,states){
+                if (!rooms) return adapter.log.warn("cleanRooms needs paramter ioBroker room-id's")
+                adapter.getForeignObjects(adapter.namespace + '.rooms.*.mapIndex', 'state', 'rooms', function (err, states) {
                     if (states){
                         let mapIndex= [];
                         for ( let stateId in states){
@@ -1350,8 +1351,10 @@ adapter.on('message', function (obj) {
                                 }
                                 adapter.sendTo(adapter.namespace, "cleanSegments",mapIndex.join(','))
                             })
-                        }
-                    }
+                        } else
+                            adapter.log.warn('cleanRooms found no mapIndex for ' + rooms)
+                    } else
+                        adapter.log.warn("cleanRooms found no room-channel with mapIndex")
                 });
                 return;
             case 'pause':

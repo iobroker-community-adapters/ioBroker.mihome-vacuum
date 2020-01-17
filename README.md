@@ -209,7 +209,7 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
-### ???? (2020-01-)
+### 1.10.0 (2020-01-17)
 * (dirkhe) added room handling
 * (dirkhe) added Timer 
 * (dirkhe) changed featurehandling 

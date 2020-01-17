@@ -218,7 +218,7 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
-### ???? (2020-01-)
+### 1.10.0 (2020-01-17)
 * (dirkhe) Raumhandling hinzugefügt
 * (dirkhe) Timer hinzugefügt
 * (dirkhe) Featurehandling angepasst

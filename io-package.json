@@ -1,8 +1,11 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "1.9.1",
+        "version": "1.10.0",
         "news": {
+            "1.10.0": {
+                "en": "added room handling and timer and changed featurehandling"
+            },
             "1.1.6": {
                 "en": "Added fan speed for MOP (S50+)",
                 "de": "Saugleistung für Wischmodus hinzugefügt (S50+)",
