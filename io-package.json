@@ -4,7 +4,16 @@
         "version": "1.10.0",
         "news": {
             "1.10.0": {
-                "en": "added room handling and timer and changed featurehandling"
+                "en": "added room handling and timer and changed featurehandling",
+                "de": "Raumhandhabung und Timer hinzugefügt und das Featurehandling geändert",
+                "ru": "добавлена ​​обработка комнаты и таймера, а также изменена обработка функций",
+                "pt": "manipulação de sala e temporizador adicionados e manipulação de recursos",
+                "nl": "kamerafhandeling en timer toegevoegd en functiehandling gewijzigd",
+                "fr": "ajout de la gestion de la pièce et de la minuterie et modification de la gestion des fonctionnalités",
+                "it": "aggiunta gestione della stanza e timer e modifica delle funzioni",
+                "es": "Se agregó manejo de sala y temporizador y cambio de manejo de características",
+                "pl": "dodano obsługę pokoju i timera oraz zmieniono obsługę funkcji",
+                "zh-cn": "添加了房间处理和计时器并更改了功能处理"
             },
             "1.1.6": {
                 "en": "Added fan speed for MOP (S50+)",
