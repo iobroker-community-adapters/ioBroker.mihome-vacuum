@@ -982,7 +982,7 @@ function enabledVoiceControl() {
 //create default states
 function init() {
     adapter.getForeignObject('system.config', (err, systemConfig) => {
-        if (systemDictionary.Sunday[systemConfig.common.language]) {
+        if (systemConfig && systemConfig.common && systemConfig.common.language && systemDictionary.Sunday[systemConfig.common.language]) {
             userLang = systemConfig.common.language
             for (let i in weekDaysFull)
                 weekDaysFull[i] = systemDictionary[weekDaysFull[i]][userLang]
