@@ -1362,7 +1362,7 @@ adapter.on('message', function (obj) {
                             map = obj.message.split(",")
                         for (let i in map) {
                             map[i] = parseInt(map[i], 10);
-                            if (!isNaN(map[i]))
+                            if (isNaN(map[i]))
                                 delete map[i];
                         }
                     }
