@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "1.10.1",
+        "version": "1.10.2",
         "news": {
             "1.10.1": {
                 "en": "added zone as room handling + timer can directly trigger room channels",
@@ -162,16 +162,16 @@
         },
         "title": "mihome-vacuum",
         "titleLang": {
-            "en": "Xiaomi Vacuum Cleaner control for v1 and s5",
-            "de": "Xiaomi Staubsaugersteuerung für v1 und s5",
-            "ru": "Управление пылесосом Xiaomi для v1 и s5",
-            "pt": "Controle de aspirador de pó Xiaomi para v1 e s5",
-            "nl": "Xiaomi Stofzuigerbediening voor v1 en s5",
-            "fr": "Xiaomi Vacuum Cleaner contrôle pour v1 et s5",
-            "it": "Controllo Xiaomi Aspirapolvere per v1 e s5",
-            "es": "Control de aspiradora Xiaomi para v1 y s5",
-            "pl": "Xiaomi Vacuum Cleaner do kontroli v1 i s5 ",
-            "zh-cn": "小米吸尘器控制v1和s5"
+            "en": "control of Xiaomi/Roborock vacuum cleaner",
+            "de": "Steuerung des Staubsaugers Xiaomi / Roborock",
+            "ru": "управление пылесосом Xiaomi / Roborock",
+            "pt": "controle do aspirador Xiaomi / Roborock",
+            "nl": "bediening van Xiaomi / Roborock stofzuiger",
+            "fr": "contrôle de l'aspirateur Xiaomi / Roborock",
+            "it": "controllo dell'aspirapolvere Xiaomi / Roborock",
+            "es": "control de la aspiradora Xiaomi / Roborock",
+            "pl": "kontrola odkurzacza Xiaomi / Roborock",
+            "zh-cn": "小米/罗伯克吸尘器的控制"
         },
         "desc": {
             "en": "This adapter allows control Xiaomi vacuum cleaner",
