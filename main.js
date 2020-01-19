@@ -53,6 +53,8 @@ const i18n = {
     nextTimer: "next timer",
     loadRooms: "load rooms from robot",
     cleanRoom: "clean Room",
+    cleanMultiRooms: "clean assigned rooms",
+    addRoom: "insert map Index or zone coordinates",
     waterBox_installed: "water box installed",
     waterBox_filter: "clean water Filter",
     waterBox_filter_reset: "water filter reset"
@@ -393,18 +395,17 @@ adapter.on('stateChange', function (id, state) {
         } else if (command === 'addRoom') {
             if (typeof state.val == "number")
                 roomManager.createRoom("manual_" + state.val, state.val)
-            adapter.setForeignState(id, 'insert map Index', true);
+            else {
+                let terms = state.val.match(/((?:[0-9]+\,){3,3}[0-9]+)(\,[0-9]+)?/)
+                if (terms)
+                    roomManager.createRoom("manual_" + terms[1].replace(/,/g,'_'), '[' + terms[1] + (terms[2] || ',1') + ']')
+                else 
+                    adapter.log.warn('invalid input for addRoom, use index of map or coordinates like 1111,2222,3333,4444')
+            }
+            adapter.setForeignState(id, '', true);
 
-        } else if (command === 'roomClean'){
-            adapter.getState(id.replace('roomClean', 'mapIndex'),function(err,objState){
-                if (objState && parseInt(objState.val,10) != isNaN){
-                    adapter.getState(id.replace('roomClean', 'roomFanPower'),function(err,fanPower){
-                        adapter.setState("control.fan_power",fanPower.val);
-                        adapter.sendTo(adapter.namespace, "cleanSegments",objState.val)
-                    })
-                } else
-                    adapter.log.error("could not clean " + id + ", because mapIndex is invalid")
-            })
+        } else if (command === 'roomClean') {
+            roomManager.cleanRooms([id.replace("roomClean", "mapIndex")]);
         } else if (command === 'multiRoomClean' || parent === 'timer') {
             if (parent === 'timer') {
                 adapter.setForeignState(id, (state.val == TIMER_SKIP || state.val == TIMER_DISABLED) ? state.val : TIMER_ENABLED, true, function () {
@@ -412,15 +413,24 @@ adapter.on('stateChange', function (id, state) {
                 });
                 if (state.val != TIMER_START) return
             }
-             // search for assigned roomObjs
+             // search for assigned roomObjs or id on timer
             adapter.getForeignObjects(id,'state','rooms',function(err,states){
-                if (states){
-                    let rooms= ""
-                    for ( let r in states[id].enums)
+                if (states) {
+                    let mapIndex = [];
+                    if (states[id].native.channels) {
+                        for (let i in states[id].native.channels)
+                            mapIndex.push(adapter.namespace.concat('.rooms.',states[id].native.channels[i],'.mapIndex'))
+                    } 
+                    let rooms = ""
+                    for (let r in states[id].enums)
                         rooms += r
-                    if (rooms.length > 0)
-                        adapter.sendTo(adapter.namespace, "cleanRooms", rooms)
-                    else
+                    if (rooms.length > 0) {
+                        roomManager.findMapIndexByRoom(rooms, function (states) {
+                            roomManager.cleanRooms(mapIndex.concat(states))
+                        })
+                    } else if (mapIndex.length > 0) {
+                        roomManager.cleanRooms(mapIndex);
+                    } else
                         adapter.log.warn("no room found for " + id)
                 }
             })
@@ -1320,42 +1330,24 @@ adapter.on('message', function (obj) {
                     zoneCleanActive = true;
                     adapter.log.debug("trigger cleaning segment " + obj.message)
                     let map = obj.message
-                    if (typeof map == "string") {
-                        map = obj.message.split(",")
-                        for (let i in map) map[i]= parseInt(map[i],10)
-                    } else if (typeof map == "number")
-                        map= [map]
-                    sendCustomCommand('app_segment_clean',map)
+                    if (typeof map == "number")
+                        map = [map]
+                    else {
+                        if (typeof map == "string") 
+                            map = obj.message.split(",")
+                        for (let i in map) {
+                            map[i] = parseInt(map[i], 10);
+                            if (!isNaN(map[i]))
+                                delete map[i];
+                        }
+                    }
+                    //todo prod sendCustomCommand('app_segment_clean',map)
                 }
                 return;
             case 'cleanRooms':
                 let rooms= obj.message // comma separated String with enum.rooms.XXX
                 if (!rooms) return adapter.log.warn("cleanRooms needs paramter ioBroker room-id's")
-                adapter.getForeignObjects(adapter.namespace + '.rooms.*.mapIndex', 'state', 'rooms', function (err, states) {
-                    if (states){
-                        let mapIndex= [];
-                        for ( let stateId in states){
-                            for ( let r in states[stateId].enums)
-                                if (rooms.indexOf(r) >= 0)
-                                    mapIndex.push(stateId)
-                        }
-                        if (mapIndex.length == 1){ // trigger button, because than the fan_power will also set
-                            adapter.setForeignState(mapIndex[0].replace('.mapIndex','.roomClean'), true, false);
-                        } else if (mapIndex.length > 0){
-                            adapter.getForeignStates(mapIndex, function(err,states){
-                                mapIndex= [];
-                                for ( let stateId in states){
-                                    let val= parseInt(states[stateId].val,10)
-                                    if (val != NaN)
-                                        mapIndex.push(val)
-                                }
-                                adapter.sendTo(adapter.namespace, "cleanSegments",mapIndex.join(','))
-                            })
-                        } else
-                            adapter.log.warn('cleanRooms found no mapIndex for ' + rooms)
-                    } else
-                        adapter.log.warn("cleanRooms found no room-channel with mapIndex")
-                });
+                roomManager.findMapIndexByRoom(rooms, roomManager.cleanRooms)
                 return;
             case 'pause':
                 sendCustomCommand('app_pause');
@@ -1563,88 +1555,88 @@ VALETUDO._MapPoll = function () {
 }
 
 //------------------------------------------------------Room Section
-class RoomManager{
+class RoomManager {
     constructor() {
         this.stateRoomClean = {
-            type: 'state',
+            type: "state",
             common: {
                 name: i18n.cleanRoom,
-                type: 'boolean',
-                role: 'button',
+                type: "boolean",
+                role: "button",
                 read: false,
                 write: true,
-                desc: 'Start Room Cleaning',
+                desc: "Start Room Cleaning",
                 smartName: i18n.cleanRoom
             },
             native: {}
-        }    
+        };
         if (features.roomMapping === null) {
             features.roomMapping = true;
-            adapter.log.info("add room handling")
-            adapter.setObjectNotExists('rooms.loadRooms', {
-                type: 'state',
+            adapter.log.info("add room handling");
+            adapter.setObject("rooms.loadRooms", {
+                type: "state",
                 common: {
                     name: i18n.loadRooms,
                     type: "boolean",
                     role: "button",
                     read: false,
                     write: true,
-                    desc: "loads id's from stored rooms",
+                    desc: "loads id's from stored rooms"
                 },
                 native: {}
             });
-            adapter.setObjectNotExists('rooms.multiRoomClean', {
-                type: 'state',
+            adapter.setObject("rooms.multiRoomClean", {
+                type: "state",
                 common: {
-                    name: "clean assigned rooms",
+                    name: i18n.cleanMultiRooms,
                     type: "boolean",
                     role: "button",
                     read: false,
                     write: true,
-                    desc: "clean all rooms, which are connected to this datapoint",
+                    desc: "clean all rooms, which are connected to this datapoint"
                 },
                 native: {}
             });
-            adapter.setObjectNotExists('rooms.addRoom', {
-                type: 'state',
+            adapter.setObject("rooms.addRoom", {
+                type: "state",
                 common: {
-                    name: "add manual room map Index",
-                    type: "number",
+                    name: i18n.addRoom,
+                    type: "string",
+                    role: "value",
                     read: true,
                     write: true,
-                    desc: "insert map index from for room",
+                    desc: "add roos manual with map Index or zone coordinates"
                 },
-                native: {}
-            }, function (err, obj) {
-                obj && adapter.setForeignState(obj.id, 'insert map Index', true);
-            });
-            if (!timerManager)
-                timerManager = new TimerManager()
-        }
+                    native: {}
+                }, function (err, obj) {
+                    obj && adapter.setForeignState(obj.id, "insert map Index", true);
+            })
+        };
+        if (!timerManager) timerManager = new TimerManager();
     }
 
-/** Parses the answer of get_room_mapping */
+    /** Parses the answer of get_room_mapping */
     processRoomMaping(response) {
-        const rooms = {}
+        const rooms = {};
         let room;
         for (let r in response.result) {
-            room = response.result[r];
-            rooms[room[1]] = room[0];
+        room = response.result[r];
+        rooms[room[1]] = room[0];
         }
-        adapter.getChannelsOf("rooms", function (err, roomObjs) {
+        adapter.getChannelsOf("rooms", function(err, roomObjs) {
             for (let r in roomObjs) {
                 let roomObj = roomObjs[r];
                 let extRoomId = roomObj._id.split(".").pop();
                 if (extRoomId.indexOf("manual_") == -1) {
                     room = rooms[extRoomId];
                     if (!room) {
-                        adapter.log.info("room: " + extRoomId + ' not mapped')
-                        adapter.setState(roomObj._id + '.mapIndex', i18n.notAvailable, true);
-                        adapter.delObject(roomObj._id + '.roomClean');
+                        adapter.log.info("room: " + extRoomId + " not mapped");
+                        adapter.setState(roomObj._id + ".mapIndex", i18n.notAvailable, true );
+                        adapter.delObject(roomObj._id + ".roomClean");
                     } else {
-                        adapter.log.info("room: " + extRoomId + ' mapped with index ' + room)
-                        adapter.setState(roomObj._id + '.mapIndex', room, true);
-                        adapter.setObjectNotExists(roomObj._id + '.roomClean', roomManager.stateRoomClean);
+                        adapter.log.info("room: " + extRoomId + " mapped with index " + room)
+                        adapter.setState(roomObj._id + ".mapIndex", room, true);
+                        adapter.setObjectNotExists(roomObj._id + ".roomClean", roomManager.stateRoomClean);
                         delete rooms[extRoomId];
                     }
                 }
@@ -1652,46 +1644,115 @@ class RoomManager{
             for (let extRoomId in rooms) {
                 adapter.getObject("rooms." + extRoomId, function (err, roomObj) {
                     if (roomObj)
-                        adapter.setState(roomObj._id + '.mapIndex', rooms[extRoomId], true);
-                    else
-                        roomManager.createRoom(extRoomId, rooms[extRoomId])
-                })
+                        adapter.setState(roomObj._id + ".mapIndex", rooms[extRoomId], true);
+                    else roomManager.createRoom(extRoomId, rooms[extRoomId]);
+                });
             }
-        })
+        });
+    }
+
+    cleanRooms(mapIndexStates) {
+        adapter.getForeignStates(mapIndexStates, function (err, states) {
+            let mapIndex = [];
+            let zones = [];
+            if (states) {
+                let stateId
+                for (let stateId in states) {
+                    if (stateId.indexOf('.mapIndex') > 0) {
+                        let val = parseInt(states[stateId].val, 10);
+                        if (!isNaN(val))
+                            mapIndex.indexOf(val) == -1 && mapIndex.push(val);
+                        else if (states[stateId].val[0] == "[")
+                             zones.indexOf(states[stateId].val) == -1 && zones.push(states[stateId].val)
+                        else
+                            adapter.log.error("could not clean " + stateId + ", because mapIndex/zone is invalid -> " + states[stateId])
+                    } else
+                        adapter.log.error("state must be .mapIndex for roomManager.cleanRooms " + stateId)
+                }
+                if (mapIndexStates.length == 1) {
+                    adapter.getState(mapIndexStates[0].replace('.mapIndex', '.roomFanPower'), function (err, fanPower) {
+                        adapter.setState("control.fan_power", fanPower.val);
+                    })
+                }
+                if (mapIndex.length > 0)
+                    adapter.sendTo(adapter.namespace, "cleanSegments", mapIndex.join(","))
+                if (zones.length > 0) {
+                    adapter.log.info("Starting zone cleaning " + JSON.stringify(zones))
+                    //todo prod sendMsg("app_zoned_clean", zones);
+                    zoneCleanActive = true;
+                }
+            }
+        });
+    }
+
+    findMapIndexByRoom(rooms, callback) {
+        adapter.getForeignObjects(adapter.namespace + '.rooms.*.mapIndex', 'state', 'rooms', function (err, states) {
+            if (states){
+                let mapIndexStates= [];
+                for ( let stateId in states){
+                    for ( let r in states[stateId].enums)
+                        if (rooms.indexOf(r) >= 0 && stateId.indexOf('.mapIndex')) // bug in js-controller 1.5, that not only mapIndex in states
+                            mapIndexStates.push(stateId)
+                }
+                callback && callback(mapIndexStates)
+            } 
+        });
     }
 
     createRoom(roomId, mapIndex) {
-        adapter.log.info("create new room: " + roomId)
-        adapter.createChannel("rooms", roomId, function (err, roomObj) {
-            if (roomObj) {
-                adapter.setObjectNotExists(roomObj.id + '.mapIndex', {
-                    type: 'state',
-                    common: {
-                        name: 'map index',
-                        type: 'number',
-                        role: 'value',
+        adapter.log.info("create new room: " + roomId);
+        adapter.createChannel("rooms", roomId, function(err, roomObj) {
+        if (roomObj) {
+            adapter.setObjectNotExists(
+            roomObj.id + ".mapIndex",
+            {
+                type: "state",
+                common:
+                mapIndex[0] == "["
+                    ? {
+                        name: "map zone",
+                        type: "string",
+                        role: "value",
                         read: false,
                         write: false,
-                        desc: 'index of assigned map'
+                        desc: "coordinates of map zone"
+                    }
+                    : {
+                        name: "map index",
+                        type: "number",
+                        role: "value",
+                        read: false,
+                        write: false,
+                        desc: "index of assigned map"
                     },
-                    native: {}
-                }, function (err, obj) {
-                    adapter.setState(obj.id, mapIndex, true);
-                });
-
-                adapter.setObjectNotExists(roomObj.id + '.roomClean', roomManager.stateRoomClean);
-                adapter.getObject("control.fan_power", function (err, obj) {
-                    obj && adapter.getState(obj._id, function (err, comonState) {
-                        adapter.setObjectNotExists(roomObj.id + '.roomFanPower', {
-                            type: 'state',
-                            common: obj.common,
-                            native: {}
-                        }, function (err, state) {
-                            adapter.setState(state.id, comonState.val, !true);
-                        });
-                    })
-                })
+                native: {}
+            },
+            function(err, obj) {
+                adapter.setState(obj.id, mapIndex, true);
             }
+            );
+
+            adapter.setObjectNotExists(
+            roomObj.id + ".roomClean",
+            roomManager.stateRoomClean
+            );
+            adapter.getObject("control.fan_power", function(err, obj) {
+            obj &&
+                adapter.getState(obj._id, function(err, comonState) {
+                adapter.setObjectNotExists(
+                    roomObj.id + ".roomFanPower",
+                    {
+                    type: "state",
+                    common: obj.common,
+                    native: {}
+                    },
+                    function(err, state) {
+                    adapter.setState(state.id, comonState.val, !true);
+                    }
+                );
+                });
+            });
+        }
         });
     }
 }
@@ -1731,12 +1792,12 @@ class TimerManager {
 
     // calculate the nexttime, when the timer (state) should running
     _calcNextProcessTime(timerObj, now, onlyCalc) {
-        let nextProcessTime = timerObj.common.nextProcessTime ? new Date(timerObj.common.nextProcessTime) : 0
+        let nextProcessTime = timerObj.native.nextProcessTime ? new Date(timerObj.native.nextProcessTime) : 0
         if (!nextProcessTime || nextProcessTime < now) {
             let terms = timerObj._id.split('.').pop().split('_')
-            let minute = terms.pop()
-            let hour = terms.pop()
-            let day = terms.pop().split('')
+            let minute = parseInt(terms[2], 10);
+            let hour = parseInt(terms[1], 10);
+            let day = terms[0].split("");
             if (!day.length)
                 nextProcessTime = 0
             else {
@@ -1752,18 +1813,33 @@ class TimerManager {
                     dayDiff = (day[0] - nowDay) + 7
                 dayDiff && nextProcessTime.setDate(nextProcessTime.getDate() + dayDiff)
             }
-            if ((nextProcessTime != timerObj.common.nextProcessTime) && !onlyCalc) {
-                let name = ''
-                if (day.length > 0)
-                    for (let d in day)
-                        name += weekDaysFull[day[d]].substr(0, 2) + ' '
-                else
-                    name += weekDaysFull[day[0]] + ' '
-                name += "0".concat(hour).slice(-2) + ':' + "0".concat(minute).slice(-2)
-                timerObj.common.name = name
-                timerObj.common.nextProcessTime = nextProcessTime
+            if ((nextProcessTime != timerObj.native.nextProcessTime) && !onlyCalc) {
+                timerObj.native.nextProcessTime = nextProcessTime
                 timerObj.common.states["1"] = weekDaysFull[nextProcessTime.getDay()] + ' ' + adapter.formatDate(nextProcessTime, "hh:mm")
-                adapter.setObject(timerObj._id, timerObj)
+                let name = ''
+                if (day.length > 0 || timerObj.native.channels) {
+                    for (let d in day)
+                        name += weekDaysFull[day[d]].substr(0, 2) + " ";
+                }
+                else {
+                    name += weekDaysFull[day[0]] + " ";
+                }
+                name += "0".concat(hour).slice(-2) + ':' + "0".concat(minute).slice(-2)
+                timerObj.common.name = name;
+                if (timerObj.native.channels) {
+                    name += ' >' 
+                    adapter.getChannelsOf("rooms", function (err, roomObjs) {
+                        let channels= ''
+                        for (let r in roomObjs) {
+                            if (timerObj.native.channels.indexOf(roomObjs[r]._id.split('.').pop()) >= 0)
+                                channels += ',' + roomObjs[r].common.name
+                        }
+                        timerObj.common.name += " >" + channels.slice(1);
+                        adapter.setObject(timerObj._id, timerObj);
+                    })
+                } else {
+                    adapter.setObject(timerObj._id, timerObj);
+                }
                 adapter.log.info("calculate new processtime (" + timerObj.common.states["1"] + ") for timer " + timerObj._id)
             }
         }
