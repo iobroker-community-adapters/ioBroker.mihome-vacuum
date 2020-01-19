@@ -390,7 +390,7 @@ adapter.on('stateChange', function (id, state) {
 
         } else if (command === 'addRoom') {
             if (!isNaN(state.val))
-                roomManager.createRoom("manual_" + state.val, state.val)
+                roomManager.createRoom("manual_" + state.val, parseInt(state.val,10))
             else {
                 let terms = state.val.match(/((?:[0-9]+\,){3,3}[0-9]+)(\,[0-9]+)?/)
                 if (terms)
@@ -1356,7 +1356,7 @@ adapter.on('message', function (obj) {
                     adapter.log.info("trigger cleaning segment " + obj.message)
                     let map = obj.message
                     if (!isNaN(map))
-                        map = [map]
+                        map = [parseInt(map,10)]
                     else {
                         if (typeof map == "string") 
                             map = obj.message.split(",")
