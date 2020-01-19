@@ -225,7 +225,7 @@ class FeatureManager {
 
     setWaterBox(water_box_status){
         if (this.water_box === null){ // todo: check if filter_element_work_time depends on water_box_status and 
-            this.water_box = typeof water_box_status == "number";
+            this.water_box = !isNaN(water_box_status);
             if (this.water_box){
                 adapter.log.info('create states for water box');
                 adapter.setObjectNotExists('info.water_box', {
@@ -389,7 +389,7 @@ adapter.on('stateChange', function (id, state) {
             sendMsg('get_room_mapping');
 
         } else if (command === 'addRoom') {
-            if (typeof state.val == "number")
+            if (!isNaN(state.val))
                 roomManager.createRoom("manual_" + state.val, state.val)
             else {
                 let terms = state.val.match(/((?:[0-9]+\,){3,3}[0-9]+)(\,[0-9]+)?/)
@@ -1355,7 +1355,7 @@ adapter.on('message', function (obj) {
                     zoneCleanActive = true;
                     adapter.log.info("trigger cleaning segment " + obj.message)
                     let map = obj.message
-                    if (typeof map == "number")
+                    if (!isNAN(map))
                         map = [map]
                     else {
                         if (typeof map == "string") 

@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "1.10.2",
+        "version": "1.10.3",
         "news": {
             "1.10.1": {
                 "en": "added zone as room handling + timer can directly trigger room channels",
