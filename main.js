@@ -1355,7 +1355,7 @@ adapter.on('message', function (obj) {
                     zoneCleanActive = true;
                     adapter.log.info("trigger cleaning segment " + obj.message)
                     let map = obj.message
-                    if (!isNAN(map))
+                    if (!isNaN(map))
                         map = [map]
                     else {
                         if (typeof map == "string") 
