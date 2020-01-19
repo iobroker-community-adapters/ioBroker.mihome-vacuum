@@ -296,8 +296,6 @@ const clean_log_html_attr = '<colgroup> <col width="50"> <col width="50"> <col w
 const clean_log_html_head = '<tr> <th>Datum</th> <th>Start</th> <th>Saugzeit</th> <th>Fläche</th> <th>???</th> <th>Ende</th></tr>';
 
 
-
-
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
     if (!state || state.ack) return;
@@ -381,10 +379,8 @@ adapter.on('stateChange', function (id, state) {
             });
 
         } else if (command === 'zoneClean') {
-            sendMsg('app_zoned_clean', [state.val], function () {
-                adapter.setForeignState(id, state.val, true);
-            });
-            zoneCleanActive = true;
+            adapter.sendTo(adapter.namespace, "cleanZone", state.val)
+            adapter.setForeignState(id, '', true);
 
         } else if (command === 'resumeZoneClean') {
             sendMsg('resume_zoned_clean');
@@ -446,6 +442,23 @@ adapter.on('stateChange', function (id, state) {
 
 });
 
+// is called if a subscribed obj (rooms.*) changes
+/*
+adapter.on('objectChange', function (id, obj) {
+    adapter.log.error('objectChange ' + id + ' ' + JSON.stringify(obj));
+    if (adapter.config.enableAlexa && obj.type == "channel" && obj.common.name != id.split('.').pop()){
+        adapter.getObject(obj._id + '.roomClean', function(err, rcObj){
+            if (rcObj && !rcObj.common.smartName || rcObj.common.smartName == i18n.cleanRoom){
+                rcObj.common.smartName=  i18n.cleanRoom + ' ' + obj.common.name
+                adapter.setObject(rcObj._id,rcObj,function(err){
+                    if (!err)
+                        adapter.log.info("set smartname to " + rcObj.common.smartName)
+                })
+            }
+        })
+    }
+})
+*/
 adapter.on('unload', function (callback) {
     if (pingTimeout) clearTimeout(pingTimeout);
     adapter.setState('info.connection', false, true);
@@ -1190,6 +1203,7 @@ function main() {
         paramPingInterval = setInterval(requestParams, adapter.config.param_pingInterval);
 
         adapter.subscribeStates('*');
+        //adapter.subscribeObjects('rooms.*')
 
     }
 
@@ -1321,6 +1335,17 @@ adapter.on('message', function (obj) {
             case 'cleanSpot':
                 sendCustomCommand('app_spot');
                 return;
+            case 'cleanZone':
+                if (!obj.message) return adapter.log.warn("cleanZone needs paramter coordinates")
+                if (zoneCleanActive){
+                    adapter.log.info("should trigger cleaning zone " + obj.message + ", but is currently active. Add to queue")
+                    zoneCleanQueue.push(obj)
+                } else {
+                    zoneCleanActive = true;
+                    adapter.log.info("trigger cleaning zone " + obj.message)
+                    sendCustomCommand('app_zoned_clean',[obj.message])
+                }
+                return;
             case 'cleanSegments':
                 if (!obj.message) return adapter.log.warn("cleanSegments needs paramter mapIndex")
                 if (zoneCleanActive){
@@ -1328,7 +1353,7 @@ adapter.on('message', function (obj) {
                     zoneCleanQueue.push(obj)
                 } else {
                     zoneCleanActive = true;
-                    adapter.log.debug("trigger cleaning segment " + obj.message)
+                    adapter.log.info("trigger cleaning segment " + obj.message)
                     let map = obj.message
                     if (typeof map == "number")
                         map = [map]
@@ -1341,7 +1366,7 @@ adapter.on('message', function (obj) {
                                 delete map[i];
                         }
                     }
-                    //todo prod sendCustomCommand('app_segment_clean',map)
+                    sendCustomCommand('app_segment_clean',map)
                 }
                 return;
             case 'cleanRooms':
@@ -1566,7 +1591,7 @@ class RoomManager {
                 read: false,
                 write: true,
                 desc: "Start Room Cleaning",
-                smartName: i18n.cleanRoom
+                smartName: i18n.cleanRooms
             },
             native: {}
         };
@@ -1677,9 +1702,7 @@ class RoomManager {
                 if (mapIndex.length > 0)
                     adapter.sendTo(adapter.namespace, "cleanSegments", mapIndex.join(","))
                 if (zones.length > 0) {
-                    adapter.log.info("Starting zone cleaning " + JSON.stringify(zones))
-                    //todo prod sendMsg("app_zoned_clean", zones);
-                    zoneCleanActive = true;
+                    adapter.sendTo(adapter.namespace, "cleanZone", zones.join(","))
                 }
             }
         });

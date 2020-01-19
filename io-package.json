@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "1.10.0",
+        "version": "1.10.1",
         "news": {
+            "1.10.1": {
+                "en": "added zone as room handling + timer can directly trigger room channels",
+                "de": "Zone als Raumhandling hinzugefügt + Timer kann Raumkanäle direkt auslösen",
+                "ru": "добавлена ​​зона в качестве обработки помещения + таймер может напрямую вызывать каналы помещения",
+                "pt": "zona adicionada, pois o manuseio da sala + o temporizador podem acionar diretamente os canais da sala",
+                "nl": "toegevoegde zone als ruimteafhandeling + timer kan ruimtekanalen direct activeren",
+                "fr": "zone ajoutée car la gestion de la pièce + la minuterie peuvent déclencher directement les canaux de la pièce",
+                "it": "aggiunta zona come gestione della stanza + timer può attivare direttamente i canali della stanza",
+                "es": "zona agregada como manejo de habitación + temporizador puede activar directamente canales de habitación",
+                "pl": "dodano strefę, ponieważ obsługa pokoju + timer może bezpośrednio wyzwalać kanały pokojowe",
+                "zh-cn": "添加区域作为房间处理+计时器可以直接触发房间频道"
+            },
             "1.10.0": {
                 "en": "added room handling and timer and changed featurehandling",
                 "de": "Raumhandhabung und Timer hinzugefügt und das Featurehandling geändert",
