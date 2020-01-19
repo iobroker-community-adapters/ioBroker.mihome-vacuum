@@ -1714,7 +1714,7 @@ class RoomManager {
                 let mapIndexStates= [];
                 for ( let stateId in states){
                     for ( let r in states[stateId].enums)
-                        if (rooms.indexOf(r) >= 0 && stateId.indexOf('.mapIndex')) // bug in js-controller 1.5, that not only mapIndex in states
+                        if (rooms.indexOf(r) >= 0 && stateId.indexOf('.mapIndex') > 0) // bug in js-controller 1.5, that not only mapIndex in states
                             mapIndexStates.push(stateId)
                 }
                 callback && callback(mapIndexStates)
