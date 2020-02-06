@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "1.10.3",
+        "version": "1.10.4",
         "news": {
+            "1.10.4": {
+                "en": "add valetudo map support for gen3 and gen2 2XXX",
+                "de": "Unterstützung für Valetudo-Karten für Gen3 und Gen2 2XXX",
+                "ru": "добавлена поддержка карт valetudo для gen3 и gen2 2XXX",
+                "pt": "adicionar suporte ao mapa valetudo para gen3 e gen2 2XXX",
+                "nl": "ondersteuning voor valetudokaarten toevoegen voor gen3 en gen2 2XXX",
+                "fr": "ajouter le support de carte valetudo pour gen3 et gen2 2XXX",
+                "it": "aggiungere il supporto per mappe valetudo per gen3 e gen2 2XXX",
+                "es": "agregue soporte de valetudo map para gen3 y gen2 2XXX",
+                "pl": "dodaj obsługę map valetudo dla gen3 i gen2 2XXX",
+                "zh-cn": "为gen3和gen2 2XXX添加valetudo映射支持"
+            },            
             "1.10.1": {
                 "en": "added zone as room handling + timer can directly trigger room channels",
                 "de": "Zone als Raumhandling hinzugefügt + Timer kann Raumkanäle direkt auslösen",
