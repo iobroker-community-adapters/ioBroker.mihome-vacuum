@@ -21,6 +21,8 @@ This adapter allows you control the Xiaomi vacuum cleaner.
     - [S50 Kommandos](#Komandos-des-S50)
 	        - [GoTo](#GoTo)
 			- [zoneClean](#zoneClean)
+            - [Räume](#Räume)
+            - [Timer](#Timer)
     - [Eigene Kommandos](#sende-eigene-kommandos)
     - [sendTo-Hook](#eigene-kommandos-per-sendto-schicken)
 - [Widget](#widget)
@@ -114,6 +116,23 @@ Beispiel:
 ```
 [24117,26005,25767,27205,1],[24320,24693,25970,25843,1]
 ```
+#### Räume
+neuere Sauger unterstützen mit der neuesten miHome App die Definition von Räumen, siehe 
+[Video](https://www.youtube.com/watch?v=vEiUZzoXfPg)
+
+Dabei hat jeder Raum in der aktuellen Karte einen Index. Dieser wird dann dem Raum aus der App zugewiesen.
+Vom Roboter bekommen wir dann nur ein Mapping mit Raumnummer und Index.
+Der Adapter fragt diese Räume jedesmal beim Adapter start ab und erstellt für jeden Raum einen channel, der dann den aktuellen RaumIndex kennt. Manuell passiert dasselbe mit dem Button loadRooms.
+Dieser channel kann dann den ioBroker-Räumen zugeordnet werden. Wenn dann der Button roomClean gedrück wird, wird der Index der Karte ermittelt und dieser dann an den Roboter geschickt, so dass der dann gezielt diesen Raum saugt. Vorher wird bei Einzelraum Saugung noch die FAN-Power eingestellt.
+Wenn man in der App die Möglichkeit zum Benennen der Räume noch nicht hat, gibt es noch die Möglicheit manuell solche channel zu erzeugen indem man den Map Index angibt. Zusätzlich kann man anstelle des mapIndex jetzt auch die Koordinaten einer Zone eingeben.
+Wenn man spontan mal mehrere Räume reinigen will, kann man das über multiRoomClean tun, indem man diesem Datenpunkt die ioBroker-Räume zuweist und dann den Butten drückt.
+
+#### Timer
+Sobald der Sauger die Raumfunktion (siehe oben) unterstützt, kann man auch Timer erstellen, die dann die entsprechenden Raum-channel antriggert, bzw. dessen mapIndex ermittelt.
+Ein Timer kann entweder Räume antriggern und/oder auch direkt Raum Channels.
+Die Timer selber werden über den config Bereich erstellt, wird dann aber zu einem Datenpunkt. Dort kann jeder Timer dann aktiviert/deaktiviert werden oder auch einmalig übersprungen werden. Auch ein direkt Start ist möglich.
+
+Der Vorteil der ioBroker timer sind zum einen, dass die auch in der VIS angezeigt bzw. dort genutzt werden können und der Roboter auch vom Internet getrennt werden, da die Timer der App aus China getriggert werden.
 
 ### Sende eigene Kommandos
 HINWEIS: Diese Funktion sollte nur von Experten genutzt werden, da durch falsche Kommandos der sauger zu Schaden kommen könnte
@@ -188,6 +207,9 @@ Die unterstützten Kommandos sind:
 | Fernsteuerungsfunktion starten | `startRemoteControl` | - keine - |  |
 | Bewegungskommando für Fernsteuerung absetzen | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | sequenceNumber muss sequentiell sein, Dauer ist in ms |
 | Fernsteuerungsfunktion beenden | `stopRemoteControl` | - keine - |  |
+| Raum/Räume saugen | `cleanRooms` | `rooms` | `rooms` ist ein komma separierter String mit enum.rooms.XXX |
+| Segment saugen | `cleanSegments` | `rooms` | `rooms` ist Array mit mapIndex oder komma separierter String mit mapIndex |
+| Zone saugen | `cleanZone` | `coordinates` | `coordinates` ist ein String mit coordinaten und die Anzahl Durchläufe, siehe [zoneClean](#zoneClean) |
 
 ## Widget
 Zur Zeit leider noch nicht fertig.
@@ -198,6 +220,18 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 1.10.4 (2020-02-06)
+* (MeisterTR )Unterstützung für Valetudo-Karten für Gen3 und Gen2 2XXX
+
+### 1.10.1 (2020-01-20)
+* (dirkhe) zonen können jetzt auch als Räume angelegt werden
+* (dirkhe) timer können Rum Channels direkt antriggern
+
+### 1.10.0 (2020-01-17)
+* (dirkhe) Raumhandling hinzugefügt
+* (dirkhe) Timer hinzugefügt
+* (dirkhe) Featurehandling angepasst
+
 ### 1.1.6 (2018-12-06)
 * (JoJ123) Saugleistung für Wischmodus hinzugefügt (S50+).
 
