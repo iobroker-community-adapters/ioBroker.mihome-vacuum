@@ -31,7 +31,7 @@
     "zlib": "^1.0.5",
     "canvas":"^2.6.1",
     "request":"^2.88.0",
-    "tremap-js": "^1.2.1"
+    "treemap-js": "^1.2.1"
   },
   "devDependencies": {
     "gulp": "^4.0.0",
