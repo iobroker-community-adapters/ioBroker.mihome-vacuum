@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "1.10.4",
+        "version": "2.0.0",
         "news": {
             "1.10.4": {
                 "en": "add valetudo map support for gen3 and gen2 2XXX",
