@@ -314,7 +314,9 @@ adapter.on('stateChange', function (id, state) {
         if (state.val !== false && state.val !== 'false') {
             if (command === 'start' && zoneCleanActive && adapter.config.enableResumeZone) {
                 adapter.log.debug('Resuming paused zoneclean.');
-                sendMsg('resume_zoned_clean');
+                sendMsg('resume_zoned_clean', null, function () {
+                    adapter.setForeignState(id, state.val, true);
+                });
             } else {
                 sendMsg(com[command].method, [params], function () {
                     adapter.setForeignState(id, state.val, true);
@@ -351,7 +353,7 @@ adapter.on('stateChange', function (id, state) {
 
         } else if (command === 'clean_home') {
             stateControl(state.val);
-
+            adapter.setForeignState(id, true, true);
         } else if (command === 'carpet_mode') {
             //when carpetmode change
             if (state.val === true || state.val === 'true') {
@@ -380,10 +382,14 @@ adapter.on('stateChange', function (id, state) {
             adapter.setForeignState(id, '', true);
 
         } else if (command === 'resumeZoneClean') {
-            sendMsg('resume_zoned_clean');
+            sendMsg('resume_zoned_clean', null, function(){
+                adapter.setForeignState(id, state.val, true);
+            });
 
         } else if (command === 'loadRooms') {
-            sendMsg('get_room_mapping');
+            sendMsg('get_room_mapping', null, function(){
+                adapter.setForeignState(id, state.val, true);
+            });
 
         } else if (command === 'addRoom') {
             if (!isNaN(state.val))
@@ -399,13 +405,15 @@ adapter.on('stateChange', function (id, state) {
 
         } else if (command === 'roomClean') {
             roomManager.cleanRooms([id.replace("roomClean", "mapIndex")]);
+            adapter.setForeignState(id, true, true);
         } else if (command === 'multiRoomClean' || parent === 'timer') {
             if (parent === 'timer') {
                 adapter.setForeignState(id, (state.val == TimerManager.SKIP || state.val == TimerManager.DISABLED) ? state.val : TimerManager.ENABLED, true, function () {
                     TimerManager.calcNextProcess()    
                 });
                 if (state.val != TimerManager.START) return
-            }
+            } else
+                adapter.setForeignState(id, true, true);
              // search for assigned roomObjs or id on timer
             adapter.getForeignObjects(id,'state','rooms',function(err,states){
                 if (states) {
