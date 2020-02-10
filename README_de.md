@@ -220,6 +220,9 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 1.10.4 (2020-02-06)
+* (MeisterTR )Unterstützung für Valetudo-Karten für Gen3 und Gen2 2XXX
+
 ### 1.10.1 (2020-01-20)
 * (dirkhe) zonen können jetzt auch als Räume angelegt werden
 * (dirkhe) timer können Rum Channels direkt antriggern

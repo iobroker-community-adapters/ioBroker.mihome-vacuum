@@ -232,11 +232,10 @@ function save(callback) {
             }, function (err, timerObjs) {
                 if (!err && timerObjs) {
                     for (let t in timerObjs.rows) {
-                        let channels =
-                            timer = timerList[timerObjs.rows[t].id.split(".").pop()];
+                        let timer = timerList[timerObjs.rows[t].id.split(".").pop()];
                         if (timer) {
 
-                            if (timer.channels.length) {
+                            if (timer.channels && timer.channels.length) {
                                 timerObjs.rows[t].value.native.channels = timer.channels
                             } else if (timerObjs.rows[t].value.native.channels) {
                                 delete timerObjs.rows[t].value.native.channels

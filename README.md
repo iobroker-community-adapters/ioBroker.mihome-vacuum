@@ -213,6 +213,8 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 1.10.4 (2020-02-06)
+* (MeiserTR) add valetudo map support for gen3 and gen2 2XXX
 ### 1.10.1 (2020-01-20)
 * (dirkhe) added zone as room handling
 * (dirkhe) timer could room channels directly
