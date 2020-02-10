@@ -105,7 +105,7 @@ class FeatureManager {
 
     setModel(model){
         if (this.model != model) {
-            adapter.setState('info.device_model', model, true);
+            adapter.setStateChanged('info.device_model', model, true);
             this.model = model;
             this.mob= (model === 'roborock.vacuum.s5' || model === 'roborock.vacuum.s6')
 
@@ -149,7 +149,7 @@ class FeatureManager {
     setFirmware(fw_ver){
         if (this.firmware != fw_ver){
             this.firmware = fw_ver
-            adapter.setState('info.device_fw', fw_ver, true);
+            adapter.setStateChanged('info.device_fw', fw_ver, true);
 
             let fw = fw_ver.split('_'); // Splitting the FW into [Version, Build] array.
             if (parseInt(fw[0].replace(/\./g, ''), 10) > 339 || (parseInt(fw[0].replace(/\./g, ''), 10) === 339 && parseInt(fw[1], 10) >= 3194)) {
@@ -217,7 +217,7 @@ class FeatureManager {
             });
             reqParams.push(com.get_carpet_mode.method); // from now, it should be checked always 
         }
-        adapter.setState('control.carpet_mode', enabled === 1, true);
+        adapter.setStateChanged('control.carpet_mode', enabled === 1, true);
     }
 
     setWaterBox(water_box_status){
@@ -263,7 +263,7 @@ class FeatureManager {
                 });            
             }
         }
-        this.water_box && adapter.setState('info.water_box', water_box_status === 1, true);
+        this.water_box && adapter.setStateChanged('info.water_box', water_box_status === 1, true);
     }
 }
 const features= new FeatureManager();
@@ -280,7 +280,6 @@ const last_id = {
 };
 
 let reqParams = [
-    com.get_status.method,
     com.miIO_info.method,
     com.get_consumable.method,
     com.clean_summary.method,
@@ -487,18 +486,22 @@ function sendPing() {
         }
     }, 3000);
 
-    try {
-        server.send(commands.ping, 0, commands.ping.length, adapter.config.port, adapter.config.ip, function (err) {
-            if (err) adapter.log.error('Cannot send ping: ' + err)
-        });
-    } catch (e) {
-        adapter.log.warn('Cannot send ping: ' + e);
-        clearTimeout(pingTimeout);
-        pingTimeout = null;
-        if (connected) {
-            connected = false;
-            adapter.log.debug('Disconnect');
-            adapter.setState('info.connection', false, true);
+    if (connected){
+        sendMsg(com.get_status.method)
+    } else {
+        try {
+            server.send(commands.ping, 0, commands.ping.length, adapter.config.port, adapter.config.ip, function (err) {
+                if (err) adapter.log.error('Cannot send ping: ' + err)
+            });
+        } catch (e) {
+            adapter.log.warn('Cannot send ping: ' + e);
+            clearTimeout(pingTimeout);
+            pingTimeout = null;
+            if (connected) {
+                connected = false;
+                adapter.log.debug('Disconnect');
+                adapter.setState('info.connection', false, true);
+            }
         }
     }
 }
@@ -772,61 +775,64 @@ function getStates(message) {
             return adapter.log.error("[" + answer.id + "](" + name + ") -> " + answer.error.message)
         }
         if (answer.id === last_id.get_status) {
-            const status = parseStatus(answer);
-            adapter.setState('info.battery', status.battery, true);
-            adapter.setState('info.cleanedtime', Math.round(status.clean_time / 60), true);
-            adapter.setState('info.cleanedarea', Math.round(status.clean_area / 10000) / 100, true);
-            adapter.setState('control.fan_power', Math.round(status.fan_power), true);
-            adapter.setState('info.state', status.state, true);
-            stateVal = status.state;
 
-            if (stateVal === 5 || stateVal === 17 || stateVal === 18) {
-                if (stateVal === 17 || stateVal === 18) zoneCleanActive = true;
-                adapter.setState('control.clean_home', true, true);
-            } else {
-                adapter.setState('control.clean_home', false, true);
-            }
-            if ([2, 3, 5, 6, 8, 11, 16].indexOf(stateVal) > -1) {
-                zoneCleanActive = false;
-                if (zoneCleanQueue.length > 0){
-                    adapter.log.debug("use clean trigger from Queue")
-                    adapter.emit('message', zoneCleanQueue.shift());
-                }
-            }
-            // set valetudo map getter to tru if..
-            if ([5, 6, 11, 16, 17, 18].indexOf(stateVal) > -1) {
-                VALETUDO.StartMapPoll();
-            } else {
-                VALETUDO.GETMAP = false;
-            }
-                
-            adapter.setState('info.error', status.error_code, true);
-            adapter.setState('info.dnd', status.dnd_enabled, true);
+            const status = parseStatus(answer);
+            adapter.setStateChanged('info.battery', status.battery, true);
+            adapter.setStateChanged('info.cleanedtime', Math.round(status.clean_time / 60), true);
+            adapter.setStateChanged('info.cleanedarea', Math.round(status.clean_area / 10000) / 100, true);
+            adapter.setStateChanged('control.fan_power', Math.round(status.fan_power), true);
+            
+            adapter.setStateChanged('info.error', status.error_code, true);
+            adapter.setStateChanged('info.dnd', status.dnd_enabled, true);
             features.setWaterBox(status.water_box_status);
+            if (stateVal != answer.result[0].state){
+                stateVal = answer.result[0].state;
+                adapter.setState('info.state', stateVal, true);
+
+                if (stateVal === 5 || stateVal === 17 || stateVal === 18) {
+                    if (stateVal === 17 || stateVal === 18) zoneCleanActive = true;
+                    adapter.setState('control.clean_home', true, true);
+                } else {
+                    adapter.setState('control.clean_home', false, true);
+                }
+                if ([2, 3, 5, 6, 8, 11, 16].indexOf(stateVal) > -1) {
+                    zoneCleanActive = false;
+                    if (zoneCleanQueue.length > 0){
+                        adapter.log.debug("use clean trigger from Queue")
+                        adapter.emit('message', zoneCleanQueue.shift());
+                    }
+                }
+                // set valetudo map getter to tru if..
+                if ([5, 6, 11, 16, 17, 18].indexOf(stateVal) > -1) {
+                    VALETUDO.StartMapPoll();
+                } else {
+                    VALETUDO.GETMAP = false;
+                }
+            }  
         } else if (answer.id === last_id['miIO.info']) {
             const info= answer.result //parseMiIO_info(answer);
             features.setFirmware(info.fw_ver)
             features.setModel(info.model)
-            adapter.setState('info.wifi_signal', info.ap.rssi, true);
+            adapter.setStateChanged('info.wifi_signal', info.ap.rssi, true);
 
         } else if (answer.id === last_id.get_sound_volume) {
-            adapter.setState('control.sound_volume', answer.result[0], true);
+            adapter.setStateChanged('control.sound_volume', answer.result[0], true);
 
         } else if (answer.id === last_id.get_carpet_mode) {
             features.setCarpetMode(answer.result[0].enable)
             
         } else if (answer.id === last_id.get_consumable) {
             const consumable= answer.result[0] //parseConsumable(answer)
-            adapter.setState('consumable.main_brush', 100 - (Math.round(consumable.main_brush_work_time / 3600 / 3)), true);    // 300h
-            adapter.setState('consumable.side_brush', 100 - (Math.round(consumable.side_brush_work_time / 3600 / 2)), true);    // 200h
-            adapter.setState('consumable.filter', 100 - (Math.round(consumable.filter_work_time / 3600 / 1.5)), true);          // 150h
-            adapter.setState('consumable.sensors', 100 - (Math.round(consumable.sensor_dirty_time / 3600 / 0.3)), true);        // 30h
-            features.water_box && adapter.setState('consumable.water_filter', 100 - (Math.round(consumable.filter_element_work_time / 3600 )), true);          // 100h
+            adapter.setStateChanged('consumable.main_brush', 100 - (Math.round(consumable.main_brush_work_time / 3600 / 3)), true);    // 300h
+            adapter.setStateChanged('consumable.side_brush', 100 - (Math.round(consumable.side_brush_work_time / 3600 / 2)), true);    // 200h
+            adapter.setStateChanged('consumable.filter', 100 - (Math.round(consumable.filter_work_time / 3600 / 1.5)), true);          // 150h
+            adapter.setStateChanged('consumable.sensors', 100 - (Math.round(consumable.sensor_dirty_time / 3600 / 0.3)), true);        // 30h
+            features.water_box && adapter.setStateChanged('consumable.water_filter', 100 - (Math.round(consumable.filter_element_work_time / 3600 )), true);          // 100h
         } else if (answer.id === last_id.get_clean_summary) {
             const summary = parseCleaningSummary(answer);
-            adapter.setState('history.total_time', Math.round(summary.clean_time / 60), true);
-            adapter.setState('history.total_area', Math.round(summary.total_area / 1000000), true);
-            adapter.setState('history.total_cleanups', summary.num_cleanups, true);
+            adapter.setStateChanged('history.total_time', Math.round(summary.clean_time / 60), true);
+            adapter.setStateChanged('history.total_area', Math.round(summary.total_area / 1000000), true);
+            adapter.setStateChanged('history.total_cleanups', summary.num_cleanups, true);
             logEntriesNew = summary.cleaning_record_ids;
             //adapter.log.info('log_entrya' + JSON.stringify(logEntriesNew));
             //adapter.log.info('log_entry old' + JSON.stringify(logEntries));
