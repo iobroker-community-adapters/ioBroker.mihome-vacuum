@@ -10,6 +10,8 @@ const adapter = new utils.Adapter('mihome-vacuum');
 const dgram = require('dgram');
 const MiHome = require(__dirname + '/lib/mihomepacket');
 const com = require(__dirname + '/lib/comands');
+const TimerManager= require(__dirname + '/lib/timerManager');
+const RoomManager= require(__dirname + '/lib/roomManager');
 global.systemDictionary = {}
 require(__dirname + '/admin/words.js')   
 
@@ -47,8 +49,8 @@ let roomManager = null;
 let timerManager = null;
 
 // this parts will be translated
-const weekDaysFull = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 const i18n = {
+    weekDaysFull : ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     notAvailable : "not available",
     nextTimer: "next timer",
     loadRooms: "load rooms from robot",
@@ -70,8 +72,8 @@ class FeatureManager {
         this.zoneClean= false    
         this.mob= false         
         this.water_box= null       
-        this.carpetMode= null       
-        this.roomMapping= null       
+        this.carpetMode= null 
+        this.roomMapping= null      
     }
 
     init(){
@@ -82,18 +84,13 @@ class FeatureManager {
         adapter.getState('info.device_fw',function(err,state){
             state && state.val && features.setFirmware(state.val);
         });
-        adapter.getObject('timer', function (err, obj) {
-            if (obj && !timerManager)
-                timerManager = new TimerManager()
-        });
-        adapter.getObject('rooms.loadRooms', function (err, obj) {
-            if (obj && !roomManager)
-                roomManager = new RoomManager()
-        });
-        
+
         // we get miIO.info only, if the robot is connected to the internet, so we init with unavailable
         adapter.setState('info.wifi_signal', "unavailable", true); 
         
+        roomManager= new RoomManager(adapter,i18n)
+        timerManager= new TimerManager(adapter,i18n)
+
         setTimeout(this.initDelayed,3000); // wait for extending 'control.fan_power'
     }
     
@@ -102,7 +99,7 @@ class FeatureManager {
         sendMsg('get_room_mapping'); // test, if supported
         setTimeout(function(){ // it is UDP, so let's try agin once again after 1 minute
             this.carpetMode === null && sendMsg(com.get_carpet_mode.method)
-            features.roomMapping === null && sendMsg('get_room_mapping')
+            this.roomMapping === null && sendMsg('get_room_mapping')
         },60000) 
     }
 
@@ -404,10 +401,10 @@ adapter.on('stateChange', function (id, state) {
             roomManager.cleanRooms([id.replace("roomClean", "mapIndex")]);
         } else if (command === 'multiRoomClean' || parent === 'timer') {
             if (parent === 'timer') {
-                adapter.setForeignState(id, (state.val == TIMER_SKIP || state.val == TIMER_DISABLED) ? state.val : TIMER_ENABLED, true, function () {
-                    timerManager.calcNextProcess()    
+                adapter.setForeignState(id, (state.val == TimerManager.SKIP || state.val == TimerManager.DISABLED) ? state.val : TimerManager.ENABLED, true, function () {
+                    TimerManager.calcNextProcess()    
                 });
-                if (state.val != TIMER_START) return
+                if (state.val != TimerManager.START) return
             }
              // search for assigned roomObjs or id on timer
             adapter.getForeignObjects(id,'state','rooms',function(err,states){
@@ -866,8 +863,7 @@ function getStates(message) {
 
             }
         } else if (answer.id == last_id.get_room_mapping) {
-            if (!roomManager)
-                roomManager= new RoomManager()
+            features.roomMapping= true;
             roomManager.processRoomMaping(answer);
 
         } else if (answer.id in sendCommandCallbacks) {
@@ -1007,10 +1003,15 @@ function init() {
     adapter.getForeignObject('system.config', (err, systemConfig) => {
         if (systemConfig && systemConfig.common && systemConfig.common.language && systemDictionary.Sunday[systemConfig.common.language]) {
             userLang = systemConfig.common.language
-            for (let i in weekDaysFull)
-                weekDaysFull[i] = systemDictionary[weekDaysFull[i]][userLang]
-            for (let i in i18n)
-                i18n[i] = systemDictionary[i18n[i]][userLang]
+            let obj
+            for (let i in i18n){
+                obj= i18n[i]
+                if (typeof obj == "string")
+                   i18n[i] = systemDictionary[obj][userLang]
+                else if (typeof obj == "object")
+                    for (let o in obj)
+                        obj[o] = systemDictionary[obj[o]][userLang]
+            }
         }
     });
     adapter.setObjectNotExists('control.spotclean', {
@@ -1141,6 +1142,8 @@ function main() {
         VALETUDO.MAPSAFEINTERVALL = parseInt(adapter.config.valetudo_MapsaveIntervall, 10) || 5000;
         VALETUDO.POLLMAPINTERVALL = parseInt(adapter.config.valetudo_requestIntervall, 10) || 1000;
         VALETUDO.Init();
+
+
 
         packet = new MiHome.Packet(str2hex(adapter.config.token), adapter);
 
@@ -1577,334 +1580,4 @@ VALETUDO._MapPoll = function () {
             }, VALETUDO.POLLMAPINTERVALL);
         })
 
-}
-
-//------------------------------------------------------Room Section
-class RoomManager {
-    constructor() {
-        this.stateRoomClean = {
-            type: "state",
-            common: {
-                name: i18n.cleanRoom,
-                type: "boolean",
-                role: "button",
-                read: false,
-                write: true,
-                desc: "Start Room Cleaning",
-                smartName: i18n.cleanRooms
-            },
-            native: {}
-        };
-        if (features.roomMapping === null) {
-            features.roomMapping = true;
-            adapter.log.info("add room handling");
-            adapter.setObject("rooms.loadRooms", {
-                type: "state",
-                common: {
-                    name: i18n.loadRooms,
-                    type: "boolean",
-                    role: "button",
-                    read: false,
-                    write: true,
-                    desc: "loads id's from stored rooms"
-                },
-                native: {}
-            });
-            adapter.setObject("rooms.multiRoomClean", {
-                type: "state",
-                common: {
-                    name: i18n.cleanMultiRooms,
-                    type: "boolean",
-                    role: "button",
-                    read: false,
-                    write: true,
-                    desc: "clean all rooms, which are connected to this datapoint"
-                },
-                native: {}
-            });
-            adapter.setObject("rooms.addRoom", {
-                type: "state",
-                common: {
-                    name: i18n.addRoom,
-                    type: "string",
-                    role: "value",
-                    read: true,
-                    write: true,
-                    desc: "add roos manual with map Index or zone coordinates"
-                },
-                    native: {}
-                }, function (err, obj) {
-                    obj && adapter.setForeignState(obj.id, "insert map Index", true);
-            })
-        };
-        if (!timerManager) timerManager = new TimerManager();
-    }
-
-    /** Parses the answer of get_room_mapping */
-    processRoomMaping(response) {
-        const rooms = {};
-        let room;
-        for (let r in response.result) {
-        room = response.result[r];
-        rooms[room[1]] = room[0];
-        }
-        adapter.getChannelsOf("rooms", function(err, roomObjs) {
-            for (let r in roomObjs) {
-                let roomObj = roomObjs[r];
-                let extRoomId = roomObj._id.split(".").pop();
-                if (extRoomId.indexOf("manual_") == -1) {
-                    room = rooms[extRoomId];
-                    if (!room) {
-                        adapter.log.info("room: " + extRoomId + " not mapped");
-                        adapter.setState(roomObj._id + ".mapIndex", i18n.notAvailable, true );
-                        adapter.delObject(roomObj._id + ".roomClean");
-                    } else {
-                        adapter.log.info("room: " + extRoomId + " mapped with index " + room)
-                        adapter.setState(roomObj._id + ".mapIndex", room, true);
-                        adapter.setObjectNotExists(roomObj._id + ".roomClean", roomManager.stateRoomClean);
-                        delete rooms[extRoomId];
-                    }
-                }
-            }
-            for (let extRoomId in rooms) {
-                adapter.getObject("rooms." + extRoomId, function (err, roomObj) {
-                    if (roomObj)
-                        adapter.setState(roomObj._id + ".mapIndex", rooms[extRoomId], true);
-                    else roomManager.createRoom(extRoomId, rooms[extRoomId]);
-                });
-            }
-        });
-    }
-
-    cleanRooms(mapIndexStates) {
-        adapter.getForeignStates(mapIndexStates, function (err, states) {
-            let mapIndex = [];
-            let zones = [];
-            if (states) {
-                let stateId
-                for (let stateId in states) {
-                    if (stateId.indexOf('.mapIndex') > 0) {
-                        let val = parseInt(states[stateId].val, 10);
-                        if (!isNaN(val))
-                            mapIndex.indexOf(val) == -1 && mapIndex.push(val);
-                        else if (states[stateId].val[0] == "[")
-                             zones.indexOf(states[stateId].val) == -1 && zones.push(states[stateId].val)
-                        else
-                            adapter.log.error("could not clean " + stateId + ", because mapIndex/zone is invalid -> " + states[stateId])
-                    } else
-                        adapter.log.error("state must be .mapIndex for roomManager.cleanRooms " + stateId)
-                }
-                if (mapIndexStates.length == 1) {
-                    adapter.getState(mapIndexStates[0].replace('.mapIndex', '.roomFanPower'), function (err, fanPower) {
-                        adapter.setState("control.fan_power", fanPower.val);
-                    })
-                }
-                if (mapIndex.length > 0)
-                    adapter.sendTo(adapter.namespace, "cleanSegments", mapIndex.join(","))
-                if (zones.length > 0) {
-                    adapter.sendTo(adapter.namespace, "cleanZone", zones.join(","))
-                }
-            }
-        });
-    }
-
-    findMapIndexByRoom(rooms, callback) {
-        adapter.getForeignObjects(adapter.namespace + '.rooms.*.mapIndex', 'state', 'rooms', function (err, states) {
-            if (states){
-                let mapIndexStates= [];
-                for ( let stateId in states){
-                    for ( let r in states[stateId].enums)
-                        if (rooms.indexOf(r) >= 0 && stateId.indexOf('.mapIndex') > 0) // bug in js-controller 1.5, that not only mapIndex in states
-                            mapIndexStates.push(stateId)
-                }
-                callback && callback(mapIndexStates)
-            } 
-        });
-    }
-
-    createRoom(roomId, mapIndex) {
-        adapter.log.info("create new room: " + roomId);
-        adapter.createChannel("rooms", roomId, function(err, roomObj) {
-        if (roomObj) {
-            adapter.setObjectNotExists(
-            roomObj.id + ".mapIndex",
-            {
-                type: "state",
-                common:
-                mapIndex[0] == "["
-                    ? {
-                        name: "map zone",
-                        type: "string",
-                        role: "value",
-                        read: false,
-                        write: false,
-                        desc: "coordinates of map zone"
-                    }
-                    : {
-                        name: "map index",
-                        type: "number",
-                        role: "value",
-                        read: false,
-                        write: false,
-                        desc: "index of assigned map"
-                    },
-                native: {}
-            },
-            function(err, obj) {
-                adapter.setState(obj.id, mapIndex, true);
-            }
-            );
-
-            adapter.setObjectNotExists(
-            roomObj.id + ".roomClean",
-            roomManager.stateRoomClean
-            );
-            adapter.getObject("control.fan_power", function(err, obj) {
-            obj &&
-                adapter.getState(obj._id, function(err, comonState) {
-                adapter.setObjectNotExists(
-                    roomObj.id + ".roomFanPower",
-                    {
-                    type: "state",
-                    common: obj.common,
-                    native: {}
-                    },
-                    function(err, state) {
-                    adapter.setState(state.id, comonState.val, !true);
-                    }
-                );
-                });
-            });
-        }
-        });
-    }
-}
-
-//------------------------------------------------------Timer Section
-const TIMER_DISABLED = -1
-const TIMER_SKIP = 0
-const TIMER_ENABLED = 1
-const TIMER_START = 2
-
-class TimerManager {
-    constructor() {
-        this.nextTimerId = null;
-        this.nextProcessTime = null;
-        setTimeout(this.calcNextProcess, 500);
-    }
-
-    check() {
-        if (this.nextProcessTime > 0 && this.nextProcessTime < new Date()) {
-            let diff = (new Date() - this.nextProcessTime)
-            if (diff > 3600000) {
-                adapter.log.info("timer was to old, skipped")
-                timerManager.calcNextProcess()
-            } else {
-                adapter.log.debug("timmer will trigger soon...")
-                this.nextProcessTime = new Date(this.nextProcessTime.getTime() + 3600000);
-                setTimeout(function () {
-                    adapter.log.info("start cleaning by timer " + timerManager.nextTimerId)
-                    adapter.setForeignState(timerManager.nextTimerId, TIMER_START, false, function (err, obj) {
-                        if (!obj) // obj not exist anymore, so we need recalc, otherwise it would be triggerd by stateChange
-                            timerManager.calcNextProcess()
-                    });
-                }, adapter.config.param_pingInterval - diff)
-            }
-        }
-    }
-
-    // calculate the nexttime, when the timer (state) should running
-    _calcNextProcessTime(timerObj, now, onlyCalc) {
-        let nextProcessTime = timerObj.native.nextProcessTime ? new Date(timerObj.native.nextProcessTime) : 0
-        if (!nextProcessTime || nextProcessTime < now) {
-            let terms = timerObj._id.split('.').pop().split('_')
-            let minute = parseInt(terms[2], 10);
-            let hour = parseInt(terms[1], 10);
-            let day = terms[0].split("");
-            if (!day.length)
-                nextProcessTime = 0
-            else {
-                nextProcessTime = new Date(now)
-                nextProcessTime.setHours(hour, minute, 0, 0)
-                if (hour < now.getHours() || (hour == now.getHours() && minute < now.getMinutes()))
-                    nextProcessTime.setDate(nextProcessTime.getDate() + 1)
-                let nowDay = nextProcessTime.getDay();
-                let dayDiff = -99
-                for (let i = day.length - 1; i >= 0 && day[i] >= nowDay; i--)
-                    dayDiff = day[i] - nowDay;
-                if (dayDiff < 0)
-                    dayDiff = (day[0] - nowDay) + 7
-                dayDiff && nextProcessTime.setDate(nextProcessTime.getDate() + dayDiff)
-            }
-            if ((nextProcessTime != timerObj.native.nextProcessTime) && !onlyCalc) {
-                timerObj.native.nextProcessTime = nextProcessTime
-                timerObj.common.states["1"] = weekDaysFull[nextProcessTime.getDay()] + ' ' + adapter.formatDate(nextProcessTime, "hh:mm")
-                let name = ''
-                if (day.length > 0 || timerObj.native.channels) {
-                    for (let d in day)
-                        name += weekDaysFull[day[d]].substr(0, 2) + " ";
-                }
-                else {
-                    name += weekDaysFull[day[0]] + " ";
-                }
-                name += "0".concat(hour).slice(-2) + ':' + "0".concat(minute).slice(-2)
-                timerObj.common.name = name;
-                if (timerObj.native.channels) {
-                    name += ' >' 
-                    adapter.getChannelsOf("rooms", function (err, roomObjs) {
-                        let channels= ''
-                        for (let r in roomObjs) {
-                            if (timerObj.native.channels.indexOf(roomObjs[r]._id.split('.').pop()) >= 0)
-                                channels += ',' + roomObjs[r].common.name
-                        }
-                        timerObj.common.name += " >" + channels.slice(1);
-                        adapter.setObject(timerObj._id, timerObj);
-                    })
-                } else {
-                    adapter.setObject(timerObj._id, timerObj);
-                }
-                adapter.log.info("calculate new processtime (" + timerObj.common.states["1"] + ") for timer " + timerObj._id)
-            }
-        }
-        return nextProcessTime;
-    }
-
-    calcNextProcess() {
-        let now = new Date(new Date().getTime() + 60000) //some time to calculate ...
-        timerManager.nextProcessTime = new Date(now.getTime() + 604800000) // we start latest 1 week later...
-        timerManager.nextTimerId = null
-        adapter.getStatesOf("timer", function (err, timerObjects) {
-            try {
-                let timers = {}
-                for (let t in timerObjects) {
-                    timers[timerObjects[t]._id] = {
-                        obj: timerObjects[t],
-                        time: timerManager._calcNextProcessTime(timerObjects[t], now)
-                    }
-                }
-                adapter.getStates('timer.*', function (err, timerStates) {
-                    let timerState
-                    for (let t in timerStates) {
-                        if (timerStates[t].val != TIMER_DISABLED) {
-                            if (timerStates[t].val == TIMER_SKIP)
-                                timers[t].time = timerManager._calcNextProcessTime(timers[t].obj, new Date(timers[t].time.setMinutes(1)),true)
-                            if (timers[t].time < timerManager.nextProcessTime) {
-                                timerManager.nextProcessTime = timers[t].time
-                                timerManager.nextTimerId = t;
-                            }
-                        } 
-                    }
-                    let timerFolder = {
-                        id: adapter.namespace + '.timer', type: 'channel', native: {},
-                        common: { name: i18n.nextTimer + ': ' + (timerManager.nextTimerId ? weekDaysFull[timerManager.nextProcessTime.getDay()] + ' ' + adapter.formatDate(timerManager.nextProcessTime, "hh:mm") : i18n.notAvailable) }
-                    }
-                    timerManager.nextProcessTime = new Date(timerManager.nextProcessTime.getTime() - adapter.config.param_pingInterval)
-                    adapter.setObject('timer', timerFolder)
-                    adapter.log.info("set " + timerFolder.common.name)
-                })
-            } catch (error) {
-                adapter.log.error('Could not calculate next timer ' + error)
-            }
-        })
-    }
 }
