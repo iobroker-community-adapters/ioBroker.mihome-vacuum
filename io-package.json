@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "1.10.4",
+        "version": "1.10.5",
         "news": {
             "1.10.5": {
                 "en": "send Ping only if not connected, otherwise get_status\nset button states to true, if clicked\nmove Timermanager and roomManager to own libs",
