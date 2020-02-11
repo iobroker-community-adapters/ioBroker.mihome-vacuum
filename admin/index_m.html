@@ -406,8 +406,12 @@ function save(callback) {
                     </div>
                     <div class="row">
                         <div class="col s12 m4 l2">
-                            <input class="value" id="param_pingInterval" size="15" />
-                            <label class="translate" for="param_pingInterval">Request Intervall</label>
+                            <input class="value" id="param_pingInterval" size="15" type="number" min="20000" />
+                            <label class="translate" for="param_pingInterval">get Parameter Intervall</label>
+                        </div>
+                        <div class="col s12 m4 l2">
+                            <input class="value" id="pingInterval" size="15" type="number" min="10000" />
+                            <label class="translate" for="pingInterval">get Status Intervall</label>
                         </div>
                     </div>
                     <div class="divider"></div>

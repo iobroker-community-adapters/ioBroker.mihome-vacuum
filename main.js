@@ -33,8 +33,6 @@ let userLang= "en"
 let isConnect = false;
 let connected = false;
 let commands = {};
-let stateVal = 0;
-let pingInterval;
 let paramPingInterval;
 let packet;
 let firstSet = true;
@@ -43,8 +41,6 @@ let cleanLogHtmlAllLines = '';
 let clean_log_html_table = '';
 let logEntries = {};
 let logEntriesNew = {};
-let zoneCleanActive = false;
-let zoneCleanQueue = [];
 let roomManager = null;
 let timerManager = null;
 
@@ -61,6 +57,84 @@ const i18n = {
     waterBox_filter: "clean water Filter",
     waterBox_filter_reset: "water filter reset"
 }
+const cleanStatus_Unknown = 0
+const cleanStatus_Initiating = 1
+const cleanStatus_Sleeping = 2
+const cleanStatus_Waiting = 3
+//const cleanStatus_??? = 4
+const cleanStatus_Cleaning = 5
+const cleanStatus_Back_toHome = 6
+const cleanStatus_ManuellMode = 7
+const cleanStatus_Charging = 8
+const cleanStatus_Charging_Error = 9
+const cleanStatus_Pause = 10
+const cleanStatus_SpotCleaning = 11
+const cleanStatus_InError = 12
+const cleanStatus_ShuttingDown = 13
+const cleanStatus_Updating = 14
+const cleanStatus_Docking = 15
+const cleanStatus_GoingToSpot = 16
+const cleanStatus_ZoneCleaning = 17
+const cleanStatus_RoomCleaning = 18
+
+class Cleaning {
+    constructor(){
+        this.state= cleanStatus_Unknown         // current robot Status
+        this.isActive= false                    // if robot is working, than her the status is saved
+        this.queue= []                          // if new job is aclled, while robot is already cleaning
+    }
+
+    /**
+     * is called, if robot send status
+     * @param {number} newVal new status
+     */
+    setRemoteState(newVal){
+        this.state = newVal;
+        adapter.setState('info.state', this.state, true);
+
+        if ([cleanStatus_Cleaning,cleanStatus_ZoneCleaning,cleanStatus_RoomCleaning, cleanStatus_SpotCleaning].indexOf(this.state) > -1) {
+            this.isActive= this.state;
+        } else {
+            this.isActive= 0
+            if ([cleanStatus_Sleeping, cleanStatus_Waiting, cleanStatus_Back_toHome, cleanStatus_Charging, cleanStatus_GoingToSpot].indexOf(this.state) > -1) {
+                if (this.queue.length > 0){
+                    adapter.log.debug("use clean trigger from Queue")
+                    adapter.emit('message', this.queue.shift());
+                    adapter.setState("info.queue", this.queue.length,true)
+                } 
+            }
+        }
+        adapter.setState('control.clean_home', this.isActive != 0, true);
+        
+
+        if (VALETUDO.ENABLED){// set valetudo map getter to true if..
+            if ([cleanStatus_Cleaning, cleanStatus_Back_toHome, cleanStatus_SpotCleaning, cleanStatus_GoingToSpot, cleanStatus_ZoneCleaning, cleanStatus_RoomCleaning].indexOf(this.state) > -1) {
+                VALETUDO.StartMapPoll();
+            } else {
+                VALETUDO.GETMAP = false;
+            }
+        }
+    }
+
+    cleanHome(value){
+        if (value && !this.isActive) {
+            sendMsg(com.start.method);
+            setTimeout(() => sendMsg(com.get_status.method), 2000);
+        } else if (!value && this.isActive) {
+            sendMsg(com.pause.method);
+            setTimeout(() => sendMsg(com.home.method), 1000);
+            this.isActive= 0
+        }
+        adapter.setForeignState('control.clean_home', value, true);
+    }
+
+    push(messageObj){
+        this.queue.push(messageObj)
+        adapter.setState('info.queue', this.queue.length,true)
+    }
+}
+
+const cleaning= new Cleaning()
 
 // new features are initial false and shold be enabled, if result from robot is available
 class FeatureManager {
@@ -311,7 +385,7 @@ adapter.on('stateChange', function (id, state) {
             params = state.val;
         }
         if (state.val !== false && state.val !== 'false') {
-            if (command === 'start' && zoneCleanActive && adapter.config.enableResumeZone) {
+            if (command === 'start' && cleaning.isActive && adapter.config.enableResumeZone) {
                 adapter.log.debug('Resuming paused zoneclean.');
                 sendMsg('resume_zoned_clean', null, function () {
                     adapter.setForeignState(id, state.val, true);
@@ -351,8 +425,8 @@ adapter.on('stateChange', function (id, state) {
             }
 
         } else if (command === 'clean_home') {
-            stateControl(state.val);
-            adapter.setForeignState(id, true, true);
+            cleaning.cleanHome(state.val)
+            
         } else if (command === 'carpet_mode') {
             //when carpetmode change
             if (state.val === true || state.val === 'true') {
@@ -408,7 +482,7 @@ adapter.on('stateChange', function (id, state) {
         } else if (command === 'multiRoomClean' || parent === 'timer') {
             if (parent === 'timer') {
                 adapter.setForeignState(id, (state.val == TimerManager.SKIP || state.val == TimerManager.DISABLED) ? state.val : TimerManager.ENABLED, true, function () {
-                    TimerManager.calcNextProcess()    
+                    timerManager.calcNextProcess()    
                 });
                 if (state.val != TimerManager.START) return
             } else
@@ -466,7 +540,6 @@ adapter.on('objectChange', function (id, obj) {
 adapter.on('unload', function (callback) {
     if (pingTimeout) clearTimeout(pingTimeout);
     adapter.setState('info.connection', false, true);
-    if (pingInterval) clearInterval(pingInterval);
     if (paramPingInterval) clearInterval(paramPingInterval);
     if (typeof callback === 'function') callback();
 });
@@ -504,17 +577,7 @@ function sendPing() {
             }
         }
     }
-}
-
-function stateControl(value) {
-    if (value && stateVal !== 5 && stateVal !== 17 && stateVal !== 18) {
-        sendMsg(com.start.method);
-        setTimeout(() => sendMsg(com.get_status.method), 2000);
-    } else if (!value && (stateVal === 5 || stateVal === 17 || stateVal === 18)) {
-        sendMsg(com.pause.method);
-        setTimeout(() => sendMsg(com.home.method), 1000);
-        zoneCleanActive = false;
-    }
+    setTimeout(sendPing, cleaning.queue.length > 0 ? adapter.config.pingInterval : adapter.config.param_pingInterval)
 }
 
 // function to control goto params
@@ -683,28 +746,6 @@ function parseCarpetMode(response){
 }
 */
 
-const statusTexts = {
-    '0': 'Unknown',
-    '1': 'Initiating',
-    '2': 'Sleeping',
-    '3': 'Waiting',
-    '4': '?',
-    '5': 'Cleaning',
-    '6': 'Back to home',
-    '7': 'Manuell mode',
-    '8': 'Charging',
-    '9': 'Charging Error',
-    '10': 'Pause',
-    '11': 'Spot Cleaning',
-    '12': 'In Error',
-    '13': 'Shutting down',
-    '14': 'Updating',
-    '15': 'Docking',
-    '16': 'Going to Spot',
-    '17': 'Zone cleaning',
-    '18': 'Room cleaning',
-    '100': 'Full'
-};
 // TODO: deduplicate from io-package.json
 const errorTexts = {
     '0': 'No error',
@@ -740,7 +781,7 @@ function parseStatus(response) {
     response.error_text= errorTexts[response.error_code];
     response.in_cleaning= response.in_cleaning === 1;
     response.map_present= response.map_present === 1;
-    response.state_text= statusTexts[response.state];
+    //response.state_text= statusTexts[response.state];
     return response;
 }
 
@@ -785,29 +826,8 @@ function getStates(message) {
             adapter.setStateChanged('info.error', status.error_code, true);
             adapter.setStateChanged('info.dnd', status.dnd_enabled, true);
             features.setWaterBox(status.water_box_status);
-            if (stateVal != answer.result[0].state){
-                stateVal = answer.result[0].state;
-                adapter.setState('info.state', stateVal, true);
-
-                if (stateVal === 5 || stateVal === 17 || stateVal === 18) {
-                    if (stateVal === 17 || stateVal === 18) zoneCleanActive = true;
-                    adapter.setState('control.clean_home', true, true);
-                } else {
-                    adapter.setState('control.clean_home', false, true);
-                }
-                if ([2, 3, 5, 6, 8, 11, 16].indexOf(stateVal) > -1) {
-                    zoneCleanActive = false;
-                    if (zoneCleanQueue.length > 0){
-                        adapter.log.debug("use clean trigger from Queue")
-                        adapter.emit('message', zoneCleanQueue.shift());
-                    }
-                }
-                // set valetudo map getter to tru if..
-                if ([5, 6, 11, 16, 17, 18].indexOf(stateVal) > -1) {
-                    VALETUDO.StartMapPoll();
-                } else {
-                    VALETUDO.GETMAP = false;
-                }
+            if (cleaning.state != status.state){
+               cleaning.setRemoteState(status.state)
             }  
         } else if (answer.id === last_id['miIO.info']) {
             const info= answer.result //parseMiIO_info(answer);
@@ -1105,6 +1125,19 @@ function init() {
         },
         native: {}
     });
+    adapter.setObjectNotExists('info.queue', {
+        type: 'state',
+        common: {
+            name: 'Cleaning Queue',
+            type: 'number',
+            role: 'info',
+            read: true,
+            write: false
+        },
+        "native": {}
+    }, function () {
+        adapter.setState('info.queue', 0, true);
+    })
 }
 
 
@@ -1127,7 +1160,7 @@ function main() {
     adapter.config.port = parseInt(adapter.config.port, 10) || 54321;
     adapter.config.ownPort = parseInt(adapter.config.ownPort, 10) || 53421;
     adapter.config.pingInterval = parseInt(adapter.config.pingInterval, 10) || 20000;
-    adapter.config.param_pingInterval = parseInt(adapter.config.param_pingInterval, 10) || 10000;
+    adapter.config.param_pingInterval = parseInt(adapter.config.param_pingInterval, 10) || 60000;
     //adapter.log.info(JSON.stringify(adapter.config));
 
     init();
@@ -1188,6 +1221,7 @@ function main() {
                         connected = true;
                         adapter.log.debug('Connected');
                         adapter.setState('info.connection', true, true);
+                        sendMsg(com.get_status.method);
                         requestParams();
                     }
 
@@ -1216,7 +1250,6 @@ function main() {
         features.init()
  
         sendPing();
-        pingInterval = setInterval(sendPing, adapter.config.pingInterval);
         paramPingInterval = setInterval(requestParams, adapter.config.param_pingInterval);
 
         adapter.subscribeStates('*');
@@ -1354,22 +1387,22 @@ adapter.on('message', function (obj) {
                 return;
             case 'cleanZone':
                 if (!obj.message) return adapter.log.warn("cleanZone needs paramter coordinates")
-                if (zoneCleanActive){
+                if (cleaning.isActive){
                     adapter.log.info("should trigger cleaning zone " + obj.message + ", but is currently active. Add to queue")
-                    zoneCleanQueue.push(obj)
+                    cleaning.push(obj)
                 } else {
-                    zoneCleanActive = true;
+                    cleaning.isActive = cleanStatus_ZoneCleaning;
                     adapter.log.info("trigger cleaning zone " + obj.message)
                     sendCustomCommand('app_zoned_clean',[obj.message])
                 }
                 return;
             case 'cleanSegments':
                 if (!obj.message) return adapter.log.warn("cleanSegments needs paramter mapIndex")
-                if (zoneCleanActive){
+                if (cleaning.isActive){
                     adapter.log.info("should trigger cleaning segment " + obj.message + ", but is currently active. Add to queue")
-                    zoneCleanQueue.push(obj)
+                    cleaning.push(obj)
                 } else {
-                    zoneCleanActive = true;
+                    cleaning.isActive = cleanStatus_RoomCleaning;
                     adapter.log.info("trigger cleaning segment " + obj.message)
                     let map = obj.message
                     if (!isNaN(map))

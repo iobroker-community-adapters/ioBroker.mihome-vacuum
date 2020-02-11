@@ -220,6 +220,11 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 1.10.5 (2020-02-11)
+* sende Ping nur, wenn nicht verbunden, sonst get_status
+* Setzte Button Status auf true, wenn geklickt
+* Timermanager und roomManager in eigene libs ausgelagert
+
 ### 1.10.4 (2020-02-06)
 * (MeisterTR )Unterstützung für Valetudo-Karten für Gen3 und Gen2 2XXX
 

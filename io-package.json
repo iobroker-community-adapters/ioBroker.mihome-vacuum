@@ -3,6 +3,18 @@
         "name": "mihome-vacuum",
         "version": "1.10.4",
         "news": {
+            "1.10.5": {
+                "en": "send Ping only if not connected, otherwise get_status\nset button states to true, if clicked\nmove Timermanager and roomManager to own libs",
+                "de": "Ping nur senden, wenn keine Verbindung besteht, sonst get_status\n",
+                "ru": "отправлять Ping, только если не подключен, иначе get_status\n",
+                "pt": "envie Ping apenas se não estiver conectado, caso contrário, get_status\n",
+                "nl": "stuur Ping alleen indien niet verbonden, anders get_status\n",
+                "fr": "envoyer Ping uniquement s'il n'est pas connecté, sinon get_status\n",
+                "it": "invia Ping solo se non connesso, altrimenti get_status\n",
+                "es": "envíe Ping solo si no está conectado, de lo contrario get_status\n",
+                "pl": "wyślij Ping tylko jeśli nie jest podłączony, w przeciwnym razie get_status\n",
+                "zh-cn": "仅在未连接时发送Ping，否则返回get_status\n"
+            },
             "1.10.4": {
                 "en": "add valetudo map support for gen3 and gen2 2XXX",
                 "de": "Unterstützung für Valetudo-Karten für Gen3 und Gen2 2XXX",
@@ -14,7 +26,7 @@
                 "es": "agregue soporte de valetudo map para gen3 y gen2 2XXX",
                 "pl": "dodaj obsługę map valetudo dla gen3 i gen2 2XXX",
                 "zh-cn": "为gen3和gen2 2XXX添加valetudo映射支持"
-            },            
+            },
             "1.10.1": {
                 "en": "added zone as room handling + timer can directly trigger room channels",
                 "de": "Zone als Raumhandling hinzugefügt + Timer kann Raumkanäle direkt auslösen",
