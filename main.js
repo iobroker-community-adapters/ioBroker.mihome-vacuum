@@ -77,6 +77,8 @@ const cleanStatus_GoingToSpot = 16
 const cleanStatus_ZoneCleaning = 17
 const cleanStatus_RoomCleaning = 18
 
+const MAP = function () {}; // init MAP
+
 class Cleaning {
     constructor(){
         this.state= cleanStatus_Unknown         // current robot Status
@@ -107,7 +109,7 @@ class Cleaning {
         adapter.setState('control.clean_home', this.isActive != 0, true);
         
 
-        if (VALETUDO.ENABLED){// set map getter to true if..
+        if (MAP.ENABLED){// set map getter to true if..
             if ([cleanStatus_Cleaning, cleanStatus_Back_toHome, cleanStatus_SpotCleaning, cleanStatus_GoingToSpot, cleanStatus_ZoneCleaning, cleanStatus_RoomCleaning].indexOf(this.state) > -1) {
                 MAP.StartMapPoll();
             } else {
@@ -341,9 +343,6 @@ class FeatureManager {
     }
 }
 const features= new FeatureManager();
-
-const VALETUDO = function () {}; // init Valetudo
-
 
 const last_id = {
     get_status: 0,
@@ -1546,6 +1545,7 @@ MAP.Init = function () {
     this.mappointer  = "robomap%2F74476450%2F18"
     this.LASTMAPSAVE;
     this.GETMAP = false;
+    this.ENABLED = adapter.config.enableMiMap || adapter.config.valetudo_enable;
     // MAP initial
     this.MAPSAFEINTERVALL = parseInt(adapter.config.valetudo_MapsaveIntervall, 10) || 5000;
     this.POLLMAPINTERVALL = parseInt(adapter.config.valetudo_requestIntervall, 10) || 2000;
