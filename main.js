@@ -1348,6 +1348,20 @@ adapter.on('message', function (obj) {
         let params;
 
         switch (obj.command) {
+            case 'discovery':
+                adapter.log.info('discover' + JSON.stringify(obj))
+                map.getDeviceStatus(obj.message.username, obj.message.password, '{"getVirtualModel":false,"getHuamiDevices":0}').then(function (data) {
+                        adapter.log.debug('discover__' + JSON.stringify(data));
+                        respond(data)
+
+                    })
+                    .catch(function (err) {
+                        adapter.log.info('discover ' + err)
+                        respond({
+                            error: err
+                        })
+                    })
+                return;
             // call this with 
             // sendTo('mihome-vacuum.0', 'sendCustomCommand',
             //     {method: 'method_id', params: [...] /* optional*/},
