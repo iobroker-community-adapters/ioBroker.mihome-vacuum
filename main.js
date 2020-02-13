@@ -1340,7 +1340,7 @@ adapter.on('message', function (obj) {
 
         switch (obj.command) {
             case 'discovery':
-                adapter.log.info('discover' + JSON.stringify(obj))
+                //adapter.log.info('discover' + JSON.stringify(obj))
                 map.getDeviceStatus(obj.message.username, obj.message.password, '{"getVirtualModel":false,"getHuamiDevices":0}').then(function (data) {
                         adapter.log.debug('discover__' + JSON.stringify(data));
                         respond(data)
