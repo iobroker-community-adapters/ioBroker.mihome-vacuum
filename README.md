@@ -213,6 +213,11 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 2.0.1 (2020-02-13)
+* add cloud login to get token
+* add cloud Map
+* add new and old Map format
+* rebuild config page
 ### 1.10.5 (2020-02-11)
 * send Ping only if not connected, otherwise get_status
 * set button states to true, if clicked

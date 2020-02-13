@@ -2,9 +2,21 @@
     "common": {
         "name": "mihome-vacuum",
 
-        "version": "2.0.0",
+        "version": "2.0.1",
         "news": {
-            "1.10.5": {
+            "2.0.1":{
+                "en": "add cloud loging, add xiaomi map, add new map format",
+                "de": "Cloud-Zugang hinzufügen, Xiaomi-Karte hinzufügen, neues Kartenformat hinzufügen",
+                "ru": "добавить облачный журнал, добавить карту xiaomi, добавить новый формат карты",
+                "pt": "adicionar registro em nuvem, adicionar mapa xiaomi, adicionar novo formato de mapa",
+                "nl": "cloud logging toevoegen, xiaomi-kaart toevoegen, nieuw kaartformaat toevoegen",
+                "fr": "ajouter la journalisation dans le cloud, ajouter la carte xiaomi, ajouter un nouveau format de carte",
+                "it": "aggiungi il cloud loging, aggiungi la mappa xiaomi, aggiungi un nuovo formato di mappa",
+                "es": "agregue loging en la nube, agregue el mapa xiaomi, agregue un nuevo formato de mapa",
+                "pl": "dodaj rejestrowanie w chmurze, dodaj mapę Xiaomi, dodaj nowy format mapy",
+                "zh-cn": "添加云日志，添加小米地图，添加新地图格式"
+              },
+              "1.10.5": {
                 "en": "send Ping only if not connected, otherwise get_status\nset button states to true, if clicked\nmove Timermanager and roomManager to own libs",
                 "de": "Ping nur senden, wenn keine Verbindung besteht, sonst get_status\n",
                 "ru": "отправлять Ping, только если не подключен, иначе get_status\n",
