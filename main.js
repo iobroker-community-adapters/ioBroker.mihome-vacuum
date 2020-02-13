@@ -13,19 +13,10 @@ const com = require(__dirname + '/lib/comands');
 const TimerManager= require(__dirname + '/lib/timerManager');
 const RoomManager= require(__dirname + '/lib/roomManager');
 global.systemDictionary = {}
-require(__dirname + '/admin/words.js')   
+require(__dirname + '/admin/words.js')  
 
-let maphelper = {
-    load: function (callback) {
-        try {
-            maphelper = require(__dirname + '/lib/maphelper')
-            return true
-        } catch (error) {
-            adapter.log.error(error)
-            return false
-        }
-    }
-}
+let maphelper = require(__dirname + '/lib/maphelper')
+
 
 const server = dgram.createSocket('udp4');
 
@@ -1178,6 +1169,7 @@ function main() {
     } else {
         enabledExpert();
         enabledVoiceControl();
+        Map = new maphelper(null, adapter);
         MAP.Init(); // for Map
 
 
@@ -1550,7 +1542,7 @@ MAP.Init = function () {
     this.MAPSAFEINTERVALL = parseInt(adapter.config.valetudo_MapsaveIntervall, 10) || 5000;
     this.POLLMAPINTERVALL = parseInt(adapter.config.valetudo_requestIntervall, 10) || 2000;
 
-    if ((adapter.config.enableMiMap || adapter.config.valetudo_enable) && maphelper.load()) {
+    if ((adapter.config.enableMiMap || adapter.config.valetudo_enable)) {
         adapter.setObjectNotExists('map.map64', {
             type: 'state',
             common: {
@@ -1574,7 +1566,7 @@ MAP.Init = function () {
             native: {}
         });
 
-        Map = new maphelper(null, adapter);
+        
         reqParams.push('get_map_v1'); // check mappointer always
 
         setTimeout(() => {
