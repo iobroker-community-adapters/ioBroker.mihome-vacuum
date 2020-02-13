@@ -454,9 +454,6 @@ adapter.on('stateChange', function (id, state) {
             sendMsg('get_room_mapping', null, function(){
                 adapter.setForeignState(id, state.val, true);
             });
-        } else if (answer.id === last_id['get_map_v1'] || answer.id === last_id['get_fresh_map_v1']) {
-            MAP.updateMapPointer(answer.result[0]);
-
         } else if (command === 'addRoom') {
             if (!isNaN(state.val))
                 roomManager.createRoom("manual_" + state.val, parseInt(state.val,10))
@@ -893,7 +890,10 @@ function getStates(message) {
             features.roomMapping= true;
             roomManager.processRoomMaping(answer);
 
-        } else if (answer.id in sendCommandCallbacks) {
+        } else if (answer.id === last_id['get_map_v1'] || answer.id === last_id['get_fresh_map_v1']) {
+            MAP.updateMapPointer(answer.result[0]);
+
+        }  else if (answer.id in sendCommandCallbacks) {
 
             // invoke the callback from the sendTo handler
             const callback = sendCommandCallbacks[answer.id];
