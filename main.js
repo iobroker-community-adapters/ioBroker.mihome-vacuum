@@ -34,6 +34,7 @@ let logEntries = {};
 let logEntriesNew = {};
 let roomManager = null;
 let timerManager = null;
+let Map
 
 // this parts will be translated
 const i18n = {
@@ -1341,7 +1342,7 @@ adapter.on('message', function (obj) {
         switch (obj.command) {
             case 'discovery':
                 //adapter.log.info('discover' + JSON.stringify(obj))
-                map.getDeviceStatus(obj.message.username, obj.message.password, '{"getVirtualModel":false,"getHuamiDevices":0}').then(function (data) {
+                Map.getDeviceStatus(obj.message.username, obj.message.password, '{"getVirtualModel":false,"getHuamiDevices":0}').then(function (data) {
                         adapter.log.debug('discover__' + JSON.stringify(data));
                         respond(data)
 
