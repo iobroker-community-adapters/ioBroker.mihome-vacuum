@@ -1157,6 +1157,8 @@ function main() {
     //adapter.log.info(JSON.stringify(adapter.config));
 
     init();
+    Map = new maphelper(null, adapter);
+    MAP.Init(); // for Map
 
     // Abfrageintervall mindestens 10 sec.
     if (adapter.config.param_pingInterval < 10000) {
@@ -1170,8 +1172,7 @@ function main() {
     } else {
         enabledExpert();
         enabledVoiceControl();
-        Map = new maphelper(null, adapter);
-        MAP.Init(); // for Map
+
 
 
 
