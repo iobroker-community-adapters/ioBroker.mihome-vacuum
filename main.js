@@ -15,17 +15,17 @@ const RoomManager= require(__dirname + '/lib/roomManager');
 global.systemDictionary = {}
 require(__dirname + '/admin/words.js')   
 
-let ValetudoHelper = {
+let maphelper = {
     load: function (callback) {
         try {
-            ValetudoHelper = require(__dirname + '/lib/ValetudoHelper')
+            maphelper = require(__dirname + '/lib/maphelper')
             return true
         } catch (error) {
             adapter.log.error(error)
             return false
         }
     }
-} 
+}
 
 const server = dgram.createSocket('udp4');
 
@@ -107,11 +107,11 @@ class Cleaning {
         adapter.setState('control.clean_home', this.isActive != 0, true);
         
 
-        if (VALETUDO.ENABLED){// set valetudo map getter to true if..
+        if (VALETUDO.ENABLED){// set map getter to true if..
             if ([cleanStatus_Cleaning, cleanStatus_Back_toHome, cleanStatus_SpotCleaning, cleanStatus_GoingToSpot, cleanStatus_ZoneCleaning, cleanStatus_RoomCleaning].indexOf(this.state) > -1) {
-                VALETUDO.StartMapPoll();
+                MAP.StartMapPoll();
             } else {
-                VALETUDO.GETMAP = false;
+                MAP.GETMAP = false;
             }
         }
     }
@@ -463,6 +463,8 @@ adapter.on('stateChange', function (id, state) {
             sendMsg('get_room_mapping', null, function(){
                 adapter.setForeignState(id, state.val, true);
             });
+        } else if (answer.id === last_id['get_map_v1'] || answer.id === last_id['get_fresh_map_v1']) {
+            MAP.updateMapPointer(answer.result[0]);
 
         } else if (command === 'addRoom') {
             if (!isNaN(state.val))
@@ -1177,18 +1179,7 @@ function main() {
     } else {
         enabledExpert();
         enabledVoiceControl();
-
-        // Valetudo initial
-        VALETUDO.ENABLED = adapter.config.valetudo_enable;
-        VALETUDO.COLOR_OPTIONS = {
-            'FLOORCOLOR': adapter.config.valetudo_color_floor,
-            'WALLCOLOR': adapter.config.valetudo_color_wall,
-            'PATHCOLOR': adapter.config.valetudo_color_path,
-            'ROBOT': adapter.config.robot_select
-        };
-        VALETUDO.MAPSAFEINTERVALL = parseInt(adapter.config.valetudo_MapsaveIntervall, 10) || 5000;
-        VALETUDO.POLLMAPINTERVALL = parseInt(adapter.config.valetudo_requestIntervall, 10) || 1000;
-        VALETUDO.Init();
+        MAP.Init(); // for Map
 
 
 
@@ -1535,19 +1526,18 @@ adapter.on('message', function (obj) {
 });
 
 
-//------------------------------------------------------Valetudo Section
+//------------------------------------------------------MAP Section
+MAP.Init = function () {
+    this.retries = 0
+    this.mappointer  = "robomap%2F74476450%2F18"
+    this.LASTMAPSAVE;
+    this.GETMAP = false;
+    // MAP initial
+    this.MAPSAFEINTERVALL = parseInt(adapter.config.valetudo_MapsaveIntervall, 10) || 5000;
+    this.POLLMAPINTERVALL = parseInt(adapter.config.valetudo_requestIntervall, 10) || 2000;
 
-VALETUDO.GETMAP = false;
-VALETUDO.ENABLED = false;
-VALETUDO.COLOR_OPTIONS = {};
-VALETUDO.LASTMAPSAVE;
-VALETUDO.POLLMAPINTERVALL = 2000;
-VALETUDO.MAPSAFEINTERVALL = 5000;
-
-
-VALETUDO.Init = function () {
-    if (this.ENABLED && ValetudoHelper.load()){
-        adapter.setObjectNotExists('valetudo.map64', {
+    if ((adapter.config.enableMiMap || adapter.config.valetudo_enable) && maphelper.load()) {
+        adapter.setObjectNotExists('map.map64', {
             type: 'state',
             common: {
                 name: 'Map64',
@@ -1558,7 +1548,7 @@ VALETUDO.Init = function () {
             },
             native: {}
         });
-        adapter.setObjectNotExists('valetudo.mapURL', {
+        adapter.setObjectNotExists('map.mapURL', {
             type: 'state',
             common: {
                 name: 'MapURL',
@@ -1570,61 +1560,84 @@ VALETUDO.Init = function () {
             native: {}
         });
 
-        ValetudoHelper.getMapBase64(adapter.config.ip, this.COLOR_OPTIONS).then(function (data) {
-                adapter.setState('valetudo.map64', '<img src="' + data.toDataURL() + '" /style="width: auto ;height: 100%;">', true);
+        Map = new maphelper(null, adapter);
+        reqParams.push('get_map_v1'); // check mappointer always
+
+        setTimeout(() => {
+            let self = this;
+            adapter.log.debug(self.mappointer);
+            Map.updateMap(self.mappointer).then(function (data) {
+                adapter.setState('map.map64', '<img src="' + data.toDataURL() + '" /style="width: auto ;height: 100%;">', true);
                 var buf = data.toBuffer();
                 adapter.writeFile('mihome-vacuum.admin', 'actualMap.png', buf, function (error) {
                     if (error) {
                         adapter.log.error('Fehler beim Speichern der Karte');
                     } else {
-                        adapter.setState('valetudo.mapURL', "/mihome-vacuum.admin/actualMap.png", true);
+                        adapter.setState('map.mapURL', "/mihome-vacuum.admin/actualMap.png", true);
 
                     }
-                    VALETUDO.LASTMAPSAVE = Date.now();
+                    self.LASTMAPSAVE = Date.now();
                 });
             })
             .catch(err => adapter.log.error(err))
+        }, 10000)
+    }
+}
+MAP.updateMapPointer = function (answer) {
+    let that = this;
+    if (answer === 'retry') {
+        setTimeout(function () {
+            sendMsg('get_fresh_map_v1')
+            adapter.log.debug('Mappointer_retry___')
+        }, 500)
+        return
+    } else {
+        that.mappointer = answer;
+        adapter.log.debug('Mappointer_updated')
     }
 }
 
-VALETUDO.StartMapPoll = function () {
-    if (!this.GETMAP && this.ENABLED) {
-        this.GETMAP = true;
-        this._MapPoll();
+MAP.StartMapPoll = function () {
+    let self = this;
+    if (!self.GETMAP && (adapter.config.enableMiMap || adapter.config.valetudo_enable)) {
+        self.GETMAP = true;
+        self._MapPoll();
     }
-}
+} 
 
-VALETUDO._MapPoll = function () {
-    ValetudoHelper.getMapBase64(adapter.config.ip, this.COLOR_OPTIONS).then(function (data) {
-            adapter.setState('valetudo.map64', '<img src="' + data.toDataURL() + '" /style="width: auto ;height: 100%;">', true);
+MAP._MapPoll = function () {
+    let self = this;
+    Map.updateMap(self.mappointer).then(function (data) {
+            adapter.setState('map.map64', '<img src="' + data.toDataURL() + '" /style="width: auto ;height: 100%;">', true);
 
-            if (Date.now() - VALETUDO.LASTMAPSAVE > VALETUDO.MAPSAFEINTERVALL) {
+            if (Date.now() - self.LASTMAPSAVE > self.MAPSAFEINTERVALL) {
                 var buf = data.toBuffer();
                 adapter.writeFile('mihome-vacuum.admin', 'actualMap.png', buf, function (error) {
                     if (error) {
                         adapter.log.error('Fehler beim Speichern der Karte');
                     } else {
-                        adapter.setState('valetudo.mapURL', "/mihome-vacuum.admin/actualMap.png", true);
+                        adapter.setState('map.mapURL', "/mihome-vacuum.admin/actualMap.png", true);
 
                     }
-                    VALETUDO.LASTMAPSAVE = Date.now();
+                    self.LASTMAPSAVE = Date.now();
                 })
             };
 
-            if (VALETUDO.GETMAP) {
+            if (self.GETMAP) {
                 //adapter.log.info(VALETUDO.POLLMAPINTERVALL)
                 setTimeout(function () {
-                    VALETUDO._MapPoll();
-                }, VALETUDO.POLLMAPINTERVALL);
+                    sendMsg('get_map_v1');
+                    self._MapPoll();
+                }, self.POLLMAPINTERVALL);
             }
 
 
         })
         .catch(err => {
             adapter.log.error(err);
-            if (VALETUDO.GETMAP) setTimeout(function () {
-                VALETUDO._MapPoll();
-            }, VALETUDO.POLLMAPINTERVALL);
+            if (self.GETMAP) setTimeout(function () {
+                self._MapPoll();
+            }, self.POLLMAPINTERVALL);
         })
 
 }

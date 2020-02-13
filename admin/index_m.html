@@ -58,6 +58,7 @@
             z-index: 10;
             transform: rotate(90deg);
         }
+
         .path {
             position: relative;
             left: 100px;
@@ -72,281 +73,372 @@
         }
     </style>
     <script type="text/javascript">
-var namespace;
-var rooms = {}
+        var namespace;
+        var rooms = {}
+        var active = false;
 
-// the function loadSettings has to exist ...
-function load(settings, onChange) {
-    namespace = adapter + '.' + instance + '.';
-    if (!settings) return;
+        // the function loadSettings has to exist ...
+        function load(settings, onChange) {
+            namespace = adapter + '.' + instance + '.';
+            if (!settings) return;
+            $('.hidden').hide();
 
-    $('.value').each(function () {
-        var key = $(this).attr('id');
-        var $key = $('#' + key + '.value');
-        if ($key.attr('type') === 'checkbox') {
-            $key.prop('checked', settings[key]).change(function () {
-                onChange();
-            });
-        } else {
-            $key.val(settings[key]).change(function () {
-                onChange();
-            }).keyup(function () {
-                onChange();
-            });
-        }
-    });
-    $(".cbox").css("background", ($(".colorFloor").val()));
-    $(".cbox").css("border-color", ($(".colorWall").val()));
-    $(".cbox2").css("border-color", ($(".colorWall").val()));
-    $(".path").css("border-color", ($(".colorPath").val()));
-    $(".robot").attr('src', '' + $(".robotSel").val() + '.png');;
-    console.log("run all....")
+            $('.value').each(function () {
+                var key = $(this).attr('id');
+                var $key = $('#' + key + '.value');
+                if ($key.attr('type') === 'checkbox') {
+                    $key.prop('checked', settings[key]).change(function () {
 
-    $(".colorFloor").change(function () {
-        console.log("changed...." + $(this).val())
-        $(".cbox").css("background", ($(this).val()));
-    });
-    $(".colorWall").change(function () {
-        console.log("changed...." + $(this).val())
-        $(".cbox").css("border-color", ($(this).val()));
-        $(".cbox2").css("border-color", ($(this).val()));
-    });
-    $(".colorPath").change(function () {
-        console.log("changed...." + $(this).val())
-        $(".path").css("border-color", ($(this).val()));
-    });
-    $(".robotSel").change(function () {
-        console.log("changed....Pic" + $(this).val())
-        $(".robot").attr('src', '' + $(this).val() + '.png');;
-    });
-
-    socket.emit('getObjectView', 'system', 'channel', {
-        startkey: namespace + 'rooms',
-        endkey: namespace + 'rooms.\u9999'
-    }, function (err, allChannels) {
-        let channelStr = ''
-        let channel
-        if (allChannels) {
-            for (i in allChannels.rows) {
-                channel = allChannels.rows[i].value
-                channelStr += ';' + channel._id.split('.').pop() + '/' + channel.common.name
-            }
-        }
-        if (channelStr.length)
-            $('#timer th[data-name=channels]').data('options', channelStr.slice(1))
-        else
-            $('#timer th[data-name=channels]').remove()
-
-        socket.emit('getForeignStates', namespace + "timer.*", function (err, timerStates) {
-            let timer = []
-
-            socket.emit('getObjectView', 'system', 'state', {
-                startkey: namespace + 'timer.',
-                endkey: namespace + 'timer.\u9999'
-            }, function (err, timerObjs) {
-                if (!err && timerObjs) {
-                    for (let t in timerObjs.rows) {
-                        let timerState = timerStates[timerObjs.rows[t].id]
-                        if (timerState)
-                            timerState.channels = timerObjs.rows[t].value.native.channels
-                    }
-                }
-
-                socket.emit('getObjectView', 'system', 'enum', {
-                    startkey: 'enum.rooms.',
-                    endkey: 'enum.rooms.' + '\u9999'
-                }, function (err, res) {
-                    if (!err && res) {
-                        let filter = namespace + 'timer.'
-                        for (var i in res.rows) {
-                            let room = res.rows[i].value;
-                            rooms[room._id] = { timer: [], del: [], add: [] }
-                            for (let t in room.common.members) {
-                                let id = room.common.members[t]
-                                let timerState = timerStates[id]
-                                if (timerState) {
-                                    if (!timerState.room)
-                                        timerState.room = []
-                                    timerState.room.push(room._id)
-                                    rooms[room._id].timer.push(id)
-                                } else if (id.indexOf(namespace) === 0) { // we use chance for housekeeping of zombie timer and rooms
-                                    if (id.indexOf('.timer.') === 0 || (id.indexOf('.multiRoomClean') === -1 && id.indexOf('.rooms.') > 0 && channelStr.indexOf(id.replace(/.+\.rooms\.([^.]+).*/, '$1')) === -1))
-                                        rooms[room._id].del.push(id)
-                                }
-                            }
+                        if ($('#enableMiMap').prop('checked') || $('#valetudo_enable').prop(
+                            'checked')) {
+                            $('.map-setting').removeClass('disabled');
+                        } else {
+                            $('.map-setting').addClass('disabled');
                         }
-                    }
+                        console.log($('#enableMiMap').prop('checked') + '_____' + $('#valetudo_enable')
+                            .prop('checked'))
 
-                    for (let t in timerStates) {
-                        let terms = t.split('.').pop().split('_')
-                        terms.length > 2 && timer.push({
-                            enabled: timerStates[t].val != -1,
-                            minute: parseInt(terms[2], 10),
-                            hour: parseInt(terms[1], 10),
-                            day: terms[0].split(''),
-                            room: timerStates[t].room || [],
-                            channels: timerStates[t].channels || []
-                        })
-                    }
-                    values2table('timer', timer, onChange);
-                })
-            })
-        });
-    });
-    onChange(false);
-}
-
-function save(callback) {
-    var obj = {};
-    $('.value').each(function () {
-        var $this = $(this);
-        if ($this.attr('type') === 'checkbox') {
-            obj[$this.attr('id')] = $this.prop('checked');
-        } else {
-            obj[$this.attr('id')] = $this.val();
-        }
-    });
-    var tokenLength = obj.token.replace(/\s/g, '').length;
-    if (tokenLength !== 32 && tokenLength !== 96) {
-        showMessage(_('Invalid token length. Expected 32 or 96 HEX chars.'));
-        return;
-    }
-
-    let newTimerArray = table2values('timer')
-    let timerList = {}
-    let timer
-    let name
-    for (let t in newTimerArray) {
-        timer = newTimerArray[t]
-        name = timer.day.join('') + '_' + "0".concat(timer.hour).slice(-2) + '_' + "0".concat(timer.minute).slice(-2);
-        if (timerList[name])
-            return showMessage(_('same starttime of 2 timer not possible'));
-        timerList[name] = timer
-    }
-    socket.emit('getForeignStates', namespace + "timer.*", function (err, timerStates) {
-        if (!err && timerStates) {
-
-            socket.emit('getObjectView', 'system', 'state', {
-                startkey: namespace + 'timer.',
-                endkey: namespace + 'timer.\u9999'
-            }, function (err, timerObjs) {
-                if (!err && timerObjs) {
-                    for (let t in timerObjs.rows) {
-                        let timer = timerList[timerObjs.rows[t].id.split(".").pop()];
-                        if (timer) {
-
-                            if (timer.channels && timer.channels.length) {
-                                timerObjs.rows[t].value.native.channels = timer.channels
-                            } else if (timerObjs.rows[t].value.native.channels) {
-                                delete timerObjs.rows[t].value.native.channels
-                            } else
-                                continue
-                            timerObjs.rows[t].value.native.nextProcessTime = 0
-                            socket.emit('setObject', timerObjs.rows[t].id, timerObjs.rows[t].value);
-                            socket.emit('setState', timerObjs.rows[t].id, { ack: false });
-                        }
-                    }
-                }
-
-                let p
-                for (let t in timerStates) {
-                    let timerState = timerStates[t];
-                    name = t.split(".").pop();
-                    timer = timerList[name];
-                    if (!timer) {
-                        socket.emit('delObject', t);
-                        for (let r in rooms) {
-                            p = rooms[r].timer.indexOf(t)
-                            if (p >= 0) {
-                                rooms[r].del.push(t);
-                                delete rooms[r].timer[p]
-                            }
-                        }
-                    } else {
-                        if (!timer.enabled && timerState.val != -1)
-                            socket.emit('setState', t, -1);
-                        for (let r in rooms) {
-                            p = rooms[r].timer.indexOf(t)
-                            if (p >= 0) {
-                                if (timer.room.indexOf(r) == -1) {
-                                    rooms[r].del.push(t);
-                                    delete rooms[r].timer[p]
-                                }
-                            } else if (timer.room.indexOf(r) >= 0)
-                                rooms[r].add.push(t);
-                        }
-                        delete timerList[name];
-                    }
-                }
-
-                for (let tn in timerList) {
-                    timer = timerList[tn]
-                    let stateId = namespace + "timer." + tn
-                    socket.emit('setObject', stateId, {
-                        type: 'state',
-                        common: {
-                            name: tn,
-                            type: 'number',
-                            role: 'value',
-                            read: true,
-                            write: true,
-                            min: -1,
-                            max: 2,
-                            desc: 'timer',
-                            states: {
-                                "1": _("enabled"),
-                                "-1": _("disabled"),
-                                "0": _("Skip Timer"),
-                                "2": _("start now")
-                            }
-                        },
-                        native: {
-                            channels: timer.channels
-                        }
-                    }, function (err, obj) {
-                        if (err) return showMessage(err, _('Error'), 'alert');
-                        socket.emit('setState', stateId, { val: (timer.enabled ? '1' : -1), ack: false });
+                        onChange();
                     });
-                    for (let r in timer.room)
-                        rooms[timer.room[r]].add.push(stateId);
+                } else {
+                    $key.val(settings[key]).change(function () {
+                        onChange();
+                    }).keyup(function () {
+                        onChange();
+                    });
                 }
+            });
+            $(".cbox").css("background", ($(".colorFloor").val()));
+            $(".cbox").css("border-color", ($(".colorWall").val()));
+            $(".cbox2").css("border-color", ($(".colorWall").val()));
+            $(".path").css("border-color", ($(".colorPath").val()));
+            $(".robot").attr('src', '' + $(".robotSel").val() + '.png');;
+            console.log("run all....")
 
-                for (let r in rooms) {
-                    let room = rooms[r]
-                    if (room.add.length > 0 || room.del.length > 0) {
-                        socket.emit('getObject', r, function (err, obj) {
-                            if (!err && obj) {
-                                for (let t in room.del) {
-                                    p = obj.common.members.indexOf(room.del[t]);
-                                    if (p !== -1)
-                                        obj.common.members.splice(p, 1);
-                                }
-                                obj.common.members = obj.common.members.concat(room.add)
-                                room.timer = room.timer.concat(room.add)
-                                room.del = []
-                                room.add = []
-                                obj.from = 'system.adapter.' + namespace;
-                                obj.user = 'system.user.admin';
-                                obj.ts = Date.now();
-                                socket.emit('setObject', obj._id, obj);
-                            }
-                        })
+            $(".colorFloor").change(function () {
+                console.log("changed...." + $(this).val())
+                $(".cbox").css("background", ($(this).val()));
+            });
+            $(".colorWall").change(function () {
+                console.log("changed...." + $(this).val())
+                $(".cbox").css("border-color", ($(this).val()));
+                $(".cbox2").css("border-color", ($(this).val()));
+            });
+            $(".colorPath").change(function () {
+                console.log("changed...." + $(this).val())
+                $(".path").css("border-color", ($(this).val()));
+            });
+            $(".robotSel").change(function () {
+                console.log("changed....Pic" + $(this).val())
+                $(".robot").attr('src', '' + $(this).val() + '.png');;
+            });
+
+            //wenn device selection changed.
+            $('#devices').change(function () {
+                let tmp = JSON.parse($(this).val());
+                console.log("changed....devices" + $(this).val())
+
+                $('#token.value').val(tmp.token)
+                $('#ip.value').val(tmp.localip)
+                $('#MiDevice.value').val($(this).val())
+
+            });
+
+            $('#getDevices').on('click', function () {
+                var $getDevices = $('#getDevices');
+                var $devicelist = $('#devices')
+
+                if (!active) {
+                    console.log("Not_active");
+                    showToast(_('Please activate instance'));
+                    return;
+                }
+                $getDevices.addClass('disabled');
+                $('#loader1').removeClass('seenot');
+                let pass = $('#password').val();
+                let user = $('#email').val();
+                console.log("we wqill send to: " + adapter + "." + instance);
+
+                sendTo(adapter + "." + instance, 'discovery', {
+                    password: pass,
+                    username: user
+                }, function (result) {
+
+                    console.log(JSON.stringify(result));
+                    $getDevices.removeClass('disabled');
+                    $('#loader1').addClass('seenot');
+
+                    $('#token').addClass('disabled');
+                    $('#ip').addClass('disabled');
+
+                    var arr = result;
+
+                    if (arr.error) {
+                        showToast(_('ERROR: ' + arr.error));
+                        return;
+                    }
+
+                    rawdevices = arr;
+                    let text = "";
+                    arr.forEach(function (entry) {
+                        text += "<option value='" + JSON.stringify(entry) + "' >" + entry
+                            .model + ' - token: ' + entry.token + ' - ip: ' + (entry.localip ?
+                                entry.localip : '') + '</option>';
+
+                        //check if in config
+                    })
+                    $devicelist.html(text).select();
+                });
+
+            });
+
+            socket.emit('getState', 'system.adapter.' + adapter + '.' + instance + '.alive', function (err, state) {
+                active = /*common.enabled ||*/ (state && state.val);
+            });
+            socket.emit('getObjectView', 'system', 'channel', {
+                startkey: namespace + 'rooms',
+                endkey: namespace + 'rooms.\u9999'
+            }, function (err, allChannels) {
+                let channelStr = ''
+                let channel
+                if (allChannels) {
+                    for (i in allChannels.rows) {
+                        channel = allChannels.rows[i].value
+                        channelStr += ';' + channel._id.split('.').pop() + '/' + channel.common.name
                     }
                 }
+                if (channelStr.length)
+                    $('#timer th[data-name=channels]').data('options', channelStr.slice(1))
+                else
+                    $('#timer th[data-name=channels]').remove()
+
+                socket.emit('getForeignStates', namespace + "timer.*", function (err, timerStates) {
+                    let timer = []
+
+                    socket.emit('getObjectView', 'system', 'state', {
+                        startkey: namespace + 'timer.',
+                        endkey: namespace + 'timer.\u9999'
+                    }, function (err, timerObjs) {
+                        if (!err && timerObjs) {
+                            for (let t in timerObjs.rows) {
+                                let timerState = timerStates[timerObjs.rows[t].id]
+                                if (timerState)
+                                    timerState.channels = timerObjs.rows[t].value.native
+                                    .channels
+                            }
+                        }
+
+                        socket.emit('getObjectView', 'system', 'enum', {
+                            startkey: 'enum.rooms.',
+                            endkey: 'enum.rooms.' + '\u9999'
+                        }, function (err, res) {
+                            if (!err && res) {
+                                let filter = namespace + 'timer.'
+                                for (var i in res.rows) {
+                                    let room = res.rows[i].value;
+                                    rooms[room._id] = {
+                                        timer: [],
+                                        del: [],
+                                        add: []
+                                    }
+                                    for (let t in room.common.members) {
+                                        let id = room.common.members[t]
+                                        let timerState = timerStates[id]
+                                        if (timerState) {
+                                            if (!timerState.room)
+                                                timerState.room = []
+                                            timerState.room.push(room._id)
+                                            rooms[room._id].timer.push(id)
+                                        } else if (id.indexOf(namespace) ===
+                                            0
+                                            ) { // we use chance for housekeeping of zombie timer and rooms
+                                            if (id.indexOf('.timer.') === 0 || (id
+                                                    .indexOf('.multiRoomClean') === -
+                                                    1 && id.indexOf('.rooms.') > 0 &&
+                                                    channelStr.indexOf(id.replace(
+                                                        /.+\.rooms\.([^.]+).*/, '$1'
+                                                    )) === -1))
+                                                rooms[room._id].del.push(id)
+                                        }
+                                    }
+                                }
+                            }
+
+                            for (let t in timerStates) {
+                                let terms = t.split('.').pop().split('_')
+                                terms.length > 2 && timer.push({
+                                    enabled: timerStates[t].val != -1,
+                                    minute: parseInt(terms[2], 10),
+                                    hour: parseInt(terms[1], 10),
+                                    day: terms[0].split(''),
+                                    room: timerStates[t].room || [],
+                                    channels: timerStates[t].channels || []
+                                })
+                            }
+                            values2table('timer', timer, onChange);
+                        })
+                    })
+                });
+            });
+            onChange(false);
+        }
+
+        function save(callback) {
+            var obj = {};
+            $('.value').each(function () {
+                var $this = $(this);
+                if ($this.attr('type') === 'checkbox') {
+                    obj[$this.attr('id')] = $this.prop('checked');
+                } else {
+                    obj[$this.attr('id')] = $this.val();
+                }
+            });
+            var tokenLength = obj.token.replace(/\s/g, '').length;
+            if (tokenLength !== 32 && tokenLength !== 96) {
+                showMessage(_('Invalid token length. Expected 32 or 96 HEX chars.'));
+                return;
+            }
+
+            let newTimerArray = table2values('timer')
+            let timerList = {}
+            let timer
+            let name
+            for (let t in newTimerArray) {
+                timer = newTimerArray[t]
+                name = timer.day.join('') + '_' + "0".concat(timer.hour).slice(-2) + '_' + "0".concat(timer.minute)
+                    .slice(-2);
+                if (timerList[name])
+                    return showMessage(_('same starttime of 2 timer not possible'));
+                timerList[name] = timer
+            }
+            socket.emit('getForeignStates', namespace + "timer.*", function (err, timerStates) {
+                if (!err && timerStates) {
+
+                    socket.emit('getObjectView', 'system', 'state', {
+                        startkey: namespace + 'timer.',
+                        endkey: namespace + 'timer.\u9999'
+                    }, function (err, timerObjs) {
+                        if (!err && timerObjs) {
+                            for (let t in timerObjs.rows) {
+                                let timer = timerList[timerObjs.rows[t].id.split(".").pop()];
+                                if (timer) {
+
+                                    if (timer.channels && timer.channels.length) {
+                                        timerObjs.rows[t].value.native.channels = timer.channels
+                                    } else if (timerObjs.rows[t].value.native.channels) {
+                                        delete timerObjs.rows[t].value.native.channels
+                                    } else
+                                        continue
+                                    timerObjs.rows[t].value.native.nextProcessTime = 0
+                                    socket.emit('setObject', timerObjs.rows[t].id, timerObjs.rows[t]
+                                        .value);
+                                    socket.emit('setState', timerObjs.rows[t].id, {
+                                        ack: false
+                                    });
+                                }
+                            }
+                        }
+
+                        let p
+                        for (let t in timerStates) {
+                            let timerState = timerStates[t];
+                            name = t.split(".").pop();
+                            timer = timerList[name];
+                            if (!timer) {
+                                socket.emit('delObject', t);
+                                for (let r in rooms) {
+                                    p = rooms[r].timer.indexOf(t)
+                                    if (p >= 0) {
+                                        rooms[r].del.push(t);
+                                        delete rooms[r].timer[p]
+                                    }
+                                }
+                            } else {
+                                if (!timer.enabled && timerState.val != -1)
+                                    socket.emit('setState', t, -1);
+                                for (let r in rooms) {
+                                    p = rooms[r].timer.indexOf(t)
+                                    if (p >= 0) {
+                                        if (timer.room.indexOf(r) == -1) {
+                                            rooms[r].del.push(t);
+                                            delete rooms[r].timer[p]
+                                        }
+                                    } else if (timer.room.indexOf(r) >= 0)
+                                        rooms[r].add.push(t);
+                                }
+                                delete timerList[name];
+                            }
+                        }
+
+                        for (let tn in timerList) {
+                            timer = timerList[tn]
+                            let stateId = namespace + "timer." + tn
+                            socket.emit('setObject', stateId, {
+                                type: 'state',
+                                common: {
+                                    name: tn,
+                                    type: 'number',
+                                    role: 'value',
+                                    read: true,
+                                    write: true,
+                                    min: -1,
+                                    max: 2,
+                                    desc: 'timer',
+                                    states: {
+                                        "1": _("enabled"),
+                                        "-1": _("disabled"),
+                                        "0": _("Skip Timer"),
+                                        "2": _("start now")
+                                    }
+                                },
+                                native: {
+                                    channels: timer.channels
+                                }
+                            }, function (err, obj) {
+                                if (err) return showMessage(err, _('Error'), 'alert');
+                                socket.emit('setState', stateId, {
+                                    val: (timer.enabled ? '1' : -1),
+                                    ack: false
+                                });
+                            });
+                            for (let r in timer.room)
+                                rooms[timer.room[r]].add.push(stateId);
+                        }
+
+                        for (let r in rooms) {
+                            let room = rooms[r]
+                            if (room.add.length > 0 || room.del.length > 0) {
+                                socket.emit('getObject', r, function (err, obj) {
+                                    if (!err && obj) {
+                                        for (let t in room.del) {
+                                            p = obj.common.members.indexOf(room.del[t]);
+                                            if (p !== -1)
+                                                obj.common.members.splice(p, 1);
+                                        }
+                                        obj.common.members = obj.common.members.concat(room.add)
+                                        room.timer = room.timer.concat(room.add)
+                                        room.del = []
+                                        room.add = []
+                                        obj.from = 'system.adapter.' + namespace;
+                                        obj.user = 'system.user.admin';
+                                        obj.ts = Date.now();
+                                        socket.emit('setObject', obj._id, obj);
+                                    }
+                                })
+                            }
+                        }
 
 
-                callback(obj);
+                        callback(obj);
+                    })
+                }
             })
         }
-    })
-}
-
     </script>
 </head>
 
 <body>
-    <div class="m adapter-container"
-        style="background-image: url('S5.png'); background-repeat: no-repeat; background-position: 20px 110px;  background-size: 520px ;">
+    <div class="m adapter-container"></div>
 
         <div class="row">
             <!-- Tabs navigation -->
@@ -356,85 +448,132 @@ function save(callback) {
                         <a href="#tab-main" class="translate" data-lang="Main">Options</a>
                     </li>
                     <li class="tab col s2">
-                        <a href="#tab-valetudo" class="translate" data-lang="Valetudo">Devices</a>
+                        <a href="#tab-settings" class="translate" data-lang="Settings">Settings</a>
+                    </li>
+                    <li class="tab col s2 map-setting">
+                        <a href="#tab-valetudo" class="translate" data-lang="Map settings">Map settings</a>
                     </li>
                     <li class="tab col s2">
                         <a href="#tab-timer" class="translate" data-lang="Timer">Timer</a>
                     </li>
                 </ul>
             </div>
-        
+
 
             <div id="tab-main" class="col s12 page">
-
                 <div class="row">
-                    <div class="row">
-                        <div class="col s12 m2 l1">
-                            <img src="mihome-vacuum.png" class="logo">
-                        </div>
-                        <div class="col s12 m8 l10">
-                            <h6 class="translate">adapter for control of Xiaomi/Roborock vacuum cleaner</h6>
-                        </div>
+                    <div class="col s12 m2 l1">
+                        <img src="mihome-vacuum.png" class="logo">
                     </div>
-                    <div class="divider"></div>
-                    <div class="row" style="background-color: #64b5f6;">
-                        <div class="col s12">
-                            <span class="translate">connection settings</span>
-                        </div>
+                </div>
+                <div class="col s12">
+                    <h6 class="title translate" data-lang="Xiaomi cloud login">Cloud login</h6>
+                </div>
+                <div class="row">
+                    <div class="col s12 m4 l2 input-field">
+                        <input class="value" id="email" type="text" />
+                        <label class="translate" for="email">E-mail</label>
                     </div>
-                    <div class="row">
-                        <div class="col s12">
-                            <input class="value" id="token" size="60" maxlength="96" />
-                            <label for="token" class="translate">Token</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12 m4 l2">
-                            <input class="value" id="ip" size="15" />
-                            <label class="translate" for="ip">IP address:</label>
-                        </div>
 
-                        <div class="col s12 m3 l1 offset-m1 offset-l1">
-                            <input class="value number" id="port" size="5" maxlength="5" type="number" />
-                            <label class="translate" for="port">Vacuum port:</label>
-                        </div>
+                    <div class="col s12 m3 l2 input-field">
+                        <input class="value" id="password" size="5" type="password" />
+                        <label class="translate" for="password">password</label>
+                    </div>
 
-                        <div class="col s12 m3 l1 offset-m1 offset-l1">
-                            <input class="value number" id="ownPort" size="5" maxlength="5" type="number" />
-                            <label class="translate" for="ownPort">Own port:</label>
-                        </div>
+                    <div class="input-field col s12 m4 l2 ">
+                        <select class="value " id="server" type="text">
+                            <option value="" disabled selected class="translate">server</option>
+                            <option value="cn">China</option>
+                            <option value="de">Germany</option>
+                        </select>
+                        <label class="translate" for="server">Server</label>
                     </div>
-                    <div class="row">
-                        <div class="col s12 m4 l2">
-                            <input class="value" id="param_pingInterval" size="15" type="number" min="20000" />
-                            <label class="translate" for="param_pingInterval">get Parameter Intervall</label>
-                        </div>
-                        <div class="col s12 m4 l2">
-                            <input class="value" id="pingInterval" size="15" type="number" min="10000" />
-                            <label class="translate" for="pingInterval">get Status Intervall</label>
-                        </div>
+                    <div class="col s5 m3 l2">
+                        <a id="getDevices" class=" btn-small translate">get devices<span></span></a>
                     </div>
-                    <div class="divider"></div>
-                    <div class="row" style="background-color: #64b5f6;">
-                        <div class="col s12">
-                            <span class="translate">additional settings</span>
-                        </div>
+                    <div class="col s2 ">
+                        <div class="loader seenot" id="loader1"> </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m12 l12 input-field">
+                        <select class="value " id="devices" type="text">
+                            <option value="" disabled selected class="translate">Please get Devices first</option>
+                        </select>
+                        <label class="translate" for="devices">devices</label>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <h6 class="title translate" data-lang="manuell settings">manuell settings</h6>
+                </div>
+                <div class="row">
+                    <div class="col s12 m5 l3 input-field">
+                        <input class="value" id="token" size="60" maxlength="96" type="text" />
+                        <label for="token" class="translate">Token</label>
+                    </div>
+                </div>
+                <div class="col s12 m4 l2 input-field hidden">
+                    <input class="value" id="MiDevice" type="text" />
+                    <label class="translate" for="ip">device</label>
+                </div>
+                <div class="row">
+                    <div class="col s12 m4 l2 input-field">
+                        <input class="value" id="ip" size="15" type="text" />
+                        <label class="translate" for="ip">IP address:</label>
+                    </div>
 
+                    <div class="col s12 m3 l1 offset-m1 offset-l1 input-field">
+                        <input class="value number" id="port" size="5" maxlength="5" type="number" />
+                        <label class="translate" for="port">Vacuum port:</label>
                     </div>
-                    <div class="row">
-                        <div class="col s12 m6">
-                            <input class="value" id="enableAlexa" type="checkbox" />
-                            <span class="translate">add a state for Alexa</span>
-                        </div>
-                        <div class="col s12 m6">
-                            <input class="value" id="enableSelfCommands" type="checkbox" />
-                            <span class="translate">Send own commands</span>
-                        </div>
-                        <div class="col s4">
-                            <input class="value" id="enableResumeZone" type="checkbox"
-                                data-link="resume-paused-zonecleaning-with-start-button" />
-                            <span class="translate">Resume paused zonecleaning with start button</span>
-                        </div>
+
+                    <div class="col s12 m3 l1 offset-m1 offset-l1 input-field">
+                        <input class="value number" id="ownPort" size="5" maxlength="5" type="number" />
+                        <label class="translate" for="ownPort">Own port:</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs Settings -->
+            <div id="tab-settings" class="col s12 page">
+                <div class="row">
+                    <div class="col s12 m4 l2">
+                        <input class="value" id="param_pingInterval" size="15" type="number" min="20000" />
+                        <label class="translate" for="param_pingInterval">get Parameter Intervall</label>
+                    </div>
+                    <div class="col s12 m4 l2">
+                        <input class="value" id="pingInterval" size="15" type="number" min="10000" />
+                        <label class="translate" for="pingInterval">get Status Intervall</label>
+                    </div>
+                </div>
+                <div class="col s12">
+                    <h6 class="title translate" data-lang="map">map</h6>
+                </div>
+                <div class="col s12 m6">
+                    <input class="value" id="enableMiMap" type="checkbox" />
+                    <span class="translate">enable Map from xiaomi cloud</span>
+                </div>
+                <div class="col s12 m6 l2">
+                    <input class="value" id="valetudo_enable" type="checkbox" />
+                    <span class="translate">Enable Valetudo</span>
+                </div>
+
+                <div class="col s12">
+                    <h6 class="title translate" data-lang="other settings">other settings</h6>
+                </div>
+                <div class="row">
+                    <div class="col s12 m6">
+                        <input class="value" id="enableAlexa" type="checkbox" />
+                        <span class="translate">add a state for Alexa</span>
+                    </div>
+                    <div class="col s12 m6">
+                        <input class="value" id="enableSelfCommands" type="checkbox" />
+                        <span class="translate">Send own commands</span>
+                    </div>
+                    <div class="col s4">
+                        <input class="value" id="enableResumeZone" type="checkbox"
+                            data-link="resume-paused-zonecleaning-with-start-button" />
+                        <span class="translate">Resume paused zonecleaning with start button</span>
                     </div>
                 </div>
             </div>
@@ -447,10 +586,6 @@ function save(callback) {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s12 m6 l2">
-                        <input class="value" id="valetudo_enable" type="checkbox" />
-                        <span class="translate">Enable Valetudo</span>
-                    </div>
                     <div class="col s12 m4 l2">
                         <input class="value" id="valetudo_requestIntervall" size="15" />
                         <label class="translate" for="valetudo_requestIntervall">Request Intervall</label>
@@ -459,18 +594,22 @@ function save(callback) {
                         <input class="value" id="valetudo_MapsaveIntervall" size="15" />
                         <label class="translate" for="valetudo_MapsaveIntervall">Map save intervall</label>
                     </div>
+                    <div class="col s4">
+                        <input class="value" id="newmap" type="checkbox"/>
+                        <span class="translate">Use new Map format with roomcolors</span>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col s12 m4 l2">
-                        <input class="value colorFloor" id="valetudo_color_floor" size="15"/>
+                        <input class="value colorFloor" id="valetudo_color_floor" size="15" />
                         <label class="translate" for="valetudo_color_floor">Color floor:</label>
                     </div>
                     <div class="col s12 m4 l2">
-                        <input class="value colorWall" id="valetudo_color_wall" size="15"/>
+                        <input class="value colorWall" id="valetudo_color_wall" size="15" />
                         <label class="translate" for="valetudo_color_wall">Color wall:</label>
                     </div>
                     <div class="col s12 m4 l2">
-                        <input class="value colorPath" id="valetudo_color_path" size="15"/>
+                        <input class="value colorPath" id="valetudo_color_path" size="15" />
                         <label class="translate" for="valetudo_color_path">Color path:</label>
                     </div>
                 </div>
@@ -499,29 +638,32 @@ function save(callback) {
 
 
             </div>
-
+            <!-- Tabs Timer -->
             <div id="tab-timer" class="col s12 page">
                 <div class="col s12" id="timer">
                     <div class="row">
                         <div class="col">
                             <a class="btn-floating waves-effect waves-light blue table-button-add"><i
-                                class="material-icons translate">add</i></a>
+                                    class="material-icons translate">add</i></a>
                         </div>
-                        <h6 class="col s11 translate">add timer and choose room channels directly and/or choose rooms, which finds assigned room channels</h6>
+                        <h6 class="col s11 translate">add timer and choose room channels directly and/or choose rooms,
+                            which finds assigned room channels</h6>
                     </div>
                     <div class="table-values-div">
                         <table class="table-values">
                             <thead>
                                 <tr>
-                                    <th data-name="enabled" data-type="checkbox" data-default="true" 
-                                        class="translate">enabled</th>
+                                    <th data-name="enabled" data-type="checkbox" data-default="true" class="translate">
+                                        enabled</th>
                                     <th data-name="day" data-type="select multiple" data-default=""
-                                        data-options="0/Sunday;1/Monday;2/Tuesday;3/Wednesday;4/Thursday;5/Friday;6/Saturday" 
+                                        data-options="0/Sunday;1/Monday;2/Tuesday;3/Wednesday;4/Thursday;5/Friday;6/Saturday"
                                         class="translate">day</th>
                                     <th data-name="hour" data-type="select" data-default="8"
                                         data-options="0/00;1/01;2/02;3/03;4/04;5/05;6/06;7/07;8/08;9/09;10;11;12;13;14;15;16;17;18;19;20;21;22;23"
                                         class="translate">hour</th>
-                                    <th data-name="minute" data-type="select" data-options="0/00;5/05;10;15;20;25;30;35;40;45;50;55" class="translate">minute</th>
+                                    <th data-name="minute" data-type="select"
+                                        data-options="0/00;5/05;10;15;20;25;30;35;40;45;50;55" class="translate">minute
+                                    </th>
                                     <th data-name="room" data-type="select multiple" class="translate">rooms</th>
                                     <th data-name="channels" data-type="select multiple" class="translate">channels</th>
                                     <th data-buttons="delete" style="width: 120px"></th>
@@ -536,3 +678,5 @@ function save(callback) {
     </div>
 
 </body>
+
+</html>
