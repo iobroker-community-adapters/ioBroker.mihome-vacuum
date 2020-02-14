@@ -181,11 +181,20 @@
                 $('#loader1').removeClass('seenot');
                 let pass = $('#password').val();
                 let user = $('#email').val();
-                console.log("we wqill send to: " + adapter + "." + instance);
+                let server = $('#server').val();
+                console.log("send to..." + user +" server: "+ server);
+
+                if(typeof(server)== 'undefinded' || server== ''){
+                    $getDevices.removeClass('disabled');
+                    $('#loader1').addClass('seenot');
+                    showToast(_('no server selected'));
+                    return
+                }
 
                 sendTo(adapter + "." + instance, 'discovery', {
                     password: pass,
-                    username: user
+                    username: user,
+                    server: server
                 }, function (result) {
 
                     console.log(JSON.stringify(result));

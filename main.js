@@ -1343,7 +1343,7 @@ adapter.on('message', function (obj) {
         switch (obj.command) {
             case 'discovery':
                 //adapter.log.info('discover' + JSON.stringify(obj))
-                Map.getDeviceStatus(obj.message.username, obj.message.password, '{"getVirtualModel":false,"getHuamiDevices":0}').then(function (data) {
+                Map.getDeviceStatus(obj.message.username, obj.message.password, obj.message.server, '{"getVirtualModel":false,"getHuamiDevices":0}').then(function (data) {
                         adapter.log.debug('discover__' + JSON.stringify(data));
                         respond(data)
 
@@ -1544,6 +1544,8 @@ MAP.Init = function () {
     this.MAPSAFEINTERVALL = parseInt(adapter.config.valetudo_MapsaveIntervall, 10) || 5000;
     this.POLLMAPINTERVALL = parseInt(adapter.config.valetudo_requestIntervall, 10) || 2000;
 
+    this.firstMap = true;
+
     if ((adapter.config.enableMiMap || adapter.config.valetudo_enable)) {
         adapter.setObjectNotExists('map.map64', {
             type: 'state',
@@ -1570,7 +1572,7 @@ MAP.Init = function () {
 
         
         reqParams.push('get_map_v1'); // check mappointer always
-
+/*
         setTimeout(() => {
             let self = this;
             adapter.log.debug(self.mappointer);
@@ -1588,7 +1590,7 @@ MAP.Init = function () {
                 });
             })
             .catch(err => adapter.log.error(err))
-        }, 10000)
+        }, 10000)*/
     }
 }
 MAP.updateMapPointer = function (answer) {
@@ -1602,6 +1604,10 @@ MAP.updateMapPointer = function (answer) {
     } else {
         that.mappointer = answer;
         adapter.log.debug('Mappointer_updated')
+        if(that.firstMap){
+            that.firstMap = false;
+            that._MapPoll();
+
     }
 }
 
