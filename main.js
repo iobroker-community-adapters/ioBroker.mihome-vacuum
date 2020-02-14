@@ -567,7 +567,7 @@ function sendPing() {
             }
         }
     }
-    setTimeout(sendPing, cleaning.queue.length > 0 ? 10 : adapter.config.pingInterval)
+    setTimeout(sendPing, cleaning.queue.length > 0 ? 10000 : adapter.config.pingInterval)
 }
 
 // function to control goto params
