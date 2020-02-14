@@ -1607,6 +1607,7 @@ MAP.updateMapPointer = function (answer) {
         if(that.firstMap){
             that.firstMap = false;
             that._MapPoll();
+        }
 
     }
 }
