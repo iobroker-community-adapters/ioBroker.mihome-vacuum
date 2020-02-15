@@ -1,8 +1,57 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "1.10.0",
+
+        "version": "2.0.3",
         "news": {
+            "2.0.1":{
+                "en": "add cloud loging, add xiaomi map, add new map format",
+                "de": "Cloud-Zugang hinzufügen, Xiaomi-Karte hinzufügen, neues Kartenformat hinzufügen",
+                "ru": "добавить облачный журнал, добавить карту xiaomi, добавить новый формат карты",
+                "pt": "adicionar registro em nuvem, adicionar mapa xiaomi, adicionar novo formato de mapa",
+                "nl": "cloud logging toevoegen, xiaomi-kaart toevoegen, nieuw kaartformaat toevoegen",
+                "fr": "ajouter la journalisation dans le cloud, ajouter la carte xiaomi, ajouter un nouveau format de carte",
+                "it": "aggiungi il cloud loging, aggiungi la mappa xiaomi, aggiungi un nuovo formato di mappa",
+                "es": "agregue loging en la nube, agregue el mapa xiaomi, agregue un nuevo formato de mapa",
+                "pl": "dodaj rejestrowanie w chmurze, dodaj mapę Xiaomi, dodaj nowy format mapy",
+                "zh-cn": "添加云日志，添加小米地图，添加新地图格式"
+              },
+              "1.10.5": {
+                "en": "send Ping only if not connected, otherwise get_status\nset button states to true, if clicked\nmove Timermanager and roomManager to own libs",
+                "de": "Ping nur senden, wenn keine Verbindung besteht, sonst get_status\n",
+                "ru": "отправлять Ping, только если не подключен, иначе get_status\n",
+                "pt": "envie Ping apenas se não estiver conectado, caso contrário, get_status\n",
+                "nl": "stuur Ping alleen indien niet verbonden, anders get_status\n",
+                "fr": "envoyer Ping uniquement s'il n'est pas connecté, sinon get_status\n",
+                "it": "invia Ping solo se non connesso, altrimenti get_status\n",
+                "es": "envíe Ping solo si no está conectado, de lo contrario get_status\n",
+                "pl": "wyślij Ping tylko jeśli nie jest podłączony, w przeciwnym razie get_status\n",
+                "zh-cn": "仅在未连接时发送Ping，否则返回get_status\n"
+            },
+            "1.10.4": {
+                "en": "add valetudo map support for gen3 and gen2 2XXX",
+                "de": "Unterstützung für Valetudo-Karten für Gen3 und Gen2 2XXX",
+                "ru": "добавлена поддержка карт valetudo для gen3 и gen2 2XXX",
+                "pt": "adicionar suporte ao mapa valetudo para gen3 e gen2 2XXX",
+                "nl": "ondersteuning voor valetudokaarten toevoegen voor gen3 en gen2 2XXX",
+                "fr": "ajouter le support de carte valetudo pour gen3 et gen2 2XXX",
+                "it": "aggiungere il supporto per mappe valetudo per gen3 e gen2 2XXX",
+                "es": "agregue soporte de valetudo map para gen3 y gen2 2XXX",
+                "pl": "dodaj obsługę map valetudo dla gen3 i gen2 2XXX",
+                "zh-cn": "为gen3和gen2 2XXX添加valetudo映射支持"
+            },
+            "1.10.1": {
+                "en": "added zone as room handling + timer can directly trigger room channels",
+                "de": "Zone als Raumhandling hinzugefügt + Timer kann Raumkanäle direkt auslösen",
+                "ru": "добавлена ​​зона в качестве обработки помещения + таймер может напрямую вызывать каналы помещения",
+                "pt": "zona adicionada, pois o manuseio da sala + o temporizador podem acionar diretamente os canais da sala",
+                "nl": "toegevoegde zone als ruimteafhandeling + timer kan ruimtekanalen direct activeren",
+                "fr": "zone ajoutée car la gestion de la pièce + la minuterie peuvent déclencher directement les canaux de la pièce",
+                "it": "aggiunta zona come gestione della stanza + timer può attivare direttamente i canali della stanza",
+                "es": "zona agregada como manejo de habitación + temporizador puede activar directamente canales de habitación",
+                "pl": "dodano strefę, ponieważ obsługa pokoju + timer może bezpośrednio wyzwalać kanały pokojowe",
+                "zh-cn": "添加区域作为房间处理+计时器可以直接触发房间频道"
+            },
             "1.10.0": {
                 "en": "added room handling and timer and changed featurehandling",
                 "de": "Raumhandhabung und Timer hinzugefügt und das Featurehandling geändert",
@@ -150,16 +199,16 @@
         },
         "title": "mihome-vacuum",
         "titleLang": {
-            "en": "Xiaomi Vacuum Cleaner control for v1 and s5",
-            "de": "Xiaomi Staubsaugersteuerung für v1 und s5",
-            "ru": "Управление пылесосом Xiaomi для v1 и s5",
-            "pt": "Controle de aspirador de pó Xiaomi para v1 e s5",
-            "nl": "Xiaomi Stofzuigerbediening voor v1 en s5",
-            "fr": "Xiaomi Vacuum Cleaner contrôle pour v1 et s5",
-            "it": "Controllo Xiaomi Aspirapolvere per v1 e s5",
-            "es": "Control de aspiradora Xiaomi para v1 y s5",
-            "pl": "Xiaomi Vacuum Cleaner do kontroli v1 i s5 ",
-            "zh-cn": "小米吸尘器控制v1和s5"
+            "en": "control of Xiaomi/Roborock vacuum cleaner",
+            "de": "Steuerung des Staubsaugers Xiaomi / Roborock",
+            "ru": "управление пылесосом Xiaomi / Roborock",
+            "pt": "controle do aspirador Xiaomi / Roborock",
+            "nl": "bediening van Xiaomi / Roborock stofzuiger",
+            "fr": "contrôle de l'aspirateur Xiaomi / Roborock",
+            "it": "controllo dell'aspirapolvere Xiaomi / Roborock",
+            "es": "control de la aspiradora Xiaomi / Roborock",
+            "pl": "kontrola odkurzacza Xiaomi / Roborock",
+            "zh-cn": "小米/罗伯克吸尘器的控制"
         },
         "desc": {
             "en": "This adapter allows control Xiaomi vacuum cleaner",
