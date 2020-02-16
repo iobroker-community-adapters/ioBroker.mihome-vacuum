@@ -1595,7 +1595,7 @@ MAP.Init = function () {
 }
 MAP.updateMapPointer = function (answer) {
     let that = this;
-    if (answer === 'retry') {
+    if (answer === 'retry' || anser === 'locating') {
         setTimeout(function () {
             sendMsg('get_fresh_map_v1')
             adapter.log.debug('Mappointer_retry___')
