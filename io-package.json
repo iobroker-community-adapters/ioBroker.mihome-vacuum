@@ -2,9 +2,9 @@
     "common": {
         "name": "mihome-vacuum",
 
-        "version": "2.0.3",
+        "version": "2.0.4",
         "news": {
-            "2.0.1":{
+            "2.0.4":{
                 "en": "add cloud loging, add xiaomi map, add new map format",
                 "de": "Cloud-Zugang hinzufügen, Xiaomi-Karte hinzufügen, neues Kartenformat hinzufügen",
                 "ru": "добавить облачный журнал, добавить карту xiaomi, добавить новый формат карты",
