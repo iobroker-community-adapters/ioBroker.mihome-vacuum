@@ -1572,33 +1572,14 @@ MAP.Init = function () {
 
         
         reqParams.push('get_map_v1'); // check mappointer always
-/*
-        setTimeout(() => {
-            let self = this;
-            adapter.log.debug(self.mappointer);
-            Map.updateMap(self.mappointer).then(function (data) {
-                adapter.setState('map.map64', '<img src="' + data.toDataURL() + '" /style="width: auto ;height: 100%;">', true);
-                var buf = data.toBuffer();
-                adapter.writeFile('mihome-vacuum.admin', 'actualMap.png', buf, function (error) {
-                    if (error) {
-                        adapter.log.error('Fehler beim Speichern der Karte');
-                    } else {
-                        adapter.setState('map.mapURL', "/mihome-vacuum.admin/actualMap.png", true);
-
-                    }
-                    self.LASTMAPSAVE = Date.now();
-                });
-            })
-            .catch(err => adapter.log.error(err))
-        }, 10000)*/
     }
 }
 MAP.updateMapPointer = function (answer) {
     let that = this;
-    if (answer === 'retry' || anser === 'locating') {
+    if (answer.split('%')[0] !== 'robomap') {
         setTimeout(function () {
             sendMsg('get_fresh_map_v1')
-            adapter.log.debug('Mappointer_retry___')
+            adapter.log.debug('Mappointer_nomap___'+ answer)
         }, 500)
         return
     } else {
