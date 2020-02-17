@@ -31,7 +31,6 @@ let cleanLog = [];
 let cleanLogHtmlAllLines = '';
 let clean_log_html_table = '';
 let logEntries = {};
-let logEntriesNew = {};
 let roomManager = null;
 let timerManager = null;
 let Map
@@ -122,7 +121,7 @@ class Cleaning {
             return false;
         } else {
             this.activeState = cleanStatus;
-            adapter.log.info("trigger cleaning" + statusNames[cleanStatus] + messageObj.message)
+            adapter.log.info("trigger cleaning " + statusNames[cleanStatus] + messageObj.message)
             return true
         }
     }
@@ -182,10 +181,6 @@ class FeatureManager {
     initDelayed(){
         sendMsg(com.get_carpet_mode.method) // test, if supported
         sendMsg('get_room_mapping'); // test, if supported
-        setTimeout(function(){ // it is UDP, so let's try agin once again after 1 minute
-            this.carpetMode === null && sendMsg(com.get_carpet_mode.method)
-            this.roomMapping === null && sendMsg('get_room_mapping')
-        },60000) 
     }
 
     setModel(model){
@@ -546,7 +541,7 @@ let pingTimeout = null;
 function sendPing() {
     if ((new Date() - lastResponse) > adapter.config.pingInterval){
         connected = false;
-        adapter.log.debug('Disconnect');
+        adapter.log.info('Disconnect');
         adapter.setState('info.connection', false, true);
         try {
             let commandPing= str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
@@ -581,33 +576,21 @@ function parseGoTo(params, callback) {
     }
 }
 
-function send(reqParams, cb, i) {
-    i = i || 0;
-    if (!reqParams || i >= reqParams.length) {
-        return cb && cb();
-    }
-
-    sendMsg(reqParams[i], null, () => {
-        setTimeout(send, 200, reqParams, cb, i + 1);
-    });
-}
-
 function requestParams() {
     if (connected) {
         adapter.log.debug('requesting params every: ' + adapter.config.param_pingInterval / 1000 + ' Sec');
 
-        send(reqParams, () => {
-            if (!isEquivalent(logEntriesNew, logEntries)) {
-                logEntries = logEntriesNew;
-                cleanLog = [];
-                cleanLogHtmlAllLines = '';
-                getLog(() => {
-                    adapter.setState('history.allTableJSON', JSON.stringify(cleanLog), true);
-                    adapter.log.debug('CLEAN_LOGGING' + JSON.stringify(cleanLog));
-                    adapter.setState('history.allTableHTML', clean_log_html_table, true);
-                });
-            }
-        });
+        for (let i in reqParams){
+            setTimeout(sendMsg, 200 * i, reqParams[i],null, function(err){
+                if (err && reqParams[i] == com.miIO_info.method){ 
+                    adapter.log.warn(err + ' -> pause ' + reqParams[i] + ' from request parameters, try again in one hour')
+                    setTimeout(function(method){
+                        reqParams.push(method);
+                    }, 3600000,reqParams[i]) // try again in one hour
+                    reqParams.splice(i, 1);
+                }
+            })
+        }
 
         timerManager && timerManager.check()
     }
@@ -627,6 +610,7 @@ function sendMsg(method, params, options, callback) {
     } // remember packets per default
 
     let msgCounter= packet.msgCounter++;
+
     messages[msgCounter]= {
         str: buildMsg(method, params,msgCounter),
         callback: callback,
@@ -647,9 +631,12 @@ function sendMsgToServer(msgCounter){
     let message= messages[msgCounter]
     if (!message)
         return;
-    if (message.tryCount > 1){
+    if (message.tryCount > 2){
         delete messages[msgCounter]
-        return adapter.log.debug('no answer for ' + message.method + '(id:' + msgCounter +') received, giving up')
+        adapter.log.debug('no answer for ' + message.method + '(id:' + msgCounter +') received, giving up')
+        if (typeof message.callback === 'function')  
+            message.callback('no answer received after after ' + message.tryCount + ' times');    
+        return 
     }
     try {
         message.tryCount++;
@@ -660,7 +647,7 @@ function sendMsgToServer(msgCounter){
         });
         adapter.log.debug('sendMsg[' + message.tryCount + '] >>> ' + message.str);
         adapter.log.silly('sendMsgRaw >>> ' + cmdraw.toString('hex'));
-        setTimeout(sendMsgToServer,10000,msgCounter) // check in 10 sec, if robo send answer
+        setTimeout(sendMsgToServer,5000,msgCounter) // check in 10 sec, if robo send answer
            
     } catch (err) {
         adapter.log.warn('Cannot send message_: ' + err);
@@ -802,6 +789,7 @@ function getStates(message) {
         if (answer.error) {
             return adapter.log.error("[" + answer.id + "](" + (requestMessage ? requestMessage.method : 'unknown request message') + ") -> " + answer.error.message)
         }
+        lastResponse= new Date();
         if (!requestMessage){
             throw 'could not found request message for id ' + answer.id
         }
@@ -844,8 +832,17 @@ function getStates(message) {
             adapter.setStateChanged('history.total_time', Math.round(summary.clean_time / 60), true);
             adapter.setStateChanged('history.total_area', Math.round(summary.total_area / 1000000), true);
             adapter.setStateChanged('history.total_cleanups', summary.num_cleanups, true);
-            logEntriesNew = summary.cleaning_record_ids;
-            //adapter.log.info('log_entrya' + JSON.stringify(logEntriesNew));
+            if (!isEquivalent(summary.cleaning_record_ids, logEntries)) {
+                logEntries = summary.cleaning_record_ids;
+                cleanLog = [];
+                cleanLogHtmlAllLines = '';
+                getLog(() => {
+                    adapter.setState('history.allTableJSON', JSON.stringify(cleanLog), true);
+                    adapter.log.debug('CLEAN_LOGGING' + JSON.stringify(cleanLog));
+                    adapter.setState('history.allTableHTML', clean_log_html_table, true);
+                });
+            }
+            //adapter.log.info('log_entrya' + JSON.stringify(summary.cleaning_record_ids));
             //adapter.log.info('log_entry old' + JSON.stringify(logEntries));
 
 
@@ -1190,12 +1187,12 @@ function main() {
 
         server.on('message', function (msg, rinfo) {
             if (rinfo.port === adapter.config.port) {
-                lastResponse= new Date();
                 if (msg.length === 32) {
                     adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
                     packet.setRaw(msg);
                     connected = true;
-                    adapter.log.debug('Connected');
+                    lastResponse= new Date();
+                    adapter.log.info('Connected');
                     adapter.setState('info.connection', true, true);
                     checkSetTimeDiff();
                     sendMsg(com.get_status.method);
