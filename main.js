@@ -1576,7 +1576,7 @@ MAP.Init = function () {
 }
 MAP.updateMapPointer = function (answer) {
     let that = this;
-    if (answer.split('%')[0] !== 'robomap' || answer.split('%')[0] !== 'tanos') {
+    if (answer.split('%')[0] !== 'robomap' && answer.split('%')[0] !== 'tanos') {
         setTimeout(function () {
             sendMsg('get_fresh_map_v1')
             adapter.log.debug('Mappointer_nomap___'+ answer)
