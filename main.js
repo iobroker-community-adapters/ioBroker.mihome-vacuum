@@ -1583,7 +1583,7 @@ MAP.Init = function () {
                 adapter.log.warn(error);
             })
         } else if (adapter.config.valetudo_enable) {
-            that._MapPoll()
+            this._MapPoll()
         }
 
     }
