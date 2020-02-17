@@ -1537,7 +1537,7 @@ adapter.on('message', function (obj) {
 MAP.Init = function () {
     this.retries = 0
     this.mappointer  = "robomap%2F74476450%2F18"
-    this.LASTMAPSAVE;
+    this.LASTMAPSAVE  = Date.now();
     this.GETMAP = false;
     this.ENABLED = adapter.config.enableMiMap || adapter.config.valetudo_enable;
     // MAP initial
@@ -1587,7 +1587,8 @@ MAP.updateMapPointer = function (answer) {
         adapter.log.debug('Mappointer_updated')
         if(that.firstMap){
             that.firstMap = false;
-            that._MapPoll();
+            that._MapPoll() // for auth at server;
+            setTimeout(() =>{that._MapPoll();},10000); // to get new mapdata
         }
 
     }
@@ -1605,7 +1606,7 @@ MAP._MapPoll = function () {
     let self = this;
     Map.updateMap(self.mappointer).then(function (data) {
             adapter.setState('map.map64', '<img src="' + data.toDataURL() + '" /style="width: auto ;height: 100%;">', true);
-
+           
             if (Date.now() - self.LASTMAPSAVE > self.MAPSAFEINTERVALL) {
                 var buf = data.toBuffer();
                 adapter.writeFile('mihome-vacuum.admin', 'actualMap.png', buf, function (error) {
