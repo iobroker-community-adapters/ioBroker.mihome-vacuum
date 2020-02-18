@@ -891,7 +891,7 @@ function getStates(message) {
             if (answer.result.length) {
                 roomManager.processRoomMaping(answer);
             } else if (!answer.result.length) {
-                adapter.log.debung('Empty array try to get from Map')
+                adapter.log.debug('Empty array try to get from Map')
                 MAP.getRoomsFromMap(answer);
             }
 
