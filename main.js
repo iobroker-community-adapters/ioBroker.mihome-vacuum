@@ -1590,13 +1590,13 @@ MAP.Init = function () {
 }
 MAP.updateMapPointer = function (answer) {
     let that = this;
-    if (answer.split('%')[0] !== 'robomap' && answer.split('%')[0] !== 'tanos') {
+    if (answer.split('%').length === 1) {
         setTimeout(function () {
             sendMsg('get_fresh_map_v1')
             adapter.log.debug('Mappointer_nomap___' + answer)
         }, 500)
         return
-    } else {
+    } else if (answer.split('%').length === 3) {
         that.mappointer = answer;
         adapter.log.debug('Mappointer_updated')
         if (that.firstMap) {
