@@ -611,7 +611,7 @@ function requestParams() {
                 cleanLogHtmlAllLines = '';
                 getLog(() => {
                     adapter.setState('history.allTableJSON', JSON.stringify(cleanLog), true);
-                    adapter.log.debug('CLEAN_LOGGING' + JSON.stringify(cleanLog));
+                    //adapter.log.debug('CLEAN_LOGGING' + JSON.stringify(cleanLog));
                     adapter.setState('history.allTableHTML', clean_log_html_table, true);
                 });
             }
@@ -638,7 +638,7 @@ function sendMsg(method, params, options, callback) {
     // this is used to route the returned package to the sendTo callback
     if (options.rememberPacket) {
         last_id[method] = packet.msgCounter;
-        adapter.log.debug('lastid' + JSON.stringify(last_id));
+        //adapter.log.debug('lastid' + JSON.stringify(last_id));
     }
 
     const message_str = buildMsg(method, params);
@@ -650,8 +650,8 @@ function sendMsg(method, params, options, callback) {
             if (err) adapter.log.error('Cannot send command: ' + err);
             if (typeof callback === 'function') callback(err);
         });
-        adapter.log.debug('sendMsg >>> ' + message_str);
-        adapter.log.debug('sendMsgRaw >>> ' + cmdraw.toString('hex'));
+        if (method === 'get_map_v1') adapter.log.debug('sendMsg >>> ' + message_str);
+        //adapter.log.debug('sendMsgRaw >>> ' + cmdraw.toString('hex'));
     } catch (err) {
         adapter.log.warn('Cannot send message_: ' + err);
         if (typeof callback === 'function') callback(err);
@@ -917,7 +917,7 @@ function getLog(callback, i) {
         callback && callback();
     } else {
         if (logEntries[i] !== null || logEntries[i] !== 'null') {
-            adapter.log.debug('Request log entry: ' + logEntries[i]);
+            //adapter.log.debug('Request log entry: ' + logEntries[i]);
             sendMsg('get_clean_record', [logEntries[i]], () => {
                 setTimeout(getLog, 200, callback, i + 1);
             });
@@ -1218,7 +1218,9 @@ function main() {
 
                     //hier die Antwort zum decodieren
                     packet.setRaw(msg);
-                    adapter.log.debug('Receive <<< ' + packet.getPlainData() + '<<< ' + msg.toString('hex'));
+
+                    let json = JSON.parse(packet.getPlainData())
+                    if (json.id === last_id['get_map_v1']) adapter.log.debug('Receive <<< ' + packet.getPlainData());
                     getStates(packet.getPlainData());
                 }
             }
@@ -1620,6 +1622,14 @@ MAP.getRoomsFromMap = function (answer) {
         return
     }
     adapter.log.debug('get rooms from map')
+    if ((!that.ready.mappointer || !that.ready.login) && adapter.config.enableMiMap) {
+        adapter.log.debug('get rooms from map pending...')
+        setTimeout(() => {
+            sendMsg('get_room_mapping');
+        }, 20000)
+        return
+    }
+
     Map.updateMap(that.mappointer).then(function (data) {
             adapter.log.debug('get rooms from map data: ' + JSON.stringify(data[1]))
             let roomsarray = data[1]

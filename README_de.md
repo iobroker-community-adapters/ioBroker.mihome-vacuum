@@ -237,7 +237,7 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
-### 2.0.5 (2020-02-17)
+### 2.0.6 (2020-02-17)
 * (MeisterTR) Raumerkennung für S50 über die Karte (cloud oder Valetudo vorrausgesetzt)
 ### 2.0.4 (2020-02-13)
 * (MeisterTR) Token über cloud hinzugefügt
