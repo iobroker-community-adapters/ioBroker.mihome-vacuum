@@ -1583,7 +1583,7 @@ MAP.Init = function () {
         if (adapter.config.enableMiMap) {
             Map.login().then(function (anser) {
                 reqParams.push('get_map_v1');
-                that.ready.login = true;
+                MAP.ready.login = true;
             }).catch(error => {
                 adapter.log.warn(error);
             })
