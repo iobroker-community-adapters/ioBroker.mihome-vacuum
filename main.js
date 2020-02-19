@@ -1542,13 +1542,17 @@ adapter.on('message', function (obj) {
 //------------------------------------------------------MAP Section
 MAP.Init = function () {
     this.retries = 0
-    this.mappointer = "robomap%2F74476450%2F18"
+    this.mappointer = ""
     this.LASTMAPSAVE = Date.now();
     this.GETMAP = false;
     this.ENABLED = adapter.config.enableMiMap || adapter.config.valetudo_enable;
     // MAP initial
     this.MAPSAFEINTERVALL = parseInt(adapter.config.valetudo_MapsaveIntervall, 10) || 5000;
     this.POLLMAPINTERVALL = parseInt(adapter.config.valetudo_requestIntervall, 10) || 2000;
+    this.ready = {
+        login: false,
+        mappointer: false
+    }
 
     this.firstMap = true;
 
@@ -1579,6 +1583,7 @@ MAP.Init = function () {
         if (adapter.config.enableMiMap) {
             Map.login().then(function (anser) {
                 reqParams.push('get_map_v1');
+                that.ready.login = true;
             }).catch(error => {
                 adapter.log.warn(error);
             })
@@ -1592,13 +1597,14 @@ MAP.updateMapPointer = function (answer) {
     let that = this;
     if (answer.split('%').length === 1) {
         setTimeout(function () {
-            sendMsg('get_fresh_map_v1')
+            sendMsg('get_map_v1')
             adapter.log.debug('Mappointer_nomap___' + answer)
         }, 500)
         return
     } else if (answer.split('%').length === 3) {
         that.mappointer = answer;
         adapter.log.debug('Mappointer_updated')
+        that.ready.mappointer = true;
         if (that.firstMap) {
             that.firstMap = false;
             that._MapPoll() // for auth at server;
@@ -1632,21 +1638,24 @@ MAP.getRoomsFromMap = function (answer) {
 }
 
 MAP.StartMapPoll = function () {
-    let self = this;
-    if (!self.GETMAP && (adapter.config.enableMiMap || adapter.config.valetudo_enable)) {
-        self.GETMAP = true;
-        self._MapPoll();
+    let that = this;
+    if (!that.GETMAP && (adapter.config.enableMiMap || adapter.config.valetudo_enable)) {
+        that.GETMAP = true;
+        that._MapPoll();
     }
 }
 
 MAP._MapPoll = function () {
-    let self = this;
-    Map.updateMap(self.mappointer).then(function (data) {
+    let that = this;
+
+    if ((!that.ready.mappointer || !that.ready.login) && adapter.config.enableMiMap) return
+
+    Map.updateMap(that.mappointer).then(function (data) {
             let dataurl = data[0].toDataURL();
 
             adapter.setState('map.map64', '<img src="' + dataurl + '" /style="width: auto ;height: 100%;">', true);
 
-            if (Date.now() - self.LASTMAPSAVE > self.MAPSAFEINTERVALL) {
+            if (Date.now() - that.LASTMAPSAVE > that.MAPSAFEINTERVALL) {
                 var buf = data[0].toBuffer();
                 adapter.writeFile('mihome-vacuum.admin', 'actualMap.png', buf, function (error) {
                     if (error) {
@@ -1655,25 +1664,25 @@ MAP._MapPoll = function () {
                         adapter.setState('map.mapURL', "/mihome-vacuum.admin/actualMap.png", true);
 
                     }
-                    self.LASTMAPSAVE = Date.now();
+                    that.LASTMAPSAVE = Date.now();
                 })
             };
 
-            if (self.GETMAP) {
+            if (that.GETMAP) {
                 //adapter.log.info(VALETUDO.POLLMAPINTERVALL)
                 setTimeout(function () {
                     sendMsg('get_map_v1');
-                    self._MapPoll();
-                }, self.POLLMAPINTERVALL);
+                    that._MapPoll();
+                }, that.POLLMAPINTERVALL);
             }
 
 
         })
         .catch(err => {
             adapter.log.error(err);
-            if (self.GETMAP) setTimeout(function () {
-                self._MapPoll();
-            }, self.POLLMAPINTERVALL);
+            if (that.GETMAP) setTimeout(function () {
+                that._MapPoll();
+            }, that.POLLMAPINTERVALL);
         })
 
 }
