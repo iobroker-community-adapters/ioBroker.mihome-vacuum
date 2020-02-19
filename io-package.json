@@ -608,7 +608,7 @@
             "_id": "history.allTableHTML",
             "type": "state",
             "common": {
-                "name": "History of clean as THML",
+                "name": "History of clean as HTML",
                 "type": "string",
                 "role": "history",
                 "read": true
