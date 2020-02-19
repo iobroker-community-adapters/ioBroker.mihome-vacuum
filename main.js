@@ -1635,12 +1635,12 @@ MAP.getRoomsFromMap = function (answer) {
             let roomsarray = data[1]
             let roomids = []
 
-            if (typeof (roomsarray === 'undefined') || roomsarray.length === 0) {
-                return
-            }
+            if (typeof (roomsarray) === 'undefined' || roomsarray.length === 0) return
+ 
             roomsarray.forEach(element => {
                 roomids.push([element, 'room' + element])
             });
+
             answer.result = roomids
             roomManager.processRoomMaping(answer);
         })
