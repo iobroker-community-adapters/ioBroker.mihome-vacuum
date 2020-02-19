@@ -20,9 +20,9 @@ let maphelper = require(__dirname + '/lib/maphelper')
 
 const server = dgram.createSocket('udp4');
 
-let userLang= "en"
-let lastResponse= 0;
-let messages= {};
+let userLang = "en"
+let lastResponse = 0;
+let messages = {};
 let connected= false;
 let paramPingInterval;
 let packet;
@@ -72,9 +72,9 @@ const MAP = function () {}; // init MAP
 
 class Cleaning {
     constructor(){
-        this.state= cleanStatus_Unknown         // current robot Status
-        this.activeState= 0                        // if robot is working, than her the status is saved
-        this.queue= []                          // if new job is aclled, while robot is already cleaning
+        this.state = cleanStatus_Unknown // current robot Status
+        this.activeState = 0 // if robot is working, than her the status is saved
+        this.queue = [] // if new job is aclled, while robot is already cleaning
     }
 
     /**
@@ -86,9 +86,9 @@ class Cleaning {
         adapter.setState('info.state', this.state, true);
 
         if ([cleanStatus_Cleaning,cleanStatus_ZoneCleaning,cleanStatus_RoomCleaning, cleanStatus_SpotCleaning].indexOf(this.state) > -1) {
-            this.activeState= this.state;
+            this.activeState = this.state;
         } else {
-            this.activeState= 0
+            this.activeState = 0
             if ([cleanStatus_Sleeping, cleanStatus_Waiting, cleanStatus_Back_toHome, cleanStatus_Charging, cleanStatus_GoingToSpot].indexOf(this.state) > -1) {
                 if (this.queue.length > 0) {
                     adapter.log.debug("use clean trigger from Queue")
@@ -111,7 +111,7 @@ class Cleaning {
     }
 
     startCleaning(cleanStatus, messageObj){
-        const statusNames= {}
+        const statusNames = {}
         statusNames[cleanStatus_ZoneCleaning] = 'zone ';
         statusNames[cleanStatus_RoomCleaning] = 'segment ';
         if (this.activeState){
@@ -134,7 +134,7 @@ class Cleaning {
         } else if (!value && this.activeState) {
             sendMsg(com.pause.method);
             setTimeout(() => sendMsg(com.home.method), 1000);
-            this.activeState= 0
+            this.activeState = 0
         }
         adapter.setForeignState('control.clean_home', value, true);
     }
@@ -412,7 +412,7 @@ adapter.on('stateChange', function (id, state) {
             let id= sendMsg(values[0], params, function () {
                 adapter.setForeignState(id, state.val, true);
             });
-            messages[id].method= command
+            messages[id].method = command
 
 
         } else if (command === 'clean_home') {
@@ -545,7 +545,7 @@ function sendPing() {
         adapter.log.info('Disconnect');
         adapter.setState('info.connection', false, true);
         try {
-            let commandPing= str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
+            let commandPing = str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
             server.send(commandPing, 0, commandPing.length, adapter.config.port, adapter.config.ip, function (err) {
                 if (err) adapter.log.error('Cannot send ping: ' + err)
             });
@@ -555,7 +555,7 @@ function sendPing() {
     } else {
         sendMsg(com.get_status.method)
     }
-    pingTimeout= setTimeout(sendPing, cleaning.queue.length > 0 ? 10000 : adapter.config.pingInterval)
+    pingTimeout = setTimeout(sendPing, cleaning.queue.length > 0 ? 10000 : adapter.config.pingInterval)
 }
 
 // function to control goto params
@@ -587,7 +587,7 @@ function requestParams() {
                     adapter.log.warn(err + ' -> pause ' + reqParams[i] + ' from request parameters, try again in one hour')
                     setTimeout(function(method){
                         reqParams.push(method);
-                    }, 3600000,reqParams[i]) // try again in one hour
+                    }, 3600000, reqParams[i]) // try again in one hour
                     reqParams.splice(i, 1);
                 }
             })
@@ -610,18 +610,18 @@ function sendMsg(method, params, options, callback) {
         options.rememberPacket = true;
     } // remember packets per default
 
-    let msgCounter= packet.msgCounter++;
+    let msgCounter = packet.msgCounter++;
 
-    messages[msgCounter]= {
-        str: buildMsg(method, params,msgCounter),
-        callback: callback,
-        tryCount: 0
-    }
+    messages[msgCounter] = {
+      str: buildMsg(method, params, msgCounter),
+      callback: callback,
+      tryCount: 0
+    };
 
     // remember packet if not explicitly forbidden
     // this is used to route the returned package to the sendTo callback
     if (options.rememberPacket) {
-        messages[msgCounter].method= method
+        messages[msgCounter].method = method
     }
 
     sendMsgToServer(msgCounter)
@@ -629,7 +629,7 @@ function sendMsg(method, params, options, callback) {
 }
 
 function sendMsgToServer(msgCounter){
-    let message= messages[msgCounter]
+    let message = messages[msgCounter]
     if (!message)
         return;
     if (message.tryCount > 2){
@@ -786,7 +786,7 @@ function getStates(message) {
         //const ans= answer.result;
         //adapter.log.info(answer.result.length);
         //adapter.log.info(answer['id']);
-        const requestMessage= messages[answer.id] 
+        const requestMessage = messages[answer.id] 
         if (answer.error) {
             return adapter.log.error("[" + answer.id + "](" + (requestMessage ? requestMessage.method : 'unknown request message') + ") -> " + answer.error.message)
         }
@@ -808,7 +808,7 @@ function getStates(message) {
             features.setWaterBox(status.water_box_status);
             if (cleaning.state != status.state){
                cleaning.setRemoteState(status.state)
-            }  
+            }
         } else if (requestMessage.method == 'miIO.info') {
             const info= answer.result //parseMiIO_info(answer);
             features.setFirmware(info.fw_ver)
@@ -828,6 +828,7 @@ function getStates(message) {
             adapter.setStateChanged('consumable.filter', 100 - (Math.round(consumable.filter_work_time / 3600 / 1.5)), true);          // 150h
             adapter.setStateChanged('consumable.sensors', 100 - (Math.round(consumable.sensor_dirty_time / 3600 / 0.3)), true);        // 30h
             features.water_box && adapter.setStateChanged('consumable.water_filter', 100 - (Math.round(consumable.filter_element_work_time / 3600 )), true);          // 100h
+
         } else if (requestMessage.method == 'get_clean_summary') {
             const summary = parseCleaningSummary(answer);
             adapter.setStateChanged('history.total_time', Math.round(summary.clean_time / 60), true);
@@ -845,7 +846,6 @@ function getStates(message) {
             }
             //adapter.log.info('log_entrya' + JSON.stringify(summary.cleaning_record_ids));
             //adapter.log.info('log_entry old' + JSON.stringify(logEntries));
-
 
         } else if (requestMessage.method == 'X_send_command') {
             adapter.setState('control.X_get_response', JSON.stringify(answer.result), true);
@@ -1207,7 +1207,7 @@ function main() {
 
                     //hier die Antwort zum decodieren
                     packet.setRaw(msg);
-                    adapter.log.debug('Receive <<< ' + packet.getPlainData() + '<<< ')// + msg.toString('hex'));
+                    adapter.log.debug('Receive <<< ' + packet.getPlainData() + '<<< ') // + msg.toString('hex'));
                     getStates(packet.getPlainData());
                 }
             }
@@ -1300,7 +1300,7 @@ adapter.on('message', function (obj) {
         }
  
         // send msg to the robo and get packet ID
-        const id= sendMsg(method, params, {
+        const id = sendMsg(method, params, {
             rememberPacket: false
         }, err => {
             // on error, respond immediately
