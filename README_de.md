@@ -35,6 +35,23 @@ Am besten folgt man der Anleitung des folgenden Links:
 
 [Token Vorgehensweise](https://www.smarthomeassistent.de/token-auslesen-roborock-s6-roborock-s5-xiaomi-mi-robot-xiaowa/).
 
+### Fehler bei der Installation
+Wenn der Adapter nicht installiert werden kann, kann Canvas nicht installiert werden
+
+``npm ERR! canvas@2.6.1 install: node-pre-gyp install --fallback-to-build
+npm ERR! Exit status 1``
+
+Dann müssen folgende Packete und Bibliotheken selber installiert werden:
+
+``
+sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+``
+
+``
+sudo npm install canvas --unsafe-perm=true
+``
+
+
 ### Adapterkonfiguration
 - Bei IP-Adresse muss die IP-Adresse des Roboters eingegeben werden im Format "192.168.178.XX"
 - Port des Roboters ist Standardmäßig auf "54321" eingestellt, dies sollte nicht verändert werden
@@ -220,6 +237,13 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 2.0.5 (2020-02-17)
+* (MeisterTR) Raumerkennung für S50 über die Karte (cloud oder Valetudo vorrausgesetzt)
+### 2.0.4 (2020-02-13)
+* (MeisterTR) Token über cloud hinzugefügt
+* (MeisterTR) Map über Cloud hinzugefügt
+* (MeisterTR) Neues und altes Kartenformat hinzugefügt
+* (MeisterTR) Config Seite überholt
 ### 1.10.5 (2020-02-11)
 * sende Ping nur, wenn nicht verbunden, sonst get_status
 * Setzte Button Status auf true, wenn geklickt
