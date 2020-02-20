@@ -1219,9 +1219,7 @@ function main() {
 
                     //hier die Antwort zum decodieren
                     packet.setRaw(msg);
-
-                    let json = JSON.parse(packet.getPlainData())
-                    if (json.id === last_id['get_map_v1']) adapter.log.debug('Receive <<< ' + packet.getPlainData());
+                    adapter.log.silly('Receive <<< ' + packet.getPlainData());
                     getStates(packet.getPlainData());
                 }
             }
