@@ -651,7 +651,7 @@ function sendMsg(method, params, options, callback) {
             if (err) adapter.log.error('Cannot send command: ' + err);
             if (typeof callback === 'function') callback(err);
         });
-        if (method === 'get_map_v1') adapter.log.debug('sendMsg >>> ' + message_str);
+        adapter.log.silly('sendMsg >>> ' + message_str);
         //adapter.log.debug('sendMsgRaw >>> ' + cmdraw.toString('hex'));
     } catch (err) {
         adapter.log.warn('Cannot send message_: ' + err);
@@ -1200,7 +1200,7 @@ function main() {
         server.on('message', function (msg, rinfo) {
             if (rinfo.port === adapter.config.port) {
                 if (msg.length === 32) {
-                    adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
+                    adapter.log.silly('Receive <<< Helo <<< ' + msg.toString('hex'));
                     packet.setRaw(msg);
                     isConnect = true;
                     checkSetTimeDiff();
