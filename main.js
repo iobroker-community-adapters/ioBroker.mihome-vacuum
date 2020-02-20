@@ -276,7 +276,8 @@ class FeatureManager {
                 type: 'state',
                 common: {
                     name: 'Carpet mode',
-                    type: 'switch',
+                    type: 'boolean',
+                    role: 'button',
                     read: true,
                     write: true,
                     desc: 'Fanspeed is Max on carpets',
