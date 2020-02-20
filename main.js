@@ -278,7 +278,7 @@ class FeatureManager {
                     name: 'Carpet mode',
                     type: 'boolean',
                     role: 'button',
-                    read: true,
+                    read: false,
                     write: true,
                     desc: 'Fanspeed is Max on carpets',
                 },
@@ -1660,6 +1660,7 @@ MAP._MapPoll = function () {
     if ((!that.ready.mappointer || !that.ready.login) && adapter.config.enableMiMap) return
 
     Map.updateMap(that.mappointer).then(function (data) {
+        if (data){
             let dataurl = data[0].toDataURL();
 
             adapter.setState('map.map64', '<img src="' + dataurl + '" /style="width: auto ;height: 100%;">', true);
@@ -1676,7 +1677,7 @@ MAP._MapPoll = function () {
                     that.LASTMAPSAVE = Date.now();
                 })
             };
-
+        }
             if (that.GETMAP) {
                 //adapter.log.info(VALETUDO.POLLMAPINTERVALL)
                 setTimeout(function () {
