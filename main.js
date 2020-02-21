@@ -68,6 +68,25 @@ const cleanStatus_GoingToSpot = 16
 const cleanStatus_ZoneCleaning = 17
 const cleanStatus_RoomCleaning = 18
 
+const activeCleanStates = {
+    5: { 
+        name: 'all ',
+        resume: 'app_start'
+    },
+    11: { 
+        name: 'spot ',
+        resume: 'app_spot'
+    },    
+    17: {
+        name:'zone ', 
+        resume:'resume_zoned_clean'
+    },
+    18: {
+        name:'segment ', 
+        resume:'resume_segment_clean'
+    }
+}
+
 const MAP = function () {}; // init MAP
 
 class Cleaning {
@@ -85,8 +104,11 @@ class Cleaning {
         this.state = newVal;
         adapter.setState('info.state', this.state, true);
 
-        if ([cleanStatus_Cleaning,cleanStatus_ZoneCleaning,cleanStatus_RoomCleaning, cleanStatus_SpotCleaning].indexOf(this.state) > -1) {
+        if (activeCleanStates[this.state]) {
             this.activeState = this.state;
+        } else if ([cleanStatus_Pause].indexOf(this.state) > -1) {
+            // activeState should be the initial State, so do nothing
+            return
         } else {
             this.activeState = 0
             if ([cleanStatus_Sleeping, cleanStatus_Waiting, cleanStatus_Back_toHome, cleanStatus_Charging, cleanStatus_GoingToSpot].indexOf(this.state) > -1) {
@@ -98,9 +120,7 @@ class Cleaning {
             }
         }
         adapter.setState('control.clean_home', this.activeState != 0, true);
-        
-
-
+ 
         if (MAP.ENABLED) { // set map getter to true if..
             if ([cleanStatus_Cleaning, cleanStatus_Back_toHome, cleanStatus_SpotCleaning, cleanStatus_GoingToSpot, cleanStatus_ZoneCleaning, cleanStatus_RoomCleaning].indexOf(this.state) > -1) {
                 MAP.StartMapPoll();
@@ -111,32 +131,36 @@ class Cleaning {
     }
 
     startCleaning(cleanStatus, messageObj){
-        const statusNames = {}
-        statusNames[cleanStatus_ZoneCleaning] = 'zone ';
-        statusNames[cleanStatus_RoomCleaning] = 'segment ';
+        let activeCleanState= activeCleanStates[cleanStatus]
+        if (!activeCleanState)
+            return adapter.warn("Invalid cleanStatus(" + cleanStatus + ") for startCleaning")
+        clearTimeout(pingTimeout);
+        setTimeout(sendPing, 2000);
         if (this.activeState){
-            adapter.log.info("should trigger cleaning " + statusNames[cleanStatus] + messageObj.message + ", but is currently active. Add to queue")
-            this.push(messageObj)
-            clearTimeout(pingTimeout);
-            sendPing()
+            if (cleanStatus === cleanStatus_Cleaning && adapter.config.enableResumeZone) {
+                adapter.log.debug('Resuming paused ' + activeCleanStates[this.activeState].name);
+                sendMsg(activeCleanStates[this.activeState].resume);
+            } else {
+                adapter.log.info("should trigger cleaning " + activeCleanState.name + messageObj.message + ", but is currently active. Add to queue")
+                this.push(messageObj)
+            }
             return false;
         } else {
             this.activeState = cleanStatus;
-            adapter.log.info("trigger cleaning " + statusNames[cleanStatus] + messageObj.message)
+            adapter.log.info("trigger cleaning " + activeCleanState.name + messageObj.message)
             return true
         }
     }
 
-    cleanHome(value){
-        if (value && !this.activeState) {
-            sendMsg(com.start.method);
-            setTimeout(() => sendMsg(com.get_status.method), 2000);
-        } else if (!value && this.activeState) {
+    stopCleaning(){
+        if (this.activeState){
             sendMsg(com.pause.method);
-            setTimeout(() => sendMsg(com.home.method), 1000);
-            this.activeState = 0
+            this.queue= []
+            adapter.setState("info.queue", 0, true)
+            setTimeout(() => sendMsg(com.home.method), 1000); 
+            clearTimeout(pingTimeout);
+            setTimeout(sendPing, 2000);
         }
-        adapter.setForeignState('control.clean_home', value, true);
     }
 
     push(messageObj) {
@@ -376,26 +400,7 @@ adapter.on('stateChange', function (id, state) {
     const command = terms.pop();
     const parent = terms.pop();
 
-    if (com[command]) {
-        let params = com[command].params || '';
-        if (state.val !== true && state.val !== 'true') {
-            params = state.val;
-        }
-        if (state.val !== false && state.val !== 'false') {
-            if (command === 'start' && cleaning.activeState && adapter.config.enableResumeZone) {
-                adapter.log.debug('Resuming paused zoneclean.');
-                sendMsg('resume_zoned_clean', null, function () {
-                    adapter.setForeignState(id, state.val, true);
-                });
-            } else {
-                sendMsg(com[command].method, [params], function () {
-                    adapter.setForeignState(id, state.val, true);
-                });
-            }
-        }
-
-    } else {
-        // Send own commands
+         // Send own commands
         if (command === 'X_send_command') {
             const values = (state.val || '').trim().split(';');
             //const method = values[0];
@@ -416,8 +421,24 @@ adapter.on('stateChange', function (id, state) {
             messages[id].method = command
 
 
-        } else if (command === 'clean_home') {
-            cleaning.cleanHome(state.val)
+        } else if (command === 'clean_home' || command === 'start') {
+            if (state.val) {
+                adapter.sendTo(adapter.namespace, "startVacuuming",null)
+            } else if (cleaning.activeState) {
+                cleaning.stopCleaning()
+            }
+            adapter.setForeignState(id, state.val, true);
+
+        } else if (command === 'home') {
+            if (state.val) {
+                cleaning.stopCleaning()
+            }
+            adapter.setForeignState(id, state.val, true);
+
+        } else if (command === 'spotclean') {
+            if (state.val)
+                adapter.sendTo(adapter.namespace, "cleanSpot",null)
+            adapter.setForeignState(id, state.val, true);
 
         } else if (command === 'carpet_mode') {
             //when carpetmode change
@@ -502,12 +523,20 @@ adapter.on('stateChange', function (id, state) {
         } else if (command === 'roomFanPower') {
             // do nothing, only set fan power for next roomClean
             adapter.setForeignState(id, state.val, true);
-        } else if (com[command] === undefined) {
-            adapter.log.error('Unknown state "' + id + '"');
+        } else if (com[command]) {
+            let params = com[command].params || '';
+            if (state.val !== true && state.val !== 'true') {
+                params = state.val;
+            }
+            if (state.val !== false && state.val !== 'false') {
+                sendMsg(com[command].method, [params], function () {
+                    adapter.setForeignState(id, state.val, true);
+                });
+            }
         } else {
-            adapter.log.error('Command "' + command + '" is not configured');
+            adapter.log.error('Unknown state "' + id + '"');
         }
-    }
+    
 
 });
 
@@ -1232,7 +1261,6 @@ function main() {
 
         adapter.subscribeStates('*');
         //adapter.subscribeObjects('rooms.*')
-
     }
 
 }
@@ -1369,13 +1397,15 @@ adapter.on('message', function (obj) {
 
                 // cleaning commands
             case 'startVacuuming':
-                sendCustomCommand('app_start');
+                if (cleaning.startCleaning(cleanStatus_Cleaning, obj))
+                    sendCustomCommand('app_start');
                 return;
             case 'stopVacuuming':
                 sendCustomCommand('app_stop');
                 return;
             case 'cleanSpot':
-                sendCustomCommand('app_spot');
+                if (cleaning.startCleaning(cleanStatus_SpotCleaning, obj))
+                    sendCustomCommand('app_spot');
                 return;
             case 'cleanZone':
                 if (!obj.message) return adapter.log.warn("cleanZone needs paramter coordinates")
@@ -1407,9 +1437,13 @@ adapter.on('message', function (obj) {
                 return;
             case 'pause':
                 sendCustomCommand('app_pause');
+                clearTimeout(pingTimeout);
+                setTimeout(sendPing, 2000);
                 return;
             case 'charge':
                 sendCustomCommand('app_charge');
+                clearTimeout(pingTimeout);
+                setTimeout(sendPing, 2000);
                 return;
 
                 // TODO: What does this do?
