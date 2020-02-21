@@ -289,8 +289,9 @@ class FeatureManager {
                 type: 'state',
                 common: {
                     name: 'Carpet mode',
-                    type: 'switch',
-                    read: true,
+                    type: 'boolean',
+                    role: 'button',
+                    read: false,
                     write: true,
                     desc: 'Fanspeed is Max on carpets',
                 },
@@ -646,10 +647,9 @@ function sendMsgToServer(msgCounter){
             if (err) adapter.log.error('Cannot send command: ' + err);
             if (typeof message.callback === 'function')  message.callback(err);
         });
-        adapter.log.debug('sendMsg[' + message.tryCount + '] >>> ' + message.str);
-        adapter.log.silly('sendMsgRaw >>> ' + cmdraw.toString('hex'));
+        adapter.log.silly('sendMsg[' + message.tryCount + '] >>> ' + message.str);
+        //adapter.log.silly('sendMsgRaw >>> ' + cmdraw.toString('hex'));
         setTimeout(sendMsgToServer,5000,msgCounter) // check in 10 sec, if robo send answer
-           
     } catch (err) {
         adapter.log.warn('Cannot send message_: ' + err);
         if (typeof message.callback === 'function')  message.callback(err);
@@ -916,7 +916,7 @@ function getLog(callback, i) {
         callback && callback();
     } else {
         if (logEntries[i] !== null || logEntries[i] !== 'null') {
-            adapter.log.debug('Request log entry: ' + logEntries[i]);
+            //adapter.log.debug('Request log entry: ' + logEntries[i]);
             sendMsg('get_clean_record', [logEntries[i]], () => {
                 setTimeout(getLog, 200, callback, i + 1);
             });
@@ -1194,7 +1194,7 @@ function main() {
         server.on('message', function (msg, rinfo) {
             if (rinfo.port === adapter.config.port) {
                 if (msg.length === 32) {
-                    adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
+                    adapter.log.silly('Receive <<< Helo <<< ' + msg.toString('hex'));
                     packet.setRaw(msg);
                     connected = true;
                     lastResponse= new Date();
@@ -1207,7 +1207,7 @@ function main() {
 
                     //hier die Antwort zum decodieren
                     packet.setRaw(msg);
-                    adapter.log.debug('Receive <<< ' + packet.getPlainData() + '<<< ') // + msg.toString('hex'));
+                    adapter.log.silly('Receive <<< ' + packet.getPlainData());
                     getStates(packet.getPlainData());
                 }
             }
@@ -1560,7 +1560,7 @@ MAP.Init = function () {
         if (adapter.config.enableMiMap) {
             Map.login().then(function (anser) {
                 reqParams.push('get_map_v1');
-                that.ready.login = true;
+                MAP.ready.login = true;
             }).catch(error => {
                 adapter.log.warn(error);
             })
@@ -1597,17 +1597,25 @@ MAP.getRoomsFromMap = function (answer) {
         return
     }
     adapter.log.debug('get rooms from map')
+    if ((!that.ready.mappointer || !that.ready.login) && adapter.config.enableMiMap) {
+        adapter.log.debug('get rooms from map pending...')
+        setTimeout(() => {
+            sendMsg('get_room_mapping');
+        }, 20000)
+        return
+    }
+
     Map.updateMap(that.mappointer).then(function (data) {
             adapter.log.debug('get rooms from map data: ' + JSON.stringify(data[1]))
             let roomsarray = data[1]
             let roomids = []
 
-            if (typeof (roomsarray === 'undefined') || roomsarray.length === 0) {
-                return
-            }
+            if (typeof (roomsarray) === 'undefined' || roomsarray.length === 0) return
+ 
             roomsarray.forEach(element => {
                 roomids.push([element, 'room' + element])
             });
+
             answer.result = roomids
             roomManager.processRoomMaping(answer);
         })
@@ -1628,6 +1636,7 @@ MAP._MapPoll = function () {
     if ((!that.ready.mappointer || !that.ready.login) && adapter.config.enableMiMap) return
 
     Map.updateMap(that.mappointer).then(function (data) {
+        if (data){
             let dataurl = data[0].toDataURL();
 
             adapter.setState('map.map64', '<img src="' + dataurl + '" /style="width: auto ;height: 100%;">', true);
@@ -1644,7 +1653,7 @@ MAP._MapPoll = function () {
                     that.LASTMAPSAVE = Date.now();
                 })
             };
-
+        }
             if (that.GETMAP) {
                 //adapter.log.info(VALETUDO.POLLMAPINTERVALL)
                 setTimeout(function () {
