@@ -298,8 +298,22 @@ class FeatureManager {
                         },
                         native: {}
                     });
+                    adapter.setObjectNotExists('control.resumeRoomClean', {
+                        type: 'state',
+                        common: {
+                            name: "Resume paused roomClean",
+                            type: "boolean",
+                            role: "button",
+                            read: false,
+                            write: true,
+                            desc: "resume roomClean that has been paused before",
+                        },
+                        native: {}
+                    });                    
                 } else {
                     adapter.deleteState(adapter.namespace, 'control', 'resumeZoneClean');
+                    adapter.deleteState(adapter.namespace, 'control', 'resumeRoomClean');
+                }
                 }
             }
         }
@@ -469,6 +483,11 @@ adapter.on('stateChange', function (id, state) {
 
         } else if (command === 'resumeZoneClean') {
             sendMsg('resume_zoned_clean', null, function () {
+                adapter.setForeignState(id, state.val, true);
+            });
+
+        } else if (command === 'resumeRoomClean') {
+            sendMsg('resume_segment_clean', null, function () {
                 adapter.setForeignState(id, state.val, true);
             });
 
@@ -1458,6 +1477,7 @@ adapter.on('message', function (obj) {
                 return;
             case 'resetConsumables':
                 sendCustomCommand('reset_consumable');
+                setTimeout(sendMsg,2000,'get_consumable');
                 return;
 
                 // get info about cleanups
