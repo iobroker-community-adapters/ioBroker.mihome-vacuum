@@ -314,7 +314,6 @@ class FeatureManager {
                     adapter.deleteState(adapter.namespace, 'control', 'resumeZoneClean');
                     adapter.deleteState(adapter.namespace, 'control', 'resumeRoomClean');
                 }
-                }
             }
         }
     }
