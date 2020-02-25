@@ -238,6 +238,8 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 2.0.7 (2020-02-25)
+* (dirkhe) Fortsetzten nach Pause für Räume hinzugefügt
 ### 2.0.6 (2020-02-17)
 * (MeisterTR) Raumerkennung für S50 über die Karte (cloud oder Valetudo vorrausgesetzt)
 ### 2.0.4 (2020-02-13)
