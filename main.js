@@ -1718,11 +1718,11 @@ MAP._MapPoll = function () {
 
             if (Date.now() - that.LASTMAPSAVE > that.MAPSAFEINTERVALL) {
                 var buf = data[0].toBuffer();
-                adapter.writeFile('mihome-vacuum.admin', 'actualMap.png', buf, function (error) {
+                adapter.writeFile('mihome-vacuum.admin', 'actualMap_'+ adapter.instance +'.png', buf, function (error) {
                     if (error) {
                         adapter.log.error('Fehler beim Speichern der Karte');
                     } else {
-                        adapter.setState('map.mapURL', "/mihome-vacuum.admin/actualMap.png", true);
+                        adapter.setState('map.mapURL', '/mihome-vacuum.admin/actualMap_'+ adapter.instance +'.png', true);
 
                     }
                     that.LASTMAPSAVE = Date.now();
