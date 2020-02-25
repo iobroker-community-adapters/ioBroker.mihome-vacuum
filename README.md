@@ -200,6 +200,7 @@ The supported commands are:
 | Start the cleaning process | `startVacuuming` | - none - |  |
 | Stop the cleaning process | `stopVacuuming` | - none - |  |
 | Pause the cleaning process | `pause` | - none - |  |
+| Clear waiting jobs | `clearQueue` | - none - |  |
 | Clean a small area around the robot | `cleanSpot` | - none - |  |
 | Go back to the base | `charge` | - none - |  |
 | Say "Hi, I'm over here!" | `findMe` | - none - |  |

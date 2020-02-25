@@ -205,6 +205,7 @@ Die unterstützten Kommandos sind:
 | Saugprozess starten | `startVacuuming` | - keine - |  |
 | Saugprozess beenden | `stopVacuuming` | - keine - |  |
 | Saugprozess pausieren | `pause` | - keine - |  |
+| wartende Aufträge löschen | `clearQueue` | - keine - |  |
 | Einen kleinen bereich um den Roboter saugen | `cleanSpot` | - keine - |  |
 | Zurück zur Ladestation | `charge` | - keine - |  |
 | "Hi, I'm over here!" sagen | `findMe` | - keine - |  |

@@ -155,12 +155,16 @@ class Cleaning {
     stopCleaning(){
         if (this.activeState){
             sendMsg(com.pause.method);
-            this.queue= []
-            adapter.setState("info.queue", 0, true)
+            this.clearQueue();
             setTimeout(() => sendMsg(com.home.method), 1000); 
             clearTimeout(pingTimeout);
             setTimeout(sendPing, 2000);
         }
+    }
+
+    clearQueue(){
+        this.queue= []
+        adapter.setState("info.queue", 0, true)
     }
 
     push(messageObj) {
@@ -447,6 +451,10 @@ adapter.on('stateChange', function (id, state) {
                 cleaning.stopCleaning()
             }
             adapter.setForeignState(id, state.val, true);
+
+        } else if (command === 'clearQueue') {
+            cleaning.clearQueue()
+            adapter.setForeignState(id, true, true);
 
         } else if (command === 'spotclean') {
             if (state.val)
@@ -1182,6 +1190,18 @@ function init() {
     }, function () {
         adapter.setState('info.queue', 0, true);
     })
+    adapter.setObjectNotExists('control.clearQueue', {
+        type: 'state',
+        common: {
+            name: "clear cleaning queue",
+            type: "boolean",
+            role: "button",
+            read: false,
+            write: true,
+            desc: "Clear cleaning queue, but not current job",
+        },
+        native: {}
+    });
 }
 
 
@@ -1421,6 +1441,8 @@ adapter.on('message', function (obj) {
             case 'stopVacuuming':
                 sendCustomCommand('app_stop');
                 return;
+            case 'clearQueue':
+                return cleaning.clearQueue();
             case 'cleanSpot':
                 if (cleaning.startCleaning(cleanStatus_SpotCleaning, obj))
                     sendCustomCommand('app_spot');
