@@ -276,8 +276,9 @@ class FeatureManager {
                 type: 'state',
                 common: {
                     name: 'Carpet mode',
-                    type: 'switch',
-                    read: true,
+                    type: 'boolean',
+                    role: 'button',
+                    read: false,
                     write: true,
                     desc: 'Fanspeed is Max on carpets',
                 },
@@ -650,7 +651,7 @@ function sendMsg(method, params, options, callback) {
             if (err) adapter.log.error('Cannot send command: ' + err);
             if (typeof callback === 'function') callback(err);
         });
-        if (method === 'get_map_v1') adapter.log.debug('sendMsg >>> ' + message_str);
+        adapter.log.silly('sendMsg >>> ' + message_str);
         //adapter.log.debug('sendMsgRaw >>> ' + cmdraw.toString('hex'));
     } catch (err) {
         adapter.log.warn('Cannot send message_: ' + err);
@@ -1199,7 +1200,7 @@ function main() {
         server.on('message', function (msg, rinfo) {
             if (rinfo.port === adapter.config.port) {
                 if (msg.length === 32) {
-                    adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
+                    adapter.log.silly('Receive <<< Helo <<< ' + msg.toString('hex'));
                     packet.setRaw(msg);
                     isConnect = true;
                     checkSetTimeDiff();
@@ -1218,9 +1219,7 @@ function main() {
 
                     //hier die Antwort zum decodieren
                     packet.setRaw(msg);
-
-                    let json = JSON.parse(packet.getPlainData())
-                    if (json.id === last_id['get_map_v1']) adapter.log.debug('Receive <<< ' + packet.getPlainData());
+                    adapter.log.silly('Receive <<< ' + packet.getPlainData());
                     getStates(packet.getPlainData());
                 }
             }
@@ -1661,6 +1660,7 @@ MAP._MapPoll = function () {
     if ((!that.ready.mappointer || !that.ready.login) && adapter.config.enableMiMap) return
 
     Map.updateMap(that.mappointer).then(function (data) {
+        if (data){
             let dataurl = data[0].toDataURL();
 
             adapter.setState('map.map64', '<img src="' + dataurl + '" /style="width: auto ;height: 100%;">', true);
@@ -1677,7 +1677,7 @@ MAP._MapPoll = function () {
                     that.LASTMAPSAVE = Date.now();
                 })
             };
-
+        }
             if (that.GETMAP) {
                 //adapter.log.info(VALETUDO.POLLMAPINTERVALL)
                 setTimeout(function () {
