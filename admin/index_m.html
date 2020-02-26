@@ -107,6 +107,9 @@
             if (!settings) return;
             $('.hidden').hide();
 
+            settings.pingInterval= parseInt(settings.pingInterval/1000,10)
+            settings.wifiInterval= parseInt(settings.wifiInterval/1000,10)
+
             $('.value').each(function () {
                 var key = $(this).attr('id');
                 var $key = $('#' + key + '.value');
@@ -331,6 +334,9 @@
                 showMessage(_('Invalid token length. Expected 32 or 96 HEX chars.'));
                 return;
             }
+
+            obj.pingInterval= parseInt(obj.pingInterval*1000,10)
+            obj.wifiInterval= parseInt(obj.wifiInterval*1000,10)
 
             let newTimerArray = table2values('timer')
             let timerList = {}
@@ -574,12 +580,12 @@
             <div id="tab-settings" class="col s12 page">
                 <div class="row">
                     <div class="col s12 m4 l2">
-                        <input class="value" id="param_pingInterval" size="15" type="number" min="20000" />
-                        <label class="translate" for="param_pingInterval">get Parameter Intervall</label>
+                        <input class="value" id="pingInterval" size="5" type="number" min="10" />
+                        <label class="translate" for="pingInterval">get Status Intervall</label>
                     </div>
                     <div class="col s12 m4 l2">
-                        <input class="value" id="pingInterval" size="15" type="number" min="10000" />
-                        <label class="translate" for="pingInterval">get Status Intervall</label>
+                        <input class="value" id="wifiInterval" size="5" type="number" min="20" />
+                        <label class="translate" for="wifiInterval">get WiFi Intervall</label>
                     </div>
                 </div>
                 <div class="col s12">

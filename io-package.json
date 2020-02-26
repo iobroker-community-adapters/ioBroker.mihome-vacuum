@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "2.0.7",
+        "version": "2.0.8",
         "news": {
+            "2.0.8": {
+                "en": "decreased communication with robot",
+                "de": "verminderte Kommunikation mit dem Roboter",
+                "ru": "уменьшилось общение с роботом",
+                "pt": "comunicação reduzida com o robô",
+                "nl": "verminderde communicatie met robot",
+                "fr": "diminution de la communication avec le robot",
+                "it": "ridotta comunicazione con il robot",
+                "es": "disminución de la comunicación con el robot",
+                "pl": "zmniejszona komunikacja z robotem",
+                "zh-cn": "与机器人的交流减少"
+            },
             "2.0.7": {
                 "en": "add Resuming after pause for rooms",
                 "de": "Hinzufügen Wiederaufnahme nach Pause für Räume",
@@ -274,7 +286,7 @@
         "port": 54321,
         "ownPort": 53421,
         "pingInterval": 20000,
-        "param_pingInterval": 60000,
+        "wifiInterval": 60000,
         "valetudo_enable": false,
         "valetudo_color_floor": "#56affc",
         "valetudo_color_wall": "#b3edff",

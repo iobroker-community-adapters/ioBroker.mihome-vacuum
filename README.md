@@ -233,6 +233,8 @@ Sorry, not yet finished.
 - Widget at the time without function
 
 ## Changelog
+### 2.0.8 (2020-02-26)
+* (dirkhe) decreased communication with robot
 ### 2.0.7 (2020-02-25)
 * (dirkhe) add Resuming after pause for rooms
 ### 2.0.6 (2020-02-17)
