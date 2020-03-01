@@ -36,9 +36,9 @@
   },
   "devDependencies": {
     "gulp": "^4.0.0",
-    "mocha": "^6.0.2",
+    "mocha": "^7.1.0",
     "chai": "^4.1.2",
     "axios": "^0.18.0",
-    "@iobroker/testing": "^1.1.12"
+    "@iobroker/testing": "^2.1.0"
   }
 }
