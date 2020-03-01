@@ -71,6 +71,7 @@
             border-style: solid;
 
         }
+
         .loader {
             border: 4px solid #b8d1f3;
             /* Light grey */
@@ -114,7 +115,7 @@
                     $key.prop('checked', settings[key]).change(function () {
 
                         if ($('#enableMiMap').prop('checked') || $('#valetudo_enable').prop(
-                            'checked')) {
+                                'checked')) {
                             $('.map-setting').removeClass('disabled');
                         } else {
                             $('.map-setting').addClass('disabled');
@@ -132,6 +133,7 @@
                     });
                 }
             });
+            setDevices();
             $(".cbox").css("background", ($(".colorFloor").val()));
             $(".cbox").css("border-color", ($(".colorWall").val()));
             $(".cbox2").css("border-color", ($(".colorWall").val()));
@@ -161,11 +163,8 @@
             $('#devices').change(function () {
                 let tmp = JSON.parse($(this).val());
                 console.log("changed....devices" + $(this).val())
-
-                $('#token.value').val(tmp.token)
-                $('#ip.value').val(tmp.localip)
-                $('#MiDevice.value').val($(this).val())
-
+                setValue('token', tmp.token, onChange);
+                setValue('ip', tmp.localip, onChange);
             });
 
             $('#getDevices').on('click', function () {
@@ -182,9 +181,9 @@
                 let pass = $('#password').val();
                 let user = $('#email').val();
                 let server = $('#server').val();
-                console.log("send to..." + user +" server: "+ server);
+                console.log("send to..." + user + " server: " + server);
 
-                if(typeof(server)== 'undefinded' || server== ''){
+                if (typeof (server) == 'undefinded' || server == '') {
                     $getDevices.removeClass('disabled');
                     $('#loader1').addClass('seenot');
                     showToast(_('no server selected'));
@@ -201,8 +200,8 @@
                     $getDevices.removeClass('disabled');
                     $('#loader1').addClass('seenot');
 
-                    $('#token').addClass('disabled');
-                    $('#ip').addClass('disabled');
+                    // $('#token').hide();
+                    //  $('#ip').hide();
 
                     var arr = result;
 
@@ -213,6 +212,9 @@
 
                     rawdevices = arr;
                     let text = "";
+
+                    setValue('MiDevice', JSON.stringify(arr), onChange);
+
                     arr.forEach(function (entry) {
                         text += "<option value='" + JSON.stringify(entry) + "' >" + entry
                             .model + ' - token: ' + entry.token + ' - ip: ' + (entry.localip ?
@@ -284,7 +286,7 @@
                                             rooms[room._id].timer.push(id)
                                         } else if (id.indexOf(namespace) ===
                                             0
-                                            ) { // we use chance for housekeeping of zombie timer and rooms
+                                        ) { // we use chance for housekeeping of zombie timer and rooms
                                             if (id.indexOf('.timer.') === 0 || (id
                                                     .indexOf('.multiRoomClean') === -
                                                     1 && id.indexOf('.rooms.') > 0 &&
@@ -316,6 +318,44 @@
             onChange(false);
         }
 
+        function setDevices() {
+            let devices;
+            let text = "";
+            try {
+                devices = JSON.parse($('#MiDevice').val())
+            } catch (e) {
+                console.log('cant parse devices');
+                return
+            }
+            devices.forEach(function (entry) {
+                        text += "<option value='" + JSON.stringify(entry) + "' >" + entry
+                            .model + ' - token: ' + entry.token + ' - ip: ' + (entry.localip ?
+                                entry.localip : '') + '</option>';
+
+                        //check if in config
+                    })
+                    $('#devices').html(text).select();
+
+        }
+
+        function setValue(key, value, onChange) {
+            var $key = $('#' + key + '.value');
+            if ($key.attr('type') === 'checkbox') {
+                $key.prop('checked', value).on('change', function () {
+                    onChange();
+                });
+            } else {
+                $key.val(value).on('change', function () {
+                    if ($(this).attr('id') === 'type') {
+                        showHideSettings();
+                    }
+                    onChange();
+                }).on('keyup', function () {
+                    onChange();
+                });
+            }
+        }
+
         function save(callback) {
             var obj = {};
             $('.value').each(function () {
@@ -327,7 +367,7 @@
                 }
             });
             var tokenLength = obj.token.replace(/\s/g, '').length;
-            if (tokenLength !== 32 && tokenLength !== 96) {
+            if (tokenLength !== 32 && tokenLength !== 96 && tokenLength !== 31) {
                 showMessage(_('Invalid token length. Expected 32 or 96 HEX chars.'));
                 return;
             }
@@ -631,7 +671,7 @@
                         <label class="translate" for="valetudo_MapsaveIntervall">Map save intervall</label>
                     </div>
                     <div class="col s4">
-                        <input class="value" id="newmap" type="checkbox"/>
+                        <input class="value" id="newmap" type="checkbox" />
                         <span class="translate">Use new Map format with roomcolors</span>
                     </div>
                 </div>
@@ -682,7 +722,8 @@
                             <a class="btn-floating waves-effect waves-light blue table-button-add"><i
                                     class="material-icons translate">add</i></a>
                         </div>
-                        <h6 class="col s11 translate">add timer and choose room channels directly and/or choose rooms, which finds assigned room channels</h6>
+                        <h6 class="col s11 translate">add timer and choose room channels directly and/or choose rooms,
+                            which finds assigned room channels</h6>
                     </div>
                     <div class="table-values-div">
                         <table class="table-values">
