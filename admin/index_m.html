@@ -327,7 +327,8 @@
                 console.log('cant parse devices');
                 return
             }
-            devices.forEach(function (entry) {
+            if(Array.isArray(devices)){
+                devices.forEach(function (entry) {
                         text += "<option value='" + JSON.stringify(entry) + "' >" + entry
                             .model + ' - token: ' + entry.token + ' - ip: ' + (entry.localip ?
                                 entry.localip : '') + '</option>';
@@ -335,6 +336,8 @@
                         //check if in config
                     })
                     $('#devices').html(text).select();
+            }
+
 
         }
 
