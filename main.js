@@ -161,12 +161,10 @@ class Cleaning {
     }
 
     stopCleaning(){
-        if (this.activeState){
-            sendMsg(com.pause.method);
-            this.clearQueue();
-            setTimeout(() => sendMsg(com.home.method), 1000); 
-            setTimeout(sendPing, 2000);
-        }
+        sendMsg(com.pause.method);
+        this.clearQueue();
+        setTimeout(() => sendMsg(com.home.method), 1000); 
+        setTimeout(sendPing, 2000);
     }
 
     clearQueue(){
