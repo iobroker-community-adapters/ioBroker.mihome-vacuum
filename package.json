@@ -28,7 +28,7 @@
     "test:integration": "mocha test/integration --exit"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^1.0.3",
+    "@iobroker/adapter-core": "^2.2.1",
     "zlib": "^1.0.5",
     "canvas":"^2.6.1",
     "request":"^2.88.0",
@@ -36,9 +36,9 @@
   },
   "devDependencies": {
     "gulp": "^4.0.0",
-    "mocha": "^6.0.2",
+    "mocha": "^7.1.0",
     "chai": "^4.1.2",
-    "axios": "^0.18.0",
-    "@iobroker/testing": "^1.1.12"
+    "axios": "^0.19.2",
+    "@iobroker/testing": "^2.1.0"
   }
 }
