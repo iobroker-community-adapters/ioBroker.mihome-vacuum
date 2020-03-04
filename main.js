@@ -442,24 +442,24 @@ adapter.on('stateChange', function (id, state) {
         } else if (command === 'clean_home' || command === 'start') {
             if (state.val) {
                 adapter.sendTo(adapter.namespace, "startVacuuming",null)
-            } else if (cleaning.activeState) {
+            } else if (command === 'clean_home' && cleaning.activeState) {
                 cleaning.stopCleaning()
             }
             adapter.setForeignState(id, state.val, true);
 
         } else if (command === 'home') {
-            if (state.val) {
-                cleaning.stopCleaning()
-            }
-            adapter.setForeignState(id, state.val, true);
+            if (!state.val) return;
+            cleaning.stopCleaning()
+            adapter.setForeignState(id, true, true);
 
         } else if (command === 'clearQueue') {
+            if (!state.val) return;
             cleaning.clearQueue()
             adapter.setForeignState(id, true, true);
 
         } else if (command === 'spotclean') {
-            if (state.val)
-                adapter.sendTo(adapter.namespace, "cleanSpot",null)
+            if (!state.val) return;
+            adapter.sendTo(adapter.namespace, "cleanSpot",null)
             adapter.setForeignState(id, state.val, true);
 
         } else if (command === 'carpet_mode') {
@@ -490,16 +490,19 @@ adapter.on('stateChange', function (id, state) {
             adapter.setForeignState(id, '', true);
 
         } else if (command === 'resumeZoneClean') {
+            if (!state.val) return;
             sendMsg('resume_zoned_clean', null, function () {
                 adapter.setForeignState(id, state.val, true);
             });
 
         } else if (command === 'resumeRoomClean') {
+            if (!state.val) return;
             sendMsg('resume_segment_clean', null, function () {
                 adapter.setForeignState(id, state.val, true);
             });
 
         } else if (command === 'loadRooms') {
+            if (!state.val) return;
             sendMsg('get_room_mapping', null, function () {
                 adapter.setForeignState(id, state.val, true);
             });
@@ -516,6 +519,7 @@ adapter.on('stateChange', function (id, state) {
             adapter.setForeignState(id, '', true);
 
         } else if (command === 'roomClean') {
+            if (!state.val) return;
             roomManager.cleanRooms([id.replace("roomClean", "mapIndex")]);
             adapter.setForeignState(id, true, true);
         } else if (command === 'multiRoomClean' || parent === 'timer') {
@@ -524,8 +528,10 @@ adapter.on('stateChange', function (id, state) {
                     timerManager.calcNextProcess()
                 });
                 if (state.val != TimerManager.START) return
-            } else
+            } else {
+                if (!state.val) return;
                 adapter.setForeignState(id, true, true);
+            }
             // search for assigned roomObjs or id on timer
             adapter.getForeignObjects(id, 'state', 'rooms', function (err, states) {
                 if (states) {
