@@ -140,6 +140,7 @@ class Cleaning {
             if (cleanStates.Charging === newVal){
                 sendMsg(com.get_consumable.method)
                 setTimeout(sendMsg, 500, com.clean_summary.method)
+                MAP.ENABLED && setTimeout(sendMsg,2000,'get_map_v1');
             }
         }
         adapter.setState('control.clean_home', this.activeState != 0, true);
@@ -526,7 +527,7 @@ adapter.on('stateChange', function (id, state) {
         } else if (command === 'zoneClean') {
             adapter.sendTo(adapter.namespace, "cleanZone", state.val)
             adapter.setForeignState(id, '', true);
-
+/* removed to commands.js
         } else if (command === 'resumeZoneClean') {
             if (!state.val) return;
             sendMsg('resume_zoned_clean', null, function () {
@@ -544,6 +545,7 @@ adapter.on('stateChange', function (id, state) {
             sendMsg('get_room_mapping', null, function () {
                 adapter.setForeignState(id, state.val, true);
             });
+*/            
         } else if (command === 'addRoom') {
             if (!isNaN(state.val))
                 roomManager.createRoom("manual_" + state.val, parseInt(state.val, 10))
@@ -1677,6 +1679,19 @@ MAP.Init = function () {
                 read: true,
                 write: false,
                 desc: 'Path to actual PNG File',
+            },
+            native: {}
+        });
+
+        adapter.setObjectNotExists('map.loadMap', {
+            type: 'state',
+            common: {
+                name: 'load Map',
+                type: "boolean",
+                role: "button",
+                read: false,
+                write: true,
+                desc: 'load the current Map',
             },
             native: {}
         });
