@@ -26,6 +26,7 @@ let messages = {};
 let connected = false;
 let pingTimeout = null;
 let pingInterval = 0;           // will be overwrite in sendPing()
+let maxResponseTime = 60000;    // max Time difference for reconnecting
 let nextWiFiCheck = 0;          // will be set in checkWiFi()
 let packet;
 let cleanLog = [];
@@ -109,7 +110,7 @@ class Cleaning {
         adapter.setState('info.state', this.state, true);
 
         if (activeCleanStates[this.state]) {
-            if (this.activeState == this.state){ // activeState was set in startCleaning
+            if (newVal == this.activeState){ // activeState was set in startCleaning and now confirmed
                 if (this.activeChannels){
                     for (let i in this.activeChannels)
                         adapter.setState(this.activeChannels[i] + '.state', i18n.cleanRoom, true);
@@ -162,14 +163,8 @@ class Cleaning {
                 adapter.log.debug('Resuming paused ' + activeCleanStates[this.activeState].name);
                 sendMsg(activeCleanStates[this.activeState].resume);
             } else {
-                messageObj.info= activeCleanState.name;
-                if (messageObj.channels)
-                    for (let i in messageObj.channels)
-                        adapter.getObject(messageObj.channels[i],function(err,obj){
-                            if (obj)
-                                messageObj.info += ' ' + obj.common.name;
-                        })
                 adapter.log.info("should trigger cleaning " + activeCleanState.name + (messageObj.message || '') + ", but is currently active. Add to queue")
+                messageObj.info= activeCleanState.name;
                 this.push(messageObj)
             }
             return false;
@@ -201,7 +196,15 @@ class Cleaning {
 
     push(messageObj) {
         this.queue.push(messageObj)
-        this.updateQueue()
+        if (messageObj.channels){
+            let getObjs= []
+            for (let i in messageObj.channels){
+                getObjs.push(adapter.getObjectAsync(messageObj.channels[i])
+                                        .then((obj) => { messageObj.info += ' ' + obj.common.name }));
+            }
+            Promise.all(getObjs).then(() => {this.updateQueue()})
+        } else
+            this.updateQueue()
     }
 
     updateQueue(){
@@ -1183,10 +1186,12 @@ function sendPing() {
     pingTimeout && clearTimeout(pingTimeout);
 
     let now = new Date()
-    if ((now - lastResponse) > adapter.config.pingInterval){ 
+    if ((now - lastResponse) > maxResponseTime){ 
         // not connected or connection lost -> send Helo to Robot
-        connected = false;
-        adapter.log.info('Disconnect');
+        if (connected){ 
+            connected = false;
+            adapter.log.info('Disconnected due last Restponse of ' + adapter.formatDate(lastResponse,'hh:mm:ss.sss'));
+        }
         adapter.setState('info.connection', false, true);
         pingInterval= 20000; // check again in 20 seconds, sometimes the robo need some time to answer
         try {
@@ -1213,7 +1218,7 @@ function serverConnected(){
     if (packet.timediff !== 0) 
         adapter.log.warn('Time difference between Mihome Vacuum and ioBroker: ' + packet.timediff + ' sec');
 
-    adapter.log.info('connecting, This can take up to 5 minutes ...')
+    adapter.log.info('connecting, this can take up to 5 minutes ...')
     adapter.sendTo(adapter.namespace, "getStatus", null, function(obj){
         if (obj && obj.result){
             lastResponse= new Date();
@@ -1249,6 +1254,7 @@ function main() {
         adapter.config.pingInterval = 10000;
     }
 
+    maxResponseTime= Math.max(adapter.config.pingInterval, 60000) + 60000 // + some puffer
 
     if (!adapter.config.token) {
         adapter.log.error('Token not specified!');
@@ -1470,10 +1476,10 @@ adapter.on('message',function(obj) {
                     } else
                         obj.zones= [obj.message];
                 }
-                if (!obj.channels){
+                if (typeof obj.channels == "undefined"){
                     return roomManager.findChannelsByMapIndex(obj.zones, function(channels){
-                        adapter.log.error(obj.message + ' ->' + channels.join());
-                        obj.channels= channels;
+                        adapter.log.debug('search channels for ' + obj.message + ' ->' + channels.join());
+                        obj.channels= channels && channels.length ? channels : null;
                         adapter.emit('message', obj); // call function again
                     })
                 }
@@ -1504,14 +1510,15 @@ adapter.on('message',function(obj) {
                         obj.segments= message;
                     }
                 }
-                if (!obj.channels){
+                if (typeof obj.channels == "undefined"){
                     return roomManager.findChannelsByMapIndex(obj.segments, function(channels){
-                        adapter.log.error(obj.message + ' ->' + channels.join());
-                        obj.channels= channels;
+                        adapter.log.debug('search channels for ' + obj.message + ' ->' + channels.join());
+                        obj.channels= channels && channels.length ? channels : null;
                         adapter.emit('message', obj); // call function again
                     })
                 }
                 if (cleaning.startCleaning(cleanStates.RoomCleaning, obj))
+  //setTimeout(()=> {cleaning.setRemoteState(cleanStates.RoomCleaning)},2500) //simulate:
                     sendCustomCommand('app_segment_clean', obj.segments)
                 
                 return;
