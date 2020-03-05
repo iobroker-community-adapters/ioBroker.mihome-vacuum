@@ -1218,7 +1218,7 @@ function serverConnected(){
     if (packet.timediff !== 0) 
         adapter.log.warn('Time difference between Mihome Vacuum and ioBroker: ' + packet.timediff + ' sec');
 
-    adapter.log.info('connecting, this can take up to 5 minutes ...')
+    adapter.log.info('connecting, this can take up to 10 minutes ...')
     adapter.sendTo(adapter.namespace, "getStatus", null, function(obj){
         if (obj && obj.result){
             lastResponse= new Date();
