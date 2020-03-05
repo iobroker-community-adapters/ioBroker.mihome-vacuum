@@ -1477,12 +1477,9 @@ adapter.on('message',function(obj) {
                         adapter.emit('message', obj); // call function again
                     })
                 }
-                if (cleaning.startCleaning(cleanStates.ZoneCleaning, obj)){
-                    //sendCustomCommand('app_zoned_clean',obj.zones)
-                    roomManager.findChannelsByMapIndex(obj.zones, function(channels){
-                        adapter.log.error(obj.message+ ' ->' + channels.join());
-                    })
-                }
+                if (cleaning.startCleaning(cleanStates.ZoneCleaning, obj))
+                    sendCustomCommand('app_zoned_clean',obj.zones)
+                
                 return;
             case 'cleanSegments':
                 if (!obj.message) return adapter.log.warn("cleanSegments needs paramter mapIndex")
@@ -1514,9 +1511,9 @@ adapter.on('message',function(obj) {
                         adapter.emit('message', obj); // call function again
                     })
                 }
-                if (cleaning.startCleaning(cleanStates.RoomCleaning, obj)){
-                    //sendCustomCommand('app_segment_clean', obj.segments)
-                }
+                if (cleaning.startCleaning(cleanStates.RoomCleaning, obj))
+                    sendCustomCommand('app_segment_clean', obj.segments)
+                
                 return;
             case 'cleanRooms':
                 let rooms = obj.message // comma separated String with enum.rooms.XXX
