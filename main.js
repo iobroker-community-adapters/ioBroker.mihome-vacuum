@@ -47,7 +47,8 @@ const i18n = {
     addRoom: "insert map Index or zone coordinates",
     waterBox_installed: "water box installed",
     waterBox_filter: "clean water Filter",
-    waterBox_filter_reset: "water filter reset"
+    waterBox_filter_reset: "water filter reset",
+    waitingPos: "waiting position"
 }
 const cleanStates = {
     Unknown : 0,
@@ -94,7 +95,8 @@ const MAP = function () {}; // init MAP
 class Cleaning {
     constructor(){
         this.state = cleanStates.Unknown // current robot Status
-        this.activeState = 0 // if robot is working, than her the status is saved
+        this.activeState = 0 // if robot is working, than here the status is saved
+        this.activeChannels= null;
         this.queue = [] // if new job is aclled, while robot is already cleaning
     }
 
@@ -107,7 +109,13 @@ class Cleaning {
         adapter.setState('info.state', this.state, true);
 
         if (activeCleanStates[this.state]) {
-            this.activeState = this.state;
+            if (this.activeState == this.state){ // activeState was set in startCleaning
+                if (this.activeChannels){
+                    for (let i in this.activeChannels)
+                        adapter.setState(this.activeChannels[i] + '.state', i18n.cleanRoom, true);
+                }
+            } else
+                this.activeState = this.state;
             sendMsg(com.get_sound_volume.method)
             if (features.carpetMode)
                 setTimeout(sendMsg, 200, com.get_carpet_mode.method)
@@ -116,6 +124,11 @@ class Cleaning {
             return
         } else {
             this.activeState = 0
+            if (this.activeChannels){
+                for (let i in this.activeChannels)
+                    adapter.setState(this.activeChannels[i] + '.state', '', true);
+                this.activeChannels= null
+            }
             if ([cleanStates.Sleeping, cleanStates.Waiting, cleanStates.Back_toHome, cleanStates.Charging, cleanStates.GoingToSpot].indexOf(this.state) > -1) {
                 if (this.queue.length > 0) {
                     adapter.log.debug("use clean trigger from Queue")
@@ -149,13 +162,21 @@ class Cleaning {
                 adapter.log.debug('Resuming paused ' + activeCleanStates[this.activeState].name);
                 sendMsg(activeCleanStates[this.activeState].resume);
             } else {
-                adapter.log.info("should trigger cleaning " + activeCleanState.name + messageObj.message + ", but is currently active. Add to queue")
+                messageObj.info= activeCleanState.name;
+                if (messageObj.channels)
+                    for (let i in messageObj.channels)
+                        adapter.getObject(messageObj.channels[i],function(err,obj){
+                            if (obj)
+                                messageObj.info += ' ' + obj.common.name;
+                        })
+                adapter.log.info("should trigger cleaning " + activeCleanState.name + (messageObj.message || '') + ", but is currently active. Add to queue")
                 this.push(messageObj)
             }
             return false;
         } else {
             this.activeState = cleanStatus;
-            adapter.log.info("trigger cleaning " + activeCleanState.name + messageObj.message)
+            this.activeChannels= messageObj.channels;
+            adapter.log.info("trigger cleaning " + activeCleanState.name + (messageObj.message || ''))
             return true
         }
     }
@@ -169,6 +190,12 @@ class Cleaning {
 
     clearQueue(){
         this.queue= []
+        for (let i in this.queue){
+            let channels= this.queue[i].channels
+            if (channels)
+                for (let c in channels)
+                    adapter.setState(channels[c] + '.state', '', true);
+        }
         this.updateQueue()
     }
 
@@ -178,8 +205,16 @@ class Cleaning {
     }
 
     updateQueue(){
-        adapter.setStateChanged('info.queue', this.queue.length, true)
         pingInterval = this.queue.length > 0 ? 10000 : adapter.config.pingInterval;
+        let json= []
+        for (let i= this.queue.length - 1; i >=0; i--){
+            json.push(this.queue[i].info)
+            let channels= this.queue[i].channels
+            if (channels)
+                for (let c in channels)
+                    adapter.setState(channels[c] + '.state', i18n.waitingPos + ': ' + i , true);
+        }
+        adapter.setStateChanged('info.queue', JSON.stringify(json), true)
     }
 }
 
@@ -532,27 +567,8 @@ adapter.on('stateChange', function (id, state) {
                 if (!state.val) return;
                 adapter.setForeignState(id, true, true);
             }
-            // search for assigned roomObjs or id on timer
-            adapter.getForeignObjects(id, 'state', 'rooms', function (err, states) {
-                if (states) {
-                    let mapIndex = [];
-                    if (states[id].native.channels) {
-                        for (let i in states[id].native.channels)
-                            mapIndex.push(adapter.namespace.concat('.rooms.', states[id].native.channels[i], '.mapIndex'))
-                    }
-                    let rooms = ""
-                    for (let r in states[id].enums)
-                        rooms += r
-                    if (rooms.length > 0) {
-                        roomManager.findMapIndexByRoom(rooms, function (states) {
-                            roomManager.cleanRooms(mapIndex.concat(states))
-                        })
-                    } else if (mapIndex.length > 0) {
-                        roomManager.cleanRooms(mapIndex);
-                    } else
-                        adapter.log.warn("no room found for " + id)
-                }
-            })
+            roomManager.cleanRoomsFromState(id);
+            
         } else if (command === 'roomFanPower') {
             // do nothing, only set fan power for next roomClean
             adapter.setForeignState(id, state.val, true);
@@ -1125,18 +1141,18 @@ function init() {
         },
         native: {}
     });
-    adapter.setObjectNotExists('info.queue', {
+    adapter.setObject('info.queue', {
         type: 'state',
         common: {
             name: 'Cleaning Queue',
-            type: 'number',
+            type: 'object',
             role: 'info',
             read: true,
             write: false
         },
         "native": {}
     }, function () {
-        adapter.setState('info.queue', 0, true);
+        adapter.setState('info.queue', '', true);
     })
     adapter.setObjectNotExists('control.clearQueue', {
         type: 'state',
@@ -1303,7 +1319,12 @@ function returnSingleResult(resp) {
     return resp.result[0];
 }
 
-adapter.on('message', function (obj) {
+
+/**
+ * 
+ * @param { object of {command, message, callback, from} obj 
+ */
+adapter.on('message',function(obj) {
     // responds to the adapter that sent the original message
     function respond(response) {
         if (obj.callback) adapter.sendTo(obj.from, obj.command, response, obj.callback);
@@ -1440,25 +1461,61 @@ adapter.on('message', function (obj) {
                 return;
             case 'cleanZone':
                 if (!obj.message) return adapter.log.warn("cleanZone needs paramter coordinates")
-                if (cleaning.startCleaning(cleanStates.ZoneCleaning, obj))
-                    sendCustomCommand('app_zoned_clean',[obj.message])
+                if (!obj.zones){ // this data called first time!
+                    let message = obj.message   
+                    if (message.zones){ // called from roomManager with correct Array
+                        obj.zones= message.zones
+                        obj.channels= message.channels
+                        obj.message= obj.zones.join(); // we use String for message
+                    } else
+                        obj.zones= [obj.message];
+                }
+                if (!obj.channels){
+                    return roomManager.findChannelsByMapIndex(obj.zones, function(channels){
+                        adapter.log.error(obj.message + ' ->' + channels.join());
+                        obj.channels= channels;
+                        adapter.emit('message', obj); // call function again
+                    })
+                }
+                if (cleaning.startCleaning(cleanStates.ZoneCleaning, obj)){
+                    //sendCustomCommand('app_zoned_clean',obj.zones)
+                    roomManager.findChannelsByMapIndex(obj.zones, function(channels){
+                        adapter.log.error(obj.message+ ' ->' + channels.join());
+                    })
+                }
                 return;
             case 'cleanSegments':
                 if (!obj.message) return adapter.log.warn("cleanSegments needs paramter mapIndex")
-                if (cleaning.startCleaning(cleanStates.RoomCleaning, obj)){
-                    let map = obj.message
-                    if (!isNaN(map))
-                        map = [parseInt(map, 10)]
-                    else {
-                        if (typeof map == "string")
-                            map = obj.message.split(",")
-                        for (let i in map) {
-                            map[i] = parseInt(map[i], 10);
-                            if (isNaN(map[i]))
-                                delete map[i];
+                if (!obj.segments){ // this data called first time!
+                    let message = obj.message   
+                    if (message.segments){ // called from roomManager with correct Array
+                        obj.segments= message.segments
+                        obj.channels= message.channels
+                        obj.message= obj.segments.join(); // we use String for message
+                    } else{ // build correct Array
+                        if (!isNaN(message))
+                            message = [parseInt(message, 10)]
+                        else {
+                            if (typeof message == "string")
+                                message = obj.message.split(",")
+                            for (let i in message) {
+                                message[i] = parseInt(message[i], 10);
+                                if (isNaN(message[i]))
+                                    delete message[i];
+                            }
                         }
+                        obj.segments= message;
                     }
-                    sendCustomCommand('app_segment_clean', map)
+                }
+                if (!obj.channels){
+                    return roomManager.findChannelsByMapIndex(obj.segments, function(channels){
+                        adapter.log.error(obj.message + ' ->' + channels.join());
+                        obj.channels= channels;
+                        adapter.emit('message', obj); // call function again
+                    })
+                }
+                if (cleaning.startCleaning(cleanStates.RoomCleaning, obj)){
+                    //sendCustomCommand('app_segment_clean', obj.segments)
                 }
                 return;
             case 'cleanRooms':
@@ -1578,7 +1635,6 @@ adapter.on('message', function (obj) {
         }
     }
 });
-
 
 //------------------------------------------------------MAP Section
 MAP.Init = function () {

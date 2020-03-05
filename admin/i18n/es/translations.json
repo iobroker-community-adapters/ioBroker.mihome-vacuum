@@ -47,6 +47,7 @@
     "same starttime of 2 timer not possible": "No es posible la misma hora de inicio de 2 temporizadores",
     "settings": "ajustes",
     "start now": "empezar ahora",
+    "waiting position": "posición de espera:",
     "water box installed": "caja de agua instalada",
     "water filter reset": "restablecimiento del filtro de agua"
 }

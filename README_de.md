@@ -238,6 +238,8 @@ Zur Zeit leider noch nicht fertig.
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 2.0.9 (2020-03-05)
+* (dirkhe) Status info für Räume hinzugefügt und queue info von anzahl zu JSON verändert
 ### 2.0.8 (2020-02-26)
 * (dirkhe) verminderte Kommunikation mit dem Roboter
 ### 2.0.7 (2020-02-25)
