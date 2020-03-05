@@ -35,8 +35,8 @@
     "day": "день",
     "disabled": "отключен",
     "enabled": "включен",
-    "get Parameter Intervall": "получить параметр Intervall в мс",
-    "get Status Intervall": "получить статус Intervall в мс",
+    "get Status Intervall": "Состояние запроса в с",
+    "get WiFi Intervall": "запросить статус WiFi в с",
     "hour": "час",
     "insert map Index or zone coordinates": "вставить карту указатель или координаты зоны",
     "load rooms from robot": "загрузить комнаты от робота",
@@ -47,6 +47,7 @@
     "same starttime of 2 timer not possible": "то же время начала 2 таймера невозможно",
     "settings": "настройки",
     "start now": "начинай сейчас",
+    "waiting position": "позиция ожидания:",
     "water box installed": "установлен водяной бокс",
     "water filter reset": "сброс фильтра воды"
 }

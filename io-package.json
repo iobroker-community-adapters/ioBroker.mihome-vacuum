@@ -1,8 +1,32 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "2.0.7",
+        "version": "2.0.9",
         "news": {
+            "2.0.9": {
+                "en": "add state info for room channels and change queue info from number to JSON",
+                "de": "Fügen Sie Statusinformationen für Raumkanäle hinzu und ändern Sie die Warteschlangeninformationen von Nummer in JSON",
+                "ru": "добавить информацию о состоянии для комнатных каналов и изменить информацию об очереди с номера на JSON",
+                "pt": "adicione informações de estado para os canais da sala e altere as informações da fila de número para JSON",
+                "nl": "voeg statusinformatie toe voor kamerkanalen en wijzig de wachtrij-info van nummer in JSON",
+                "fr": "ajouter des informations d'état pour les canaux de salle et changer les informations de file d'attente du nombre en JSON",
+                "it": "aggiungere informazioni sullo stato per i canali della sala e modificare le informazioni sulla coda dal numero a JSON",
+                "es": "agregue información de estado para los canales de la sala y cambie la información de la cola del número a JSON",
+                "pl": "dodaj informacje o stanie dla kanałów pokojowych i zmień informacje o kolejce z numeru na JSON",
+                "zh-cn": "添加房间频道的状态信息并将队列信息从数字更改为JSON"
+            },
+            "2.0.8": {
+                "en": "decreased communication with robot",
+                "de": "verminderte Kommunikation mit dem Roboter",
+                "ru": "уменьшилось общение с роботом",
+                "pt": "comunicação reduzida com o robô",
+                "nl": "verminderde communicatie met robot",
+                "fr": "diminution de la communication avec le robot",
+                "it": "ridotta comunicazione con il robot",
+                "es": "disminución de la comunicación con el robot",
+                "pl": "zmniejszona komunikacja z robotem",
+                "zh-cn": "与机器人的交流减少"
+            },
             "2.0.7": {
                 "en": "add Resuming after pause for rooms",
                 "de": "Hinzufügen Wiederaufnahme nach Pause für Räume",
@@ -274,7 +298,7 @@
         "port": 54321,
         "ownPort": 53421,
         "pingInterval": 20000,
-        "param_pingInterval": 60000,
+        "wifiInterval": 60000,
         "valetudo_enable": false,
         "valetudo_color_floor": "#56affc",
         "valetudo_color_wall": "#b3edff",

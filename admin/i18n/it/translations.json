@@ -35,8 +35,8 @@
     "day": "giorno",
     "disabled": "Disabilitato",
     "enabled": "abilitato",
-    "get Parameter Intervall": "ottenere l'intervallo di parametri in ms",
-    "get Status Intervall": "ottenere lo stato dell'intervall in ms",
+    "get Status Intervall": "richiesta Status in s",
+    "get WiFi Intervall": "richiedere lo stato WiFi in s",
     "hour": "ora",
     "insert map Index or zone coordinates": "inserisci l'indice della mappa o le coordinate della zona",
     "load rooms from robot": "caricare le stanze dal robot",
@@ -47,6 +47,7 @@
     "same starttime of 2 timer not possible": "la stessa ora di inizio del timer 2 non è possibile",
     "settings": "impostazioni",
     "start now": "Parti ora",
+    "waiting position": "posizione di attesa:",
     "water box installed": "scatola dell'acqua installata",
     "water filter reset": "reset del filtro dell'acqua"
 }

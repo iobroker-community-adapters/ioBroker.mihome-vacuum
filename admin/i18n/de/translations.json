@@ -35,8 +35,8 @@
     "day": "Tag",
     "disabled": "deaktiviert",
     "enabled": "aktiviert",
-    "get Parameter Intervall": "Parameter abrufen in ms",
-    "get Status Intervall": "Status abrufen in ms",
+    "get Status Intervall": "Status anfordern in s",
+    "get WiFi Intervall": "WLAN-Status anfordern in s",
     "hour": "Stunde",
     "insert map Index or zone coordinates": "Kartenindex oder Zonenkoordinaten einfügen",
     "load rooms from robot": "Lade Räume vom Roboter",
@@ -47,6 +47,7 @@
     "same starttime of 2 timer not possible": "gleiche Startzeit von 2 Timer nicht möglich",
     "settings": "Einstellungen",
     "start now": "Jetzt anfangen",
+    "waiting position": "Warteposition:",
     "water box installed": "Wischeinheit installiert",
     "water filter reset": "Wasser Filter zurücksetzen"
 }

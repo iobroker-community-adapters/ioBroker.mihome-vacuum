@@ -35,8 +35,8 @@
     "day": "dag",
     "disabled": "gehandicapt",
     "enabled": "ingeschakeld",
-    "get Parameter Intervall": "krijg parameterintervall in ms",
-    "get Status Intervall": "krijg Status Intervall in ms",
+    "get Status Intervall": "verzoek Status in s",
+    "get WiFi Intervall": "vraag WiFi-status aan in s",
     "hour": "uur",
     "insert map Index or zone coordinates": "kaart invoegen Index- of zonecoördinaten",
     "load rooms from robot": "laad kamers van robot",
@@ -47,6 +47,7 @@
     "same starttime of 2 timer not possible": "zelfde starttijd van 2 timer niet mogelijk",
     "settings": "instellingen",
     "start now": "begin nu",
+    "waiting position": "wachtpositie:",
     "water box installed": "waterbak geïnstalleerd",
     "water filter reset": "waterfilter reset"
 }

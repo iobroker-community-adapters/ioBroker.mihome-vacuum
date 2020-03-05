@@ -35,8 +35,8 @@
     "day": "day",
     "disabled": "disabled",
     "enabled": "enabled",
-    "get Parameter Intervall": "request Parameter in ms",
-    "get Status Intervall": "request Status in ms",
+    "get Status Intervall": "request Status in s",
+    "get WiFi Intervall": "request WiFi Status in s",
     "hour": "hour",
     "insert map Index or zone coordinates": "insert map Index or zone coordinates",
     "load rooms from robot": "load rooms from robot",
@@ -47,6 +47,7 @@
     "same starttime of 2 timer not possible": "same starttime of 2 timer not possible",
     "settings": "settings",
     "start now": "start now",
+    "waiting position": "waiting position",
     "water box installed": "water box installed",
     "water filter reset": "water filter reset"
 }
