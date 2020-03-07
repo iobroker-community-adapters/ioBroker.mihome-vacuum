@@ -829,8 +829,8 @@ function getStates(message) {
             adapter.setStateChanged('control.fan_power', Math.round(status.fan_power), true);
             adapter.setStateChanged('info.error', status.error_code, true);
             adapter.setStateChanged('info.dnd', status.dnd_enabled, true);
+            features.setWaterBox(status.water_box_status);
             if (cleaning.state != status.state){
-                features.setWaterBox(status.water_box_status);
                 cleaning.setRemoteState(status.state)
             }
         } else if (requestMessage.method == 'miIO.info') {
@@ -1784,7 +1784,7 @@ MAP._MapPoll = function () {
         if (data){
             let dataurl = data[0].toDataURL();
 
-            adapter.setState('map.map64', '<img src="' + dataurl + '" /style="width: auto ;height: 100%;">', true);
+            adapter.setState('map.map64', '<img src="' + dataurl + '" style="width: auto ;height: 100%;" />', true);
 
             if (Date.now() - that.LASTMAPSAVE > that.MAPSAFEINTERVALL) {
                 var buf = data[0].toBuffer();
