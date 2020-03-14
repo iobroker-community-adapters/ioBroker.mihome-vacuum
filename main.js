@@ -1807,7 +1807,7 @@ MAP._MapPoll = function () {
             if (that.GETMAP) {
                 //adapter.log.info(VALETUDO.POLLMAPINTERVALL)
                 setTimeout(function () {
-                    sendMsg('get_map_v1');
+                    if(adapter.config.enableMiMap) sendMsg('get_map_v1'); // get pointer only by mimap
                     that._MapPoll();
                 }, that.POLLMAPINTERVALL);
             }
@@ -1817,6 +1817,7 @@ MAP._MapPoll = function () {
         .catch(err => {
             adapter.log.error(err);
             if (that.GETMAP) setTimeout(function () {
+                if(adapter.config.enableMiMap) sendMsg('get_map_v1'); // get pointer only by mimap
                 that._MapPoll();
             }, that.POLLMAPINTERVALL);
         })
