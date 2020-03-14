@@ -816,15 +816,15 @@ function getStates(message) {
         //const ans= answer.result;
         //adapter.log.info(answer.result.length);
         //adapter.log.info(answer['id']);
+        lastResponse= new Date();
         const requestMessage = messages[answer.id] 
+        requestMessage && delete messages[answer.id];
         if (answer.error) {
             return adapter.log.error("[" + answer.id + "](" + (requestMessage ? requestMessage.method : 'unknown request message') + ") -> " + answer.error.message)
         }
-        lastResponse= new Date();
         if (!requestMessage){
             throw 'could not found request message for id ' + answer.id
         }
-        delete messages[answer.id];
         if (requestMessage.method == 'get_status') {
 
             const status = parseStatus(answer);
@@ -925,6 +925,9 @@ function getStates(message) {
 
         } else if (requestMessage.method == 'get_map_v1' || requestMessage.method == 'get_fresh_map_v1') {
             MAP.updateMapPointer(answer.result[0]);
+
+        } else if (requestMessage.method == 'reset_consumable') {
+            sendMsg('get_consumable');
 
         } else if (answer.id in sendCommandCallbacks) {
 
@@ -1554,7 +1557,8 @@ adapter.on('message',function(obj) {
                 sendCustomCommand('get_consumable', returnSingleResult);
                 return;
             case 'resetConsumables':
-                sendCustomCommand('reset_consumable');
+                if (!requireParams(['consumable'])) return;
+                sendCustomCommand('reset_consumable',obj.message.consumable);
                 setTimeout(sendMsg,2000,'get_consumable');
                 return;
 
