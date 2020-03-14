@@ -172,6 +172,11 @@ class Cleaning {
         } else {
             this.activeState = cleanStatus;
             this.activeChannels= messageObj.channels;
+            if (this.activeChannels && this.activeChannels.length == 1) {
+                adapter.getState(this.activeChannels[0] + '.roomFanPower', function (err, fanPower) {
+                    adapter.setState("control.fan_power", fanPower.val);
+                })
+            }            
             adapter.log.info("trigger cleaning " + activeCleanState.name + (messageObj.message || ''))
             return true
         }
