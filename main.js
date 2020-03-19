@@ -157,10 +157,10 @@ class Cleaning {
     startCleaning(cleanStatus, messageObj){
         let activeCleanState= activeCleanStates[cleanStatus]
         if (!activeCleanState)
-            return adapter.warn("Invalid cleanStatus(" + cleanStatus + ") for startCleaning")
+            return !!adapter.log.warn("Invalid cleanStatus(" + cleanStatus + ") for startCleaning")
         setTimeout(sendPing, 2000);
         if (this.activeState){
-            if (cleanStatus === cleanStatus.Cleaning && adapter.config.enableResumeZone) {
+            if (cleanStatus === cleanStates.Cleaning && adapter.config.enableResumeZone) {
                 adapter.log.debug('Resuming paused ' + activeCleanStates[this.activeState].name);
                 sendMsg(activeCleanStates[this.activeState].resume);
             } else {
@@ -190,13 +190,13 @@ class Cleaning {
     }
 
     clearQueue(){
-        this.queue= []
         for (let i in this.queue){
             let channels= this.queue[i].channels
             if (channels)
                 for (let c in channels)
                     adapter.setState(channels[c] + '.state', '', true);
         }
+        this.queue= []
         this.updateQueue()
     }
 
