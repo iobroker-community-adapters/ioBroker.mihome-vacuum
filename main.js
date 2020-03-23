@@ -1819,7 +1819,7 @@ MAP._MapPoll = function () {
 
         })
         .catch(err => {
-            adapter.log.error(err);
+            adapter.log.debug(err);
             if (that.GETMAP) setTimeout(function () {
                 if(adapter.config.enableMiMap) sendMsg('get_map_v1'); // get pointer only by mimap
                 that._MapPoll();
