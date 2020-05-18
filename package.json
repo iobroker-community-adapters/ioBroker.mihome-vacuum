@@ -31,7 +31,7 @@
     "@iobroker/adapter-core": "^2.2.1",
     "zlib": "^1.0.5",
     "canvas":"^2.6.1",
-    "request":"^2.88.0",
+    "request":"^2.88.2",
     "treemap-js": "^1.2.1"
   },
   "devDependencies": {
