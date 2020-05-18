@@ -28,7 +28,7 @@
     "test:integration": "mocha test/integration --exit"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.2.1",
+    "@iobroker/adapter-core": "^2.4.0",
     "zlib": "^1.0.5",
     "canvas":"^2.6.1",
     "request":"^2.88.0",
