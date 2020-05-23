@@ -230,7 +230,6 @@ Die unterstützten Kommandos sind:
 | Zone saugen | `cleanZone` | `coordinates` | `coordinates` ist ein String mit coordinaten und die Anzahl Durchläufe, siehe [zoneClean](#zoneClean) |
 
 ## Widget
-Zur Zeit leider noch nicht fertig.
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
 
 ## Bugs
