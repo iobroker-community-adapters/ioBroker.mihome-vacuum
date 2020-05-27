@@ -12,6 +12,9 @@
             "oid-find":         {"en": "ID for search",     "de": "ID für Suche",       "ru": "ID для поиска"},
             "oid-home":         {"en": "ID go home",        "de": "ID zu Homebase",     "ru": "ID идти к базе"},
             "oid-power-level":  {"en": "ID for power level","de": "ID für Saugstufe",   "ru": "ID для мощности"},
+            "oid-power-level-1":  {"en": "Value for power level 1","de": "Wert für Saugstufe 1",   "ru": "Value для мощности 1"},
+            "oid-power-level-2":  {"en": "Value for power level 2","de": "Wert für Saugstufe 2",   "ru": "Value для мощности 2"},
+            "oid-power-level-3":  {"en": "Value for power level 3","de": "Wert für Saugstufe 3",   "ru": "Value для мощности 3"},
             "oid-connected":    {"en": "ID is connected",   "de": "ID ist verbunden",   "ru": "ID online"}
         });
     }
@@ -96,7 +99,7 @@
         data-vis-set="mihome-vacuum"
         data-vis-name="Control"
         data-vis-prev='<img src="widgets/mihome-vacuum/img/previewControl.png"></img>'
-        data-vis-attrs="oid-state/id/changedId;oid-home;oid-start;oid-pause;oid-connected;oid-find;oid-power-level;picVisible[true]/checkbox;"
+        data-vis-attrs="oid-state/id/changedId;oid-home;oid-start;oid-pause;oid-connected;oid-find;oid-power-level;oid-power-level-1[101]/number;oid-power-level-2[102]/number;oid-power-level-3[104]/number;picVisible[true]/checkbox;"
 >
 <%
     function isRunning(data) {
@@ -123,8 +126,8 @@
         </div>
         </div>
         <img onclick="vis.binds['mihome-vacuum'].onclick(this)" data-oid="<%= this.data['oid-find'] %>" style="position: absolute; width: 20%; left: 8%; top: 39%;<%= this.data['oid-find'] ? 'cursor: pointer;' : 'display: none;' %>" src="widgets/mihome-vacuum/img/search.png"  />
-        <div onclick="vis.binds['mihome-vacuum'].onclick(this)" data-value="38" data-oid="<%= this.data['oid-power-level'] %>" style="position: absolute;top: calc(27% - 8px); left: 72%; border: 1px gray solid; border-radius: 25px; width: 16px; height: 16px; text-align: center;cursor: pointer;<%= this.data['oid-power-level'] ? '' : 'display: none;' %>">1</div>
-        <div onclick="vis.binds['mihome-vacuum'].onclick(this)" data-value="60" data-oid="<%= this.data['oid-power-level'] %>" style="position: absolute;top: calc(47% - 8px); left: 77%; border: 1px gray solid; border-radius: 25px; width: 16px; height: 16px; text-align: center;cursor: pointer;<%= this.data['oid-power-level'] ? '' : 'display: none;' %>">2</div>
-        <div onclick="vis.binds['mihome-vacuum'].onclick(this)" data-value="90" data-oid="<%= this.data['oid-power-level'] %>" style="position: absolute;top: calc(66% - 8px); left: 72%; border: 1px gray solid; border-radius: 25px; width: 16px; height: 16px; text-align: center;cursor: pointer;<%= this.data['oid-power-level'] ? '' : 'display: none;' %>">3</div>
+        <div onclick="vis.binds['mihome-vacuum'].onclick(this)" data-value="<%= this.data['oid-power-level-1'] %>" data-oid="<%= this.data['oid-power-level'] %>" style="position: absolute;top: calc(27% - 8px); left: 72%; border: 1px gray solid; border-radius: 25px; width: 16px; height: 16px; text-align: center;cursor: pointer;<%= this.data['oid-power-level'] ? '' : 'display: none;' %>">1</div>
+        <div onclick="vis.binds['mihome-vacuum'].onclick(this)" data-value="<%= this.data['oid-power-level-2'] %>" data-oid="<%= this.data['oid-power-level'] %>" style="position: absolute;top: calc(47% - 8px); left: 77%; border: 1px gray solid; border-radius: 25px; width: 16px; height: 16px; text-align: center;cursor: pointer;<%= this.data['oid-power-level'] ? '' : 'display: none;' %>">2</div>
+        <div onclick="vis.binds['mihome-vacuum'].onclick(this)" data-value="<%= this.data['oid-power-level-3'] %>" data-oid="<%= this.data['oid-power-level'] %>" style="position: absolute;top: calc(66% - 8px); left: 72%; border: 1px gray solid; border-radius: 25px; width: 16px; height: 16px; text-align: center;cursor: pointer;<%= this.data['oid-power-level'] ? '' : 'display: none;' %>">3</div>
     </div>
 </script>
