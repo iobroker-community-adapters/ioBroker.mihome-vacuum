@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "2.0.9",
+        "version": "2.0.10-RC01",
         "news": {
             "2.0.9": {
                 "en": "add state info for room channels and change queue info from number to JSON",
