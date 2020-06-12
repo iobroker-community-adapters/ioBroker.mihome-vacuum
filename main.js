@@ -164,7 +164,7 @@ class Cleaning {
                 adapter.log.debug('Resuming paused ' + activeCleanStates[this.activeState].name);
                 sendMsg(activeCleanStates[this.activeState].resume);
             } else {
-                adapter.log.info("should trigger cleaning " + activeCleanState.name + (messageObj.message || '') + ", but is currently active. Add to queue")
+                adapter.log.info("should trigger cleaning " + activeCleanState.name + (messageObj.message || '') + ", but is currently active(" + this.activeState +"). Add to queue")
                 messageObj.info= activeCleanState.name;
                 this.push(messageObj)
             }
@@ -183,9 +183,10 @@ class Cleaning {
     }
 
     stopCleaning(){
-        sendMsg(com.pause.method);
+        // sendMsg(com.pause.method); // @meisterTR why we need first pause and than home??
         this.clearQueue();
-        setTimeout(() => sendMsg(com.home.method), 1000); 
+        this.state= cleanStates.Unknown; // Force calling setRemoteState on next get_status answer
+        sendMsg(com.home.method);//setTimeout(() => sendMsg(com.home.method), 1000); // @meisterTR why we need first pause and than home??
         setTimeout(sendPing, 2000);
     }
 
