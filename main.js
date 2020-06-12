@@ -405,7 +405,7 @@ class FeatureManager {
                     type: "state",
                     common: {
                         name: i18n.waterBox_installed,
-                        type: "text",
+                        type: "string",
                         role: "info",
                         read: true,
                         write: false
