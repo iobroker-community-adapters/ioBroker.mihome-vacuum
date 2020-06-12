@@ -1722,16 +1722,20 @@ MAP.Init = function () {
 MAP.updateMapPointer = function (answer) {
     let that = this;
     if (answer.split('%').length === 1) {
-        if (typeof that.trys == "undefined")
-            that.trys= 0;
-        if ( that.trys < 10){
-            setTimeout(function () {
-                sendMsg('get_map_v1')
-                adapter.log.debug(that.trys++ + '. Mappointer_nomap___' + answer)
-            }, 500)
-            return
+        if (answer.indexOf('map_slot') == 0){
+            adapter.log.warn('answer map_slot is currently not supported!')
         } else {
-            adapter.log.warn('Could not receive Mappointer, giving up')
+            if (typeof that.trys == "undefined")
+                that.trys= 0;
+            if ( that.trys < 10){
+                setTimeout(function () {
+                    sendMsg('get_map_v1')
+                    adapter.log.debug(that.trys++ + '. Mappointer_nomap___' + answer)
+                }, 500)
+                return
+            } else {
+                adapter.log.warn('Could not receive Mappointer, giving up')
+            }
         }
     } else if (answer.split('%').length === 3) {
         that.mappointer = answer;
