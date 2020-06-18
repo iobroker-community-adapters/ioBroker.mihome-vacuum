@@ -19,6 +19,8 @@ let maphelper = require(__dirname + '/lib/maphelper')
 
 
 const server = dgram.createSocket('udp4');
+const maxTryForMessage = 3;
+const waitTimeForNextTryMessage = 5000;
 
 let userLang = "en"
 let lastResponse = 0;
@@ -97,6 +99,7 @@ class Cleaning {
     constructor(){
         this.state = cleanStates.Unknown // current robot Status
         this.activeState = 0 // if robot is working, than here the status is saved
+        this.checkCleanState = null;
         this.activeChannels= null;
         this.queue = [] // if new job is aclled, while robot is already cleaning
     }
@@ -143,6 +146,9 @@ class Cleaning {
                 MAP.ENABLED && setTimeout(sendMsg,2000,'get_map_v1');
             }
         }
+        if (this.checkCleanState)
+            this.checkCleanState= !!clearTimeout(this.checkCleanState)
+        
         adapter.setState('control.clean_home', this.activeState != 0, true);
  
         if (MAP.ENABLED) { // set map getter to true if..
@@ -178,6 +184,20 @@ class Cleaning {
                 })
             }            
             adapter.log.info("trigger cleaning " + activeCleanState.name + (messageObj.message || ''))
+            this.checkCleanState= setTimeout(function(){
+                if (cleaning.activeState != cleaning.state){
+                    adapter.log.info('could not start cleaning ' + activeCleanState.name + ', try one again')
+                    sendMsg(activeCleanStates[cleaning.activeState].resume);
+                    if (cleaning.checkCleanState){
+                        cleaning.checkCleanState= setTimeout(() =>{
+                            if (cleaning.activeState != cleaning.state){
+                                adapter.log.error('could not start cleaning ' + activeCleanState.name)
+                                cleaning.setRemoteState(cleaning.state); // try to get trigger from queue
+                            }
+                        },waitTimeForNextTryMessage * maxTryForMessage + 1000)
+                    }
+                }
+            },waitTimeForNextTryMessage * maxTryForMessage + 1000)
             return true
         }
     }
@@ -664,11 +684,11 @@ function sendMsgToServer(msgCounter){
     let message = messages[msgCounter]
     if (!message)
         return;
-    if (message.tryCount > 2){
-        delete messages[msgCounter]
-        adapter.log.debug('no answer for ' + message.method + '(id:' + msgCounter +') received, giving up')
+    if (message.tryCount >= maxTryForMessage){
+        adapter.log.debug('no answer for ' + ( message.method || '') + ' id:' + msgCounter +' received, giving up')
         if (typeof message.callback === 'function')  
             message.callback('no answer received after after ' + message.tryCount + ' times');    
+        delete messages[msgCounter]
         return 
     }
     try {
@@ -680,7 +700,7 @@ function sendMsgToServer(msgCounter){
         });
         adapter.log.debug('sendMsg[' + message.tryCount + '] >>> ' + message.str);
         //adapter.log.silly('sendMsgRaw >>> ' + cmdraw.toString('hex'));
-        setTimeout(sendMsgToServer,5000,msgCounter) // check in 5 sec, if robo send answer
+        setTimeout(sendMsgToServer,waitTimeForNextTryMessage,msgCounter) // check in 5 sec, if robo send answer
     } catch (err) {
         adapter.log.warn('Cannot send message_: ' + err);
         if (typeof message.callback === 'function')  message.callback(err);
