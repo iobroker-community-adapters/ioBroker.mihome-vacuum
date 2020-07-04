@@ -272,6 +272,11 @@
         "authors": [
             "bluefox <dogafox@gmail.com>"
         ],
+        "osDependencies": {
+            "linux": [
+                "canvas"
+            ]
+        },
         "license": "MIT",
         "platform": "Javascript/Node.js",
         "mode": "daemon",
