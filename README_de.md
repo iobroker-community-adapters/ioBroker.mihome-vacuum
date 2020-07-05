@@ -237,6 +237,8 @@ Die unterstützten Kommandos sind:
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 2.0.10 (2020-07-05)
+* (dirkhe) Versuche bis zu 3mal das Reinigen zu starten, wenn der Robotor nicht reagierts
 ### 2.0.9 (2020-03-05)
 * (dirkhe) Status info für Räume hinzugefügt und queue info von anzahl zu JSON verändert
 ### 2.0.8 (2020-02-26)

@@ -232,6 +232,9 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
+### 2.0.10 (2020-07-05)
+* try to starting of cleaning 3 times, if robot not answers and some fixes
+
 ### 2.0.9 (2020-03-05)
 * (dirkhe) add state info for room channels and change queue info from number to JSON
 ### 2.0.8 (2020-02-26)

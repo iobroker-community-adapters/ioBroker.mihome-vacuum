@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "2.0.10-RC02",
+        "version": "2.0.10",
         "news": {
+            "2.0.10": {
+                "en": "try to starting of cleaning 3 times, if robot not answers and some fixes",
+                "de": "Versuchen Sie dreimal mit dem Reinigen zu beginnen, wenn der Roboter nicht antwortet und einige Korrekturen vorgenommen hat",
+                "ru": "попытаться начать уборку 3 раза, если робот не отвечает и некоторые исправления",
+                "pt": "tente iniciar a limpeza 3 vezes, se o robô não responder e algumas correções",
+                "nl": "probeer 3 keer te beginnen met schoonmaken, als de robot niet antwoordt en een aantal fixes",
+                "fr": "essayez de commencer le nettoyage 3 fois, si le robot ne répond pas et quelques correctifs",
+                "it": "provare a iniziare la pulizia 3 volte, se il robot non risponde e alcune correzioni",
+                "es": "intente iniciar la limpieza 3 veces, si el robot no responde y algunas soluciones",
+                "pl": "spróbuj rozpocząć czyszczenie 3 razy, jeśli robot nie odpowiada i niektóre poprawki",
+                "zh-cn": "如果机器人无法回答并进行一些修复，请尝试开始清洁3次"
+            },
             "2.0.9": {
                 "en": "add state info for room channels and change queue info from number to JSON",
                 "de": "Fügen Sie Statusinformationen für Raumkanäle hinzu und ändern Sie die Warteschlangeninformationen von Nummer in JSON",
@@ -134,114 +146,6 @@
                 "es": "Configuración añadida para el resumen automático de la zona de limpieza pausada",
                 "pl": "Dodano ustawienie automatycznego wznowienia wstrzymanego procesu oczyszczania",
                 "zh-cn": "添加了自动恢复暂停区域清理的设置"
-            },
-            "1.1.4": {
-                "en": "added possibility to resume zone cleaning",
-                "de": "Möglichkeit zur Fortsetzung der Zonenreinigung hinzugefügt",
-                "ru": "добавлена ​​возможность возобновить очистку зоны",
-                "pt": "possibilidade adicionada para retomar a limpeza da zona",
-                "nl": "mogelijkheid toegevoegd om zone-schoonmaak te hervatten",
-                "fr": "possibilité de reprendre le nettoyage de la zone",
-                "it": "aggiunta possibilità di riprendere la pulizia delle zone",
-                "es": "posibilidad añadida de reanudar la limpieza de zonas",
-                "pl": "dodano możliwość wznowienia czyszczenia strefy",
-                "zh-cn": "增加恢复区域清洁的可能性"
-            },
-            "1.1.3": {
-                "en": "fixed zone cleanup state not working",
-                "de": "Fixed Zone Cleanup State funktioniert nicht",
-                "ru": "состояние очистки фиксированной зоны не работает",
-                "pt": "estado de limpeza de zona fixa não funciona",
-                "nl": "vaste zone opschoningstoestand werkt niet",
-                "fr": "état de nettoyage de zone fixe ne fonctionne pas",
-                "it": "stato di pulizia zona fissa non funzionante",
-                "es": "el estado de limpieza de zona fija no funciona",
-                "pl": "naprawiony stan czyszczenia strefy nie działa",
-                "zh-cn": "固定区域清理状态不起作用"
-            },
-            "1.1.2": {
-                "en": "Detection of new Firmware fixed",
-                "de": "Erkennung neuer Firmware behoben",
-                "ru": "Обнаружение нового исправления",
-                "pt": "Detecção de novo Firmware fixo",
-                "nl": "Detectie van nieuwe Firmware hersteld",
-                "fr": "Détection du nouveau firmware corrigé",
-                "it": "Rilevato nuovo firmware",
-                "es": "Detección de nuevo Firmware arreglado",
-                "pl": "Wykryto nowe oprogramowanie sprzętowe",
-                "zh-cn": "检测到固定的新固件"
-            },
-            "1.1.1": {
-                "en": "error catched , added states for new fw",
-                "de": "Fehler eingefangen, Status für neues fw hinzugefügt",
-                "ru": "ошибка уловлена, добавлены состояния для нового fw",
-                "pt": "erro apanhado, estados adicionados para novo fw",
-                "nl": "fout gemaakt, staten toegevoegd voor nieuwe fw",
-                "fr": "erreur détectée, les états ajoutés pour les nouveaux fw",
-                "it": "errore rilevato, stati aggiunti per nuovi fw",
-                "es": "error atrapado, estados agregados para nuevo fw",
-                "pl": "błąd catched, dodano stany dla nowego fw",
-                "zh-cn": "错误被捕获，为新fw添加了状态"
-            },
-            "1.1.0": {
-                "en": "Finished the widget",
-                "de": "Beendet das Widget",
-                "ru": "Закончил виджет",
-                "pt": "Terminou o widget",
-                "nl": "De widget is voltooid",
-                "fr": "Terminé le widget",
-                "it": "Finito il widget",
-                "es": "Terminado el widget",
-                "pl": "Ukończyłem widget",
-                "zh-cn": "完成了小部件"
-            },
-            "1.0.1": {
-                "en": "Add voice level, ready for admin3, add vacuum2",
-                "de": "Sprachlevel hinzufügen, bereit für admin3, add vacuum2",
-                "ru": "Добавить уровень голоса, готовый для admin3, добавить vacuum2",
-                "pt": "Adicione o nível de voz, pronto para admin3, adicione vacuum2",
-                "nl": "Voeg stemniveau toe, klaar voor admin3, voeg vacuum2 toe",
-                "fr": "Ajouter un niveau de voix, prêt pour admin3, ajouter un vide2",
-                "it": "Aggiungi il livello della voce, pronto per admin3, aggiungi vacuum2",
-                "es": "Agregue el nivel de voz, listo para admin3, agregue vacuum2",
-                "pl": "Dodaj poziom głosu, przygotuj się na admin3, dodaj próżnię2",
-                "zh-cn": "添加语音级别，为admin3做好准备，添加vacuum2"
-            },
-            "0.6.0": {
-                "en": "Fix iostoken Bug finaly",
-                "de": "Fix iostoken Bug endlich",
-                "ru": "Исправить ошибку iostoken Bug finaly",
-                "pt": "Corrigir o iostoken Bug finaly",
-                "nl": "Fix iostoken Bug eindelijk",
-                "fr": "Correction d'iostoken Bug finaly",
-                "it": "Risolto il problema con iostoken Bug",
-                "es": "Corregir iostoken Bug finaly",
-                "pl": "Napraw bug iostoken Bug",
-                "zh-cn": "最终修复iostoken Bug"
-            },
-            "0.5.6": {
-                "en": "add option for switch on/off to control by Alexa",
-                "de": "Option zum Ein- und Ausschalten von Alexa hinzufügen",
-                "ru": "добавить опцию включения / выключения для управления Alexa",
-                "pt": "adicionar opção para ligar / desligar para controlar por Alexa",
-                "nl": "optie toevoegen om aan / uit te zetten naar besturing door Alexa",
-                "fr": "ajouter une option pour activer / désactiver le contrôle par Alexa",
-                "it": "aggiungi l'opzione per accendere / spegnere il controllo di Alexa",
-                "es": "agregar la opción para activar / desactivar para controlar por Alexa",
-                "pl": "dodaj opcję włączania / wyłączania do sterowania przez Alexa",
-                "zh-cn": "通过Alexa添加开启/关闭选项以进行控制"
-            },
-            "0.2.0": {
-                "en": "Inital version",
-                "de": "Erste Version",
-                "ru": "Первоначальная версия",
-                "pt": "Versão inicial",
-                "nl": "Oorspronkelijke versie",
-                "fr": "Version initiale",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Początkowa wersja",
-                "zh-cn": "初始版"
             }
         },
         "title": "mihome-vacuum",
