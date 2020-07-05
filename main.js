@@ -184,22 +184,22 @@ class Cleaning {
                 })
             }            
             adapter.log.info("trigger cleaning " + activeCleanState.name + (messageObj.message || ''))
-            this.checkCleanState= setTimeout(function(){
-                if (cleaning.activeState != cleaning.state){
-                    adapter.log.info('could not start cleaning ' + activeCleanState.name + ', try one again')
-                    sendMsg(activeCleanStates[cleaning.activeState].resume);
-                    if (cleaning.checkCleanState){
-                        cleaning.checkCleanState= setTimeout(() =>{
-                            if (cleaning.activeState != cleaning.state){
-                                adapter.log.error('could not start cleaning ' + activeCleanState.name)
-                                cleaning.setRemoteState(cleaning.state); // try to get trigger from queue
-                            }
-                        },waitTimeForNextTryMessage * maxTryForMessage + 1000)
-                    }
-                }
-            },waitTimeForNextTryMessage * maxTryForMessage + 1000)
+            this.checkStartCleaning(2)
             return true
         }
+    }
+
+    checkStartCleaning(tryCnt){
+        cleaning.checkCleanState= setTimeout(function(){
+            if (cleaning.activeState != cleaning.state){
+                adapter.log.info('could not start cleaning ' + activeCleanStates[cleaning.activeState].name + (tryCnt > 0 ? ', try again':', giving up'))
+                if (tryCnt > 0){
+                    sendMsg(activeCleanStates[cleaning.activeState].resume);
+                    if (cleaning.checkCleanState)
+                        cleaning.checkStartCleaning(tryCnt - 1)
+                }
+            }
+        },waitTimeForNextTryMessage * maxTryForMessage + 1000)
     }
 
     stopCleaning(){
