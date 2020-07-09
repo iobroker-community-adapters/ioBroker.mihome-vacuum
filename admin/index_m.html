@@ -162,7 +162,7 @@
                 $(".robot").attr('src', '' + $(this).val() + '.png');;
             });
 
-            //wenn device selection changed.
+            // wenn device selection changed.
             $('#devices').change(function () {
                 let tmp = JSON.parse($(this).val());
                 console.log("changed....devices" + $(this).val())
@@ -224,7 +224,7 @@
                                 entry.localip : '') + '</option>';
 
                         //check if in config
-                    })
+                    });
                     $devicelist.html(text).select();
                 });
 
@@ -237,21 +237,22 @@
                 startkey: namespace + 'rooms',
                 endkey: namespace + 'rooms.\u9999'
             }, function (err, allChannels) {
-                let channelStr = ''
-                let channel
+                let channelStr = '';
+                let channel;
                 if (allChannels) {
-                    for (i in allChannels.rows) {
-                        channel = allChannels.rows[i].value
+                    for (var i in allChannels.rows) {
+                        channel = allChannels.rows[i].value;
                         channelStr += ';' + channel._id.split('.').pop() + '/' + channel.common.name
                     }
                 }
-                if (channelStr.length)
-                    $('#timer th[data-name=channels]').data('options', channelStr.slice(1))
-                else
-                    $('#timer th[data-name=channels]').remove()
+                if (channelStr.length) {
+                    $('#timer th[data-name=channels]').data('options', channelStr.slice(1));
+                } else {
+                    $('#timer th[data-name=channels]').remove();
+                }
 
                 socket.emit('getForeignStates', namespace + "timer.*", function (err, timerStates) {
-                    let timer = []
+                    let timer = [];
 
                     socket.emit('getObjectView', 'system', 'state', {
                         startkey: namespace + 'timer.',
@@ -259,7 +260,7 @@
                     }, function (err, timerObjs) {
                         if (!err && timerObjs) {
                             for (let t in timerObjs.rows) {
-                                let timerState = timerStates[timerObjs.rows[t].id]
+                                let timerState = timerStates[timerObjs.rows[t].id];
                                 if (timerState)
                                     timerState.channels = timerObjs.rows[t].value.native
                                     .channels
@@ -278,32 +279,30 @@
                                         timer: [],
                                         del: [],
                                         add: []
-                                    }
+                                    };
                                     for (let t in room.common.members) {
-                                        let id = room.common.members[t]
-                                        let timerState = timerStates[id]
+                                        let id = room.common.members[t];
+                                        let timerState = timerStates[id];
                                         if (timerState) {
-                                            if (!timerState.room)
-                                                timerState.room = []
-                                            timerState.room.push(room._id)
+                                            timerState.room = timerState.room || [];
+                                            timerState.room.push(room._id);
                                             rooms[room._id].timer.push(id)
-                                        } else if (id.indexOf(namespace) ===
-                                            0
-                                        ) { // we use chance for housekeeping of zombie timer and rooms
-                                            if (id.indexOf('.timer.') === 0 || (id
-                                                    .indexOf('.multiRoomClean') === -
-                                                    1 && id.indexOf('.rooms.') > 0 &&
-                                                    channelStr.indexOf(id.replace(
-                                                        /.+\.rooms\.([^.]+).*/, '$1'
-                                                    )) === -1))
+                                        } else if (id.indexOf(namespace) === 0) { // we use chance for housekeeping of zombie timer and rooms
+                                            if (id.indexOf('.timer.') === 0 ||
+                                                (id.indexOf('.multiRoomClean') === -1 &&
+                                                    id.indexOf('.rooms.') > 0 &&
+                                                    channelStr.indexOf(id.replace(/.+\.rooms\.([^.]+).*/, '$1')) === -1
+                                                )
+                                            ) {
                                                 rooms[room._id].del.push(id)
+                                            }
                                         }
                                     }
                                 }
                             }
 
                             for (let t in timerStates) {
-                                let terms = t.split('.').pop().split('_')
+                                let terms = t.split('.').pop().split('_');
                                 terms.length > 2 && timer.push({
                                     enabled: timerStates[t].val != -1,
                                     minute: parseInt(terms[2], 10),
@@ -313,6 +312,7 @@
                                     channels: timerStates[t].channels || []
                                 })
                             }
+
                             values2table('timer', timer, onChange);
                         })
                     })
@@ -330,14 +330,14 @@
                 console.log('cant parse devices');
                 return
             }
-            if(Array.isArray(devices)){
+            if (Array.isArray(devices)) {
                 devices.forEach(function (entry) {
                         text += "<option value='" + JSON.stringify(entry) + "' >" + entry
                             .model + ' - token: ' + entry.token + ' - ip: ' + (entry.localip ?
                                 entry.localip : '') + '</option>';
 
                         //check if in config
-                    })
+                    });
                     $('#devices').html(text).select();
             }
 
@@ -378,21 +378,25 @@
                 return;
             }
 
-            obj.pingInterval= parseInt(obj.pingInterval*1000,10)
-            obj.wifiInterval= parseInt(obj.wifiInterval*1000,10)
+            obj.pingInterval = parseInt(obj.pingInterval * 1000, 10);
+            obj.wifiInterval = parseInt(obj.wifiInterval * 1000, 10);
+            obj.ip = (obj.ip || '').trim();
+            obj.email = (obj.email || '').trim();
+            obj.token = (obj.token || '').trim();
 
-            let newTimerArray = table2values('timer')
-            let timerList = {}
-            let timer
-            let name
+            let newTimerArray = table2values('timer');
+            let timerList = {};
+            let timer;
+            let name;
             for (let t in newTimerArray) {
-                timer = newTimerArray[t]
+                timer = newTimerArray[t];
                 name = timer.day.join('') + '_' + "0".concat(timer.hour).slice(-2) + '_' + "0".concat(timer.minute)
                     .slice(-2);
                 if (timerList[name])
                     return showMessage(_('same starttime of 2 timer not possible'));
                 timerList[name] = timer
             }
+
             socket.emit('getForeignStates', namespace + "timer.*", function (err, timerStates) {
                 if (!err && timerStates) {
 
@@ -421,7 +425,7 @@
                             }
                         }
 
-                        let p
+                        var p;
                         for (let t in timerStates) {
                             let timerState = timerStates[t];
                             name = t.split(".").pop();
@@ -453,8 +457,9 @@
                         }
 
                         for (let tn in timerList) {
-                            timer = timerList[tn]
-                            let stateId = namespace + "timer." + tn
+                            timer = timerList[tn];
+                            let stateId = namespace + "timer." + tn;
+
                             socket.emit('setObject', stateId, {
                                 type: 'state',
                                 common: {
@@ -488,7 +493,7 @@
                         }
 
                         for (let r in rooms) {
-                            let room = rooms[r]
+                            let room = rooms[r];
                             if (room.add.length > 0 || room.del.length > 0) {
                                 socket.emit('getObject', r, function (err, obj) {
                                     if (!err && obj) {
@@ -497,10 +502,10 @@
                                             if (p !== -1)
                                                 obj.common.members.splice(p, 1);
                                         }
-                                        obj.common.members = obj.common.members.concat(room.add)
-                                        room.timer = room.timer.concat(room.add)
-                                        room.del = []
-                                        room.add = []
+                                        obj.common.members = obj.common.members.concat(room.add);
+                                        room.timer = room.timer.concat(room.add);
+                                        room.del = [];
+                                        room.add = [];
                                         obj.from = 'system.adapter.' + namespace;
                                         obj.user = 'system.user.admin';
                                         obj.ts = Date.now();
@@ -512,7 +517,7 @@
 
 
                         callback(obj);
-                    })
+                    });
                 }
             })
         }
