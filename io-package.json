@@ -140,7 +140,6 @@
         "materialize": true,
         "compact": true,
         "icon": "mihome-vacuum.png",
-        "webExtension": "lib/mihome-vacuum.js",
         "readme": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/README.md",
         "keywords": [
             "url",
