@@ -13,3 +13,4 @@ gulpfile.js
 !/main.js
 !/README.md
 !/README_de.md
+/admin/i18n

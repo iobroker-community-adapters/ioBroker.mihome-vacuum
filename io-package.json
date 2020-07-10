@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "2.0.10",
+        "version": "2.1.0",
         "news": {
+            "2.1.0": {
+                "en": "Refactoring\nSupport of compact mode added",
+                "de": "Refactoring\nUnterstützung des Kompaktmodus hinzugefügt",
+                "ru": "Рефакторинг\nДобавлена поддержка компактного режима",
+                "pt": "Reestruturação\nAdicionado suporte ao modo compacto",
+                "nl": "Refactoring\nOndersteuning voor compacte modus toegevoegd",
+                "fr": "Refactoring\nAjout du support du mode compact",
+                "it": "refactoring\nSupporto della modalità compatta aggiunto",
+                "es": "Refactorización\nSoporte de modo compacto agregado",
+                "pl": "Refaktoryzacja\nDodano obsługę trybu kompaktowego",
+                "zh-cn": "重构\n支持紧凑模式"
+            },
             "2.0.10": {
                 "en": "try to starting of cleaning 3 times, if robot not answers and some fixes",
                 "de": "Versuchen Sie dreimal mit dem Reinigen zu beginnen, wenn der Roboter nicht antwortet und einige Korrekturen vorgenommen hat",
@@ -86,79 +98,19 @@
                 "es": "envíe Ping solo si no está conectado, de lo contrario get_status\n",
                 "pl": "wyślij Ping tylko jeśli nie jest podłączony, w przeciwnym razie get_status\n",
                 "zh-cn": "仅在未连接时发送Ping，否则返回get_status\n"
-            },
-            "1.10.4": {
-                "en": "add valetudo map support for gen3 and gen2 2XXX",
-                "de": "Unterstützung für Valetudo-Karten für Gen3 und Gen2 2XXX",
-                "ru": "добавлена поддержка карт valetudo для gen3 и gen2 2XXX",
-                "pt": "adicionar suporte ao mapa valetudo para gen3 e gen2 2XXX",
-                "nl": "ondersteuning voor valetudokaarten toevoegen voor gen3 en gen2 2XXX",
-                "fr": "ajouter le support de carte valetudo pour gen3 et gen2 2XXX",
-                "it": "aggiungere il supporto per mappe valetudo per gen3 e gen2 2XXX",
-                "es": "agregue soporte de valetudo map para gen3 y gen2 2XXX",
-                "pl": "dodaj obsługę map valetudo dla gen3 i gen2 2XXX",
-                "zh-cn": "为gen3和gen2 2XXX添加valetudo映射支持"
-            },
-            "1.10.1": {
-                "en": "added zone as room handling + timer can directly trigger room channels",
-                "de": "Zone als Raumhandling hinzugefügt + Timer kann Raumkanäle direkt auslösen",
-                "ru": "добавлена ​​зона в качестве обработки помещения + таймер может напрямую вызывать каналы помещения",
-                "pt": "zona adicionada, pois o manuseio da sala + o temporizador podem acionar diretamente os canais da sala",
-                "nl": "toegevoegde zone als ruimteafhandeling + timer kan ruimtekanalen direct activeren",
-                "fr": "zone ajoutée car la gestion de la pièce + la minuterie peuvent déclencher directement les canaux de la pièce",
-                "it": "aggiunta zona come gestione della stanza + timer può attivare direttamente i canali della stanza",
-                "es": "zona agregada como manejo de habitación + temporizador puede activar directamente canales de habitación",
-                "pl": "dodano strefę, ponieważ obsługa pokoju + timer może bezpośrednio wyzwalać kanały pokojowe",
-                "zh-cn": "添加区域作为房间处理+计时器可以直接触发房间频道"
-            },
-            "1.10.0": {
-                "en": "added room handling and timer and changed featurehandling",
-                "de": "Raumhandhabung und Timer hinzugefügt und das Featurehandling geändert",
-                "ru": "добавлена ​​обработка комнаты и таймера, а также изменена обработка функций",
-                "pt": "manipulação de sala e temporizador adicionados e manipulação de recursos",
-                "nl": "kamerafhandeling en timer toegevoegd en functiehandling gewijzigd",
-                "fr": "ajout de la gestion de la pièce et de la minuterie et modification de la gestion des fonctionnalités",
-                "it": "aggiunta gestione della stanza e timer e modifica delle funzioni",
-                "es": "Se agregó manejo de sala y temporizador y cambio de manejo de características",
-                "pl": "dodano obsługę pokoju i timera oraz zmieniono obsługę funkcji",
-                "zh-cn": "添加了房间处理和计时器并更改了功能处理"
-            },
-            "1.1.6": {
-                "en": "Added fan speed for MOP (S50+)",
-                "de": "Saugleistung für Wischmodus hinzugefügt (S50+)",
-                "ru": "Добавлена ​​мощность всасывания для режима очистки (S50+)",
-                "pt": "Adicionado poder de sucção para o modo de limpeza (S50+)",
-                "nl": "Zuigkracht toegevoegd voor de wismodus (S50+)",
-                "fr": "Puissance d'aspiration ajoutée pour le mode de balayage (S50+)",
-                "it": "Aggiunta potenza di aspirazione per la modalità tendina (S50+)",
-                "es": "Mayor potencia de succión para el modo de limpieza (S50+)",
-                "pl": "Dodano siłę ssania dla trybu wycierania (S50+)",
-                "zh-cn": "增加了MOP的风扇速度（S50 +）"
-            },
-            "1.1.5": {
-                "en": "Added setting for automatic resume of paused zonecleaning",
-                "de": "Einstellung für automatische Fortsetzung der pausierten Zonenreinigung hinzugefügt",
-                "ru": "Добавлена ​​настройка автоматического возобновления приостановленной zonecleaning",
-                "pt": "Configuração adicionada para o resumo automático de zonecleaning em pausa",
-                "nl": "Instelling toegevoegd voor automatisch hervatten van onderbroken zonecleaning",
-                "fr": "Ajout du réglage pour la reprise automatique du nettoyage en mode pause",
-                "it": "Aggiunta l'impostazione per il ripristino automatico della pausa in pausa",
-                "es": "Configuración añadida para el resumen automático de la zona de limpieza pausada",
-                "pl": "Dodano ustawienie automatycznego wznowienia wstrzymanego procesu oczyszczania",
-                "zh-cn": "添加了自动恢复暂停区域清理的设置"
             }
         },
         "title": "mihome-vacuum",
         "titleLang": {
-            "en": "control of Xiaomi/Roborock vacuum cleaner",
-            "de": "Steuerung des Staubsaugers Xiaomi / Roborock",
-            "ru": "управление пылесосом Xiaomi / Roborock",
-            "pt": "controle do aspirador Xiaomi / Roborock",
-            "nl": "bediening van Xiaomi / Roborock stofzuiger",
-            "fr": "contrôle de l'aspirateur Xiaomi / Roborock",
-            "it": "controllo dell'aspirapolvere Xiaomi / Roborock",
-            "es": "control de la aspiradora Xiaomi / Roborock",
-            "pl": "kontrola odkurzacza Xiaomi / Roborock",
+            "en": "Control of Xiaomi/Roborock vacuum cleaner",
+            "de": "Steuerung des Staubsaugers Xiaomi/Roborock",
+            "ru": "Управление пылесосом Xiaomi/Roborock",
+            "pt": "Controle do aspirador Xiaomi/Roborock",
+            "nl": "Bediening van Xiaomi/Roborock stofzuiger",
+            "fr": "Contrôle de l'aspirateur Xiaomi/Roborock",
+            "it": "Controllo dell'aspirapolvere Xiaomi/Roborock",
+            "es": "Control de la aspiradora Xiaomi/Roborock",
+            "pl": "Kontrola odkurzacza Xiaomi/Roborock",
             "zh-cn": "小米/罗伯克吸尘器的控制"
         },
         "desc": {
@@ -186,6 +138,7 @@
         "mode": "daemon",
         "loglevel": "info",
         "materialize": true,
+        "compact": true,
         "icon": "mihome-vacuum.png",
         "webExtension": "lib/mihome-vacuum.js",
         "readme": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/README.md",
@@ -256,7 +209,8 @@
                 "role": "indicator.connected",
                 "name": "If connected to CUL",
                 "type": "boolean",
-                "read": true
+                "read": true,
+                "write": false
             },
             "native": {}
         },
@@ -455,8 +409,9 @@
             "common": {
                 "name": "DnD aktiv",
                 "type": "boolean",
-                "role": "level",
-                "read": true
+                "role": "indicator",
+                "read": true,
+                "write": false
             },
             "native": {}
         },
