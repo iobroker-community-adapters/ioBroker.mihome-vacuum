@@ -13,18 +13,17 @@ const TimerManager = require('./lib/timerManager');
 const RoomManager  = require('./lib/roomManager');
 
 global.systemDictionary = {};
-require(__dirname + '/admin/words.js');
+require('./admin/words.js');
 
-let maphelper = require('./lib/maphelper');
+let MapHelper = require('./lib/maphelper');
 
-const adapter      = new utils.Adapter('mihome-vacuum');
-
+const adapter = new utils.Adapter('mihome-vacuum');
 
 const server = dgram.createSocket('udp4');
 const maxTryForMessage = 3;
 const waitTimeForNextTryMessage = 5000;
 
-let userLang = "en";
+let userLang = 'en';
 let lastResponse = 0;
 let messages = {};
 let connected = false;
@@ -43,17 +42,17 @@ let Map;
 
 // this parts will be translated
 const i18n = {
-    weekDaysFull: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    notAvailable: "not available",
-    nextTimer: "next timer",
-    loadRooms: "load rooms from robot",
-    cleanRoom: "clean Room",
-    cleanMultiRooms: "clean assigned rooms",
-    addRoom: "insert map Index or zone coordinates",
-    waterBox_installed: "water box installed",
-    waterBox_filter: "clean water Filter",
-    waterBox_filter_reset: "water filter reset",
-    waitingPos: "waiting position"
+    weekDaysFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    notAvailable: 'not available',
+    nextTimer: 'next timer',
+    loadRooms: 'load rooms from robot',
+    cleanRoom: 'clean Room',
+    cleanMultiRooms: 'clean assigned rooms',
+    addRoom: 'insert map Index or zone coordinates',
+    waterBox_installed: 'water box installed',
+    waterBox_filter: 'clean water Filter',
+    waterBox_filter_reset: 'water filter reset',
+    waitingPos: 'waiting position'
 };
 
 const cleanStates = {
@@ -139,7 +138,7 @@ class Cleaning {
             }
             if ([cleanStates.Sleeping, cleanStates.Waiting, cleanStates.Back_toHome, cleanStates.Charging, cleanStates.GoingToSpot].indexOf(this.state) > -1) {
                 if (this.queue.length > 0) {
-                    adapter.log.debug("use clean trigger from Queue");
+                    adapter.log.debug('use clean trigger from Queue');
                     adapter.emit('message', this.queue.shift());
                     this.updateQueue()
                 }
@@ -167,14 +166,14 @@ class Cleaning {
     startCleaning(cleanStatus, messageObj) {
         let activeCleanState= activeCleanStates[cleanStatus];
         if (!activeCleanState)
-            return !!adapter.log.warn("Invalid cleanStatus(" + cleanStatus + ") for startCleaning");
+            return !!adapter.log.warn('Invalid cleanStatus(' + cleanStatus + ') for startCleaning');
         setTimeout(sendPing, 2000);
         if (this.activeState){
             if (cleanStatus === cleanStates.Cleaning && adapter.config.enableResumeZone) {
                 adapter.log.debug('Resuming paused ' + activeCleanStates[this.activeState].name);
                 sendMsg(activeCleanStates[this.activeState].resume);
             } else {
-                adapter.log.info("should trigger cleaning " + activeCleanState.name + (messageObj.message || '') + ", but is currently active(" + this.activeState +"). Add to queue")
+                adapter.log.info('should trigger cleaning ' + activeCleanState.name + (messageObj.message || '') + ', but is currently active(' + this.activeState +'). Add to queue')
                 messageObj.info= activeCleanState.name;
                 this.push(messageObj)
             }
@@ -184,10 +183,10 @@ class Cleaning {
             this.activeChannels= messageObj.channels;
             if (this.activeChannels && this.activeChannels.length === 1) {
                 adapter.getState(this.activeChannels[0] + '.roomFanPower', function (err, fanPower) {
-                    adapter.setState("control.fan_power", fanPower.val);
+                    adapter.setState('control.fan_power', fanPower.val);
                 })
             }            
-            adapter.log.info("trigger cleaning " + activeCleanState.name + (messageObj.message || ''));
+            adapter.log.info('trigger cleaning ' + activeCleanState.name + (messageObj.message || ''));
             this.checkStartCleaning(2);
             return true
         }
@@ -278,7 +277,7 @@ class FeatureManager {
         });
 
         // we get miIO.info only, if the robot is connected to the internet, so we init with unavailable
-        adapter.setState('info.wifi_signal', "unavailable", true);
+        adapter.setState('info.wifi_signal', 'unavailable', true);
 
         roomManager = new RoomManager(adapter, i18n);
         timerManager = new TimerManager(adapter, i18n);
@@ -325,7 +324,7 @@ class FeatureManager {
                     common: {
                         max: 105,
                         states: {
-                            105: "MOP" // no vacuum, only mop
+                            105: 'MOP' // no vacuum, only mop
                         }
                     }
                 }); // need time, until the new setting above
@@ -371,24 +370,24 @@ class FeatureManager {
                     adapter.setObjectNotExists('control.resumeZoneClean', {
                         type: 'state',
                         common: {
-                            name: "Resume paused zoneClean",
-                            type: "boolean",
-                            role: "button",
+                            name: 'Resume paused zoneClean',
+                            type: 'boolean',
+                            role: 'button',
                             read: false,
                             write: true,
-                            desc: "resume zoneClean that has been paused before",
+                            desc: 'resume zoneClean that has been paused before',
                         },
                         native: {}
                     });
                     adapter.setObjectNotExists('control.resumeRoomClean', {
                         type: 'state',
                         common: {
-                            name: "Resume paused roomClean",
-                            type: "boolean",
-                            role: "button",
+                            name: 'Resume paused roomClean',
+                            type: 'boolean',
+                            role: 'button',
                             read: false,
                             write: true,
-                            desc: "resume roomClean that has been paused before",
+                            desc: 'resume roomClean that has been paused before',
                         },
                         native: {}
                     });                    
@@ -426,11 +425,11 @@ class FeatureManager {
             if (this.water_box) {
                 adapter.log.info('create states for water box');
                 adapter.setObjectNotExists('info.water_box', {
-                    type: "state",
+                    type: 'state',
                     common: {
                         name: i18n.waterBox_installed,
-                        type: "string",
-                        role: "info",
+                        type: 'string',
+                        role: 'info',
                         read: true,
                         write: false
                     },
@@ -438,26 +437,26 @@ class FeatureManager {
                 });
                 adapter.log.info('create states for water box filter');
                 adapter.setObjectNotExists('consumable.water_filter', {
-                    type: "state",
+                    type: 'state',
                     common: {
                         name: i18n.waterBox_filter,
-                        type: "number",
-                        role: "level",
+                        type: 'number',
+                        role: 'level',
                         read: true,
                         write: false,
-                        unit: "%"
+                        unit: '%'
                     },
                     native: {}
                 });
                 adapter.setObjectNotExists('consumable.water_filter_reset', {
-                    type: "state",
+                    type: 'state',
                     common: {
                         name: i18n.waterBox_filter_reset,
-                        type: "boolean",
-                        role: "button",
+                        type: 'boolean',
+                        role: 'button',
                         read: false,
                         write: true,
-                        unit: "%"
+                        unit: '%'
                     },
                     native: {}
                 });
@@ -476,7 +475,9 @@ const clean_log_html_head = '<tr> <th>Datum</th> <th>Start</th> <th>Saugzeit</th
 
 // is called if a subscribed state changes
 adapter.on('stateChange', function (id, state) {
-    if (!state || state.ack) return;
+    if (!state || state.ack) {
+        return;
+    }
 
     // Warning, state can be null if it was deleted
     adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
@@ -491,147 +492,142 @@ adapter.on('stateChange', function (id, state) {
         if (command === 'X_send_command') {
             const values = (state.val || '').trim().split(';');
             //const method = values[0];
-            let params = [''];
-            if (values[1]) {
-                try {
-                    params = JSON.parse(values[1]);
-                } catch (e) {
-                    return adapter.setState('control.X_get_response', 'Could not send these params because its not in JSON format: ' + values[1] , true);
-                }
-                adapter.log.info('send message: Method: ' + values[0] + ' Params: ' + values[1]);
-            } else {           
-                adapter.log.info('send message: Method: ' + values[0]);
+        let params = [''];
+        if (values[1]) {
+            try {
+                params = JSON.parse(values[1]);
+            } catch (e) {
+                return adapter.setState('control.X_get_response', 'Could not send these params because its not in JSON format: ' + values[1] , true);
             }
-            let id= sendMsg(values[0], params, function () {
+            adapter.log.info('send message: Method: ' + values[0] + ' Params: ' + values[1]);
+        } else {
+            adapter.log.info('send message: Method: ' + values[0]);
+        }
+        let id= sendMsg(values[0], params, function () {
+            adapter.setForeignState(id, state.val, true);
+        });
+        messages[id].method = command
+    } else if (command === 'clean_home' || command === 'start') {
+        if (state.val) {
+            adapter.sendTo(adapter.namespace, 'startVacuuming', null)
+        } else if (command === 'clean_home' && cleaning.activeState) {
+            cleaning.stopCleaning()
+        }
+        adapter.setForeignState(id, state.val, true);
+    } else if (command === 'home') {
+        if (!state.val) return;
+        cleaning.stopCleaning();
+        adapter.setForeignState(id, true, true);
+    } else if (command === 'clearQueue') {
+        if (!state.val) return;
+        cleaning.clearQueue();
+        adapter.setForeignState(id, true, true);
+    } else if (command === 'spotclean') {
+        if (!state.val) {
+            return;
+        }
+        adapter.sendTo(adapter.namespace, 'cleanSpot', null);
+        adapter.setForeignState(id, state.val, true);
+    } else if (command === 'carpet_mode') {
+        //when carpetmode change
+        if (state.val === true || state.val === 'true') {
+            sendMsg('set_carpet_mode', [{
+                enable: 1
+            }], function () {
                 adapter.setForeignState(id, state.val, true);
             });
-            messages[id].method = command
-
-
-        } else if (command === 'clean_home' || command === 'start') {
-            if (state.val) {
-                adapter.sendTo(adapter.namespace, "startVacuuming",null)
-            } else if (command === 'clean_home' && cleaning.activeState) {
-                cleaning.stopCleaning()
-            }
-            adapter.setForeignState(id, state.val, true);
-
-        } else if (command === 'home') {
-            if (!state.val) return;
-            cleaning.stopCleaning();
-            adapter.setForeignState(id, true, true);
-
-        } else if (command === 'clearQueue') {
-            if (!state.val) return;
-            cleaning.clearQueue();
-            adapter.setForeignState(id, true, true);
-
-        } else if (command === 'spotclean') {
-            if (!state.val) return;
-            adapter.sendTo(adapter.namespace, "cleanSpot", null);
-            adapter.setForeignState(id, state.val, true);
-
-        } else if (command === 'carpet_mode') {
-            //when carpetmode change
-            if (state.val === true || state.val === 'true') {
-                sendMsg('set_carpet_mode', [{
-                    enable: 1
-                }], function () {
-                    adapter.setForeignState(id, state.val, true);
-                });
-            } else {
-                sendMsg('set_carpet_mode', [{
-                    enable: 0
-                }], function () {
-                    adapter.setForeignState(id, false, true);
-                });
-            }
-
-        } else if (command === 'goTo') {
-            //changeMowerCfg(id, state.val);
-            //goto function wit error catch
-            parseGoTo(state.val, function () {
-                adapter.setForeignState(id, state.val, true);
+        } else {
+            sendMsg('set_carpet_mode', [{
+                enable: 0
+            }], function () {
+                adapter.setForeignState(id, false, true);
             });
+        }
 
-        } else if (command === 'zoneClean') {
-            adapter.sendTo(adapter.namespace, "cleanZone", state.val);
-            adapter.setForeignState(id, '', true);
+    } else if (command === 'goTo') {
+        //changeMowerCfg(id, state.val);
+        //goto function wit error catch
+        parseGoTo(state.val, function () {
+            adapter.setForeignState(id, state.val, true);
+        });
+
+    } else if (command === 'zoneClean') {
+        adapter.sendTo(adapter.namespace, 'cleanZone', state.val);
+        adapter.setForeignState(id, '', true);
 /* removed to commands.js
-        } else if (command === 'resumeZoneClean') {
-            if (!state.val) return;
-            sendMsg('resume_zoned_clean', null, function () {
-                adapter.setForeignState(id, state.val, true);
-            });
-
-        } else if (command === 'resumeRoomClean') {
-            if (!state.val) return;
-            sendMsg('resume_segment_clean', null, function () {
-                adapter.setForeignState(id, state.val, true);
-            });
-
-        } else if (command === 'loadRooms') {
-            if (!state.val) return;
-            sendMsg('get_room_mapping', null, function () {
-                adapter.setForeignState(id, state.val, true);
-            });
-*/            
-        } else if (command === 'addRoom') {
-            if (!isNaN(state.val))
-                roomManager.createRoom("manual_" + state.val, parseInt(state.val, 10));
-            else {
-                let terms = state.val.match(/((?:[0-9]+\,){3,3}[0-9]+)(\,[0-9]+)?/);
-                if (terms)
-                    roomManager.createRoom("manual_" + terms[1].replace(/,/g, '_'), '[' + terms[1] + (terms[2] || ',1') + ']');
-                else
-                    adapter.log.warn('invalid input for addRoom, use index of map or coordinates like 1111,2222,3333,4444')
-            }
-            adapter.setForeignState(id, '', true);
-
-        } else if (command === 'roomClean') {
-            if (!state.val) return;
-            roomManager.cleanRooms([id.replace("roomClean", "mapIndex")]);
-            adapter.setForeignState(id, true, true);
-        } else if (command === 'multiRoomClean' || parent === 'timer') {
-            if (parent === 'timer') {
-                adapter.setForeignState(id, (state.val == TimerManager.SKIP || state.val == TimerManager.DISABLED) ? state.val : TimerManager.ENABLED, true, function () {
-                    timerManager.calcNextProcess()
-                });
-                if (state.val != TimerManager.START) {
-                    return
-                }
-            } else {
-                if (!state.val) {
-                    return;
-                }
-                adapter.setForeignState(id, true, true);
-            }
-            roomManager.cleanRoomsFromState(id);
-            
-        } else if (command === 'roomFanPower') {
-            // do nothing, only set fan power for next roomClean
+    } else if (command === 'resumeZoneClean') {
+        if (!state.val) return;
+        sendMsg('resume_zoned_clean', null, function () {
             adapter.setForeignState(id, state.val, true);
-        } else if (com[command]) {
-            let params = com[command].params || '';
-            if (state.val !== true && state.val !== 'true') {
-                params = state.val;
-            }
-            if (state.val !== false && state.val !== 'false') {
-                sendMsg(com[command].method, [params], function () {
-                    adapter.setForeignState(id, state.val, true);
-                });
+        });
+
+    } else if (command === 'resumeRoomClean') {
+        if (!state.val) return;
+        sendMsg('resume_segment_clean', null, function () {
+            adapter.setForeignState(id, state.val, true);
+        });
+
+    } else if (command === 'loadRooms') {
+        if (!state.val) return;
+        sendMsg('get_room_mapping', null, function () {
+            adapter.setForeignState(id, state.val, true);
+        });
+*/            
+    } else if (command === 'addRoom') {
+        if (!isNaN(state.val))
+            roomManager.createRoom('manual_' + state.val, parseInt(state.val, 10));
+        else {
+            let terms = state.val.match(/((?:[0-9]+\,){3,3}[0-9]+)(\,[0-9]+)?/);
+            if (terms)
+                roomManager.createRoom('manual_' + terms[1].replace(/,/g, '_'), '[' + terms[1] + (terms[2] || ',1') + ']');
+            else
+                adapter.log.warn('invalid input for addRoom, use index of map or coordinates like 1111,2222,3333,4444')
+        }
+        adapter.setForeignState(id, '', true);
+    } else if (command === 'roomClean') {
+        if (!state.val) return;
+        roomManager.cleanRooms([id.replace('roomClean', 'mapIndex')]);
+        adapter.setForeignState(id, true, true);
+    } else if (command === 'multiRoomClean' || parent === 'timer') {
+        if (parent === 'timer') {
+            adapter.setForeignState(id, (state.val == TimerManager.SKIP || state.val == TimerManager.DISABLED) ? state.val : TimerManager.ENABLED, true, function () {
+                timerManager.calcNextProcess()
+            });
+            if (state.val != TimerManager.START) {
+                return
             }
         } else {
-            adapter.log.error('Unknown state "' + id + '"');
+            if (!state.val) {
+                return;
+            }
+            adapter.setForeignState(id, true, true);
         }
-    
-
+        roomManager.cleanRoomsFromState(id);
+    } else if (command === 'roomFanPower') {
+        // do nothing, only set fan power for next roomClean
+        adapter.setForeignState(id, state.val, true);
+    } else if (com[command]) {
+        let params = com[command].params || '';
+        if (state.val !== true && state.val !== 'true') {
+            params = state.val;
+        }
+        if (state.val !== false && state.val !== 'false') {
+            sendMsg(com[command].method, [params], function () {
+                adapter.setForeignState(id, state.val, true);
+            });
+        }
+    } else {
+        adapter.log.error('Unknown state "' + id + '"');
+    }
 });
 
-adapter.on('unload', function (callback) {
-    if (pingTimeout) clearTimeout(pingTimeout);
+adapter.on('unload', callback => {
+    if (pingTimeout) {
+        clearTimeout(pingTimeout);
+        pingTimeout = null;
+    }
     adapter.setState('info.connection', false, true);
-    if (typeof callback === 'function') callback();
+    typeof callback === 'function' && callback();
 });
 
 
@@ -640,6 +636,7 @@ adapter.on('ready', main);
 // function to control goto params
 function parseGoTo(params, callback) {
     const coordinates = params.split(',');
+
     if (coordinates.length === 2) {
         const xVal = coordinates[0];
         const yVal = coordinates[1];
@@ -648,14 +645,15 @@ function parseGoTo(params, callback) {
             //send goTo request with coordinates
             sendMsg('app_goto_target', [parseInt(xVal), parseInt(yVal)]);
             callback();
-        } else adapter.log.error('GoTo need two koordinates with type number');
-        adapter.log.info('xVAL: ' + xVal + '  yVal:  ' + yVal);
+        } else {
+            adapter.log.error('GoTo need two koordinates with type number');
+        }
 
+        adapter.log.info('xVAL: ' + xVal + '  yVal:  ' + yVal);
     } else {
         adapter.log.error('GoTo only work with two arguments seperated by ', '');
     }
 }
-
 
 function sendMsg(method, params, options, callback) {
     // define optional options
@@ -690,13 +688,15 @@ function sendMsg(method, params, options, callback) {
 
 function sendMsgToServer(msgCounter){
     let message = messages[msgCounter];
-    if (!message)
+    if (!message) {
         return;
+    }
+
     if (message.tryCount >= maxTryForMessage){
         adapter.log.debug('no answer for ' + ( message.method || '') + ' id:' + msgCounter +' received, giving up');
         typeof message.callback === 'function' && message.callback('no answer received after after ' + message.tryCount + ' times');
         delete messages[msgCounter];
-        return 
+        return;
     }
 
     try {
@@ -706,6 +706,7 @@ function sendMsgToServer(msgCounter){
             err && adapter.log.error('Cannot send command: ' + err);
             typeof message.callback === 'function' && message.callback(err);
         });
+
         adapter.log.debug('sendMsg[' + message.tryCount + '] >>> ' + message.str);
         //adapter.log.silly('sendMsgRaw >>> ' + cmdraw.toString('hex'));
         setTimeout(sendMsgToServer, waitTimeForNextTryMessage, msgCounter); // check in 5 sec, if robo send answer
@@ -848,14 +849,15 @@ function getStates(message) {
         lastResponse= new Date();
         const requestMessage = messages[answer.id];
         requestMessage && delete messages[answer.id];
+
         if (answer.error) {
-            return adapter.log.error("[" + answer.id + "](" + (requestMessage ? requestMessage.method : 'unknown request message') + ") -> " + answer.error.message)
+            return adapter.log.error('[' + answer.id + '](' + (requestMessage ? requestMessage.method : 'unknown request message') + ') -> ' + answer.error.message)
         }
         if (!requestMessage){
             throw 'could not found request message for id ' + answer.id
         }
-        if (requestMessage.method === 'get_status') {
 
+        if (requestMessage.method === 'get_status') {
             const status = parseStatus(answer);
             adapter.setStateChanged('info.battery', status.battery, true);
             adapter.setStateChanged('info.cleanedtime', Math.round(status.clean_time / 60), true);
@@ -928,6 +930,7 @@ function getStates(message) {
                     min = dates.getMinutes();
                 }
 
+                // Todo translate
                 const log_data = {
                     Datum: dates.getDate() + '.' + (dates.getMonth() + 1),
                     Start: hour + ':' + min,
@@ -937,18 +940,15 @@ function getStates(message) {
                     Ende: record.completed
                 };
 
-
                 cleanLog.push(log_data);
                 clean_log_html_table = makeTable(log_data);
-
-
             }
         } else if (requestMessage.method === 'get_room_mapping') {
             features.roomMapping= true;
             if (answer.result.length) {
                 roomManager.processRoomMaping(answer);
             } else if (!answer.result.length) {
-                adapter.log.debug('Empty array try to get from Map')
+                adapter.log.debug('Empty array try to get from Map');
                 MAP.getRoomsFromMap(answer);
             }
 
@@ -962,7 +962,7 @@ function getStates(message) {
 
             // invoke the callback from the sendTo handler
             const callback = sendCommandCallbacks[answer.id];
-            if (typeof callback === 'function') callback(answer);
+            typeof callback === 'function' && callback(answer);
         }
     } catch (err) {
         adapter.log.debug('The answer from the robot is not correct! (' + err + ') ' + JSON.stringify(message));
@@ -978,9 +978,8 @@ function getLog(callback, i) {
     } else {
         if (logEntries[i] !== null || logEntries[i] !== 'null') {
             //adapter.log.debug('Request log entry: ' + logEntries[i]);
-            sendMsg('get_clean_record', [logEntries[i]], () => {
-                setTimeout(getLog, 200, callback, i + 1);
-            });
+            sendMsg('get_clean_record', [logEntries[i]], () =>
+                setTimeout(getLog, 200, callback, i + 1));
         } else {
             adapter.log.error('Could not find log entry');
             setImmediate(getLog, callback, i + 1);
@@ -1027,7 +1026,6 @@ function makeTable(line) {
     cleanLogHtmlAllLines += html_line;
 
     return '<table>' + clean_log_html_attr + clean_log_html_head + cleanLogHtmlAllLines + '</table>';
-
 }
 
 function enabledExpert() {
@@ -1053,15 +1051,11 @@ function enabledExpert() {
             },
             native: {}
         });
-
-
     } else {
         adapter.log.info('Expert mode disabled, states deleted');
         adapter.delObject('control.X_send_command');
         adapter.delObject('control.X_get_response');
-
     }
-
 }
 
 function enabledVoiceControl() {
@@ -1081,13 +1075,10 @@ function enabledVoiceControl() {
             },
             native: {}
         });
-
     } else {
         adapter.log.info('Cloud control disabled');
         adapter.delObject('control.clean_home');
-
     }
-
 }
 
 //create default states
@@ -1098,9 +1089,9 @@ function init() {
             let obj;
             for (let i in i18n) {
                 obj = i18n[i];
-                if (typeof obj == "string") {
+                if (typeof obj == 'string') {
                     i18n[i] = systemDictionary[obj][userLang];
-                } else if (typeof obj == "object") {
+                } else if (typeof obj == 'object') {
                     for (let o in obj) {
                         obj[o] = systemDictionary[obj[o]][userLang]
                     }
@@ -1122,6 +1113,7 @@ function init() {
         },
         native: {}
     });
+
     adapter.setObjectNotExists('control.sound_volume_test', {
         type: 'state',
         common: {
@@ -1134,6 +1126,7 @@ function init() {
         },
         native: {}
     });
+
     adapter.setObjectNotExists('control.sound_volume', {
         type: 'state',
         common: {
@@ -1175,6 +1168,7 @@ function init() {
         },
         native: {}
     });
+
     adapter.setObjectNotExists('info.device_fw', {
         type: 'state',
         common: {
@@ -1186,6 +1180,7 @@ function init() {
         },
         native: {}
     });
+
     adapter.setObject('info.queue', {
         type: 'state',
         common: {
@@ -1195,19 +1190,18 @@ function init() {
             read: true,
             write: false
         },
-        "native": {}
-    }, function () {
-        adapter.setState('info.queue', '', true);
-    });
+        native: {}
+    }, () => adapter.setState('info.queue', '', true));
+
     adapter.setObjectNotExists('control.clearQueue', {
         type: 'state',
         common: {
-            name: "clear cleaning queue",
-            type: "boolean",
-            role: "button",
+            name: 'clear cleaning queue',
+            type: 'boolean',
+            role: 'button',
             read: false,
             write: true,
-            desc: "Clear cleaning queue, but not current job",
+            desc: 'Clear cleaning queue, but not current job',
         },
         native: {}
     });
@@ -1215,13 +1209,13 @@ function init() {
 
 function checkWiFi(){
     nextWiFiCheck = new Date(new Date().getTime() + (adapter.config.wifiInterval || 86400000)); // if no wifi status update is needed, we want to get firmware/model once a day 
-    sendMsg(com.miIO_info.method, null, function(err){
+    sendMsg(com.miIO_info.method, null, err => {
         if (err){ 
             adapter.log.warn(err + ' -> pause ' + com.miIO_info.method + ' try again in one hour');
             nextWiFiCheck = new Date(new Date().getTime() + 3600000) // try again in one hour
         }
-        adapter.log.debug('Next WiFi check: ' + adapter.formatDate(nextWiFiCheck,'DD.MM hh:mm'))
-    })
+        adapter.log.debug('Next WiFi check: ' + adapter.formatDate(nextWiFiCheck, 'DD.MM hh:mm'))
+    });
 }
 
 function sendPing() {
@@ -1262,10 +1256,10 @@ function serverConnected(){
     }
 
     adapter.log.info('connecting, this can take up to 10 minutes ...');
-    adapter.sendTo(adapter.namespace, "getStatus", null, function (obj) {
+    adapter.sendTo(adapter.namespace, 'getStatus', null, obj => {
         if (obj && obj.result) {
             lastResponse= new Date();
-            if (!connected) { // it is the first successed call
+            if (!connected) { // it is the first succeeded call
                 connected = true;
                 adapter.log.info('Connected');
                 adapter.setState('info.connection', true, true);
@@ -1275,7 +1269,7 @@ function serverConnected(){
                 setTimeout(sendMsg, 800, com.clean_summary.method);
                 setTimeout(features.detect, 1000);
                 if (MAP.ENABLED) {
-                    setTimeout(sendMsg, 1200, "get_map_v1")
+                    setTimeout(sendMsg, 1200, 'get_map_v1')
                 }
             }
         }
@@ -1290,7 +1284,7 @@ function main() {
     //adapter.log.info(JSON.stringify(adapter.config));
 
     init();
-    Map = new maphelper(null, adapter);
+    Map = new MapHelper(null, adapter);
     MAP.Init(); // for Map
 
     // Abfrageintervall mindestens 10 sec.
@@ -1298,7 +1292,7 @@ function main() {
         adapter.config.pingInterval = 10000;
     }
 
-    maxResponseTime= Math.max(adapter.config.pingInterval, 60000) + 60000; // + some puffer
+    maxResponseTime = Math.max(adapter.config.pingInterval, 60000) + 60000; // + some puffer
 
     if (!adapter.config.token) {
         adapter.log.error('Token not specified!');
@@ -1311,13 +1305,13 @@ function main() {
 
         packet.msgCounter = 1;
 
-        server.on('error', function (err) {
+        server.on('error', err => {
             adapter.log.error('UDP error: ' + err);
             server.close();
             process.exit();
         });
 
-        server.on('message', function (msg, rinfo) {
+        server.on('message', (msg, rinfo) => {
             if (rinfo.port === adapter.config.port) {
                 if (msg.length === 32) {
                     adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
@@ -1332,7 +1326,7 @@ function main() {
             }
         });
 
-        server.on('listening', function () {
+        server.on('listening', () => {
             const address = server.address();
             adapter.log.debug('server started on ' + address.address + ':' + address.port);
         });
@@ -1354,7 +1348,7 @@ function main() {
 }
 
 const sendCommandCallbacks = {
-    /* "counter": callback() */
+    /* counter: callback() */
 };
 
 /** Returns the only array element in a response */
@@ -1367,10 +1361,10 @@ function returnSingleResult(resp) {
  * 
  * @param { object of {command, message, callback, from} obj 
  */
-adapter.on('message',function(obj) {
+adapter.on('message', obj => {
     // responds to the adapter that sent the original message
     function respond(response) {
-        if (obj.callback) adapter.sendTo(obj.from, obj.command, response, obj.callback);
+        obj.callback && adapter.sendTo(obj.from, obj.command, response, obj.callback);
     }
 
     // some predefined responses so we only have to define them once
@@ -1394,7 +1388,9 @@ adapter.on('message',function(obj) {
 
     // make required parameters easier
     function requireParams(params /*: string[] */ ) {
-        if (!(params && params.length)) return true;
+        if (!(params && params.length)) {
+            return true;
+        }
         for (let i = 0; i < params.length; i++) {
             const param = params[i];
             if (!(obj.message && obj.message.hasOwnProperty(param))) {
@@ -1430,7 +1426,7 @@ adapter.on('message',function(obj) {
             });
             // else wait for the callback
         });
-        
+
         // create callback to be called later
         sendCommandCallbacks[id] = function (response) {
             if (parser) {
@@ -1459,18 +1455,19 @@ adapter.on('message',function(obj) {
         switch (obj.command) {
             case 'discovery':
                 //adapter.log.info('discover' + JSON.stringify(obj))
-                Map.getDeviceStatus(obj.message.username, obj.message.password, obj.message.server, '{"getVirtualModel":false,"getHuamiDevices":0}').then(function (data) {
+                Map.getDeviceStatus(obj.message.username, obj.message.password, obj.message.server, '{"getVirtualModel":false,"getHuamiDevices":0}')
+                    .then(data => {
                         adapter.log.debug('discover__' + JSON.stringify(data));
-                        respond(data)
-
+                        respond(data);
                     })
-                    .catch(function (err) {
+                    .catch(err => {
                         adapter.log.info('discover ' + err);
                         respond({
                             error: err
-                        })
+                        });
                     });
                 return;
+
                 // call this with 
                 // sendTo('mihome-vacuum.0', 'sendCustomCommand',
                 //     {method: 'method_id', params: [...] /* optional*/},
@@ -1479,7 +1476,9 @@ adapter.on('message',function(obj) {
 
             case 'sendCustomCommand':
                 // require the method to be given
-                if (!requireParams(['method'])) return;
+                if (!requireParams(['method'])) {
+                    return;
+                }
                 // params is optional
 
                 params = obj.message;
@@ -1492,21 +1491,27 @@ adapter.on('message',function(obj) {
 
                 // cleaning commands
             case 'startVacuuming':
-                if (cleaning.startCleaning(cleanStates.Cleaning, obj))
+                if (cleaning.startCleaning(cleanStates.Cleaning, obj)) {
                     sendCustomCommand('app_start');
+                }
                 return;
+
             case 'stopVacuuming':
                 sendCustomCommand('app_stop');
                 return;
+
             case 'clearQueue':
                 return cleaning.clearQueue();
+
             case 'cleanSpot':
-                if (cleaning.startCleaning(cleanStates.SpotCleaning, obj))
+                if (cleaning.startCleaning(cleanStates.SpotCleaning, obj)) {
                     sendCustomCommand('app_spot');
+                }
                 return;
+
             case 'cleanZone':
                 if (!obj.message) {
-                    return adapter.log.warn("cleanZone needs paramter coordinates");
+                    return adapter.log.warn('cleanZone needs paramter coordinates');
                 }
                 if (!obj.zones) { // this data called first time!
                     let message = obj.message  ;
@@ -1514,67 +1519,80 @@ adapter.on('message',function(obj) {
                         obj.zones= message.zones;
                         obj.channels= message.channels;
                         obj.message= obj.zones.join(); // we use String for message
-                    } else
+                    } else {
                         obj.zones= [obj.message];
+                    }
                 }
 
-                if (typeof obj.channels == "undefined"){
-                    return roomManager.findChannelsByMapIndex(obj.zones, function(channels){
+                if (typeof obj.channels == 'undefined'){
+                    return roomManager.findChannelsByMapIndex(obj.zones, channels => {
                         adapter.log.debug('search channels for ' + obj.message + ' ->' + channels.join());
                         obj.channels= channels && channels.length ? channels : null;
                         adapter.emit('message', obj); // call function again
-                    })
+                    });
                 }
-                if (cleaning.startCleaning(cleanStates.ZoneCleaning, obj))
-                    sendCustomCommand('app_zoned_clean',obj.zones)
-                
+
+                if (cleaning.startCleaning(cleanStates.ZoneCleaning, obj)) {
+                    sendCustomCommand('app_zoned_clean',obj.zones);
+                }
+
                 return;
+
             case 'cleanSegments':
                 if (!obj.message) {
-                    return adapter.log.warn("cleanSegments needs paramter mapIndex")
+                    return adapter.log.warn('cleanSegments needs paramter mapIndex');
                 }
                 if (!obj.segments) { // this data called first time!
                     let message = obj.message;
-                    if (message.segments){ // called from roomManager with correct Array
+                    if (message.segments) { // called from roomManager with correct Array
                         obj.segments= message.segments;
                         obj.channels= message.channels;
                         obj.message= obj.segments.join(); // we use String for message
-                    } else{ // build correct Array
-                        if (!isNaN(message))
+                    } else { // build correct Array
+                        if (!isNaN(message)) {
                             message = [parseInt(message, 10)];
-                        else {
-                            if (typeof message == "string")
-                                message = obj.message.split(",");
+                        } else {
+                            if (typeof message == 'string') {
+                                message = obj.message.split(',');
+                            }
+
                             for (let i in message) {
                                 message[i] = parseInt(message[i], 10);
-                                if (isNaN(message[i]))
+                                if (isNaN(message[i])) {
                                     delete message[i];
+                                }
                             }
                         }
                         obj.segments= message;
                     }
                 }
-                if (typeof obj.channels == "undefined"){
-                    return roomManager.findChannelsByMapIndex(obj.segments, function(channels){
+                if (typeof obj.channels === 'undefined') {
+                    return roomManager.findChannelsByMapIndex(obj.segments, channels => {
                         adapter.log.debug('search channels for ' + obj.message + ' ->' + channels.join());
                         obj.channels= channels && channels.length ? channels : null;
                         adapter.emit('message', obj); // call function again
-                    })
+                    });
                 }
-                if (cleaning.startCleaning(cleanStates.RoomCleaning, obj))
-  //setTimeout(()=> {cleaning.setRemoteState(cleanStates.RoomCleaning)},2500) //simulate:
+                if (cleaning.startCleaning(cleanStates.RoomCleaning, obj)) {
+                    //setTimeout(()=> {cleaning.setRemoteState(cleanStates.RoomCleaning)},2500) //simulate:
                     sendCustomCommand('app_segment_clean', obj.segments);
-                
+                }
+
                 return;
+
             case 'cleanRooms':
                 let rooms = obj.message; // comma separated String with enum.rooms.XXX
-                if (!rooms) return adapter.log.warn("cleanRooms needs paramter ioBroker room-id's");
+                if (!rooms) {
+                    return adapter.log.warn('cleanRooms needs parameter ioBroker room-id\'s');
+                }
                 roomManager.findMapIndexByRoom(rooms, roomManager.cleanRooms);
                 return;
+
             case 'pause':
                 sendCustomCommand('app_pause');
                 setTimeout(sendPing, 2000);
                 return;
+
             case 'charge':
                 sendCustomCommand('app_charge');
                 setTimeout(sendPing, 2000);
@@ -1590,8 +1608,11 @@ adapter.on('message',function(obj) {
             case 'getConsumableStatus':
                 sendCustomCommand('get_consumable', returnSingleResult);
                 return;
+
             case 'resetConsumables':
-                if (!requireParams(['consumable'])) return;
+                if (!requireParams(['consumable'])) {
+                    return;
+                }
                 sendCustomCommand('reset_consumable',obj.message.consumable);
                 setTimeout(sendMsg,2000,'get_consumable');
                 return;
@@ -1600,9 +1621,12 @@ adapter.on('message',function(obj) {
             case 'getCleaningSummary':
                 sendCustomCommand('get_clean_summary', parseCleaningSummary);
                 return;
+
             case 'getCleaningRecord':
                 // require the record id to be given
-                if (!requireParams(['recordId'])) return;
+                if (!requireParams(['recordId'])) {
+                    return;
+                }
                 // TODO: can we do multiple at once?
                 sendCustomCommand('get_clean_record', [obj.message.recordId], parseCleaningRecords);
                 return;
@@ -1618,11 +1642,12 @@ adapter.on('message',function(obj) {
             case 'getStatus':
                 sendCustomCommand('get_status', parseStatus);
                 return;
+
             case 'getSerialNumber':
-                sendCustomCommand('get_serial_number', function (resp) {
-                    return resp.result[0].serial_number;
-                });
+                sendCustomCommand('get_serial_number', resp =>
+                    resp.result[0].serial_number);
                 return;
+
             case 'getDeviceDetails':
                 sendCustomCommand('miIO.info');
                 return;
@@ -1631,12 +1656,16 @@ adapter.on('message',function(obj) {
             case 'getDNDTimer':
                 sendCustomCommand('get_dnd_timer', returnSingleResult);
                 return;
+
             case 'setDNDTimer':
                 // require start and end time to be given
-                if (!requireParams(['startHour', 'startMinute', 'endHour', 'endMinute'])) return;
+                if (!requireParams(['startHour', 'startMinute', 'endHour', 'endMinute'])) {
+                    return;
+                }
                 params = obj.message;
                 sendCustomCommand('set_dnd_timer', [params.startHour, params.startMinute, params.endHour, params.endMinute]);
                 return;
+
             case 'deleteDNDTimer':
                 sendCustomCommand('close_dnd_timer');
                 return;
@@ -1646,9 +1675,12 @@ adapter.on('message',function(obj) {
                 // require start and end time to be given
                 sendCustomCommand('get_custom_mode', returnSingleResult);
                 return;
+
             case 'setFanSpeed':
                 // require start and end time to be given
-                if (!requireParams(['fanSpeed'])) return;
+                if (!requireParams(['fanSpeed'])) {
+                    return;
+                }
                 sendCustomCommand('set_custom_mode', [obj.message.fanSpeed]);
                 return;
 
@@ -1656,9 +1688,11 @@ adapter.on('message',function(obj) {
             case 'startRemoteControl':
                 sendCustomCommand('app_rc_start');
                 return;
+
             case 'stopRemoteControl':
                 sendCustomCommand('app_rc_end');
                 return;
+
             case 'move':
                 // require all params to be given
                 if (!requireParams(['velocity', 'angularVelocity', 'duration', 'sequenceNumber'])) {
@@ -1687,7 +1721,7 @@ adapter.on('message',function(obj) {
 //------------------------------------------------------MAP Section
 MAP.Init = function () {
     this.retries = 0;
-    this.mappointer = "";
+    this.mappointer = '';
     this.LASTMAPSAVE = Date.now();
     this.GETMAP = false;
     this.ENABLED = adapter.config.enableMiMap || adapter.config.valetudo_enable;
@@ -1713,6 +1747,7 @@ MAP.Init = function () {
             },
             native: {}
         });
+
         adapter.setObjectNotExists('map.mapURL', {
             type: 'state',
             common: {
@@ -1729,8 +1764,8 @@ MAP.Init = function () {
             type: 'state',
             common: {
                 name: 'load Map',
-                type: "boolean",
-                role: "button",
+                type: 'boolean',
+                role: 'button',
                 read: false,
                 write: true,
                 desc: 'load the current Map',
@@ -1739,16 +1774,15 @@ MAP.Init = function () {
         });
 
         if (adapter.config.enableMiMap) {
-            Map.login().then(function (anser) {
-                //reqParams.push('get_map_v1'); todo: is this nessessary, or it is enough with mapPoll? 
-                MAP.ready.login = true;
-            }).catch(error => {
-                adapter.log.warn(error);
-            })
+            Map.login()
+                .then(answer => {
+                    //reqParams.push('get_map_v1'); todo: is this necessary, or it is enough with mapPoll?
+                    MAP.ready.login = true;
+                })
+                .catch(error => adapter.log.warn(error))
         } else if (adapter.config.valetudo_enable) {
             this._MapPoll()
         }
-
     }
 };
 
@@ -1758,10 +1792,11 @@ MAP.updateMapPointer = function (answer) {
         if (answer.indexOf('map_slot') === 0){
             adapter.log.warn('answer map_slot is currently not supported!')
         } else {
-            if (typeof that.trys == "undefined")
+            if (typeof that.trys == 'undefined') {
                 that.trys= 0;
-            if ( that.trys < 10){
-                setTimeout(function () {
+            }
+            if (that.trys < 10) {
+                setTimeout(() => {
                     sendMsg('get_map_v1');
                     adapter.log.debug(that.trys++ + '. Mappointer_nomap___' + answer)
                 }, 500);
@@ -1774,10 +1809,10 @@ MAP.updateMapPointer = function (answer) {
         that.mappointer = answer;
         adapter.log.debug('Mappointer_updated');
         that.ready.mappointer = true;
+
         if (that.firstMap) {
             that.firstMap = false;
             that._MapPoll() // for auth at server;
-
         }
     }
     delete that.trys;
@@ -1791,29 +1826,27 @@ MAP.getRoomsFromMap = function (answer) {
     adapter.log.debug('get rooms from map');
     if ((!that.ready.mappointer || !that.ready.login) && adapter.config.enableMiMap) {
         adapter.log.debug('get rooms from map pending...');
-        setTimeout(() => {
-            sendMsg('get_room_mapping');
-        }, 20000);
-        return
+        setTimeout(() => sendMsg('get_room_mapping'), 20000);
+        return;
     }
 
-    Map.updateMap(that.mappointer).then(function (data) {
+    Map.updateMap(that.mappointer)
+        .then(data => {
             adapter.log.debug('get rooms from map data: ' + JSON.stringify(data[1]));
             let roomsarray = data[1];
             let roomids = [];
 
-            if (typeof (roomsarray) === 'undefined' || roomsarray.length === 0) {
+            if (typeof roomsarray === 'undefined' || roomsarray.length === 0) {
                 return;
             }
  
-            roomsarray.forEach(element => {
-                roomids.push([element, 'room' + element])
-            });
+            roomsarray.forEach(element =>
+                roomids.push([element, 'room' + element]));
 
             answer.result = roomids;
             roomManager.processRoomMaping(answer);
         })
-        .catch(err => {})
+        .catch(err => {});
 };
 
 MAP.StartMapPoll = function () {
@@ -1831,40 +1864,43 @@ MAP._MapPoll = function () {
         return;
     }
 
-    Map.updateMap(that.mappointer).then(function (data) {
-        if (data){
-            let dataurl = data[0].toDataURL();
+    Map.updateMap(that.mappointer)
+        .then(data => {
+            if (data) {
+                let dataurl = data[0].toDataURL();
 
-            adapter.setState('map.map64', '<img src="' + dataurl + '" style="width: auto ;height: 100%;" />', true);
+                adapter.setState('map.map64', '<img src="' + dataurl + '" style="width: auto ;height: 100%;" />', true);
 
-            if (Date.now() - that.LASTMAPSAVE > that.MAPSAFEINTERVALL) {
-                var buf = data[0].toBuffer();
-                adapter.writeFile('mihome-vacuum.admin', 'actualMap_'+ adapter.instance +'.png', buf, function (error) {
-                    if (error) {
-                        adapter.log.error('Fehler beim Speichern der Karte');
-                    } else {
-                        adapter.setState('map.mapURL', '/mihome-vacuum.admin/actualMap_'+ adapter.instance +'.png', true);
+                if (Date.now() - that.LASTMAPSAVE > that.MAPSAFEINTERVALL) {
+                    const buf = data[0].toBuffer();
+                    adapter.writeFile('mihome-vacuum.admin', 'actualMap_'+ adapter.instance +'.png', buf, error => {
+                        if (error) {
+                            adapter.log.error('Error by saving of the map');
+                        } else {
+                            adapter.setState('map.mapURL', '/mihome-vacuum.admin/actualMap_'+ adapter.instance +'.png', true);
 
-                    }
-                    that.LASTMAPSAVE = Date.now();
-                })
+                        }
+                        that.LASTMAPSAVE = Date.now();
+                    });
+                }
             }
-        }
             if (that.GETMAP) {
                 //adapter.log.info(VALETUDO.POLLMAPINTERVALL)
-                setTimeout(function () {
-                    if(adapter.config.enableMiMap) sendMsg('get_map_v1'); // get pointer only by mimap
+                setTimeout(() => {
+                    if (adapter.config.enableMiMap) { // get pointer only by mimap
+                        sendMsg('get_map_v1');
+                    }
                     that._MapPoll();
                 }, that.POLLMAPINTERVALL);
             }
-
-
         })
         .catch(err => {
             adapter.log.debug(err);
-            if (that.GETMAP) setTimeout(function () {
-                if(adapter.config.enableMiMap) sendMsg('get_map_v1'); // get pointer only by mimap
-                that._MapPoll();
-            }, that.POLLMAPINTERVALL);
-        })
+            if (that.GETMAP) {
+                setTimeout(() => {
+                    adapter.config.enableMiMap && sendMsg('get_map_v1'); // get pointer only by mimap
+                    that._MapPoll();
+                }, that.POLLMAPINTERVALL);
+            }
+        });
 };
