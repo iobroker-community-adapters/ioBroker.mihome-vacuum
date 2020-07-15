@@ -232,7 +232,7 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
-### 2.1.0 (2020-07-10)
+### 2.1.1 (2020-07-10)
 * (bluefox) Refactoring
 * (bluefox) Support of compact mode added
 

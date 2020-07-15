@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "2.1.0",
+        "version": "2.1.1",
         "news": {
-            "2.1.0": {
+            "2.1.1": {
                 "en": "Refactoring\nSupport of compact mode added",
                 "de": "Refactoring\nUnterstützung des Kompaktmodus hinzugefügt",
                 "ru": "Рефакторинг\nДобавлена поддержка компактного режима",
