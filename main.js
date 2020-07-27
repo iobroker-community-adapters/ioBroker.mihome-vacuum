@@ -1076,7 +1076,7 @@ function sendMsgToServer(msgCounter){
 
     if (message.tryCount >= maxTryForMessage){
         adapter.log.debug('no answer for ' + ( message.method || '') + ' id:' + msgCounter +' received, giving up');
-        typeof message.callback === 'function' && message.callback('no answer received after after ' + message.tryCount + ' times');
+        typeof message.callback === 'function' && message.callback('no answer received after ' + message.tryCount + ' times');
         delete messages[msgCounter];
         return;
     }
