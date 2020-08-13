@@ -305,15 +305,20 @@ class FeatureManager {
 
 
         // First Viomi detection
-        if(viomiManager.ViomiDevices.includes(model)){
-            adapter.log.info('Detect Viomi Device: '+ model);
-            ViomiFlag = true;
-            viomiManager.initStates();
-        }
+
 
         if (this.model != model) {
+
             adapter.setStateChanged('info.device_model', model, true);
             this.model = model;
+
+            if(viomiManager.ViomiDevices.includes(model)){
+                adapter.log.info('Detect Viomi Device: '+ model);
+                ViomiFlag = true;
+                viomiManager.initStates();
+            }
+
+
             this.mob = (model === 'roborock.vacuum.s5' || model === 'roborock.vacuum.s6');
 
             if (model === 'roborock.vacuum.m1s' || model === 'roborock.vacuum.s5' || model === 'roborock.vacuum.s6') {
@@ -1691,24 +1696,50 @@ function serverConnected(){
     }
 
     adapter.log.info('connecting, this can take up to 10 minutes ...');
-    adapter.sendTo(adapter.namespace, 'getStatus', null, obj => {
-        if (obj && obj.result) {
-            lastResponse= new Date();
-            if (!connected) { // it is the first succeeded call
-                connected = true;
-                adapter.log.info('Connected');
-                adapter.setState('info.connection', true, true);
-                setTimeout(checkWiFi, 200);
-                setTimeout(sendMsg, 400, com.get_sound_volume.method);
-                setTimeout(sendMsg, 600, com.get_consumable.method);
-                setTimeout(sendMsg, 800, com.clean_summary.method);
-                setTimeout(features.detect, 1000);
-                if (MAP.ENABLED) {
-                    setTimeout(sendMsg, 1200, 'get_map_v1');
+
+    if(ViomiFlag) {
+
+        adapter.sendTo(adapter.namespace, 'get_prop', viomiManager.PARAMS, obj => {
+            if (obj && obj.result) {
+                lastResponse = new Date();
+                if (!connected) { // it is the first succeeded call
+                    connected = true;
+                    adapter.log.info('Connected');
+                    adapter.setState('info.connection', true, true);
+                    setTimeout(checkWiFi, 200);
+                    //setTimeout(sendMsg, 400, com.get_sound_volume.method);
+                    //setTimeout(sendMsg, 600, com.get_consumable.method);
+                    //setTimeout(sendMsg, 800, com.clean_summary.method);
+                    //setTimeout(features.detect, 1000);
+                    if (MAP.ENABLED) {
+                        setTimeout(sendMsg, 1200, 'get_map_v1');
+                    }
                 }
             }
-        }
-    });
+        });
+
+    }
+    else {
+
+        adapter.sendTo(adapter.namespace, 'getStatus', null, obj => {
+            if (obj && obj.result) {
+                lastResponse= new Date();
+                if (!connected) { // it is the first succeeded call
+                    connected = true;
+                    adapter.log.info('Connected');
+                    adapter.setState('info.connection', true, true);
+                    setTimeout(checkWiFi, 200);
+                    setTimeout(sendMsg, 400, com.get_sound_volume.method);
+                    setTimeout(sendMsg, 600, com.get_consumable.method);
+                    setTimeout(sendMsg, 800, com.clean_summary.method);
+                    setTimeout(features.detect, 1000);
+                    if (MAP.ENABLED) {
+                        setTimeout(sendMsg, 1200, 'get_map_v1');
+                    }
+                }
+            }
+        });
+    }
 }
 
 function main() {
@@ -1745,44 +1776,22 @@ function main() {
             server.close();
             process.exit();
         });
-        if(ViomiFlag) {
-
-            adapter.sendTo(adapter.namespace, 'get_prop', viomiManager.PARAMS, obj => {
-                if (obj && obj.result) {
-                    lastResponse = new Date();
-                    if (!connected) { // it is the first succeeded call
-                        connected = true;
-                        adapter.log.info('Connected');
-                        adapter.setState('info.connection', true, true);
-                        setTimeout(checkWiFi, 200);
-                        //setTimeout(sendMsg, 400, com.get_sound_volume.method);
-                        //setTimeout(sendMsg, 600, com.get_consumable.method);
-                        //setTimeout(sendMsg, 800, com.clean_summary.method);
-                        //setTimeout(features.detect, 1000);
-                        if (MAP.ENABLED) {
-                            setTimeout(sendMsg, 1200, 'get_map_v1');
-                        }
-                    }
-                }
-            });
-
-        }
-        else {
-            server.on('message', (msg, rinfo) => {
-                if (rinfo.port === adapter.config.port) {
-                    if (msg.length === 32) {
-                        adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
-                        packet.setRaw(msg);
-                        serverConnected();
-                    } else {
+        
+        server.on('message', (msg, rinfo) => {
+            if (rinfo.port === adapter.config.port) {
+                if (msg.length === 32) {
+                    adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
+                    packet.setRaw(msg);
+                    serverConnected();
+                } else {
                     // hier die Antwort zum decodieren
-                        packet.setRaw(msg);
-                        adapter.log.debug('Receive <<< ' + packet.getPlainData());
-                        getStates(packet.getPlainData());
-                    }
+                    packet.setRaw(msg);
+                    adapter.log.debug('Receive <<< ' + packet.getPlainData());
+                    getStates(packet.getPlainData());
                 }
-            });
-        }
+            }
+        });
+        
 
         server.on('listening', () => {
             const address = server.address();
