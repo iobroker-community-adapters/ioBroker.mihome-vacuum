@@ -11,12 +11,13 @@ const MiHome       = require('./lib/mihomepacket');
 const com          = require('./lib/comands');
 const TimerManager = require('./lib/timerManager');
 const RoomManager  = require('./lib/roomManager');
+const ViomiManager = require('./lib/viomiVacuum');
 const adapterName  = require('./package.json').name.split('.').pop();
 
 global.systemDictionary = {};
 require('./admin/words.js');
 
-let MapHelper = require('./lib/maphelper');
+const MapHelper = require('./lib/maphelper');
 
 let adapter;
 
@@ -26,7 +27,7 @@ const waitTimeForNextTryMessage = 5000;
 
 let userLang = 'en';
 let lastResponse = 0;
-let messages = {};
+const messages = {};
 let connected = false;
 let pingTimeout = null;
 let pingInterval = 0;           // will be overwrite in sendPing()
@@ -40,6 +41,8 @@ let logEntries = {};
 let roomManager = null;
 let timerManager = null;
 let Map;
+let viomiManager = null;
+let ViomiFlag = false;
 
 // this parts will be translated
 const i18n = {
@@ -58,24 +61,24 @@ const i18n = {
 
 const cleanStates = {
     Unknown : 0,
-	Initiating : 1,
-	Sleeping : 2,
-	Waiting : 3,
-//??? : 4,
-	Cleaning : 5,
-	Back_toHome : 6,
-	ManuellMode : 7,
-	Charging : 8,
-	Charging_Error : 9,
-	Pause : 10,
-	SpotCleaning : 11,
-	InError : 12,
-	ShuttingDown : 13,
-	Updating : 14,
-	Docking : 15,
-	GoingToSpot : 16,
-	ZoneCleaning : 17,
-	RoomCleaning : 18
+    Initiating : 1,
+    Sleeping : 2,
+    Waiting : 3,
+    //??? : 4,
+    Cleaning : 5,
+    Back_toHome : 6,
+    ManuellMode : 7,
+    Charging : 8,
+    Charging_Error : 9,
+    Pause : 10,
+    SpotCleaning : 11,
+    InError : 12,
+    ShuttingDown : 13,
+    Updating : 14,
+    Docking : 15,
+    GoingToSpot : 16,
+    ZoneCleaning : 17,
+    RoomCleaning : 18
 };
 
 const activeCleanStates = {
@@ -119,29 +122,29 @@ class Cleaning {
         if (activeCleanStates[this.state]) {
             if (newVal == this.activeState){ // activeState was set in startCleaning and now confirmed
                 if (this.activeChannels){
-                    for (let i in this.activeChannels)
+                    for (const i in this.activeChannels)
                         adapter.setState(this.activeChannels[i] + '.state', i18n.cleanRoom, true);
                 }
             } else
                 this.activeState = this.state;
             sendMsg(com.get_sound_volume.method);
             if (features.carpetMode)
-                setTimeout(sendMsg, 200, com.get_carpet_mode.method)
+                setTimeout(sendMsg, 200, com.get_carpet_mode.method);
         } else if (cleanStates.Pause === this.state) {
             // activeState should be the initial State, so do nothing
-            return
+            return;
         } else {
             this.activeState = 0;
             if (this.activeChannels){
-                for (let i in this.activeChannels)
+                for (const i in this.activeChannels)
                     adapter.setState(this.activeChannels[i] + '.state', '', true);
-                this.activeChannels= null
+                this.activeChannels= null;
             }
             if ([cleanStates.Sleeping, cleanStates.Waiting, cleanStates.Back_toHome, cleanStates.Charging, cleanStates.GoingToSpot].indexOf(this.state) > -1) {
                 if (this.queue.length > 0) {
                     adapter.log.debug('use clean trigger from Queue');
                     adapter.emit('message', this.queue.shift());
-                    this.updateQueue()
+                    this.updateQueue();
                 }
             }
             if (cleanStates.Charging === newVal){
@@ -165,7 +168,7 @@ class Cleaning {
     }
 
     startCleaning(cleanStatus, messageObj) {
-        let activeCleanState= activeCleanStates[cleanStatus];
+        const activeCleanState= activeCleanStates[cleanStatus];
         if (!activeCleanState)
             return !!adapter.log.warn('Invalid cleanStatus(' + cleanStatus + ') for startCleaning');
         setTimeout(sendPing, 2000);
@@ -174,9 +177,9 @@ class Cleaning {
                 adapter.log.debug('Resuming paused ' + activeCleanStates[this.activeState].name);
                 sendMsg(activeCleanStates[this.activeState].resume);
             } else {
-                adapter.log.info('should trigger cleaning ' + activeCleanState.name + (messageObj.message || '') + ', but is currently active(' + this.activeState +'). Add to queue')
+                adapter.log.info('should trigger cleaning ' + activeCleanState.name + (messageObj.message || '') + ', but is currently active(' + this.activeState +'). Add to queue');
                 messageObj.info= activeCleanState.name;
-                this.push(messageObj)
+                this.push(messageObj);
             }
             return false;
         } else {
@@ -185,11 +188,11 @@ class Cleaning {
             if (this.activeChannels && this.activeChannels.length === 1) {
                 adapter.getState(this.activeChannels[0] + '.roomFanPower', function (err, fanPower) {
                     adapter.setState('control.fan_power', fanPower.val);
-                })
+                });
             }            
             adapter.log.info('trigger cleaning ' + activeCleanState.name + (messageObj.message || ''));
             this.checkStartCleaning(2);
-            return true
+            return true;
         }
     }
 
@@ -200,25 +203,32 @@ class Cleaning {
                 if (tryCnt > 0){
                     sendMsg(activeCleanStates[cleaning.activeState].resume);
                     if (cleaning.checkCleanState)
-                        cleaning.checkStartCleaning(tryCnt - 1)
+                        cleaning.checkStartCleaning(tryCnt - 1);
                 }
             }
-        },waitTimeForNextTryMessage * maxTryForMessage + 1000)
+        },waitTimeForNextTryMessage * maxTryForMessage + 1000);
     }
 
     stopCleaning(){
         // sendMsg(com.pause.method); // @meisterTR why we need first pause and than home??
         this.clearQueue();
         this.state= cleanStates.Unknown; // Force calling setRemoteState on next get_status answer
-        sendMsg(com.home.method);//setTimeout(() => sendMsg(com.home.method), 1000); // @meisterTR why we need first pause and than home??
+        
+        if(ViomiFlag){
+            sendMsg(com.home.method);
+        }
+        else{
+            sendMsg(com.home.method);
+        }
+
         setTimeout(sendPing, 2000);
     }
 
     clearQueue(){
-        for (let i in this.queue){
-            let channels= this.queue[i].channels;
+        for (const i in this.queue){
+            const channels= this.queue[i].channels;
             if (channels)
-                for (let c in channels)
+                for (const c in channels)
                     adapter.setState(channels[c] + '.state', '', true);
         }
         this.queue = [];
@@ -228,27 +238,27 @@ class Cleaning {
     push(messageObj) {
         this.queue.push(messageObj);
         if (messageObj.channels) {
-            let getObjs = [];
-            for (let i in messageObj.channels){
+            const getObjs = [];
+            for (const i in messageObj.channels){
                 getObjs.push(adapter.getObjectAsync(messageObj.channels[i])
-                                        .then((obj) => { messageObj.info += ' ' + obj.common.name }));
+                    .then((obj) => { messageObj.info += ' ' + obj.common.name; }));
             }
-            Promise.all(getObjs).then(() => {this.updateQueue()})
+            Promise.all(getObjs).then(() => {this.updateQueue();});
         } else
-            this.updateQueue()
+            this.updateQueue();
     }
 
     updateQueue(){
         pingInterval = this.queue.length > 0 ? 10000 : adapter.config.pingInterval;
-        let json = [];
+        const json = [];
         for (let i= this.queue.length - 1; i >=0; i--){
             json.push(this.queue[i].info);
-            let channels= this.queue[i].channels;
+            const channels= this.queue[i].channels;
             if (channels)
-                for (let c in channels)
+                for (const c in channels)
                     adapter.setState(channels[c] + '.state', i18n.waitingPos + ': ' + i , true);
         }
-        adapter.setStateChanged('info.queue', JSON.stringify(json), true)
+        adapter.setStateChanged('info.queue', JSON.stringify(json), true);
     }
 }
 
@@ -270,6 +280,10 @@ class FeatureManager {
 
     init() {
         //adapter.states
+        roomManager = new RoomManager(adapter, i18n);
+        timerManager = new TimerManager(adapter, i18n);
+        viomiManager = new ViomiManager(adapter);
+
         adapter.getState('info.device_model', function (err, state) {
             state && state.val && features.setModel(state.val);
         });
@@ -280,9 +294,6 @@ class FeatureManager {
         // we get miIO.info only, if the robot is connected to the internet, so we init with unavailable
         adapter.setState('info.wifi_signal', 'unavailable', true);
 
-        roomManager = new RoomManager(adapter, i18n);
-        timerManager = new TimerManager(adapter, i18n);
-
     }
 
     detect() {
@@ -291,6 +302,15 @@ class FeatureManager {
     }
 
     setModel(model) {
+
+
+        // First Viomi detection
+        if(viomiManager.ViomiDevices.includes(model)){
+            adapter.log.info('Detect Viomi Device: '+ model);
+            ViomiFlag = true;
+            viomiManager.initStates();
+        }
+
         if (this.model != model) {
             adapter.setStateChanged('info.device_model', model, true);
             this.model = model;
@@ -338,7 +358,7 @@ class FeatureManager {
             this.firmware = fw_ver;
             adapter.setStateChanged('info.device_fw', fw_ver, true);
 
-            let fw = fw_ver.split('_'); // Splitting the FW into [Version, Build] array.
+            const fw = fw_ver.split('_'); // Splitting the FW into [Version, Build] array.
             if (parseInt(fw[0].replace(/\./g, ''), 10) > 339 || (parseInt(fw[0].replace(/\./g, ''), 10) === 339 && parseInt(fw[1], 10) >= 3194)) {
                 adapter.log.info('New generation or new fw(' + fw + ') detected, create new states goto and zoneclean');
                 this.goto = true;
@@ -402,7 +422,7 @@ class FeatureManager {
 
     setCarpetMode(enabled) {
         if (this.carpetMode === null) {
-            this.carpetMode = true
+            this.carpetMode = true;
             adapter.log.info('create state for carpet_mode');
             adapter.setObjectNotExists('control.carpet_mode', {
                 type: 'state',
@@ -478,7 +498,7 @@ function startAdapter(options) {
     Object.assign(options, {name: adapterName});
     adapter = new utils.Adapter(options);
 
-// is called if a subscribed state changes
+    // is called if a subscribed state changes
     adapter.on('stateChange', (id, state) => {
         if (!state || state.ack) {
             return;
@@ -508,15 +528,15 @@ function startAdapter(options) {
             } else {
                 adapter.log.info('send message: Method: ' + values[0]);
             }
-            let id = sendMsg(values[0], params, () =>
+            const id = sendMsg(values[0], params, () =>
                 adapter.setForeignState(id, state.val, true));
 
-            messages[id].method = command
+            messages[id].method = command;
         } else if (command === 'clean_home' || command === 'start') {
             if (state.val) {
-                adapter.sendTo(adapter.namespace, 'startVacuuming', null)
+                adapter.sendTo(adapter.namespace, 'startVacuuming', null);
             } else if (command === 'clean_home' && cleaning.activeState) {
-                cleaning.stopCleaning()
+                cleaning.stopCleaning();
             }
             adapter.setForeignState(id, state.val, true);
         } else if (command === 'home') {
@@ -568,13 +588,11 @@ function startAdapter(options) {
                     sendMsg('resume_zoned_clean', null, function () {
                         adapter.setForeignState(id, state.val, true);
                     });
-
                 } else if (command === 'resumeRoomClean') {
                     if (!state.val) return;
                     sendMsg('resume_segment_clean', null, function () {
                         adapter.setForeignState(id, state.val, true);
                     });
-
                 } else if (command === 'loadRooms') {
                     if (!state.val) return;
                     sendMsg('get_room_mapping', null, function () {
@@ -585,11 +603,11 @@ function startAdapter(options) {
             if (!isNaN(state.val))
                 roomManager.createRoom('manual_' + state.val, parseInt(state.val, 10));
             else {
-                let terms = state.val.match(/((?:[0-9]+\,){3,3}[0-9]+)(\,[0-9]+)?/);
+                const terms = state.val.match(/((?:[0-9]+\,){3,3}[0-9]+)(\,[0-9]+)?/);
                 if (terms)
                     roomManager.createRoom('manual_' + terms[1].replace(/,/g, '_'), '[' + terms[1] + (terms[2] || ',1') + ']');
                 else
-                    adapter.log.warn('invalid input for addRoom, use index of map or coordinates like 1111,2222,3333,4444')
+                    adapter.log.warn('invalid input for addRoom, use index of map or coordinates like 1111,2222,3333,4444');
             }
             adapter.setForeignState(id, '', true);
         } else if (command === 'roomClean') {
@@ -599,10 +617,10 @@ function startAdapter(options) {
         } else if (command === 'multiRoomClean' || parent === 'timer') {
             if (parent === 'timer') {
                 adapter.setForeignState(id, (state.val == TimerManager.SKIP || state.val == TimerManager.DISABLED) ? state.val : TimerManager.ENABLED, true, function () {
-                    timerManager.calcNextProcess()
+                    timerManager.calcNextProcess();
                 });
                 if (state.val != TimerManager.START) {
-                    return
+                    return;
                 }
             } else {
                 if (!state.val) {
@@ -614,7 +632,7 @@ function startAdapter(options) {
         } else if (command === 'roomFanPower') {
             // do nothing, only set fan power for next roomClean
             adapter.setForeignState(id, state.val, true);
-        } else if (com[command]) {
+        } else if (com[command] && !ViomiFlag) {
             let params = com[command].params || '';
             if (state.val !== true && state.val !== 'true') {
                 params = state.val;
@@ -624,6 +642,13 @@ function startAdapter(options) {
                     adapter.setForeignState(id, state.val, true);
                 });
             }
+           
+        }else if (command === 'fan_power' && ViomiFlag){
+            sendMsg('set_suction', [state.val], function () {
+                adapter.setForeignState(id, state.val, true);
+            });
+
+
         } else {
             adapter.log.error('Unknown state "' + id + '"');
         }
@@ -760,11 +785,11 @@ function startAdapter(options) {
                         });
                     return;
 
-                // call this with
-                // sendTo('mihome-vacuum.0', 'sendCustomCommand',
-                //     {method: 'method_id', params: [...] /* optional*/},
-                //     callback
-                // );
+                    // call this with
+                    // sendTo('mihome-vacuum.0', 'sendCustomCommand',
+                    //     {method: 'method_id', params: [...] /* optional*/},
+                    //     callback
+                    // );
 
                 case 'sendCustomCommand':
                     // require the method to be given
@@ -777,14 +802,19 @@ function startAdapter(options) {
                     sendCustomCommand(params.method, params.params);
                     return;
 
-                // ======================================================================
-                // support for the commands mentioned here:
-                // https://github.com/MeisterTR/XiaomiRobotVacuumProtocol#vaccum-commands
+                    // ======================================================================
+                    // support for the commands mentioned here:
+                    // https://github.com/MeisterTR/XiaomiRobotVacuumProtocol#vaccum-commands
 
                 // cleaning commands
                 case 'startVacuuming':
                     if (cleaning.startCleaning(cleanStates.Cleaning, obj)) {
-                        sendCustomCommand('app_start');
+                        if(ViomiFlag){
+                            sendCustomCommand('set_mode_withroom',[0,1,0]);
+                        }
+                        else{
+                            sendCustomCommand('app_start');
+                        }
                     }
                     return;
 
@@ -806,7 +836,7 @@ function startAdapter(options) {
                         return adapter.log.warn('cleanZone needs paramter coordinates');
                     }
                     if (!obj.zones) { // this data called first time!
-                        let message = obj.message  ;
+                        const message = obj.message  ;
                         if (message.zones) { // called from roomManager with correct Array
                             obj.zones= message.zones;
                             obj.channels= message.channels;
@@ -848,7 +878,7 @@ function startAdapter(options) {
                                     message = obj.message.split(',');
                                 }
 
-                                for (let i in message) {
+                                for (const i in message) {
                                     message[i] = parseInt(message[i], 10);
                                     if (isNaN(message[i])) {
                                         delete message[i];
@@ -873,7 +903,7 @@ function startAdapter(options) {
                     return;
 
                 case 'cleanRooms':
-                    let rooms = obj.message; // comma separated String with enum.rooms.XXX
+                    const rooms = obj.message; // comma separated String with enum.rooms.XXX
                     if (!rooms) {
                         return adapter.log.warn('cleanRooms needs parameter ioBroker room-id\'s');
                     }
@@ -1050,18 +1080,18 @@ function sendMsg(method, params, options, callback) {
         options.rememberPacket = true;
     } // remember packets per default
 
-    let msgCounter = packet.msgCounter++;
+    const msgCounter = packet.msgCounter++;
 
     messages[msgCounter] = {
-      str: buildMsg(method, params, msgCounter),
-      callback: callback,
-      tryCount: 0
+        str: buildMsg(method, params, msgCounter),
+        callback: callback,
+        tryCount: 0
     };
 
     // remember packet if not explicitly forbidden
     // this is used to route the returned package to the sendTo callback
     if (options.rememberPacket) {
-        messages[msgCounter].method = method
+        messages[msgCounter].method = method;
     }
 
     sendMsgToServer(msgCounter);
@@ -1069,7 +1099,7 @@ function sendMsg(method, params, options, callback) {
 }
 
 function sendMsgToServer(msgCounter){
-    let message = messages[msgCounter];
+    const message = messages[msgCounter];
     if (!message) {
         return;
     }
@@ -1160,7 +1190,6 @@ function parseMiIO_info(response){
 */
 /** Parses the answer of get_consumable
  *  response= {"result":[{"main_brush_work_time":11472,"side_brush_work_time":11472,"filter_work_time":11472,"filter_element_work_time":3223,"sensor_dirty_time":11253}]}
-
 function parseConsumable(response){
     return response.result[0];
 }
@@ -1233,10 +1262,10 @@ function getStates(message) {
         requestMessage && delete messages[answer.id];
 
         if (answer.error) {
-            return adapter.log.error('[' + answer.id + '](' + (requestMessage ? requestMessage.method : 'unknown request message') + ') -> ' + answer.error.message)
+            return adapter.log.error('[' + answer.id + '](' + (requestMessage ? requestMessage.method : 'unknown request message') + ') -> ' + answer.error.message);
         }
         if (!requestMessage){
-            throw 'could not found request message for id ' + answer.id
+            throw 'could not found request message for id ' + answer.id;
         }
 
         if (requestMessage.method === 'get_status') {
@@ -1249,7 +1278,7 @@ function getStates(message) {
             adapter.setStateChanged('info.dnd', status.dnd_enabled, true);
             features.setWaterBox(status.water_box_status);
             if (cleaning.state != status.state){
-                cleaning.setRemoteState(status.state)
+                cleaning.setRemoteState(status.state);
             }
         } else if (requestMessage.method === 'miIO.info') {
             const info= answer.result; //parseMiIO_info(answer);
@@ -1261,10 +1290,10 @@ function getStates(message) {
             adapter.setStateChanged('control.sound_volume', answer.result[0], true);
 
         } else if (requestMessage.method === 'get_carpet_mode') {
-            features.setCarpetMode(answer.result[0].enable)
+            features.setCarpetMode(answer.result[0].enable);
             
         } else if (requestMessage.method === 'get_consumable') {
-            const consumable= answer.result[0] //parseConsumable(answer)
+            const consumable= answer.result[0]; //parseConsumable(answer)
             adapter.setStateChanged('consumable.main_brush', 100 - (Math.round(consumable.main_brush_work_time / 3600 / 3)), true);    // 300h
             adapter.setStateChanged('consumable.side_brush', 100 - (Math.round(consumable.side_brush_work_time / 3600 / 2)), true);    // 200h
             adapter.setStateChanged('consumable.filter', 100 - (Math.round(consumable.filter_work_time / 3600 / 1.5)), true);          // 150h
@@ -1346,6 +1375,23 @@ function getStates(message) {
             const callback = sendCommandCallbacks[answer.id];
             typeof callback === 'function' && callback(answer);
         }
+
+        //====================================================
+        //Viomi Commands
+        //----------------------------------------------------
+        else if (requestMessage.method === 'get_prop') {
+            adapter.setStateChanged('info.state', answer.result[0], true);
+            adapter.setStateChanged('control.fan_power', answer.result[1], true);
+            adapter.setStateChanged('info.error', answer.result[3], true);
+            adapter.setStateChanged('info.battery', answer.result[4], true);
+            adapter.setStateChanged('info.cleanedarea',Math.round(answer.result[8] * 100 ) / 100, true);
+            adapter.setStateChanged('info.cleanedtime', answer.result[7], true);
+            //adapter.setStateChanged('info.state', answer.result[0][0], true);
+            //adapter.setStateChanged('info.state', answer.result[0][0], true);
+            //adapter.setStateChanged('info.state', answer.result[0][0], true);
+
+        }
+        
     } catch (err) {
         adapter.log.debug('The answer from the robot is not correct! (' + err + ') ' + JSON.stringify(message));
     }
@@ -1468,13 +1514,13 @@ function init() {
         if (systemConfig && systemConfig.common && systemConfig.common.language && systemDictionary.Sunday[systemConfig.common.language]) {
             userLang = systemConfig.common.language;
             let obj;
-            for (let i in i18n) {
+            for (const i in i18n) {
                 obj = i18n[i];
                 if (typeof obj == 'string') {
                     i18n[i] = systemDictionary[obj][userLang];
                 } else if (typeof obj == 'object') {
-                    for (let o in obj) {
-                        obj[o] = systemDictionary[obj[o]][userLang]
+                    for (const o in obj) {
+                        obj[o] = systemDictionary[obj[o]][userLang];
                     }
                 }
             }
@@ -1593,16 +1639,16 @@ function checkWiFi(){
     sendMsg(com.miIO_info.method, null, err => {
         if (err){ 
             adapter.log.warn(err + ' -> pause ' + com.miIO_info.method + ' try again in one hour');
-            nextWiFiCheck = new Date(new Date().getTime() + 3600000) // try again in one hour
+            nextWiFiCheck = new Date(new Date().getTime() + 3600000); // try again in one hour
         }
-        adapter.log.debug('Next WiFi check: ' + adapter.formatDate(nextWiFiCheck, 'DD.MM hh:mm'))
+        adapter.log.debug('Next WiFi check: ' + adapter.formatDate(nextWiFiCheck, 'DD.MM hh:mm'));
     });
 }
 
 function sendPing() {
     pingTimeout && clearTimeout(pingTimeout);
 
-    let now = new Date();
+    const now = new Date();
     if ((now - lastResponse) > maxResponseTime){ 
         // not connected or connection lost -> send Helo to Robot
         if (connected){ 
@@ -1612,20 +1658,27 @@ function sendPing() {
         adapter.setState('info.connection', false, true);
         pingInterval= 20000; // check again in 20 seconds, sometimes the robo need some time to answer
         try {
-            let commandPing = str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
+            const commandPing = str2hex('21310020ffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
             server.send(commandPing, 0, commandPing.length, adapter.config.port, adapter.config.ip, err =>
                 err && adapter.log.error('Cannot send ping: ' + err));
         } catch (e) {
             adapter.log.warn('Cannot send ping: ' + e);
         }
     } else {
-        sendMsg(com.get_status.method);
+
+        if(ViomiFlag) {
+            sendMsg('get_prop',viomiManager.PARAMS);
+        }
+        else {
+            sendMsg(com.get_status.method);
+        }
+
         if (now > nextWiFiCheck) {
             checkWiFi();
         }
-        timerManager && timerManager.check()
+        timerManager && timerManager.check();
     }
-    pingTimeout = setTimeout(sendPing, pingInterval)
+    pingTimeout = setTimeout(sendPing, pingInterval);
 }
 
 function serverConnected(){
@@ -1651,7 +1704,7 @@ function serverConnected(){
                 setTimeout(sendMsg, 800, com.clean_summary.method);
                 setTimeout(features.detect, 1000);
                 if (MAP.ENABLED) {
-                    setTimeout(sendMsg, 1200, 'get_map_v1')
+                    setTimeout(sendMsg, 1200, 'get_map_v1');
                 }
             }
         }
@@ -1692,21 +1745,44 @@ function main() {
             server.close();
             process.exit();
         });
+        if(ViomiFlag) {
 
-        server.on('message', (msg, rinfo) => {
-            if (rinfo.port === adapter.config.port) {
-                if (msg.length === 32) {
-                    adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
-                    packet.setRaw(msg);
-                    serverConnected()
-                } else {
-                    // hier die Antwort zum decodieren
-                    packet.setRaw(msg);
-                    adapter.log.debug('Receive <<< ' + packet.getPlainData());
-                    getStates(packet.getPlainData());
+            adapter.sendTo(adapter.namespace, 'get_prop', viomiManager.PARAMS, obj => {
+                if (obj && obj.result) {
+                    lastResponse = new Date();
+                    if (!connected) { // it is the first succeeded call
+                        connected = true;
+                        adapter.log.info('Connected');
+                        adapter.setState('info.connection', true, true);
+                        setTimeout(checkWiFi, 200);
+                        //setTimeout(sendMsg, 400, com.get_sound_volume.method);
+                        //setTimeout(sendMsg, 600, com.get_consumable.method);
+                        //setTimeout(sendMsg, 800, com.clean_summary.method);
+                        //setTimeout(features.detect, 1000);
+                        if (MAP.ENABLED) {
+                            setTimeout(sendMsg, 1200, 'get_map_v1');
+                        }
+                    }
                 }
-            }
-        });
+            });
+
+        }
+        else {
+            server.on('message', (msg, rinfo) => {
+                if (rinfo.port === adapter.config.port) {
+                    if (msg.length === 32) {
+                        adapter.log.debug('Receive <<< Helo <<< ' + msg.toString('hex'));
+                        packet.setRaw(msg);
+                        serverConnected();
+                    } else {
+                    // hier die Antwort zum decodieren
+                        packet.setRaw(msg);
+                        adapter.log.debug('Receive <<< ' + packet.getPlainData());
+                        getStates(packet.getPlainData());
+                    }
+                }
+            });
+        }
 
         server.on('listening', () => {
             const address = server.address();
@@ -1798,18 +1874,18 @@ MAP.Init = function () {
                     //reqParams.push('get_map_v1'); todo: is this necessary, or it is enough with mapPoll?
                     MAP.ready.login = true;
                 })
-                .catch(error => adapter.log.warn(error))
+                .catch(error => adapter.log.warn(error));
         } else if (adapter.config.valetudo_enable) {
-            this._MapPoll()
+            this._MapPoll();
         }
     }
 };
 
 MAP.updateMapPointer = function (answer) {
-    let that = this;
+    const that = this;
     if (answer.split('%').length === 1) {
         if (answer.indexOf('map_slot') === 0){
-            adapter.log.warn('answer map_slot is currently not supported!')
+            adapter.log.warn('answer map_slot is currently not supported!');
         } else {
             if (typeof that.trys == 'undefined') {
                 that.trys= 0;
@@ -1817,11 +1893,11 @@ MAP.updateMapPointer = function (answer) {
             if (that.trys < 10) {
                 setTimeout(() => {
                     sendMsg('get_map_v1');
-                    adapter.log.debug(that.trys++ + '. Mappointer_nomap___' + answer)
+                    adapter.log.debug(that.trys++ + '. Mappointer_nomap___' + answer);
                 }, 500);
-                return
+                return;
             } else {
-                adapter.log.warn('Could not receive Mappointer, giving up')
+                adapter.log.warn('Could not receive Mappointer, giving up');
             }
         }
     } else if (answer.split('%').length === 3) {
@@ -1831,16 +1907,16 @@ MAP.updateMapPointer = function (answer) {
 
         if (that.firstMap) {
             that.firstMap = false;
-            that._MapPoll() // for auth at server;
+            that._MapPoll(); // for auth at server;
         }
     }
     delete that.trys;
 };
 
 MAP.getRoomsFromMap = function (answer) {
-    let that = this;
+    const that = this;
     if (!adapter.config.enableMiMap) {
-        return
+        return;
     }
     adapter.log.debug('get rooms from map');
     if ((!that.ready.mappointer || !that.ready.login) && adapter.config.enableMiMap) {
@@ -1852,8 +1928,8 @@ MAP.getRoomsFromMap = function (answer) {
     Map.updateMap(that.mappointer)
         .then(data => {
             adapter.log.debug('get rooms from map data: ' + JSON.stringify(data[1]));
-            let roomsarray = data[1];
-            let roomids = [];
+            const roomsarray = data[1];
+            const roomids = [];
 
             if (typeof roomsarray === 'undefined' || roomsarray.length === 0) {
                 return;
@@ -1869,7 +1945,7 @@ MAP.getRoomsFromMap = function (answer) {
 };
 
 MAP.StartMapPoll = function () {
-    let that = this;
+    const that = this;
     if (!that.GETMAP && (adapter.config.enableMiMap || adapter.config.valetudo_enable)) {
         that.GETMAP = true;
         that._MapPoll();
@@ -1877,7 +1953,7 @@ MAP.StartMapPoll = function () {
 };
 
 MAP._MapPoll = function () {
-    let that = this;
+    const that = this;
 
     if ((!that.ready.mappointer || !that.ready.login) && adapter.config.enableMiMap) {
         return;
@@ -1886,7 +1962,7 @@ MAP._MapPoll = function () {
     Map.updateMap(that.mappointer)
         .then(data => {
             if (data) {
-                let dataurl = data[0].toDataURL();
+                const dataurl = data[0].toDataURL();
 
                 adapter.setState('map.map64', '<img src="' + dataurl + '" style="width: auto ;height: 100%;" />', true);
 

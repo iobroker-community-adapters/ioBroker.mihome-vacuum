@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "2.1.1",
+        "version": "2.2.0",
         "news": {
+            "2.2.0": {
+                "en": "add api for viomi and dreame",
+                "de": "füge api für viomi hinzu und träume",
+                "ru": "добавить api для viomi и dreame",
+                "pt": "adicionar api para viomi e sonhar",
+                "nl": "voeg api toe voor viomi en dreame",
+                "fr": "ajouter une api pour viomi et dreame",
+                "it": "aggiungi api per viomi e dreame",
+                "es": "agregar api para viomi y dreame",
+                "pl": "dodaj api dla viomi i dreame",
+                "zh-cn": "为Viomi和Dreame添加api"
+            },
             "2.1.1": {
                 "en": "Refactoring\nSupport of compact mode added",
                 "de": "Refactoring\nUnterstützung des Kompaktmodus hinzugefügt",
@@ -168,8 +180,7 @@
         "valetudo_requestIntervall": 2000,
         "valetudo_MapsaveIntervall": 5000
     },
-    "instanceObjects": [
-        {
+    "instanceObjects": [{
             "_id": "info",
             "type": "channel",
             "common": {
