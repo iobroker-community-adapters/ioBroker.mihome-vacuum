@@ -1015,6 +1015,9 @@ function startAdapter(options) {
                 case 'startRemoteControl':
                     sendCustomCommand('app_rc_start');
                     return;
+                case 'get_prop':
+                    sendCustomCommand('get_prop',obj.message);
+                    return;
 
                 case 'stopRemoteControl':
                     sendCustomCommand('app_rc_end');
