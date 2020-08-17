@@ -204,7 +204,8 @@ class Cleaning {
                     sendMsg(activeCleanStates[cleaning.activeState].resume);
                     if (cleaning.checkCleanState)
                         cleaning.checkStartCleaning(tryCnt - 1);
-                }
+                } else 
+                    cleaning.activeState= 0;
             }
         },waitTimeForNextTryMessage * maxTryForMessage + 1000);
     }

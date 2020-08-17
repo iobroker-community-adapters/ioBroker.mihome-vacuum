@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "2.2.0",
+        "version": "2.2.1",
         "news": {
             "2.2.0": {
                 "en": "add api for viomi and dreame",
