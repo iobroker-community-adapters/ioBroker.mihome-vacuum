@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "2.2.2",
+        "version": "2.2.3",
         "news": {
+            "2.2.3": {
+                "en": "room DP are not deleted, on map change",
+                "de": "Raum DP werden bei Kartenwechsel nicht mehr gelöscht",
+                "ru": "ДП комнаты не удаляются, при изменении карты",
+                "pt": "DP da sala não são excluídos, na alteração do mapa",
+                "nl": "kamer DP worden niet verwijderd bij kaartwijziging",
+                "fr": "salle DP ne sont pas supprimés, lors du changement de carte",
+                "it": "camera DP non vengono cancellate, al cambio mappa",
+                "es": "habitación DP no se eliminan, en cambio de mapa",
+                "pl": "DP pokoju nie są usuwane przy zmianie mapy",
+                "zh-cn": "更改地图后，房间DP不会被删除"
+            },
             "2.2.0": {
                 "en": "add api for viomi and dreame",
                 "de": "füge api für viomi hinzu und träume",
@@ -180,7 +192,8 @@
         "valetudo_requestIntervall": 2000,
         "valetudo_MapsaveIntervall": 5000
     },
-    "instanceObjects": [{
+    "instanceObjects": [
+        {
             "_id": "info",
             "type": "channel",
             "common": {

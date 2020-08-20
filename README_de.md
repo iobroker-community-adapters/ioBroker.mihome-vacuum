@@ -237,6 +237,8 @@ Die unterstützten Kommandos sind:
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 2.2.3 (2020-08-20)
+* (dirkhe) Raum DP werden bei Kartenwechsel nicht mehr gelöscht
 ### 2.0.10 (2020-07-05)
 * (dirkhe) Versuche bis zu 3mal das Reinigen zu starten, wenn der Robotor nicht reagierts
 ### 2.0.9 (2020-03-05)
