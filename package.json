@@ -38,6 +38,6 @@
     "mocha": "^8.1.1",
     "chai": "^4.2.0",
     "axios": "^0.20.0",
-    "@iobroker/testing": "^2.2.0"
+    "@iobroker/testing": "^2.3.0"
   }
 }
