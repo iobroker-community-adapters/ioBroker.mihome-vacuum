@@ -1,0 +1,34 @@
+.git
+.idea
+node_modules/
+nbproject/
+.vs*/
+*.code-workspace
+Thumbs.db
+gulpfile.js
+
+# CI test files
+test/
+travis/
+.travis.yml
+appveyor.yml
+.travis.yaml
+appveyor.yaml
+
+# Type checking configuration
+tsconfig.json
+tsconfig.*.json
+
+# ESLint configuration
+.eslintrc.json
+.eslintrc.js
+
+# npm package files
+iobroker.*.tgz
+package-lock.json
+
+# i18n intermediate files
+admin/i18n
+
+# maintenance scripts
+maintenance/**
