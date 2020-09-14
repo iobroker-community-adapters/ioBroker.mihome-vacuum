@@ -71,6 +71,31 @@
             border-style: solid;
 
         }
+
+        .loader {
+            border: 4px solid #b8d1f3;
+            /* Light grey */
+            border-top: 4px solid #3498db;
+            /* Blue */
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 2s linear infinite;
+        }
+
+        .seenot {
+            display: none;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
     <script type="text/javascript">
         var namespace;
@@ -82,6 +107,12 @@
             namespace = adapter + '.' + instance + '.';
             if (!settings) return;
             $('.hidden').hide();
+            //soad selection list
+            
+            console.log('sett_'+ JSON.stringify(settings))
+            loadSelect(settings['MiDevice'])
+            settings.pingInterval= parseInt(settings.pingInterval/1000,10)
+            settings.wifiInterval= parseInt(settings.wifiInterval/1000,10)
 
             $('.value').each(function () {
                 var key = $(this).attr('id');
@@ -90,7 +121,7 @@
                     $key.prop('checked', settings[key]).change(function () {
 
                         if ($('#enableMiMap').prop('checked') || $('#valetudo_enable').prop(
-                            'checked')) {
+                                'checked')) {
                             $('.map-setting').removeClass('disabled');
                         } else {
                             $('.map-setting').addClass('disabled');
@@ -101,13 +132,20 @@
                         onChange();
                     });
                 } else {
-                    $key.val(settings[key]).change(function () {
+                    if ($key.attr('id') === 'devices'){
+
+                    }
+                    $key.val(settings[key]).change(function ()  {
                         onChange();
                     }).keyup(function () {
                         onChange();
                     });
                 }
+
+                
             });
+            //loadSelect()
+            //setDevices();
             $(".cbox").css("background", ($(".colorFloor").val()));
             $(".cbox").css("border-color", ($(".colorWall").val()));
             $(".cbox2").css("border-color", ($(".colorWall").val()));
@@ -133,15 +171,12 @@
                 $(".robot").attr('src', '' + $(this).val() + '.png');;
             });
 
-            //wenn device selection changed.
+            // wenn device selection changed.
             $('#devices').change(function () {
                 let tmp = JSON.parse($(this).val());
                 console.log("changed....devices" + $(this).val())
-
-                $('#token.value').val(tmp.token)
-                $('#ip.value').val(tmp.localip)
-                $('#MiDevice.value').val($(this).val())
-
+                setValue('token', tmp.token, onChange);
+                setValue('ip', tmp.localip, onChange);
             });
 
             $('#getDevices').on('click', function () {
@@ -157,19 +192,28 @@
                 $('#loader1').removeClass('seenot');
                 let pass = $('#password').val();
                 let user = $('#email').val();
-                console.log("we wqill send to: " + adapter + "." + instance);
+                let server = $('#server').val();
+                console.log("send to..." + user + " server: " + server);
+
+                if (typeof (server) == 'undefinded' || server == '') {
+                    $getDevices.removeClass('disabled');
+                    $('#loader1').addClass('seenot');
+                    showToast(_('no server selected'));
+                    return
+                }
 
                 sendTo(adapter + "." + instance, 'discovery', {
                     password: pass,
-                    username: user
+                    username: user,
+                    server: server
                 }, function (result) {
 
                     console.log(JSON.stringify(result));
                     $getDevices.removeClass('disabled');
                     $('#loader1').addClass('seenot');
 
-                    $('#token').addClass('disabled');
-                    $('#ip').addClass('disabled');
+                    // $('#token').hide();
+                    //  $('#ip').hide();
 
                     var arr = result;
 
@@ -180,13 +224,16 @@
 
                     rawdevices = arr;
                     let text = "";
+
+                    setValue('MiDevice', JSON.stringify(arr), onChange);
+
                     arr.forEach(function (entry) {
                         text += "<option value='" + JSON.stringify(entry) + "' >" + entry
                             .model + ' - token: ' + entry.token + ' - ip: ' + (entry.localip ?
                                 entry.localip : '') + '</option>';
 
                         //check if in config
-                    })
+                    });
                     $devicelist.html(text).select();
                 });
 
@@ -199,21 +246,22 @@
                 startkey: namespace + 'rooms',
                 endkey: namespace + 'rooms.\u9999'
             }, function (err, allChannels) {
-                let channelStr = ''
-                let channel
+                let channelStr = '';
+                let channel;
                 if (allChannels) {
-                    for (i in allChannels.rows) {
-                        channel = allChannels.rows[i].value
+                    for (var i in allChannels.rows) {
+                        channel = allChannels.rows[i].value;
                         channelStr += ';' + channel._id.split('.').pop() + '/' + channel.common.name
                     }
                 }
-                if (channelStr.length)
-                    $('#timer th[data-name=channels]').data('options', channelStr.slice(1))
-                else
-                    $('#timer th[data-name=channels]').remove()
+                if (channelStr.length) {
+                    $('#timer th[data-name=channels]').data('options', channelStr.slice(1));
+                } else {
+                    $('#timer th[data-name=channels]').remove();
+                }
 
                 socket.emit('getForeignStates', namespace + "timer.*", function (err, timerStates) {
-                    let timer = []
+                    let timer = [];
 
                     socket.emit('getObjectView', 'system', 'state', {
                         startkey: namespace + 'timer.',
@@ -221,7 +269,7 @@
                     }, function (err, timerObjs) {
                         if (!err && timerObjs) {
                             for (let t in timerObjs.rows) {
-                                let timerState = timerStates[timerObjs.rows[t].id]
+                                let timerState = timerStates[timerObjs.rows[t].id];
                                 if (timerState)
                                     timerState.channels = timerObjs.rows[t].value.native
                                     .channels
@@ -240,32 +288,30 @@
                                         timer: [],
                                         del: [],
                                         add: []
-                                    }
+                                    };
                                     for (let t in room.common.members) {
-                                        let id = room.common.members[t]
-                                        let timerState = timerStates[id]
+                                        let id = room.common.members[t];
+                                        let timerState = timerStates[id];
                                         if (timerState) {
-                                            if (!timerState.room)
-                                                timerState.room = []
-                                            timerState.room.push(room._id)
+                                            timerState.room = timerState.room || [];
+                                            timerState.room.push(room._id);
                                             rooms[room._id].timer.push(id)
-                                        } else if (id.indexOf(namespace) ===
-                                            0
-                                            ) { // we use chance for housekeeping of zombie timer and rooms
-                                            if (id.indexOf('.timer.') === 0 || (id
-                                                    .indexOf('.multiRoomClean') === -
-                                                    1 && id.indexOf('.rooms.') > 0 &&
-                                                    channelStr.indexOf(id.replace(
-                                                        /.+\.rooms\.([^.]+).*/, '$1'
-                                                    )) === -1))
+                                        } else if (id.indexOf(namespace) === 0) { // we use chance for housekeeping of zombie timer and rooms
+                                            if (id.indexOf('.timer.') === 0 ||
+                                                (id.indexOf('.multiRoomClean') === -1 &&
+                                                    id.indexOf('.rooms.') > 0 &&
+                                                    channelStr.indexOf(id.replace(/.+\.rooms\.([^.]+).*/, '$1')) === -1
+                                                )
+                                            ) {
                                                 rooms[room._id].del.push(id)
+                                            }
                                         }
                                     }
                                 }
                             }
 
                             for (let t in timerStates) {
-                                let terms = t.split('.').pop().split('_')
+                                let terms = t.split('.').pop().split('_');
                                 terms.length > 2 && timer.push({
                                     enabled: timerStates[t].val != -1,
                                     minute: parseInt(terms[2], 10),
@@ -275,12 +321,54 @@
                                     channels: timerStates[t].channels || []
                                 })
                             }
+
                             values2table('timer', timer, onChange);
                         })
                     })
                 });
             });
             onChange(false);
+        }
+
+        function  loadSelect(array) {
+            let devices;
+            let text = "";
+            try {
+                devices = JSON.parse(array)
+            } catch (e) {
+                console.log('cant parse devices');
+                return
+            }
+            if (Array.isArray(devices)) {
+                devices.forEach(function (entry) {
+                        text += "<option value='" + JSON.stringify(entry) + "' >" + entry
+                            .model + ' - token: ' + entry.token + ' - ip: ' + (entry.localip ?
+                                entry.localip : '') + '</option>';
+
+                        //check if in config
+                    });
+                    $('#devices').html(text).select();
+            }
+
+
+        }
+
+        function setValue(key, value, onChange) {
+            var $key = $('#' + key + '.value');
+            if ($key.attr('type') === 'checkbox') {
+                $key.prop('checked', value).on('change', function () {
+                    onChange();
+                });
+            } else {
+                $key.val(value).on('change', function () {
+                    if ($(this).attr('id') === 'type') {
+                        showHideSettings();
+                    }
+                    onChange();
+                }).on('keyup', function () {
+                    onChange();
+                });
+            }
         }
 
         function save(callback) {
@@ -294,23 +382,30 @@
                 }
             });
             var tokenLength = obj.token.replace(/\s/g, '').length;
-            if (tokenLength !== 32 && tokenLength !== 96) {
+            if (tokenLength !== 32 && tokenLength !== 96 && tokenLength !== 31) {
                 showMessage(_('Invalid token length. Expected 32 or 96 HEX chars.'));
                 return;
             }
 
-            let newTimerArray = table2values('timer')
-            let timerList = {}
-            let timer
-            let name
+            obj.pingInterval = parseInt(obj.pingInterval * 1000, 10);
+            obj.wifiInterval = parseInt(obj.wifiInterval * 1000, 10);
+            obj.ip = (obj.ip || '').trim();
+            obj.email = (obj.email || '').trim();
+            obj.token = (obj.token || '').trim();
+
+            let newTimerArray = table2values('timer');
+            let timerList = {};
+            let timer;
+            let name;
             for (let t in newTimerArray) {
-                timer = newTimerArray[t]
+                timer = newTimerArray[t];
                 name = timer.day.join('') + '_' + "0".concat(timer.hour).slice(-2) + '_' + "0".concat(timer.minute)
                     .slice(-2);
                 if (timerList[name])
                     return showMessage(_('same starttime of 2 timer not possible'));
                 timerList[name] = timer
             }
+
             socket.emit('getForeignStates', namespace + "timer.*", function (err, timerStates) {
                 if (!err && timerStates) {
 
@@ -339,7 +434,7 @@
                             }
                         }
 
-                        let p
+                        var p;
                         for (let t in timerStates) {
                             let timerState = timerStates[t];
                             name = t.split(".").pop();
@@ -371,8 +466,9 @@
                         }
 
                         for (let tn in timerList) {
-                            timer = timerList[tn]
-                            let stateId = namespace + "timer." + tn
+                            timer = timerList[tn];
+                            let stateId = namespace + "timer." + tn;
+
                             socket.emit('setObject', stateId, {
                                 type: 'state',
                                 common: {
@@ -406,7 +502,7 @@
                         }
 
                         for (let r in rooms) {
-                            let room = rooms[r]
+                            let room = rooms[r];
                             if (room.add.length > 0 || room.del.length > 0) {
                                 socket.emit('getObject', r, function (err, obj) {
                                     if (!err && obj) {
@@ -415,10 +511,10 @@
                                             if (p !== -1)
                                                 obj.common.members.splice(p, 1);
                                         }
-                                        obj.common.members = obj.common.members.concat(room.add)
-                                        room.timer = room.timer.concat(room.add)
-                                        room.del = []
-                                        room.add = []
+                                        obj.common.members = obj.common.members.concat(room.add);
+                                        room.timer = room.timer.concat(room.add);
+                                        room.del = [];
+                                        room.add = [];
                                         obj.from = 'system.adapter.' + namespace;
                                         obj.user = 'system.user.admin';
                                         obj.ts = Date.now();
@@ -430,7 +526,7 @@
 
 
                         callback(obj);
-                    })
+                    });
                 }
             })
         }
@@ -438,7 +534,7 @@
 </head>
 
 <body>
-    <div class="m adapter-container"></div>
+    <div class="m adapter-container">
 
         <div class="row">
             <!-- Tabs navigation -->
@@ -483,8 +579,11 @@
                     <div class="input-field col s12 m4 l2 ">
                         <select class="value " id="server" type="text">
                             <option value="" disabled selected class="translate">server</option>
-                            <option value="cn">China</option>
+                            <option value="-">China</option>
+                            <option value="sg">Singapur</option>
                             <option value="de">Germany</option>
+                            <option value="us">USA</option>
+                            <option value="ru">Russia</option>
                         </select>
                         <label class="translate" for="server">Server</label>
                     </div>
@@ -538,12 +637,12 @@
             <div id="tab-settings" class="col s12 page">
                 <div class="row">
                     <div class="col s12 m4 l2">
-                        <input class="value" id="param_pingInterval" size="15" type="number" min="20000" />
-                        <label class="translate" for="param_pingInterval">get Parameter Intervall</label>
+                        <input class="value" id="pingInterval" size="5" type="number" min="10" />
+                        <label class="translate" for="pingInterval">get Status Intervall</label>
                     </div>
                     <div class="col s12 m4 l2">
-                        <input class="value" id="pingInterval" size="15" type="number" min="10000" />
-                        <label class="translate" for="pingInterval">get Status Intervall</label>
+                        <input class="value" id="wifiInterval" size="5" type="number" min="20" />
+                        <label class="translate" for="wifiInterval">get WiFi Intervall</label>
                     </div>
                 </div>
                 <div class="col s12">
@@ -595,7 +694,7 @@
                         <label class="translate" for="valetudo_MapsaveIntervall">Map save intervall</label>
                     </div>
                     <div class="col s4">
-                        <input class="value" id="newmap" type="checkbox"/>
+                        <input class="value" id="newmap" type="checkbox" />
                         <span class="translate">Use new Map format with roomcolors</span>
                     </div>
                 </div>
