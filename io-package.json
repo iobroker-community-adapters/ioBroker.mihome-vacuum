@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "2.2.3",
+        "version": "2.2.4",
         "news": {
+            "2.2.4": {
+                "en": "add config for send Pause Before Home",
+                "de": "Konfiguration für Sende pause vor Home hinzufügen",
+                "ru": "добавить конфиг для отправки Pause Before Home",
+                "pt": "adicionar configuração para enviar Pausa antes de casa",
+                "nl": "voeg config toe om Pause Before Home te verzenden",
+                "fr": "ajouter la configuration pour envoyer Pause Before Home",
+                "it": "aggiungi config per inviare Pause Before Home",
+                "es": "agregar configuración para enviar pausa antes de casa",
+                "pl": "dodaj konfigurację do wysłania Wstrzymaj przed domem",
+                "zh-cn": "添加配置以在回家之前发送暂停"
+            },
             "2.2.3": {
                 "en": "room DP are not deleted, on map change",
                 "de": "Raum DP werden bei Kartenwechsel nicht mehr gelöscht",
@@ -154,7 +166,11 @@
         ],
         "osDependencies": {
             "linux": [
-                "libcairo2-dev", "libpango1.0-dev", "libjpeg-dev", "libgif-dev", "librsvg2-dev"
+                "libcairo2-dev",
+                "libpango1.0-dev",
+                "libjpeg-dev",
+                "libgif-dev",
+                "librsvg2-dev"
             ]
         },
         "license": "MIT",
@@ -190,7 +206,8 @@
         "valetudo_color_path": "#FFFFFF",
         "robot_select": "robot",
         "valetudo_requestIntervall": 2000,
-        "valetudo_MapsaveIntervall": 5000
+        "valetudo_MapsaveIntervall": 5000,
+        "sendsPauseBeforeHome": false
     },
     "instanceObjects": [
         {

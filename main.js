@@ -211,7 +211,8 @@ class Cleaning {
     }
 
     stopCleaning(){
-        // sendMsg(com.pause.method); // @meisterTR why we need first pause and than home??
+        if (adapter.config.sendPauseBeforeHome)
+            sendMsg(com.pause.method);
         this.clearQueue();
         this.state= cleanStates.Unknown; // Force calling setRemoteState on next get_status answer
         

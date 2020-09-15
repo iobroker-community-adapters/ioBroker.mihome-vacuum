@@ -237,6 +237,8 @@ Die unterstützten Kommandos sind:
 - Widget zur Zeit ohne Funktion
 
 ## Changelog
+### 2.2.4 (2020-09-15)
+* (dirkhe) Setting für sende Pause vor Home
 ### 2.2.3 (2020-08-20)
 * (dirkhe) Raum DP werden bei Kartenwechsel nicht mehr gelöscht
 ### 2.0.10 (2020-07-05)
