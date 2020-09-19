@@ -1,106 +1,107 @@
 {
     "common": {
-        "name": "mihome-vacuum",
-
-        "version": "3.0.0-alpha",
-        "news": {
-            "1.10.5": {
-                "en": "send Ping only if not connected, otherwise get_status\nset button states to true, if clicked\nmove Timermanager and roomManager to own libs",
-                "de": "Ping nur senden, wenn keine Verbindung besteht, sonst get_status\n",
-                "ru": "отправлять Ping, только если не подключен, иначе get_status\n",
-                "pt": "envie Ping apenas se não estiver conectado, caso contrário, get_status\n",
-                "nl": "stuur Ping alleen indien niet verbonden, anders get_status\n",
-                "fr": "envoyer Ping uniquement s'il n'est pas connecté, sinon get_status\n",
-                "it": "invia Ping solo se non connesso, altrimenti get_status\n",
-                "es": "envíe Ping solo si no está conectado, de lo contrario get_status\n",
-                "pl": "wyślij Ping tylko jeśli nie jest podłączony, w przeciwnym razie get_status\n",
-                "zh-cn": "仅在未连接时发送Ping，否则返回get_status\n"
-            }
-        },
-        "title": "mihome-vacuum",
-        "titleLang": {
-            "en": "control of Xiaomi/Roborock vacuum cleaner",
-            "de": "Steuerung des Staubsaugers Xiaomi / Roborock",
-            "ru": "управление пылесосом Xiaomi / Roborock",
-            "pt": "controle do aspirador Xiaomi / Roborock",
-            "nl": "bediening van Xiaomi / Roborock stofzuiger",
-            "fr": "contrôle de l'aspirateur Xiaomi / Roborock",
-            "it": "controllo dell'aspirapolvere Xiaomi / Roborock",
-            "es": "control de la aspiradora Xiaomi / Roborock",
-            "pl": "kontrola odkurzacza Xiaomi / Roborock",
-            "zh-cn": "小米/罗伯克吸尘器的控制"
-        },
-        "desc": {
-            "en": "This adapter allows control Xiaomi vacuum cleaner",
-            "de": "Dieser Adapter ermöglicht die Steuerung Xiaomi Staubsauger",
-            "ru": "Этот адаптер позволяет контролировать пылесос Xiaomi",
-            "pt": "Este adaptador permite controle Xiaomi aspirador de pó",
-            "nl": "Met deze adapter kunt u de Xiaomi-stofzuiger bedienen",
-            "fr": "Cet adaptateur permet de contrôler l'aspirateur Xiaomi",
-            "it": "Questo adattatore consente il controllo dell'aspirapolvere Xiaomi",
-            "es": "Este adaptador permite el control del aspirador Xiaomi",
-            "pl": "Ten adapter umożliwia kontrolę odkurzacza Xiaomi",
-            "zh-cn": "这款适配器可以控制小米吸尘器"
-        },
-        "authors": [
-            "bluefox <dogafox@gmail.com>"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "loglevel": "info",
-        "materialize": true,
-        "icon": "mihome-vacuum.png",
-        "webExtension": "lib/mihome-vacuum.js",
-        "readme": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/README.md",
-        "keywords": [
-            "url",
-            "html",
-            "file",
-            "mihome-vacuum"
-        ],
-        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.mihome-vacuum/master/admin/mihome-vacuum.png",
-        "type": "household",
-        "config": {
-            "minWidth": 800,
-            "width ": 1224
-        },
-        "messagebox": true
+      "name": "mihome-vacuum",
+      "version": "3.0.0-alpha",
+      "news": {
+        "1.10.5": {
+          "en": "send Ping only if not connected, otherwise get_status\nset button states to true, if clicked\nmove Timermanager and roomManager to own libs",
+          "de": "Ping nur senden, wenn keine Verbindung besteht, sonst get_status\n",
+          "ru": "отправлять Ping, только если не подключен, иначе get_status\n",
+          "pt": "envie Ping apenas se não estiver conectado, caso contrário, get_status\n",
+          "nl": "stuur Ping alleen indien niet verbonden, anders get_status\n",
+          "fr": "envoyer Ping uniquement s'il n'est pas connecté, sinon get_status\n",
+          "it": "invia Ping solo se non connesso, altrimenti get_status\n",
+          "es": "envíe Ping solo si no está conectado, de lo contrario get_status\n",
+          "pl": "wyślij Ping tylko jeśli nie jest podłączony, w przeciwnym razie get_status\n",
+          "zh-cn": "仅在未连接时发送Ping，否则返回get_status\n"
+        }
+      },
+      "title": "mihome-vacuum",
+      "titleLang": {
+        "en": "control of Xiaomi/Roborock vacuum cleaner",
+        "de": "Steuerung des Staubsaugers Xiaomi / Roborock",
+        "ru": "управление пылесосом Xiaomi / Roborock",
+        "pt": "controle do aspirador Xiaomi / Roborock",
+        "nl": "bediening van Xiaomi / Roborock stofzuiger",
+        "fr": "contrôle de l'aspirateur Xiaomi / Roborock",
+        "it": "controllo dell'aspirapolvere Xiaomi / Roborock",
+        "es": "control de la aspiradora Xiaomi / Roborock",
+        "pl": "kontrola odkurzacza Xiaomi / Roborock",
+        "zh-cn": "小米/罗伯克吸尘器的控制"
+      },
+      "desc": {
+        "en": "This adapter allows control Xiaomi vacuum cleaner",
+        "de": "Dieser Adapter ermöglicht die Steuerung Xiaomi Staubsauger",
+        "ru": "Этот адаптер позволяет контролировать пылесос Xiaomi",
+        "pt": "Este adaptador permite controle Xiaomi aspirador de pó",
+        "nl": "Met deze adapter kunt u de Xiaomi-stofzuiger bedienen",
+        "fr": "Cet adaptateur permet de contrôler l'aspirateur Xiaomi",
+        "it": "Questo adattatore consente il controllo dell'aspirapolvere Xiaomi",
+        "es": "Este adaptador permite el control del aspirador Xiaomi",
+        "pl": "Ten adapter umożliwia kontrolę odkurzacza Xiaomi",
+        "zh-cn": "这款适配器可以控制小米吸尘器"
+      },
+      "authors": [
+        "bluefox <dogafox@gmail.com>"
+      ],
+      "license": "MIT",
+      "platform": "Javascript/Node.js",
+      "mode": "daemon",
+      "loglevel": "info",
+      "materialize": true,
+      "icon": "mihome-vacuum.png",
+      "webExtension": "lib/mihome-vacuum.js",
+      "readme": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/README.md",
+      "keywords": [
+        "url",
+        "html",
+        "file",
+        "mihome-vacuum"
+      ],
+      "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.mihome-vacuum/master/admin/mihome-vacuum.png",
+      "type": "household",
+      "config": {
+        "minWidth": 800,
+        "width ": 1224
+      },
+      "messagebox": true,
+      "installedFrom": "https://github.com/MeisterTR/ioBroker.mihome-vacuum/tarball/f303066dca21e7cf9197fc14a82e9d052f6ba4c5"
     },
     "native": {
-        "port": 54321,
-        "ownPort": 53421,
-        "pingInterval": 20000,
-        "param_pingInterval": 60000,
-        "valetudo_enable": false,
-        "valetudo_color_floor": "#56affc",
-        "valetudo_color_wall": "#b3edff",
-        "valetudo_color_path": "#FFFFFF",
-        "robot_select": "robot",
-        "valetudo_requestIntervall": 2000,
-        "valetudo_MapsaveIntervall": 5000
+      "port": 54321,
+      "ownPort": 53421,
+      "pingInterval": 20000,
+      "param_pingInterval": 60000,
+      "valetudo_enable": false,
+      "valetudo_color_floor": "#56affc",
+      "valetudo_color_wall": "#b3edff",
+      "valetudo_color_path": "#FFFFFF",
+      "robot_select": "robot",
+      "valetudo_requestIntervall": 2000,
+      "valetudo_MapsaveIntervall": 5000,
+      "sendsPauseBeforeHome": false
     },
     "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
+      {
+        "_id": "info",
+        "type": "channel",
+        "common": {
+          "name": "Information"
         },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
+        "native": {}
+      },
+      {
+        "_id": "info.connection",
+        "type": "state",
+        "common": {
+          "role": "indicator.connected",
+          "name": "Device or service connected",
+          "type": "boolean",
+          "read": true,
+          "write": false,
+          "def": false
+        },
+        "native": {}
+      }
     ]
-}
+  }

@@ -8,20 +8,29 @@
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
 const dgram = require('dgram');
-const MiHome = require('./lib/mihomepacket');
 const com = require('./lib/comands');
 const TimerManager = require('./lib/timerManager');
 const RoomManager = require('./lib/roomManager');
 const adapterName = require('./package.json').name.split('.').pop();
 const MapHelper = require('./lib/maphelper');
 const miio = require('./lib/miio');
+const objects = require(__dirname + '/lib/objects');
+
+const ViomiManager = require('./lib/viomi');
 
 global.systemDictionary = {};
 require('./admin/words.js');
 
-
+let DeviceModel;
+let connected = false;
 let Miio;
+let vacuum = null;
 let Map;
+
+const deviceList = {
+    'viomi.vacuum.v7': ViomiManager,
+    'viomi.vacuum.v8': ViomiManager
+};
 
 class MihomeVacuum extends utils.Adapter {
 
@@ -35,8 +44,7 @@ class MihomeVacuum extends utils.Adapter {
         });
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
-        // this.on('objectChange', this.onObjectChange.bind(this));
-        // this.on('message', this.onMessage.bind(this));
+        this.on('message', this.onMessage.bind(this));
         this.on('unload', this.onUnload.bind(this));
     }
 
@@ -44,32 +52,109 @@ class MihomeVacuum extends utils.Adapter {
         //create new miio class
         Miio = new miio(this);
 
+        //create default States
+        objects.deviceInfo.map(o => this.setObjectNotExistsAsync('deviceInfo.' + o._id, o));
+
         Miio.on('connect', () => {
             this.log.debug('MAIN: Connected to device, try to get model..');
-            this.getModelFromApi();
+            this.getModel();
+
 
         });
+
+        //check if Self send Commands is enabled
+        if (this.config.enableSelfCommands) {
+            objects.customComands.map(o => this.setObjectNotExistsAsync('control.' + o._id, o));
+        }
+        else{
+            objects.customComands.map(o => this.delObj('control.' + o._id));
+        }
     }
 
     /**
      * first communicaton to find out the model
      */
-    async getModelFromApi() {
-        this.InfoCouter = 0;
+    async getModel() {
+        //try to get from Config
+        let configModel;
+        try {
+            configModel = JSON.parse(this.config.devices).model;
+        } catch (e) {
+            configModel = null;
+        }
+        const objModel = await this.getStateAsync('deviceInfo.model');
+        this.log.debug('GETMODELFROMAPI: objModel: ' + JSON.stringify(objModel));
 
+        let DeviceData;
+        // try 5 times to get data
+        for (let i = 0; i < 5; i++) {
+            DeviceData = await this.getModelFromApi();
+            this.log.debug('Get Device data..' + i);
+            if (DeviceData) {
+                this.log.debug('Get Device data from robot..');
+                this.setModelInfoObject(DeviceData.result);
+                DeviceModel = DeviceData.result.model
+
+                this.setConnrection(true);
+                break;
+            }
+        }
+        if (!DeviceData && objModel.val) {
+            this.log.warn('No Answer for DeviceModel use old one');
+            DeviceModel = objModel.val;
+        } else if (!DeviceData && !objModel.val && configModel) {
+            this.log.warn('No Answer for DeviceModel use model from Config');
+            DeviceModel = configModel;
+            this.setModelInfoObject(JSON.parse(this.config.devices));
+        }
+        this.log.debug('DeviceModel selected to: ' + DeviceModel);
+
+        //we get a model so we can select a protocoll
+
+        vacuum = new deviceList[DeviceModel](this,Miio);
+    }
+
+    /**
+     * function to set DeviceInfo
+     * @param {any} deviceInfo Modelname from Xiaomi eg: viomi.vacuum.v8
+     */
+    async setModelInfoObject(deviceInfo) {
+        this.setStateAsync('deviceInfo.model', {
+            val: deviceInfo.model,
+            ack: true
+        });
+        this.setStateAsync('deviceInfo.fw_ver', {
+            val: deviceInfo.fw_ver,
+            ack: true
+        });
+        this.setStateAsync('deviceInfo.mac', {
+            val: deviceInfo.mac,
+            ack: true
+        });
+        return true;
+    }
+
+    /**
+     * Function to set the connection indicator
+     * @param {boolean} indicator could be true or false
+     */
+    async setConnrection(indicator) {
+        connected = indicator;
+        await this.setStateAsync('info.connection', {
+            val: indicator,
+            ack: true
+        });
+    }
+
+    async getModelFromApi() {
         try {
             const DeviceData = await Miio.sendMessage('miIO.info');
 
             this.log.debug('GETMODELFROMAPI:Data: ' + JSON.stringify(DeviceData));
-        } catch (error) {
-            this.log.debug('GETMODELFROMAPI: Error: No Data recived try again:' + this.InfoCouter);
-            this.InfoCouter++;
-            if (this.InfoCouter <= 10) {
-                setTimeout(this.getModelFromApi.bind(this), 2000);
-            } else {
-                this.log.debug('GETMODELFROMAPI: Error: give up, make sure your robot has internet or restart your robot!');
-            }
+            return (DeviceData);
 
+        } catch (error) {
+            return null;
         }
     }
 
@@ -95,56 +180,8 @@ class MihomeVacuum extends utils.Adapter {
 
         // Reset the connection indicator during startup
         this.setState('info.connection', false, true);
+        this.subscribeStates('*');
 
-        // The adapters config (in the instance object everything under the attribute "native") is accessible via
-        // this.config:
-        this.log.info('config option: ' + JSON.stringify(this.config.devices));
-        this.log.info('config option2: ' + this.config.option2);
-
-        /*
-        For every state in the system there has to be also an object of type state
-        Here a simple template for a boolean variable named "testVariable"
-        Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-        */
-        await this.setObjectNotExistsAsync('testVariable', {
-            type: 'state',
-            common: {
-                name: 'testVariable',
-                type: 'boolean',
-                role: 'indicator',
-                read: true,
-                write: true,
-            },
-            native: {},
-        });
-
-        // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-        this.subscribeStates('testVariable');
-        // You can also add a subscription for multiple states. The following line watches all states starting with "lights."
-        // this.subscribeStates('lights.*');
-        // Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
-        // this.subscribeStates('*');
-
-        /*
-            setState examples
-            you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-        */
-        // the variable testVariable is set to true as command (ack=false)
-        await this.setStateAsync('testVariable', true);
-
-        // same thing, but the value is flagged "ack"
-        // ack should be always set to true if the value is received from or acknowledged from the target system
-        await this.setStateAsync('testVariable', {
-            val: true,
-            ack: true
-        });
-
-        // same thing, but the state is deleted after 30s (getState will return null afterwards)
-        await this.setStateAsync('testVariable', {
-            val: true,
-            ack: true,
-            expire: 30
-        });
 
         // examples for the checkPassword/checkGroup functions
         let result = await this.checkPasswordAsync('admin', 'iobroker');
@@ -199,14 +236,47 @@ class MihomeVacuum extends utils.Adapter {
      * @param {string} id
      * @param {ioBroker.State | null | undefined} state
      */
-    onStateChange(id, state) {
-        if (state) {
-            // The state was changed
-            this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-        } else {
-            // The state was deleted
-            this.log.info(`state ${id} deleted`);
+    async onStateChange(id, state) {
+        this.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
+        if (!state || state.ack) {
+            return;
         }
+
+        // Warning, state can be null if it was deleted
+        this.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
+
+        // output to parser
+
+        const terms = id.split('.');
+        const command = terms.pop();
+        const parent = terms.pop();
+
+        // Send own commands
+        if (command === 'X_send_command') {
+            const values = (state.val || '').trim().split(';');
+            let params = [''];
+            if (values[1]) {
+                try {
+                    params = JSON.parse(values[1]);
+                } catch (e) {
+                    return this.setState('control.X_get_response', 'Could not send these params because its not in JSON format: ' + values[1] , true);
+                }
+                this.log.info('send message: Method: ' + values[0] + ' Params: ' + values[1]);
+            } else {
+                this.log.info('send message: Method: ' + values[0]);
+            }
+            this.setStateAsync(id, state.val, true);
+
+            try {
+                const DeviceData = await Miio.sendMessage(values[0], params);
+                this.log.debug('Get self send data:' + JSON.stringify(DeviceData));
+                this.setStateAsync('control.X_get_response', JSON.stringify(DeviceData.result), true);
+
+            } catch (error) {
+                this.setStateAsync('control.X_get_response', '['+error+']', true);
+            }
+        }
+
     }
 
 
