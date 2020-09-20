@@ -237,13 +237,12 @@ class MihomeVacuum extends utils.Adapter {
      * @param {ioBroker.State | null | undefined} state
      */
     async onStateChange(id, state) {
-        this.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
         if (!state || state.ack) {
             return;
         }
 
         // Warning, state can be null if it was deleted
-        this.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
+        //this.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
 
         // output to parser
 
@@ -276,7 +275,7 @@ class MihomeVacuum extends utils.Adapter {
                 this.setStateAsync('control.X_get_response', '['+error+']', true);
             }
         }
-
+        vacuum.stateChange(id, state);
     }
 
 
