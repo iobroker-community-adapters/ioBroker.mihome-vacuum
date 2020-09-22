@@ -1,7 +1,7 @@
 {
   "name": "iobroker.mihome-vacuum",
 
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Control your Xiaomi/Roborock vacuum cleaner with ioBroker",
   "keywords": [
     "Mihome",

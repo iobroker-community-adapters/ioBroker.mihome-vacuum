@@ -1,20 +1,20 @@
 {
     "common": {
       "name": "mihome-vacuum",
-      "version": "3.0.0-alpha",
+      "version": "3.0.1-alpha",
       "news": {
-        "1.10.5": {
-          "en": "send Ping only if not connected, otherwise get_status\nset button states to true, if clicked\nmove Timermanager and roomManager to own libs",
-          "de": "Ping nur senden, wenn keine Verbindung besteht, sonst get_status\n",
-          "ru": "отправлять Ping, только если не подключен, иначе get_status\n",
-          "pt": "envie Ping apenas se não estiver conectado, caso contrário, get_status\n",
-          "nl": "stuur Ping alleen indien niet verbonden, anders get_status\n",
-          "fr": "envoyer Ping uniquement s'il n'est pas connecté, sinon get_status\n",
-          "it": "invia Ping solo se non connesso, altrimenti get_status\n",
-          "es": "envíe Ping solo si no está conectado, de lo contrario get_status\n",
-          "pl": "wyślij Ping tylko jeśli nie jest podłączony, w przeciwnym razie get_status\n",
-          "zh-cn": "仅在未连接时发送Ping，否则返回get_status\n"
-        }
+        "3.0.1": {
+            "en": "total rework, support for viomi",
+            "de": "totale Überarbeitung, Unterstützung für viomi",
+            "ru": "полная переработка, поддержка viomi",
+            "pt": "retrabalho total, suporte para viomi",
+            "nl": "totale herwerking, ondersteuning voor viomi",
+            "fr": "retouche totale, support pour viomi",
+            "it": "rielaborazione totale, supporto per viomi",
+            "es": "retrabajo total, soporte para viomi",
+            "pl": "całkowita przeróbka, wsparcie dla viomi",
+            "zh-cn": "全面返工，支持viomi"
+          }
       },
       "title": "mihome-vacuum",
       "titleLang": {
