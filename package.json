@@ -1,13 +1,11 @@
 {
   "name": "iobroker.mihome-vacuum",
-
   "version": "3.0.2",
   "description": "Control your Xiaomi/Roborock vacuum cleaner with ioBroker",
   "keywords": [
     "Mihome",
     "vacuum",
     "Roborock"
-
   ],
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum",
   "bugs": {
@@ -25,17 +23,17 @@
   },
   "scripts": {
     "test:js": "mocha \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
-      "test:package": "mocha test/package --exit",
-      "test:unit": "mocha test/unit --exit",
-      "test:integration": "mocha test/integration --exit",
-      "test": "npm run test:js && npm run test:package",
-      "lint": "eslint"
+    "test:package": "mocha test/package --exit",
+    "test:unit": "mocha test/unit --exit",
+    "test:integration": "mocha test/integration --exit",
+    "test": "npm run test:js && npm run test:package",
+    "lint": "eslint"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^1.0.3",
     "zlib": "^1.0.5",
-    "canvas":"^2.6.1",
-    "request":"^2.88.0",
+    "canvas": "^2.6.1",
+    "request": "^2.88.0",
     "treemap-js": "^1.2.1"
   },
   "devDependencies": {
