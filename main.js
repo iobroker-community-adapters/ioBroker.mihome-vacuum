@@ -93,7 +93,7 @@ class MihomeVacuum extends utils.Adapter {
             if (DeviceData) {
                 this.log.debug('Get Device data from robot..');
                 this.setModelInfoObject(DeviceData.result);
-                DeviceModel = DeviceData.result.model
+                DeviceModel = DeviceData.result.model;
 
                 this.setConnrection(true);
                 break;
@@ -110,8 +110,12 @@ class MihomeVacuum extends utils.Adapter {
         this.log.debug('DeviceModel selected to: ' + DeviceModel);
 
         //we get a model so we can select a protocoll
-
-        vacuum = new deviceList[DeviceModel](this,Miio);
+        if(deviceList[DeviceModel]){
+            vacuum = new deviceList[DeviceModel](this,Miio);
+        }
+        else{
+            this.log.warn('Model '+ DeviceModel+ ' not supported! Please open issue on git:  https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/issues');
+        }
     }
 
     /**
@@ -296,9 +300,9 @@ class MihomeVacuum extends utils.Adapter {
         }
 
         // responds to the adapter that sent the original message
-        function respond(response) {
-            obj.callback && adapter.sendTo(obj.from, obj.command, response, obj.callback);
-        }
+        const respond = response =>{
+            obj.callback && this.sendTo(obj.from, obj.command, response, obj.callback);
+        };
 
         // some predefined responses so we only have to define them once
         const predefinedResponses = {
@@ -390,11 +394,11 @@ class MihomeVacuum extends utils.Adapter {
                     //adapter.log.info('discover' + JSON.stringify(obj))
                     Map.getDeviceStatus(obj.message.username, obj.message.password, obj.message.server, '{"getVirtualModel":false,"getHuamiDevices":0}')
                         .then(data => {
-                            adapter.log.debug('discover__' + JSON.stringify(data));
+                            this.log.debug('discover__' + JSON.stringify(data));
                             respond(data);
                         })
                         .catch(err => {
-                            adapter.log.info('discover ' + err);
+                            this.log.info('discover ' + err);
                             respond({
                                 error: err
                             });
