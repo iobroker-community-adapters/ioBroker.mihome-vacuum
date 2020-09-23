@@ -73,6 +73,7 @@
       "pingInterval": 20000,
       "param_pingInterval": 60000,
       "valetudo_enable": false,
+      "token" : "00000000000000000000000000000000",
       "valetudo_color_floor": "#56affc",
       "valetudo_color_wall": "#b3edff",
       "valetudo_color_path": "#FFFFFF",
