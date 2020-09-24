@@ -415,7 +415,7 @@ class MihomeVacuum extends utils.Adapter {
                     // require the method to be given
                     if (!requireParams(['method'])) {
                         return;
-                    }
+                    } 
                     // params is optional
 
                     params = obj.message;
