@@ -16,6 +16,9 @@
 This adapter allows you control the Xiaomi vacuum cleaner.
 
 ## Content
+ - [Known Errors](#Known_Errors)
+    - [Error at installation (canvas)](#Error_at_installation)
+    - [HTTP error when getting token cookie{}](#HTTP_error_when_getting_token_cookie{})
 - [Setup](#configuration)
     - [Configure Adapter](#adapter-configuration)
         - [Control via Alexa](#control-over-alexa)
@@ -32,13 +35,8 @@ This adapter allows you control the Xiaomi vacuum cleaner.
 - [widget](#widget)
 - [bugs](#bugs)
 - [Changelog](#changelog)
- 
-## Configuration
-Currently, finding the token is the biggest problem.
-PLease follow the instruction in the Link:
 
-[Token turorial](https://www.smarthomeassistent.de/token-auslesen-roborock-s6-roborock-s5-xiaomi-mi-robot-xiaowa/).
-
+## Known Errors
 ### Error at installation
 if your installation runs in error. The canvas package could not be install
 
@@ -55,7 +53,15 @@ sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev l
 sudo npm install canvas --unsafe-perm=true
 ``
 
+###  HTTP error when getting token cookie{}
+sometimes you cant connect to the xiaomi cloud. Please open Browswer, go to Mihome and login. Enter the code you recieved via mail. After that the connection should work.
 
+
+## Configuration
+Currently, finding the token is the biggest problem.
+PLease follow the instruction in the Link:
+
+[Token turorial](https://www.smarthomeassistent.de/token-auslesen-roborock-s6-roborock-s5-xiaomi-mi-robot-xiaowa/).
 
 ### Adapter Configuration
 - For IP address, the IP address of the robot must be entered in the format "192.168.178.XX"
