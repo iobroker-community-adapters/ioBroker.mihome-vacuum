@@ -1,9 +1,9 @@
 ![Logo](admin/mihome-vacuum.png)
 # ioBroker mihome-vacuum adapter
 
-[![NPM version](http://img.shields.io/npm/v/ioBroker.mihome-vacuum.svg)](https://www.npmjs.com/package//ioBroker.mihome-vacuum)
+[![NPM version](http://img.shields.io/npm/v/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package//iobroker.mihome-vacuum)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
-![Number of Installations (latest)](http://http://iobroker.live/badges/mihome-vacuum-installed.svg)
+![Number of Installations (latest)](http://iobroker.live/badges/mihome-vacuum-installed.svg)
 [![Dependency Status](https://img.shields.io/david/iobroker-community-adapters/iobroker.mihome-vacuum.svg)](https://david-dm.org/iobroker-community-adapters/iobroker.mihome-vacuum)
 [![Known Vulnerabilities](https://snyk.io/test/github/iobroker-community-adapters/ioBroker.mihome-vacuum/badge.svg)](https://snyk.io/test/github/iobroker-community-adapters/ioBroker.mihome-vacuum)
 ![Test and Release](https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/workflows/Test%20and%20Release/badge.svg)
