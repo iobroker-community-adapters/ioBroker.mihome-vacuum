@@ -16,9 +16,9 @@
 This adapter allows you control the Xiaomi vacuum cleaner.
 
 ## Content
- - [Known Errors](#Known_Errors)
-    - [Error at installation (canvas)](#Error_at_installation)
-    - [HTTP error when getting token cookie{}](#HTTP_error_when_getting_token_cookie{})
+ - [Known Errors](#known_errors)
+    - [Error at installation (canvas)](#error_at_installation)
+    - [HTTP error when getting token cookie{}](#http_error_when_getting_token_cookie{})
 - [Setup](#configuration)
     - [Configure Adapter](#adapter-configuration)
         - [Control via Alexa](#control-over-alexa)
