@@ -535,10 +535,11 @@ function startAdapter(options) {
             } else {
                 adapter.log.info('send message: Method: ' + values[0]);
             }
-            const id = sendMsg(values[0], params, () =>
+            const messageId = sendMsg(values[0], params, () =>
                 adapter.setForeignState(id, state.val, true));
 
-            messages[id].method = command;
+            messages[messageId].method = command;
+            
         } else if (command === 'clean_home' || command === 'start') {
             if (state.val) {
                 adapter.sendTo(adapter.namespace, 'startVacuuming', null);
