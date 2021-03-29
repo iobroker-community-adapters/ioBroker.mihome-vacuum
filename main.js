@@ -156,7 +156,7 @@ class Cleaning {
 		if (this.checkCleanState)
 			this.checkCleanState = !!clearTimeout(this.checkCleanState);
 
-		adapter.setState('control.clean_home', this.activeState != 0, true);
+		if (adapter.config.enableAlexa) adapter.setState('control.clean_home', this.activeState != 0, true);
 
 		if (MAP.ENABLED) { // set map getter to true if..
 			if ([cleanStates.Cleaning, cleanStates.Back_toHome, cleanStates.SpotCleaning, cleanStates.GoingToSpot, cleanStates.ZoneCleaning, cleanStates.RoomCleaning].indexOf(this.state) > -1) {
