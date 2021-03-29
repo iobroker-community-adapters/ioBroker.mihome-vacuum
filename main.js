@@ -324,9 +324,9 @@ class FeatureManager {
 			}
 
 
-			this.mob = (model === 'roborock.vacuum.s5' || model === 'roborock.vacuum.s6');
+			this.mob = (model === 'roborock.vacuum.s5' || model === 'roborock.vacuum.s6' || model === 'roborock.vacuum.s5e');
 
-			if (model === 'roborock.vacuum.m1s' || model === 'roborock.vacuum.s5' || model === 'roborock.vacuum.s6') {
+			if (model === 'roborock.vacuum.m1s' || model === 'roborock.vacuum.s5' || model === 'roborock.vacuum.s5e'|| model === 'roborock.vacuum.s6') {
 				adapter.log.info('change states from State control.fan_power');
 				adapter.setObject('control.fan_power', {
 					type: 'state',
