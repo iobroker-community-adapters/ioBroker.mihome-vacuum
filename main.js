@@ -189,6 +189,11 @@ class Cleaning {
 				adapter.getState(this.activeChannels[0] + '.roomFanPower', function (err, fanPower) {
 					adapter.setState('control.fan_power', fanPower.val);
 				});
+				if (features.water_box_mode != null)
+				adapter.getState(this.activeChannels[0] + '.roomWaterBoxMode', function(err, waterBoxMode) {
+					adapter.setState('control.water_box_mode', waterBoxMode.val);
+				});
+
 			}
 			adapter.log.info('trigger cleaning ' + activeCleanState.name + (messageObj.message || ''));
 			this.checkStartCleaning(2);
@@ -279,6 +284,7 @@ class FeatureManager {
 		this.zoneClean = false;
 		this.mob = false;
 		this.water_box = null;
+		this.water_box_mode = null;
 		this.carpetMode = null;
 		this.roomMapping = null;
 	}
@@ -495,6 +501,35 @@ class FeatureManager {
 		}
 		this.water_box && adapter.setStateChanged('info.water_box', water_box_status === 1, true);
 	}
+	setWaterBoxMode(water_box_mode) {
+		if (this.water_box_mode === null) {
+			this.water_box_mode = !isNaN(water_box_mode);
+			if (this.water_box_mode) {
+				adapter.log.info('create states for water box mode');
+				adapter.setObjectNotExists('control.water_box_mode', {
+					type: 'state',
+					common: {
+						name: 'Water Box mode',
+						type: 'number',
+						role: 'level',
+						read: true,
+						write: true,
+						min: 200,
+						max: 204,
+						states: {
+							200: 'OFF',
+							201: 'LOW',
+							202: 'MEDIUM',
+							203: 'HIGH',
+							204: 'CUSTOM' // setting for rooms will be used
+						}
+					},
+					native: {}
+				});
+				adapter.setStateChanged('control.water_box_mode', Math.round(water_box_mode), true);
+			}
+		}
+	}
 }
 const features = new FeatureManager();
 
@@ -645,7 +680,12 @@ function startAdapter(options) {
 		} else if (command === 'roomFanPower') {
 			// do nothing, only set fan power for next roomClean
 			adapter.setForeignState(id, state.val, true);
-		} else if (com[command] && !ViomiFlag) {
+		}
+		else if (command === 'roomWaterBoxMode') {
+			//do nothing, only set water box mode for next roomClean
+			adapter.setForeignState(id, state.val,  true);
+		} 
+		else if (com[command] && !ViomiFlag) {
 			let params = com[command].params || '';
 			if (state.val !== true && state.val !== 'true') {
 				params = state.val;
@@ -1018,6 +1058,19 @@ function startAdapter(options) {
 					sendCustomCommand('set_custom_mode', [obj.message.fanSpeed]);
 					return;
 
+					//Water Flow Mode
+				case 'getWaterBoxMode':
+					//require start and end time to be given
+					sendCustomCommand('get_water_box_custom_mode', returnSingleResult);
+					return;
+				
+				case 'setWaterBoxMode':
+					//require start and end time to be given
+					if (!requireParams(['waterBoxMode'])) {
+						return;
+					}
+					sendCustomCommand('set_water_box_custom_mode', [obj.message.waterBoxMode]);
+
 					// Remote controls
 				case 'startRemoteControl':
 					sendCustomCommand('app_rc_start');
@@ -1292,6 +1345,7 @@ function getStates(message) {
 			adapter.setStateChanged('info.error', status.error_code, true);
 			adapter.setStateChanged('info.dnd', status.dnd_enabled, true);
 			features.setWaterBox(status.water_box_status);
+			features.setWaterBoxMode(status.water_box_mode);
 			if (cleaning.state != status.state) {
 				cleaning.setRemoteState(status.state);
 			}
