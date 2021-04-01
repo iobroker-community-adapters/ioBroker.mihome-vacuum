@@ -512,7 +512,7 @@ class FeatureManager {
 		this.water_box && adapter.setStateChanged('info.water_box', water_box_status === 1, true);
 	}
 	setWaterBoxMode(water_box_mode) {
-		if (this.water_box_mode === null) {
+		if (this.water_box_mode === null && water_box_mode) {
 			this.water_box_mode = !isNaN(water_box_mode);
 			if (this.water_box_mode) {
 				adapter.log.info('create states for water box mode');
@@ -536,9 +536,10 @@ class FeatureManager {
 					},
 					native: {}
 				});
-				adapter.setStateChanged('control.water_box_mode', Math.round(water_box_mode), true);
+				
 			}
 		}
+		water_box_mode && adapter.setStateChanged('control.water_box_mode', Math.round(water_box_mode), true);
 	}
 }
 const features = new FeatureManager();
