@@ -193,9 +193,15 @@
             "minWidth": 800,
             "width ": 1224
         },
-        "messagebox": true
+        "messagebox": true,
+        "dependencies": [{
+            "js-controller": ">=3.1.0"
+        }]
     },
+    "encryptedNative": ["password"],
+    "protectedNative": ["password"],
     "native": {
+        "password": "",
         "port": 54321,
         "ownPort": 53421,
         "pingInterval": 20000,
@@ -209,8 +215,7 @@
         "valetudo_MapsaveIntervall": 5000,
         "sendsPauseBeforeHome": false
     },
-    "instanceObjects": [
-        {
+    "instanceObjects": [{
             "_id": "info",
             "type": "channel",
             "common": {
