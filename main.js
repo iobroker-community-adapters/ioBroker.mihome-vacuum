@@ -112,9 +112,9 @@ class Cleaning {
 	}
 
 	/**
-     * is called, if robot send status
-     * @param {number} newVal new status
-     */
+	 * is called, if robot send status
+	 * @param {number} newVal new status
+	 */
 	setRemoteState(newVal) {
 		this.state = newVal;
 		adapter.setState('info.state', this.state, true);
@@ -190,9 +190,9 @@ class Cleaning {
 					adapter.setState('control.fan_power', fanPower.val);
 				});
 				if (features.water_box_mode != null)
-				adapter.getState(this.activeChannels[0] + '.roomWaterBoxMode', function(err, waterBoxMode) {
-					adapter.setState('control.water_box_mode', waterBoxMode.val);
-				});
+					adapter.getState(this.activeChannels[0] + '.roomWaterBoxMode', function (err, waterBoxMode) {
+						adapter.setState('control.water_box_mode', waterBoxMode.val);
+					});
 
 			}
 			adapter.log.info('trigger cleaning ' + activeCleanState.name + (messageObj.message || ''));
@@ -287,6 +287,7 @@ class FeatureManager {
 		this.water_box_mode = null;
 		this.carpetMode = null;
 		this.roomMapping = null;
+		this.NewSuctionPower = null;
 	}
 
 	init() {
@@ -312,6 +313,49 @@ class FeatureManager {
 		sendMsg('get_room_mapping'); // test, if supported
 	}
 
+	async setNewSuctionValues(value) {
+
+		if(this.NewSuctionPower === null && value > 100){
+			adapter.log.info('change states from State control.fan_power');
+
+			this.NewSuctionPower = true;
+			adapter.setObject('control.fan_power', {
+				type: 'state',
+				common: {
+					name: 'Suction power',
+					type: 'number',
+					role: 'level',
+					read: true,
+					write: true,
+					min: 101,
+					max: 106,
+					states: {
+						101: 'QUIET',
+						102: 'BALANCED',
+						103: 'TURBO',
+						104: 'MAXIMUM',
+						106: 'CUSTOM' // setting for rooms will be used
+					}
+				},
+				native: {}
+			});
+	
+			if (this.mob) {
+				adapter.log.info('extend state mop for State control.fan_power');
+				setTimeout(adapter.extendObject, 2000, 'control.fan_power', {
+					common: {
+						max: 105,
+						states: {
+							105: 'MOP' // no vacuum, only mop
+						}
+					}
+				}); // need time, until the new setting above
+			}
+
+		}
+		else if (this.NewSuctionPower === null && value <= 100)this.NewSuctionPower = true;
+	}
+
 	setModel(model) {
 
 
@@ -332,40 +376,6 @@ class FeatureManager {
 
 			this.mob = (model === 'roborock.vacuum.s5' || model === 'roborock.vacuum.s6' || model === 'roborock.vacuum.s5e');
 
-			if (model === 'roborock.vacuum.m1s' || model === 'roborock.vacuum.s5' || model === 'roborock.vacuum.s5e'|| model === 'roborock.vacuum.s6') {
-				adapter.log.info('change states from State control.fan_power');
-				adapter.setObject('control.fan_power', {
-					type: 'state',
-					common: {
-						name: 'Suction power',
-						type: 'number',
-						role: 'level',
-						read: true,
-						write: true,
-						min: 101,
-						max: 106,
-						states: {
-							101: 'QUIET',
-							102: 'BALANCED',
-							103: 'TURBO',
-							104: 'MAXIMUM',
-							106: 'CUSTOM' // setting for rooms will be used
-						}
-					},
-					native: {}
-				});
-			}
-			if (this.mob) {
-				adapter.log.info('extend state mop for State control.fan_power');
-				setTimeout(adapter.extendObject, 2000, 'control.fan_power', {
-					common: {
-						max: 105,
-						states: {
-							105: 'MOP' // no vacuum, only mop
-						}
-					}
-				}); // need time, until the new setting above
-			}
 		}
 	}
 
@@ -680,12 +690,10 @@ function startAdapter(options) {
 		} else if (command === 'roomFanPower') {
 			// do nothing, only set fan power for next roomClean
 			adapter.setForeignState(id, state.val, true);
-		}
-		else if (command === 'roomWaterBoxMode') {
+		} else if (command === 'roomWaterBoxMode') {
 			//do nothing, only set water box mode for next roomClean
-			adapter.setForeignState(id, state.val,  true);
-		} 
-		else if (com[command] && !ViomiFlag) {
+			adapter.setForeignState(id, state.val, true);
+		} else if (com[command] && !ViomiFlag) {
 			let params = com[command].params || '';
 			if (state.val !== true && state.val !== 'true') {
 				params = state.val;
@@ -728,9 +736,9 @@ function startAdapter(options) {
 	});
 
 	/**
-     *
-     * @param { object of {command, message, callback, from} obj
-     */
+	 *
+	 * @param { object of {command, message, callback, from} obj
+	 */
 	adapter.on('message', obj => {
 		// responds to the adapter that sent the original message
 		function respond(response) {
@@ -1063,7 +1071,7 @@ function startAdapter(options) {
 					//require start and end time to be given
 					sendCustomCommand('get_water_box_custom_mode', returnSingleResult);
 					return;
-				
+
 				case 'setWaterBoxMode':
 					//require start and end time to be given
 					if (!requireParams(['waterBoxMode'])) {
@@ -1338,14 +1346,19 @@ function getStates(message) {
 
 		if (requestMessage.method === 'get_status') {
 			const status = parseStatus(answer);
+
+			features.setNewSuctionValues(Math.round(status.fan_power));
+			features.setWaterBox(status.water_box_status);
+			features.setWaterBoxMode(status.water_box_mode);
+
 			adapter.setStateChanged('info.battery', status.battery, true);
 			adapter.setStateChanged('info.cleanedtime', Math.round(status.clean_time / 60), true);
 			adapter.setStateChanged('info.cleanedarea', Math.round(status.clean_area / 10000) / 100, true);
 			adapter.setStateChanged('control.fan_power', Math.round(status.fan_power), true);
 			adapter.setStateChanged('info.error', status.error_code, true);
 			adapter.setStateChanged('info.dnd', status.dnd_enabled, true);
-			features.setWaterBox(status.water_box_status);
-			features.setWaterBoxMode(status.water_box_mode);
+
+
 			if (cleaning.state != status.state) {
 				cleaning.setRemoteState(status.state);
 			}
