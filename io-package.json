@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "2.2.4",
+        "version": "2.2.5",
         "news": {
+            "2.2.5": {
+                  "en": "added Robock S7 Support, fixes for S5Max, many bugfixes",
+                  "de": "Robock S7 Support hinzugefügt, Korrekturen für S5Max, viele Bugfixes",
+                  "ru": "добавлена поддержка Robock S7, исправления для S5Max, множество исправлений",
+                  "pt": "adicionado Suporte Robock S7, correções para S5Max, muitas correções de bugs",
+                  "nl": "Robock S7-ondersteuning toegevoegd, fixes voor S5Max, veel bugfixes",
+                  "fr": "Ajout du support Robock S7, des correctifs pour S5Max, de nombreuses corrections de bogues",
+                  "it": "aggiunto il supporto per Robock S7, correzioni per S5Max, molte correzioni di bug",
+                  "es": "Se agregó soporte para Robock S7, correcciones para S5Max, muchas correcciones de errores",
+                  "pl": "dodano obsługę Robock S7, poprawki dla S5Max, wiele poprawek błędów",
+                  "zh-cn": "添加了Robock S7支持，针对S5Max的修复，许多错误修复"
+                },
             "2.2.4": {
                 "en": "add config for send Pause Before Home",
                 "de": "Konfiguration für Sende pause vor Home hinzufügen",
