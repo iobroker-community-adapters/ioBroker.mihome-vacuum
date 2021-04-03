@@ -8,13 +8,12 @@
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
 const dgram = require('dgram');
-const com = require('./lib/comands');
 const TimerManager = require('./lib/timerManager');
 const RoomManager = require('./lib/roomManager');
 const adapterName = require('./package.json').name.split('.').pop();
 const MapHelper = require('./lib/maphelper');
 const miio = require('./lib/miio');
-const objects = require(__dirname + '/lib/objects');
+const objects = require('./lib/objects');
 
 const ViomiManager = require('./lib/viomi');
 const VacuumManager = require('./lib/vacuum');
