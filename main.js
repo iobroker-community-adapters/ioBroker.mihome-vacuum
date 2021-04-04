@@ -23,10 +23,10 @@ let connected = false;
 let Miio;
 let vacuum = null;
 let Map;
-
 const deviceList = {
 	'viomi.vacuum.v7': ViomiManager,
 	'viomi.vacuum.v8': ViomiManager,
+	'viomi.vacuum.v19': ViomiManager, //test
 	'roborock.vacuum.s5': VacuumManager,
 	'roborock.vacuum.s6': VacuumManager,
 	'roborock.vacuum.m1s': VacuumManager,
@@ -65,7 +65,7 @@ class MihomeVacuum extends utils.Adapter {
 
 		if (!this.config.token) {
 			this.log.warn('Token not specified!');
-			return;
+			return
 		}
 		//create new miio class
 		Miio = new miio(this);
@@ -140,6 +140,12 @@ class MihomeVacuum extends utils.Adapter {
 			vacuum = new deviceList[DeviceModel](this, Miio);
 		} else {
 			this.log.warn('Model ' + DeviceModel + ' not supported! Please open issue on git:  https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/issues');
+
+			//try to get stock Model maybe it is working
+			let FirstDevMod = DeviceModel.split('.')[0]
+
+			if(FirstDevMod === 'viomi') vacuum = new ViomiManager(this, Miio);
+			else if (FirstDevMod === 'roborock') vacuum = new VacuumManager(this, Miio);
 		}
 	}
 
