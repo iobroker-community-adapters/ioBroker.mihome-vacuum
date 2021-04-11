@@ -318,7 +318,7 @@ class MihomeVacuum extends utils.Adapter {
 	 * Using this method requires "common.message" property to be set to true in io-package.json
 	 * @param {ioBroker.Message} obj
 	 */
-	onMessage(obj) {
+	async onMessage(obj) {
 		if (typeof obj === 'object' && obj.message) {
 			if (obj.command === 'send') {
 				// e.g. send email or pushover or whatever
@@ -328,7 +328,6 @@ class MihomeVacuum extends utils.Adapter {
 				if (obj.callback) this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
 			}
 		}
-
 		// responds to the adapter that sent the original message
 		const respond = response => {
 			obj.callback && this.sendTo(obj.from, obj.command, response, obj.callback);
@@ -356,7 +355,10 @@ class MihomeVacuum extends utils.Adapter {
 
 					// ======================================================================
 				default:
-					respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
+					//respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
+					//await vacuum.onMessage(obj)
+					//this.log.warn('gottosent vacuu '+ JSON.stringify(obj))
+					respond(await vacuum.onMessage(obj));
 					return;
 			}
 		}
