@@ -313,7 +313,7 @@ class MihomeVacuum extends utils.Adapter {
 				this.setStateAsync('control.X_get_response', '[' + error + ']', true);
 			}
 		}
-		vacuum.stateChange(id, state);
+		vacuum && vacuum.stateChange(id, state);
 	}
 
 
@@ -362,8 +362,8 @@ class MihomeVacuum extends utils.Adapter {
 					//respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
 					//await vacuum.onMessage(obj)
 					//this.log.warn('gottosent vacuu '+ JSON.stringify(obj))
-					respond(await vacuum.onMessage(obj));
-					return;
+					respond(await vacuum.onMessage(obj))
+					return
 			}
 		}
 	}
