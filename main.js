@@ -24,6 +24,8 @@ let Miio;
 let vacuum = null;
 let Map;
 const deviceList = {
+	//'mijia.vacuum.v2' : MiotVacuum, //  Modell: Xiaomi mijia g1
+	//'dreame.vacuum.mc1808' : MiotVacuum, //  Modell: Xioami mijia 1c
 	'viomi.vacuum.v7': ViomiManager,
 	'viomi.vacuum.v8': ViomiManager,
 	'viomi.vacuum.v19': ViomiManager, //test
@@ -70,6 +72,7 @@ class MihomeVacuum extends utils.Adapter {
 		//create new miio class
 		Miio = new miio(this);
 
+		
 		//create default States
 		objects.deviceInfo.map(o => this.setObjectNotExistsAsync('deviceInfo.' + o._id, o));
 
@@ -124,6 +127,7 @@ class MihomeVacuum extends utils.Adapter {
 			}
 		}
 		if (!DeviceData && objModel && objModel.val) {
+			this.log.warn('YOUR DEVICE IS CONNECTED BUT DID NOT ANSWER CONNECTION CAN TAKE UP TO 10 MINUTES PLESASE WAIT AND DON`T TRUN THE ADAPTER OFF');
 			this.log.warn('No Answer for DeviceModel use old one');
 			DeviceModel = objModel.val;
 		}
@@ -137,15 +141,15 @@ class MihomeVacuum extends utils.Adapter {
 
 		//we get a model so we can select a protocoll
 		if (deviceList[DeviceModel]) {
-			vacuum = new deviceList[DeviceModel](this, Miio);
+			vacuum = new deviceList[DeviceModel](this, Miio, Map);
 		} else {
 			this.log.warn('Model ' + DeviceModel + ' not supported! Please open issue on git:  https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/issues');
 
 			//try to get stock Model maybe it is working
 			let FirstDevMod = DeviceModel.split('.')[0]
 
-			if(FirstDevMod === 'viomi') vacuum = new ViomiManager(this, Miio);
-			else if (FirstDevMod === 'roborock') vacuum = new VacuumManager(this, Miio);
+			if (FirstDevMod === 'viomi') vacuum = new ViomiManager(this, Miio, Map);
+			else if (FirstDevMod === 'roborock') vacuum = new VacuumManager(this, Miio, Map);
 		}
 	}
 
