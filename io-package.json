@@ -1,7 +1,7 @@
 {
     "common": {
       "name": "mihome-vacuum",
-      "version": "3.0.3",
+      "version": "3.0.4",
       "news": {
         "2.2.5": {
           "en": "added Robock S7 Support, fixes for S5Max, many bugfixes",
