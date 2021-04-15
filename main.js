@@ -69,12 +69,14 @@ class MihomeVacuum extends utils.Adapter {
 			this.log.warn('Token not specified!');
 			return
 		}
+		//create default States
+		await Promise.all(objects.deviceInfo.map(async (o) => {
+			const contents = await this.setObjectNotExistsAsync('deviceInfo.' + o._id, o);
+			this.log.debug('Create State for deviceInfo' + o._id);
+		}));
+
 		//create new miio class
 		Miio = new miio(this);
-
-		
-		//create default States
-		objects.deviceInfo.map(o => this.setObjectNotExistsAsync('deviceInfo.' + o._id, o));
 
 		Miio.on('connect', () => {
 			this.log.debug('MAIN: Connected to device, try to get model..');
