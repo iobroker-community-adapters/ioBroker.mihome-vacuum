@@ -1,633 +1,271 @@
 {
     "common": {
-        "name": "mihome-vacuum",
-        "version": "2.2.5",
-        "news": {
-            "2.2.5": {
-                  "en": "added Robock S7 Support, fixes for S5Max, many bugfixes",
-                  "de": "Robock S7 Support hinzugefügt, Korrekturen für S5Max, viele Bugfixes",
-                  "ru": "добавлена поддержка Robock S7, исправления для S5Max, множество исправлений",
-                  "pt": "adicionado Suporte Robock S7, correções para S5Max, muitas correções de bugs",
-                  "nl": "Robock S7-ondersteuning toegevoegd, fixes voor S5Max, veel bugfixes",
-                  "fr": "Ajout du support Robock S7, des correctifs pour S5Max, de nombreuses corrections de bogues",
-                  "it": "aggiunto il supporto per Robock S7, correzioni per S5Max, molte correzioni di bug",
-                  "es": "Se agregó soporte para Robock S7, correcciones para S5Max, muchas correcciones de errores",
-                  "pl": "dodano obsługę Robock S7, poprawki dla S5Max, wiele poprawek błędów",
-                  "zh-cn": "添加了Robock S7支持，针对S5Max的修复，许多错误修复"
-                },
-            "2.2.4": {
-                "en": "add config for send Pause Before Home",
-                "de": "Konfiguration für Sende pause vor Home hinzufügen",
-                "ru": "добавить конфиг для отправки Pause Before Home",
-                "pt": "adicionar configuração para enviar Pausa antes de casa",
-                "nl": "voeg config toe om Pause Before Home te verzenden",
-                "fr": "ajouter la configuration pour envoyer Pause Before Home",
-                "it": "aggiungi config per inviare Pause Before Home",
-                "es": "agregar configuración para enviar pausa antes de casa",
-                "pl": "dodaj konfigurację do wysłania Wstrzymaj przed domem",
-                "zh-cn": "添加配置以在回家之前发送暂停"
-            },
-            "2.2.3": {
-                "en": "room DP are not deleted, on map change",
-                "de": "Raum DP werden bei Kartenwechsel nicht mehr gelöscht",
-                "ru": "ДП комнаты не удаляются, при изменении карты",
-                "pt": "DP da sala não são excluídos, na alteração do mapa",
-                "nl": "kamer DP worden niet verwijderd bij kaartwijziging",
-                "fr": "salle DP ne sont pas supprimés, lors du changement de carte",
-                "it": "camera DP non vengono cancellate, al cambio mappa",
-                "es": "habitación DP no se eliminan, en cambio de mapa",
-                "pl": "DP pokoju nie są usuwane przy zmianie mapy",
-                "zh-cn": "更改地图后，房间DP不会被删除"
-            },
-            "2.2.0": {
-                "en": "add api for viomi and dreame",
-                "de": "füge api für viomi hinzu und träume",
-                "ru": "добавить api для viomi и dreame",
-                "pt": "adicionar api para viomi e sonhar",
-                "nl": "voeg api toe voor viomi en dreame",
-                "fr": "ajouter une api pour viomi et dreame",
-                "it": "aggiungi api per viomi e dreame",
-                "es": "agregar api para viomi y dreame",
-                "pl": "dodaj api dla viomi i dreame",
-                "zh-cn": "为Viomi和Dreame添加api"
-            },
-            "2.1.1": {
-                "en": "Refactoring\nSupport of compact mode added",
-                "de": "Refactoring\nUnterstützung des Kompaktmodus hinzugefügt",
-                "ru": "Рефакторинг\nДобавлена поддержка компактного режима",
-                "pt": "Reestruturação\nAdicionado suporte ao modo compacto",
-                "nl": "Refactoring\nOndersteuning voor compacte modus toegevoegd",
-                "fr": "Refactoring\nAjout du support du mode compact",
-                "it": "refactoring\nSupporto della modalità compatta aggiunto",
-                "es": "Refactorización\nSoporte de modo compacto agregado",
-                "pl": "Refaktoryzacja\nDodano obsługę trybu kompaktowego",
-                "zh-cn": "重构\n支持紧凑模式"
-            },
-            "2.0.10": {
-                "en": "try to starting of cleaning 3 times, if robot not answers and some fixes",
-                "de": "Versuchen Sie dreimal mit dem Reinigen zu beginnen, wenn der Roboter nicht antwortet und einige Korrekturen vorgenommen hat",
-                "ru": "попытаться начать уборку 3 раза, если робот не отвечает и некоторые исправления",
-                "pt": "tente iniciar a limpeza 3 vezes, se o robô não responder e algumas correções",
-                "nl": "probeer 3 keer te beginnen met schoonmaken, als de robot niet antwoordt en een aantal fixes",
-                "fr": "essayez de commencer le nettoyage 3 fois, si le robot ne répond pas et quelques correctifs",
-                "it": "provare a iniziare la pulizia 3 volte, se il robot non risponde e alcune correzioni",
-                "es": "intente iniciar la limpieza 3 veces, si el robot no responde y algunas soluciones",
-                "pl": "spróbuj rozpocząć czyszczenie 3 razy, jeśli robot nie odpowiada i niektóre poprawki",
-                "zh-cn": "如果机器人无法回答并进行一些修复，请尝试开始清洁3次"
-            },
-            "2.0.9": {
-                "en": "add state info for room channels and change queue info from number to JSON",
-                "de": "Fügen Sie Statusinformationen für Raumkanäle hinzu und ändern Sie die Warteschlangeninformationen von Nummer in JSON",
-                "ru": "добавить информацию о состоянии для комнатных каналов и изменить информацию об очереди с номера на JSON",
-                "pt": "adicione informações de estado para os canais da sala e altere as informações da fila de número para JSON",
-                "nl": "voeg statusinformatie toe voor kamerkanalen en wijzig de wachtrij-info van nummer in JSON",
-                "fr": "ajouter des informations d'état pour les canaux de salle et changer les informations de file d'attente du nombre en JSON",
-                "it": "aggiungere informazioni sullo stato per i canali della sala e modificare le informazioni sulla coda dal numero a JSON",
-                "es": "agregue información de estado para los canales de la sala y cambie la información de la cola del número a JSON",
-                "pl": "dodaj informacje o stanie dla kanałów pokojowych i zmień informacje o kolejce z numeru na JSON",
-                "zh-cn": "添加房间频道的状态信息并将队列信息从数字更改为JSON"
-            },
-            "2.0.8": {
-                "en": "decreased communication with robot",
-                "de": "verminderte Kommunikation mit dem Roboter",
-                "ru": "уменьшилось общение с роботом",
-                "pt": "comunicação reduzida com o robô",
-                "nl": "verminderde communicatie met robot",
-                "fr": "diminution de la communication avec le robot",
-                "it": "ridotta comunicazione con il robot",
-                "es": "disminución de la comunicación con el robot",
-                "pl": "zmniejszona komunikacja z robotem",
-                "zh-cn": "与机器人的交流减少"
-            },
-            "2.0.7": {
-                "en": "add Resuming after pause for rooms",
-                "de": "Hinzufügen Wiederaufnahme nach Pause für Räume",
-                "ru": "добавить Возобновление после паузы для комнат",
-                "pt": "adicionar Retomando após uma pausa nos quartos",
-                "nl": "toevoegen Hervatten na pauze voor kamers",
-                "fr": "add Reprise après pause pour les salles",
-                "it": "aggiungi Riprendi dopo la pausa per le stanze",
-                "es": "agregar Reanudación después de pausa para habitaciones",
-                "pl": "dodaj Wznawianie po pauzie dla pokoi",
-                "zh-cn": "添加房间暂停后恢复"
-            },
-            "2.0.6": {
-                "en": "add roooms for s50 with map",
-                "de": "füge zimmer für s50 mit karte hinzu",
-                "ru": "добавить комнаты для s50 с картой",
-                "pt": "adicionar roooms para s50 com mapa",
-                "nl": "voeg roooms toe voor s50 met kaart",
-                "fr": "ajouter des chambres pour s50 avec carte",
-                "it": "aggiungi roooms per s50 con mappa",
-                "es": "agregar habitaciones para s50 con mapa",
-                "pl": "dodaj rooomy do s50 z mapą",
-                "zh-cn": "在地图上添加s50的房间"
-            },
-            "2.0.4": {
-                "en": "add cloud loging, add xiaomi map, add new map format",
-                "de": "Cloud-Zugang hinzufügen, Xiaomi-Karte hinzufügen, neues Kartenformat hinzufügen",
-                "ru": "добавить облачный журнал, добавить карту xiaomi, добавить новый формат карты",
-                "pt": "adicionar registro em nuvem, adicionar mapa xiaomi, adicionar novo formato de mapa",
-                "nl": "cloud logging toevoegen, xiaomi-kaart toevoegen, nieuw kaartformaat toevoegen",
-                "fr": "ajouter la journalisation dans le cloud, ajouter la carte xiaomi, ajouter un nouveau format de carte",
-                "it": "aggiungi il cloud loging, aggiungi la mappa xiaomi, aggiungi un nuovo formato di mappa",
-                "es": "agregue loging en la nube, agregue el mapa xiaomi, agregue un nuevo formato de mapa",
-                "pl": "dodaj rejestrowanie w chmurze, dodaj mapę Xiaomi, dodaj nowy format mapy",
-                "zh-cn": "添加云日志，添加小米地图，添加新地图格式"
-            },
-            "1.10.5": {
-                "en": "send Ping only if not connected, otherwise get_status\nset button states to true, if clicked\nmove Timermanager and roomManager to own libs",
-                "de": "Ping nur senden, wenn keine Verbindung besteht, sonst get_status\n",
-                "ru": "отправлять Ping, только если не подключен, иначе get_status\n",
-                "pt": "envie Ping apenas se não estiver conectado, caso contrário, get_status\n",
-                "nl": "stuur Ping alleen indien niet verbonden, anders get_status\n",
-                "fr": "envoyer Ping uniquement s'il n'est pas connecté, sinon get_status\n",
-                "it": "invia Ping solo se non connesso, altrimenti get_status\n",
-                "es": "envíe Ping solo si no está conectado, de lo contrario get_status\n",
-                "pl": "wyślij Ping tylko jeśli nie jest podłączony, w przeciwnym razie get_status\n",
-                "zh-cn": "仅在未连接时发送Ping，否则返回get_status\n"
-            }
+      "name": "mihome-vacuum",
+      "version": "3.1.1",
+      "news": {
+        "3.1.1": {
+          "en": "Breaking Change: Full rewrote, Please delete Adapter first before update",
+          "de": "Breaking Change: Vollständig neu geschrieben. Bitte löschen Sie den Adapter zuerst, bevor Sie ihn aktualisieren",
+          "ru": "Критическое изменение: полностью переписано, пожалуйста, удалите адаптер перед обновлением",
+          "pt": "Quebrando a mudança: Reescrito completo, exclua o adaptador antes de atualizar",
+          "nl": "Brekende wijziging: volledig herschreven, verwijder eerst de adapter voordat u de update uitvoert",
+          "fr": "Changement de rupture: réécriture complète, veuillez supprimer l'adaptateur avant la mise à jour",
+          "it": "Modifica definitiva: riscrittura completa, eliminare l'adattatore prima dell'aggiornamento",
+          "es": "Cambio rotundo: reescritura completa, elimine el adaptador primero antes de la actualización",
+          "pl": "Przełomowa zmiana: pełna przeróbka, najpierw usuń adapter przed aktualizacją",
+          "zh-cn": "重大更改：已完全重写，请在更新之前先删除适配器"
         },
-        "title": "mihome-vacuum",
-        "titleLang": {
-            "en": "Control of Xiaomi/Roborock vacuum cleaner",
-            "de": "Steuerung des Staubsaugers Xiaomi/Roborock",
-            "ru": "Управление пылесосом Xiaomi/Roborock",
-            "pt": "Controle do aspirador Xiaomi/Roborock",
-            "nl": "Bediening van Xiaomi/Roborock stofzuiger",
-            "fr": "Contrôle de l'aspirateur Xiaomi/Roborock",
-            "it": "Controllo dell'aspirapolvere Xiaomi/Roborock",
-            "es": "Control de la aspiradora Xiaomi/Roborock",
-            "pl": "Kontrola odkurzacza Xiaomi/Roborock",
-            "zh-cn": "小米/罗伯克吸尘器的控制"
+        "2.2.5": {
+          "en": "added Robock S7 Support, fixes for S5Max, many bugfixes",
+          "de": "Robock S7 Support hinzugefügt, Korrekturen für S5Max, viele Bugfixes",
+          "ru": "добавлена поддержка Robock S7, исправления для S5Max, множество исправлений",
+          "pt": "adicionado Suporte Robock S7, correções para S5Max, muitas correções de bugs",
+          "nl": "Robock S7-ondersteuning toegevoegd, fixes voor S5Max, veel bugfixes",
+          "fr": "Ajout du support Robock S7, des correctifs pour S5Max, de nombreuses corrections de bogues",
+          "it": "aggiunto il supporto per Robock S7, correzioni per S5Max, molte correzioni di bug",
+          "es": "Se agregó soporte para Robock S7, correcciones para S5Max, muchas correcciones de errores",
+          "pl": "dodano obsługę Robock S7, poprawki dla S5Max, wiele poprawek błędów",
+          "zh-cn": "添加了Robock S7支持，针对S5Max的修复，许多错误修复"
         },
-        "desc": {
-            "en": "This adapter allows control Xiaomi vacuum cleaner",
-            "de": "Dieser Adapter ermöglicht die Steuerung Xiaomi Staubsauger",
-            "ru": "Этот адаптер позволяет контролировать пылесос Xiaomi",
-            "pt": "Este adaptador permite controle Xiaomi aspirador de pó",
-            "nl": "Met deze adapter kunt u de Xiaomi-stofzuiger bedienen",
-            "fr": "Cet adaptateur permet de contrôler l'aspirateur Xiaomi",
-            "it": "Questo adattatore consente il controllo dell'aspirapolvere Xiaomi",
-            "es": "Este adaptador permite el control del aspirador Xiaomi",
-            "pl": "Ten adapter umożliwia kontrolę odkurzacza Xiaomi",
-            "zh-cn": "这款适配器可以控制小米吸尘器"
+        "2.2.4": {
+          "en": "add config for send Pause Before Home",
+          "de": "Konfiguration für Sende pause vor Home hinzufügen",
+          "ru": "добавить конфиг для отправки Pause Before Home",
+          "pt": "adicionar configuração para enviar Pausa antes de casa",
+          "nl": "voeg config toe om Pause Before Home te verzenden",
+          "fr": "ajouter la configuration pour envoyer Pause Before Home",
+          "it": "aggiungi config per inviare Pause Before Home",
+          "es": "agregar configuración para enviar pausa antes de casa",
+          "pl": "dodaj konfigurację do wysłania Wstrzymaj przed domem",
+          "zh-cn": "添加配置以在回家之前发送暂停"
         },
-        "authors": [
-            "bluefox <dogafox@gmail.com>"
-        ],
-        "osDependencies": {
-            "linux": [
-                "libcairo2-dev",
-                "libpango1.0-dev",
-                "libjpeg-dev",
-                "libgif-dev",
-                "librsvg2-dev"
-            ]
+        "2.2.3": {
+          "en": "room DP are not deleted, on map change",
+          "de": "Raum DP werden bei Kartenwechsel nicht mehr gelöscht",
+          "ru": "ДП комнаты не удаляются, при изменении карты",
+          "pt": "DP da sala não são excluídos, na alteração do mapa",
+          "nl": "kamer DP worden niet verwijderd bij kaartwijziging",
+          "fr": "salle DP ne sont pas supprimés, lors du changement de carte",
+          "it": "camera DP non vengono cancellate, al cambio mappa",
+          "es": "habitación DP no se eliminan, en cambio de mapa",
+          "pl": "DP pokoju nie są usuwane przy zmianie mapy",
+          "zh-cn": "更改地图后，房间DP不会被删除"
         },
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "loglevel": "info",
-        "materialize": true,
-        "compact": true,
-        "icon": "mihome-vacuum.png",
-        "readme": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/README.md",
-        "keywords": [
-            "url",
-            "html",
-            "file",
-            "mihome-vacuum"
-        ],
-        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.mihome-vacuum/master/admin/mihome-vacuum.png",
-        "type": "household",
-        "config": {
-            "minWidth": 800,
-            "width ": 1224
+        "2.2.0": {
+          "en": "add api for viomi and dreame",
+          "de": "füge api für viomi hinzu und träume",
+          "ru": "добавить api для viomi и dreame",
+          "pt": "adicionar api para viomi e sonhar",
+          "nl": "voeg api toe voor viomi en dreame",
+          "fr": "ajouter une api pour viomi et dreame",
+          "it": "aggiungi api per viomi e dreame",
+          "es": "agregar api para viomi y dreame",
+          "pl": "dodaj api dla viomi i dreame",
+          "zh-cn": "为Viomi和Dreame添加api"
         },
-        "messagebox": true,
-        "dependencies": [{
-            "js-controller": ">=3.1.0"
-        }]
-    },
-    "encryptedNative": ["password"],
-    "protectedNative": ["password"],
-    "native": {
-        "password": "",
-        "port": 54321,
-        "ownPort": 53421,
-        "pingInterval": 20000,
-        "wifiInterval": 60000,
-        "valetudo_enable": false,
-        "valetudo_color_floor": "#56affc",
-        "valetudo_color_wall": "#b3edff",
-        "valetudo_color_path": "#FFFFFF",
-        "robot_select": "robot",
-        "valetudo_requestIntervall": 2000,
-        "valetudo_MapsaveIntervall": 5000,
-        "sendsPauseBeforeHome": false
-    },
-    "instanceObjects": [{
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
+        "2.1.1": {
+          "en": "Refactoring\nSupport of compact mode added",
+          "de": "Refactoring\nUnterstützung des Kompaktmodus hinzugefügt",
+          "ru": "Рефакторинг\nДобавлена поддержка компактного режима",
+          "pt": "Reestruturação\nAdicionado suporte ao modo compacto",
+          "nl": "Refactoring\nOndersteuning voor compacte modus toegevoegd",
+          "fr": "Refactoring\nAjout du support du mode compact",
+          "it": "refactoring\nSupporto della modalità compatta aggiunto",
+          "es": "Refactorización\nSoporte de modo compacto agregado",
+          "pl": "Refaktoryzacja\nDodano obsługę trybu kompaktowego",
+          "zh-cn": "重构\n支持紧凑模式"
         },
-        {
-            "_id": "consumable",
-            "type": "channel",
-            "common": {
-                "name": "Vacuum consumable"
-            },
-            "native": {}
+        "2.0.10": {
+          "en": "try to starting of cleaning 3 times, if robot not answers and some fixes",
+          "de": "Versuchen Sie dreimal mit dem Reinigen zu beginnen, wenn der Roboter nicht antwortet und einige Korrekturen vorgenommen hat",
+          "ru": "попытаться начать уборку 3 раза, если робот не отвечает и некоторые исправления",
+          "pt": "tente iniciar a limpeza 3 vezes, se o robô não responder e algumas correções",
+          "nl": "probeer 3 keer te beginnen met schoonmaken, als de robot niet antwoordt en een aantal fixes",
+          "fr": "essayez de commencer le nettoyage 3 fois, si le robot ne répond pas et quelques correctifs",
+          "it": "provare a iniziare la pulizia 3 volte, se il robot non risponde e alcune correzioni",
+          "es": "intente iniciar la limpieza 3 veces, si el robot no responde y algunas soluciones",
+          "pl": "spróbuj rozpocząć czyszczenie 3 razy, jeśli robot nie odpowiada i niektóre poprawki",
+          "zh-cn": "如果机器人无法回答并进行一些修复，请尝试开始清洁3次"
         },
-        {
-            "_id": "history",
-            "type": "channel",
-            "common": {
-                "name": "Vacuumcleaning history"
-            },
-            "native": {}
+        "2.0.9": {
+          "en": "add state info for room channels and change queue info from number to JSON",
+          "de": "Fügen Sie Statusinformationen für Raumkanäle hinzu und ändern Sie die Warteschlangeninformationen von Nummer in JSON",
+          "ru": "добавить информацию о состоянии для комнатных каналов и изменить информацию об очереди с номера на JSON",
+          "pt": "adicione informações de estado para os canais da sala e altere as informações da fila de número para JSON",
+          "nl": "voeg statusinformatie toe voor kamerkanalen en wijzig de wachtrij-info van nummer in JSON",
+          "fr": "ajouter des informations d'état pour les canaux de salle et changer les informations de file d'attente du nombre en JSON",
+          "it": "aggiungere informazioni sullo stato per i canali della sala e modificare le informazioni sulla coda dal numero a JSON",
+          "es": "agregue información de estado para los canales de la sala y cambie la información de la cola del número a JSON",
+          "pl": "dodaj informacje o stanie dla kanałów pokojowych i zmień informacje o kolejce z numeru na JSON",
+          "zh-cn": "添加房间频道的状态信息并将队列信息从数字更改为JSON"
         },
-        {
-            "_id": "control",
-            "type": "channel",
-            "common": {
-                "name": "Vacuum Control"
-            },
-            "native": {}
+        "2.0.8": {
+          "en": "decreased communication with robot",
+          "de": "verminderte Kommunikation mit dem Roboter",
+          "ru": "уменьшилось общение с роботом",
+          "pt": "comunicação reduzida com o robô",
+          "nl": "verminderde communicatie met robot",
+          "fr": "diminution de la communication avec le robot",
+          "it": "ridotta comunicazione con il robot",
+          "es": "disminución de la comunicación con el robot",
+          "pl": "zmniejszona komunikacja z robotem",
+          "zh-cn": "与机器人的交流减少"
         },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "If connected to CUL",
-                "type": "boolean",
-                "read": true,
-                "write": false
-            },
-            "native": {}
+        "2.0.7": {
+          "en": "add Resuming after pause for rooms",
+          "de": "Hinzufügen Wiederaufnahme nach Pause für Räume",
+          "ru": "добавить Возобновление после паузы для комнат",
+          "pt": "adicionar Retomando após uma pausa nos quartos",
+          "nl": "toevoegen Hervatten na pauze voor kamers",
+          "fr": "add Reprise après pause pour les salles",
+          "it": "aggiungi Riprendi dopo la pausa per le stanze",
+          "es": "agregar Reanudación después de pausa para habitaciones",
+          "pl": "dodaj Wznawianie po pauzie dla pokoi",
+          "zh-cn": "添加房间暂停后恢复"
         },
-        {
-            "_id": "control.start",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Start vacuum",
-                "type": "boolean",
-                "read": false,
-                "write": true
-            },
-            "native": {}
+        "2.0.6": {
+          "en": "add roooms for s50 with map",
+          "de": "füge zimmer für s50 mit karte hinzu",
+          "ru": "добавить комнаты для s50 с картой",
+          "pt": "adicionar roooms para s50 com mapa",
+          "nl": "voeg roooms toe voor s50 met kaart",
+          "fr": "ajouter des chambres pour s50 avec carte",
+          "it": "aggiungi roooms per s50 con mappa",
+          "es": "agregar habitaciones para s50 con mapa",
+          "pl": "dodaj rooomy do s50 z mapą",
+          "zh-cn": "在地图上添加s50的房间"
         },
-        {
-            "_id": "control.pause",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Pause vacuum",
-                "type": "boolean",
-                "read": false,
-                "write": true
-            },
-            "native": {}
+        "2.0.4": {
+          "en": "add cloud loging, add xiaomi map, add new map format",
+          "de": "Cloud-Zugang hinzufügen, Xiaomi-Karte hinzufügen, neues Kartenformat hinzufügen",
+          "ru": "добавить облачный журнал, добавить карту xiaomi, добавить новый формат карты",
+          "pt": "adicionar registro em nuvem, adicionar mapa xiaomi, adicionar novo formato de mapa",
+          "nl": "cloud logging toevoegen, xiaomi-kaart toevoegen, nieuw kaartformaat toevoegen",
+          "fr": "ajouter la journalisation dans le cloud, ajouter la carte xiaomi, ajouter un nouveau format de carte",
+          "it": "aggiungi il cloud loging, aggiungi la mappa xiaomi, aggiungi un nuovo formato di mappa",
+          "es": "agregue loging en la nube, agregue el mapa xiaomi, agregue un nuevo formato de mapa",
+          "pl": "dodaj rejestrowanie w chmurze, dodaj mapę Xiaomi, dodaj nowy format mapy",
+          "zh-cn": "添加云日志，添加小米地图，添加新地图格式"
         },
-        {
-            "_id": "control.home",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Go home",
-                "type": "boolean",
-                "read": false,
-                "write": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "control.find",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Find",
-                "type": "boolean",
-                "read": false,
-                "write": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.battery",
-            "type": "state",
-            "common": {
-                "name": "Battery status",
-                "type": "number",
-                "read": true,
-                "write": false,
-                "unit": "%",
-                "max": 100
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.cleanedarea",
-            "type": "state",
-            "common": {
-                "name": "Cleaned area",
-                "type": "number",
-                "read": true,
-                "write": false,
-                "unit": "m²"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.cleanedtime",
-            "type": "state",
-            "common": {
-                "name": "Cleaning time",
-                "type": "number",
-                "read": true,
-                "write": false,
-                "unit": "min"
-            },
-            "native": {}
-        },
-        {
-            "_id": "control.fan_power",
-            "type": "state",
-            "common": {
-                "name": "Suction power",
-                "type": "number",
-                "role": "level",
-                "read": true,
-                "write": true,
-                "max": 100,
-                "states": {
-                    "5": "5%",
-                    "10": "10%",
-                    "15": "15%",
-                    "20": "20%",
-                    "25": "25%",
-                    "30": "30%",
-                    "35": "35%",
-                    "38": "QUIET",
-                    "40": "40%",
-                    "45": "45%",
-                    "50": "50%",
-                    "55": "55%",
-                    "60": "BALANCED",
-                    "65": "65%",
-                    "70": "70%",
-                    "75": "75%",
-                    "77": "TURBO",
-                    "80": "80%",
-                    "85": "85%",
-                    "90": "MAXIMUM",
-                    "95": "95%",
-                    "100": "100%"
-                }
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.state",
-            "type": "state",
-            "common": {
-                "name": "Vacuum state",
-                "type": "number",
-                "read": true,
-                "write": false,
-                "max": 30,
-                "states": {
-                    "0": "Unknown",
-                    "1": "Initiating",
-                    "2": "Sleeping",
-                    "3": "Waiting",
-                    "4": "?",
-                    "5": "Cleaning",
-                    "6": "Back to home",
-                    "7": "Manuell mode",
-                    "8": "Charging",
-                    "9": "Charging Error",
-                    "10": "Pause",
-                    "11": "Spot Cleaning",
-                    "12": "In Error",
-                    "13": "Shutting down",
-                    "14": "Updating",
-                    "15": "Docking",
-                    "16": "Going to Spot",
-                    "17": "Zone cleaning",
-                    "18": "Room cleaning"
-                }
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.error",
-            "type": "state",
-            "common": {
-                "name": "Error",
-                "type": "number",
-                "read": true,
-                "write": false,
-                "max": 30,
-                "states": {
-                    "0": "No error",
-                    "1": "Laser distance sensor error",
-                    "2": "Collision sensor error",
-                    "3": "Wheels on top of void, move robot",
-                    "4": "Clean hovering sensors, move robot",
-                    "5": "Clean main brush",
-                    "6": "Clean side brush",
-                    "7": "Main wheel stuck?",
-                    "8": "Device stuck, clean area",
-                    "9": "Dust collector missing",
-                    "10": "Clean filter",
-                    "11": "Stuck in magnetic barrier",
-                    "12": "Low battery",
-                    "13": "Charging fault",
-                    "14": "Battery fault",
-                    "15": "Wall sensors dirty, wipe them",
-                    "16": "Place me on flat surface",
-                    "17": "Side brushes problem, reboot me",
-                    "18": "Suction fan problem",
-                    "19": "Unpowered charging station"
-                }
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.dnd",
-            "type": "state",
-            "common": {
-                "name": "DnD aktiv",
-                "type": "boolean",
-                "role": "indicator",
-                "read": true,
-                "write": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "consumable.main_brush",
-            "type": "state",
-            "common": {
-                "name": "Main brush lifetime",
-                "type": "number",
-                "role": "level",
-                "read": true,
-                "write": false,
-                "unit": "%"
-            },
-            "native": {}
-        },
-        {
-            "_id": "consumable.main_brush_reset",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Main brush lifetime reset",
-                "type": "boolean",
-                "write": true,
-                "read": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "consumable.side_brush",
-            "type": "state",
-            "common": {
-                "name": "Side brush lifetime",
-                "type": "number",
-                "role": "level",
-                "read": true,
-                "write": false,
-                "unit": "%"
-            },
-            "native": {}
-        },
-        {
-            "_id": "consumable.side_brush_reset",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Side brush lifetime reset",
-                "type": "boolean",
-                "write": true,
-                "read": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "consumable.filter",
-            "type": "state",
-            "common": {
-                "name": "Filter lifetime",
-                "type": "number",
-                "role": "level",
-                "read": true,
-                "write": false,
-                "unit": "%"
-            },
-            "native": {}
-        },
-        {
-            "_id": "consumable.filter_reset",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Filter lifetime reset",
-                "type": "boolean",
-                "write": true,
-                "read": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "consumable.sensors",
-            "type": "state",
-            "common": {
-                "name": "sensor lifetime",
-                "type": "number",
-                "role": "level",
-                "read": true,
-                "write": false,
-                "unit": "%"
-            },
-            "native": {}
-        },
-        {
-            "_id": "consumable.sensors_reset",
-            "type": "state",
-            "common": {
-                "role": "button",
-                "name": "Sensors lifetime reset",
-                "type": "boolean",
-                "write": true,
-                "read": false
-            },
-            "native": {}
-        },
-        {
-            "_id": "history.allTableHTML",
-            "type": "state",
-            "common": {
-                "name": "History of clean as HTML",
-                "type": "string",
-                "role": "history",
-                "read": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "history.allTableJSON",
-            "type": "state",
-            "common": {
-                "name": "History of clean as JSON",
-                "type": "object",
-                "role": "history",
-                "read": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "history.total_time",
-            "type": "state",
-            "common": {
-                "name": "Total time ",
-                "type": "number",
-                "role": "history",
-                "unit": "min.",
-                "read": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "history.total_area",
-            "type": "state",
-            "common": {
-                "name": "Total area ",
-                "type": "number",
-                "role": "history",
-                "unit": "m²",
-                "read": true
-            },
-            "native": {}
-        },
-        {
-            "_id": "history.total_cleanups",
-            "type": "state",
-            "common": {
-                "name": "Total cleanups ",
-                "type": "number",
-                "role": "history",
-                "read": true
-            },
-            "native": {}
+        "1.10.5": {
+          "en": "send Ping only if not connected, otherwise get_status\nset button states to true, if clicked\nmove Timermanager and roomManager to own libs",
+          "de": "Ping nur senden, wenn keine Verbindung besteht, sonst get_status\n",
+          "ru": "отправлять Ping, только если не подключен, иначе get_status\n",
+          "pt": "envie Ping apenas se não estiver conectado, caso contrário, get_status\n",
+          "nl": "stuur Ping alleen indien niet verbonden, anders get_status\n",
+          "fr": "envoyer Ping uniquement s'il n'est pas connecté, sinon get_status\n",
+          "it": "invia Ping solo se non connesso, altrimenti get_status\n",
+          "es": "envíe Ping solo si no está conectado, de lo contrario get_status\n",
+          "pl": "wyślij Ping tylko jeśli nie jest podłączony, w przeciwnym razie get_status\n",
+          "zh-cn": "仅在未连接时发送Ping，否则返回get_status\n"
         }
+      },
+      "title": "mihome-vacuum",
+      "titleLang": {
+        "en": "Control of Xiaomi/Roborock vacuum cleaner",
+        "de": "Steuerung des Staubsaugers Xiaomi/Roborock",
+        "ru": "Управление пылесосом Xiaomi/Roborock",
+        "pt": "Controle do aspirador Xiaomi/Roborock",
+        "nl": "Bediening van Xiaomi/Roborock stofzuiger",
+        "fr": "Contrôle de l'aspirateur Xiaomi/Roborock",
+        "it": "Controllo dell'aspirapolvere Xiaomi/Roborock",
+        "es": "Control de la aspiradora Xiaomi/Roborock",
+        "pl": "Kontrola odkurzacza Xiaomi/Roborock",
+        "zh-cn": "小米/罗伯克吸尘器的控制"
+      },
+      "desc": {
+        "en": "This adapter allows control Xiaomi vacuum cleaner",
+        "de": "Dieser Adapter ermöglicht die Steuerung Xiaomi Staubsauger",
+        "ru": "Этот адаптер позволяет контролировать пылесос Xiaomi",
+        "pt": "Este adaptador permite controle Xiaomi aspirador de pó",
+        "nl": "Met deze adapter kunt u de Xiaomi-stofzuiger bedienen",
+        "fr": "Cet adaptateur permet de contrôler l'aspirateur Xiaomi",
+        "it": "Questo adattatore consente il controllo dell'aspirapolvere Xiaomi",
+        "es": "Este adaptador permite el control del aspirador Xiaomi",
+        "pl": "Ten adapter umożliwia kontrolę odkurzacza Xiaomi",
+        "zh-cn": "这款适配器可以控制小米吸尘器"
+      },
+      "authors": [
+        "bluefox <dogafox@gmail.com>"
+      ],
+      "osDependencies": {
+        "linux": [
+          "libcairo2-dev",
+          "libpango1.0-dev",
+          "libjpeg-dev",
+          "libgif-dev",
+          "librsvg2-dev"
+        ]
+      },
+      "license": "MIT",
+      "platform": "Javascript/Node.js",
+      "mode": "daemon",
+      "loglevel": "info",
+      "materialize": true,
+      "compact": true,
+      "icon": "mihome-vacuum.png",
+      "readme": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/README.md",
+      "keywords": [
+        "url",
+        "html",
+        "file",
+        "mihome-vacuum"
+      ],
+      "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.mihome-vacuum/master/admin/mihome-vacuum.png",
+      "type": "household",
+      "config": {
+        "minWidth": 800,
+        "width ": 1224
+      },
+      "messagebox": true,
+      "dependencies": [
+        {
+          "js-controller": ">=3.1.0"
+        }
+      ],
+      "installedFrom": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/tarball/rebuild3"
+    },
+    "encryptedNative": [
+      "password"
+    ],
+    "protectedNative": [
+      "password"
+    ],
+    "native": {
+      "password": "",
+      "port": 54321,
+      "ownPort": 53421,
+      "pingInterval": 20000,
+      "wifiInterval": 60000,
+      "valetudo_enable": false,
+      "valetudo_color_floor": "#56affc",
+      "valetudo_color_wall": "#b3edff",
+      "valetudo_color_path": "#FFFFFF",
+      "robot_select": "robot",
+      "valetudo_requestIntervall": 2000,
+      "valetudo_MapsaveIntervall": 5000,
+      "sendsPauseBeforeHome": false
+    },
+    "instanceObjects": [
+      {
+        "_id": "info",
+        "type": "channel",
+        "common": {
+          "name": "Information"
+        },
+        "native": {}
+      },
+      {
+        "_id": "info.connection",
+        "type": "state",
+        "common": {
+          "role": "indicator.connected",
+          "name": "If connected to CUL",
+          "type": "boolean",
+          "read": true,
+          "write": false
+        },
+        "native": {}
+      }
     ]
-}
+  }
