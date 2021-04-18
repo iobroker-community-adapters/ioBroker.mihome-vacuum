@@ -1,8 +1,20 @@
 {
     "common": {
       "name": "mihome-vacuum",
-      "version": "3.1.0",
+      "version": "3.1.1",
       "news": {
+        "3.1.1": {
+          "en": "Breaking Change: Full rewrote, Please delete Adapter first before update",
+          "de": "Breaking Change: Vollständig neu geschrieben. Bitte löschen Sie den Adapter zuerst, bevor Sie ihn aktualisieren",
+          "ru": "Критическое изменение: полностью переписано, пожалуйста, удалите адаптер перед обновлением",
+          "pt": "Quebrando a mudança: Reescrito completo, exclua o adaptador antes de atualizar",
+          "nl": "Brekende wijziging: volledig herschreven, verwijder eerst de adapter voordat u de update uitvoert",
+          "fr": "Changement de rupture: réécriture complète, veuillez supprimer l'adaptateur avant la mise à jour",
+          "it": "Modifica definitiva: riscrittura completa, eliminare l'adattatore prima dell'aggiornamento",
+          "es": "Cambio rotundo: reescritura completa, elimine el adaptador primero antes de la actualización",
+          "pl": "Przełomowa zmiana: pełna przeróbka, najpierw usuń adapter przed aktualizacją",
+          "zh-cn": "重大更改：已完全重写，请在更新之前先删除适配器"
+        },
         "2.2.5": {
           "en": "added Robock S7 Support, fixes for S5Max, many bugfixes",
           "de": "Robock S7 Support hinzugefügt, Korrekturen für S5Max, viele Bugfixes",
