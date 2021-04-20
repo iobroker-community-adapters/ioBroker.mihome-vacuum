@@ -29,7 +29,9 @@ const deviceList = {
 	'viomi.vacuum.v7': ViomiManager,
 	'viomi.vacuum.v8': ViomiManager,
 	'viomi.vacuum.v19': ViomiManager, //test
+	'roborock.vacuum.s4': VacuumManager, // Roborock S4
 	'roborock.vacuum.s5': VacuumManager,
+	'roborock.vacuum.s5e': VacuumManager, // Roborock S5 Max
 	'roborock.vacuum.s6': VacuumManager,
 	'roborock.vacuum.m1s': VacuumManager,
 	'rockrobo.vacuum.v1': VacuumManager,
@@ -145,13 +147,20 @@ class MihomeVacuum extends utils.Adapter {
 		if (deviceList[DeviceModel]) {
 			vacuum = new deviceList[DeviceModel](this, Miio, Map);
 		} else {
-			this.log.warn('Model ' + DeviceModel + ' not supported! Please open issue on git:  https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/issues');
+			if(typeof DeviceModel !== 'undefined'){
+				this.log.warn('Model ' + DeviceModel + ' not supported! Please open issue on git:  https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/issues');
 
-			//try to get stock Model maybe it is working
-			let FirstDevMod = DeviceModel.split('.')[0]
-
-			if (FirstDevMod === 'viomi') vacuum = new ViomiManager(this, Miio, Map);
-			else if (FirstDevMod === 'roborock') vacuum = new VacuumManager(this, Miio, Map);
+				//try to get stock Model maybe it is working
+				let FirstDevMod = DeviceModel.split('.')[0]
+	
+				if (FirstDevMod === 'viomi') vacuum = new ViomiManager(this, Miio);
+				else if (FirstDevMod === 'roborock') vacuum = new VacuumManager(this, Miio, Map);
+			}
+			else{
+				this.log.warn('Cant detect Device please select Device form Devicelist or enable the cloud of thr robot to get device infos');
+				this.log.warn('Falback to Stock miio Protocoll')
+				vacuum = new VacuumManager(this, Miio, Map);
+			}
 		}
 	}
 
