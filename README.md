@@ -35,7 +35,11 @@ This adapter allows you control the Xiaomi vacuum cleaner.
 - [widget](#widget)
 - [bugs](#bugs)
 - [Changelog](#changelog)
-
+## Supported Devices and Fetures
+| Device | Mittig ausgerichtet | Rechts ausgerichtet |
+|:------------------ |:-------------------:| -------------------:|
+| Inhalt             | :x:                 | Inhalt              |
+| Inhalt             | Inhalt              | Inhalt              |
 ## Known Errors
 ### Error at installation
 if your installation runs in error. The canvas package could not be install
@@ -44,7 +48,6 @@ if your installation runs in error. The canvas package could not be install
 npm ERR! Exit status 1``
 
 Please install canvas and the libs manually with:
-
 ``
 sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 ``
