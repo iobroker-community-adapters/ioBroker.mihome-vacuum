@@ -36,10 +36,19 @@ This adapter allows you control the Xiaomi vacuum cleaner.
 - [bugs](#bugs)
 - [Changelog](#changelog)
 ## Supported Devices and Fetures
-| Device | Mittig ausgerichtet | Rechts ausgerichtet |
-|:------------------ |:-------------------:| -------------------:|
-| Inhalt             | :x:                 | Inhalt              |
-| Inhalt             | Inhalt              | Inhalt              |
+| Device                | Basic Control             | history               | rooms               | map                 | 
+|:------------------    |:-------------------:      |:-------------------:  |:-------------------:|:-------------------:|
+| viomi.vacuum.v6       | :heavy_check_mark:        | :x:                   |:x:                  | :x:                 |
+| viomi.vacuum.v7       | :heavy_check_mark:        | :x:                   |:x:                  | :x:                 |
+| viomi.vacuum.v8       | :heavy_check_mark:        | :x:                   |:x:                  | :x:                 |
+| rockrobo.vacuum.v1    | :heavy_check_mark:        | :heavy_check_mark:    |:x:                  |:heavy_check_mark:   |
+| roborock.vacuum.s4    | :heavy_check_mark:        | :heavy_check_mark:    |:heavy_check_mark:   |:heavy_check_mark:   |
+| roborock.vacuum.s5    | :heavy_check_mark:        | :heavy_check_mark:    |:heavy_check_mark:   |:heavy_check_mark:   |
+| roborock.vacuum.s5e   | :heavy_check_mark:        | :heavy_check_mark:    |:heavy_check_mark:   |:heavy_check_mark:   |
+| roborock.vacuum.m1s   | :heavy_check_mark:        | :heavy_check_mark:    |:heavy_check_mark:   |:heavy_check_mark:   |
+| roborock.vacuum.a10   | :heavy_check_mark:        | :heavy_check_mark:    |:heavy_check_mark:   |:heavy_check_mark:   |
+| roborock.vacuum.a15   | :heavy_check_mark:        | :heavy_check_mark:    |:heavy_check_mark:   |:heavy_check_mark:   |
+
 ## Known Errors
 ### Error at installation
 if your installation runs in error. The canvas package could not be install
