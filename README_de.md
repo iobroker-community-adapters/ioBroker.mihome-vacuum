@@ -88,14 +88,27 @@ Hierfür muss der Roboter gerootet und Valetudo installiert sein. dafür nutzt m
 ```
 - Unter Roboter Bilder kann man verschiedene Bilder auswählen die in der Karte angezeigt werden sollen
 
-### Map Widget
- Am besten kann man die map über ein html widget einbinden einfach den Datempunk binden mit {mihome-vacuum.0.valetudo.map64} wie im unteren Beispiel:
+### Einbindung der Karte
+ 
+ Die Karte wird in zwei Formaten gespeichert:
+ - base64: ```mihome-vacuum.0.cleanmap.map64```
+ - PNG: ```mihome-vacuum.0.cleanmap.mapURL```
+ 
+ Beide Formate können direkt als Bildquelle verwendet werden. Im HTML-Stil sieht das bspw. wir folgt aus:
+ ```<img src="mihome-vacuum.0.cleanmap.map64">```
+ 
+ Mit zusätzlichen Stil-Attributen kann die Karte noch in Größe und Format geändert werden.
+ 
+Die Bildquellen können natürlich in den verschiedenen VIS von ioBroker verwendet werden. In ```jarvis``` kann einer der o.g. Datenpunkte als URL im DisplayImage-Widget verwendet werden. Durch die Einstellungen im Widget kann die Größe der Karte angepasst werden. Aufgrund des repositiven Designs von jarvis verändert sich die Karte in Verbindung mit der Display-Größe.
+  
+Im ```ioBroker VIS``` kann man die Karte bspw. über ein HTML Widget einbinden. Einfach den Datempunk mit {mihome-vacuum.0.cleanmap.map64} wie im unteren Beispiel einbinden:
 
 ```
-[{"tpl":"tplHtml","data":{"g_fixed":false,"g_visibility":false,"g_css_font_text":false,"g_css_background":false,"g_css_shadow_padding":false,"g_css_border":false,"g_gestures":false,"g_signals":false,"g_last_change":false,"visibility-cond":"==","visibility-val":1,"visibility-groups-action":"hide","refreshInterval":"0","signals-cond-0":"==","signals-val-0":true,"signals-icon-0":"/vis/signals/lowbattery.png","signals-icon-size-0":0,"signals-blink-0":false,"signals-horz-0":0,"signals-vert-0":0,"signals-hide-edit-0":false,"signals-cond-1":"==","signals-val-1":true,"signals-icon-1":"/vis/signals/lowbattery.png","signals-icon-size-1":0,"signals-blink-1":false,"signals-horz-1":0,"signals-vert-1":0,"signals-hide-edit-1":false,"signals-cond-2":"==","signals-val-2":true,"signals-icon-2":"/vis/signals/lowbattery.png","signals-icon-size-2":0,"signals-blink-2":false,"signals-horz-2":0,"signals-vert-2":0,"signals-hide-edit-2":false,"lc-type":"last-change","lc-is-interval":true,"lc-is-moment":false,"lc-format":"","lc-position-vert":"top","lc-position-horz":"right","lc-offset-vert":0,"lc-offset-horz":0,"lc-font-size":"12px","lc-font-family":"","lc-font-style":"","lc-bkg-color":"","lc-color":"","lc-border-width":"0","lc-border-style":"","lc-border-color":"","lc-border-radius":10,"lc-zindex":0,"html":"{mihome-vacuum.0.valetudo.map64}"},"style":{"left":"0","top":"0","width":"100%","height":"100%"},"widgetSet":"basic"}]
+[{"tpl":"tplHtml","data":{"g_fixed":false,"g_visibility":false,"g_css_font_text":false,"g_css_background":false,"g_css_shadow_padding":false,"g_css_border":false,"g_gestures":false,"g_signals":false,"g_last_change":false,"visibility-cond":"==","visibility-val":1,"visibility-groups-action":"hide","refreshInterval":"0","signals-cond-0":"==","signals-val-0":true,"signals-icon-0":"/vis/signals/lowbattery.png","signals-icon-size-0":0,"signals-blink-0":false,"signals-horz-0":0,"signals-vert-0":0,"signals-hide-edit-0":false,"signals-cond-1":"==","signals-val-1":true,"signals-icon-1":"/vis/signals/lowbattery.png","signals-icon-size-1":0,"signals-blink-1":false,"signals-horz-1":0,"signals-vert-1":0,"signals-hide-edit-1":false,"signals-cond-2":"==","signals-val-2":true,"signals-icon-2":"/vis/signals/lowbattery.png","signals-icon-size-2":0,"signals-blink-2":false,"signals-horz-2":0,"signals-vert-2":0,"signals-hide-edit-2":false,"lc-type":"last-change","lc-is-interval":true,"lc-is-moment":false,"lc-format":"","lc-position-vert":"top","lc-position-horz":"right","lc-offset-vert":0,"lc-offset-horz":0,"lc-font-size":"12px","lc-font-family":"","lc-font-style":"","lc-bkg-color":"","lc-color":"","lc-border-width":"0","lc-border-style":"","lc-border-color":"","lc-border-radius":10,"lc-zindex":0,"html":"{mihome-vacuum.0.cleanmap.map64}"},"style":{"left":"0","top":"0","width":"100%","height":"100%"},"widgetSet":"basic"}]
 ```
 
-Der zweite Weg ist über ein src img Widget, hier einfach den Datenpunkt PNG auswählen, dieses wird aber nicht so oft aktualisiert wie die html Version.
+Dies funktioniert mit beiden Formaten. Am besten verwendet man das base64-Format, da dies öfter aktualisiert wird und den Roboter nahezu in Echtzeit anzeigt.
+
 
 ## Funktionen
 
