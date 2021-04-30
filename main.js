@@ -152,6 +152,7 @@ class MihomeVacuum extends utils.Adapter {
 
 				//try to get stock Model maybe it is working
 				let FirstDevMod = DeviceModel.split('.')[0]
+				this.device = DeviceModel;
 	
 				if (FirstDevMod === 'viomi') vacuum = new ViomiManager(this, Miio);
 				else if (FirstDevMod === 'roborock') vacuum = new VacuumManager(this, Miio, Map);
