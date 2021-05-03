@@ -134,7 +134,7 @@ class MihomeVacuum extends utils.Adapter {
 			}
 		}
 		if (!DeviceData && objModel && objModel.val) {
-			this.log.warn('YOUR DEVICE IS CONNECTED BUT DID NOT ANSWER CONNECTION CAN TAKE UP TO 10 MINUTES PLESASE WAIT AND DON`T TRUN THE ADAPTER OFF');
+			this.log.warn('YOUR DEVICE IS CONNECTED BUT DID NOT ANSWER YET - CONNECTION CAN TAKE UP TO 10 MINUTES - PLEASE BE PATIENT AND DO NOT TURN THE ADAPTER OFF');
 			this.log.warn('No Answer for DeviceModel use old one');
 			DeviceModel = objModel.val;
 		}
