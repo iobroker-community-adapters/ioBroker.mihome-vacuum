@@ -1,7 +1,7 @@
 {
     "common": {
       "name": "mihome-vacuum",
-      "version": "3.1.4",
+      "version": "3.1.5",
       "news": {
         "3.1.1": {
           "en": "Breaking Change: Full rewrote, Please delete Adapter first before update",
@@ -218,6 +218,8 @@
         "width ": 1224
       },
       "messagebox": true,
+      "connectionType": "local",
+      "dataSource": "poll",
       "dependencies": [
         {
           "js-controller": ">=3.1.0"

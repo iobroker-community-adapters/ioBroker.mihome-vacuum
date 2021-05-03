@@ -36,7 +36,8 @@ const deviceList = {
 	'roborock.vacuum.m1s': VacuumManager,
 	'rockrobo.vacuum.v1': VacuumManager,
 	'roborock.vacuum.a10': VacuumManager,
-	'roborock.vacuum.a15': VacuumManager
+	'roborock.vacuum.a15': VacuumManager,	// Roborock S7
+	'roborock.vacuum.e2': VacuumManager 	//Roborock Xiaowa E2
 
 };
 
@@ -96,9 +97,11 @@ class MihomeVacuum extends utils.Adapter {
 
 		//check if iotState is enabled
 		if (this.config.enableAlexa) {
+			this.log.info('IOT enabled, create state');
 			objects.iotState.map(o => this.setObjectNotExistsAsync('control.' + o._id, o));
 		} else {
-			objects.iotState.map(o => this.delObj('control.' + o._id));
+			this.log.info('IOT disabled, delete state');
+			objects.iotState.map(async o => await this.delObj('control.' + o._id));
 		}
 	}
 

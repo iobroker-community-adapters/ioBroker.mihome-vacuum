@@ -268,7 +268,7 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
-### 3.1.4 (30.04.2021)
+### 3.1.5 (03.05.2021)
 * try fix map error
 * Map64 chnaged. now without img tags
 * add Multimap support (get romms and map when map is changed)
@@ -276,6 +276,9 @@ The supported commands are:
 * fix error eith zone coordinates
 * add Wifi
 * fix connection Problems
+* fix Valetudo map
+* add Mopstate
+* fix some objects
 
 ### 3.1.1 (18.4.2021)
  * Full rewrite
