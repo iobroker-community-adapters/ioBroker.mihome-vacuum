@@ -36,6 +36,10 @@ This adapter allows you control the Xiaomi vacuum cleaner.
 - [bugs](#bugs)
 - [Changelog](#changelog)
 ## Supported Devices and Fetures
+
+Cleaner not supported? 
+[Vote Here!](https://doodle.com/poll/8m8238ridkifua99?utm_source=poll&utm_medium=link)
+
 | Device                | Basic Control             | history               | rooms               | map                 | 
 |:------------------    |:-------------------:      |:-------------------:  |:-------------------:|:-------------------:|
 | viomi.vacuum.v6       | :heavy_check_mark:        | :x:                   |:x:                  | :x:                 |
