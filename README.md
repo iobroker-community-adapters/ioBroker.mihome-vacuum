@@ -1,6 +1,8 @@
 ![Logo](admin/mihome-vacuum.png)
 # ioBroker mihome-vacuum adapter
 
+[![Paypal Donation](https://img.shields.io/badge/paypal-donate%20|%20spenden-blue.svg)](https://www.paypal.com/paypalme/MeisterTR)
+
 [![NPM version](http://img.shields.io/npm/v/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package//iobroker.mihome-vacuum)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
 ![Number of Installations (latest)](http://iobroker.live/badges/mihome-vacuum-installed.svg)
