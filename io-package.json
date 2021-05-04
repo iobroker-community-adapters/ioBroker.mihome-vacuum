@@ -1,7 +1,7 @@
 {
     "common": {
       "name": "mihome-vacuum",
-      "version": "3.1.5",
+      "version": "3.1.5.TEST",
       "news": {
         "3.1.1": {
           "en": "Breaking Change: Full rewrote, Please delete Adapter first before update",
