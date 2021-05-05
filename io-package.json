@@ -3,6 +3,18 @@
       "name": "mihome-vacuum",
       "version": "3.1.6",
       "news": {
+        "3.1.5":{
+          "en": "Breaking changes, Map format changed, added wifi state, added multimap support, added mopstate, fixed objects, show zones and points when selectiong in app, minmize disk I/O, minimize Messages clear and extend log,",
+          "de": "BREAKING CHANGE, Kartenformat geändert, WLAN-Status hinzugefügt, Multimap-Unterstützung hinzugefügt, Mopstate hinzugefügt, Objekte fixiert, Zonen und Punkte bei der Auswahl in der App anzeigen, Festplatten-E / A minimieren, Nachrichten löschen, Protokoll löschen und Protokoll erweitern,",
+          "ru": "Критические изменения, изменен формат карты, добавлено состояние Wi-Fi, добавлена поддержка нескольких карт, добавлено mopstate, фиксированные объекты, показаны зоны и точки при выборе в приложении, минимизация дискового ввода-вывода, минимизация сообщений, очистка и расширение журнала,",
+          "pt": "Quebrando mudanças, formato de mapa alterado, estado wi-fi adicionado, suporte multimap adicionado, adicionado mopstate, objetos fixos, mostrar zonas e pontos quando a seleçãog no aplicativo, minimizar E / S de disco, minimizar mensagens limpar e estender log,",
+          "nl": "Veranderingen verbreken, kaartformaat gewijzigd, wifi-status toegevoegd, multimap-ondersteuning toegevoegd, mopstate toegevoegd, vaste objecten, zones en punten weergeven bij selectie in de app, schijf-I / O verkleinen, berichten wissen minimaliseren en logboek uitbreiden,",
+          "fr": "Changements de rupture, format de carte changé, état wifi ajouté, prise en charge multimap, ajout de mopstate, objets fixes, afficher les zones et les points lors de la sélection dans l'application, minimiser les E / S du disque, minimiser les messages, effacer et étendre le journal,",
+          "it": "Cambiamenti decisivi, formato mappa modificato, aggiunto stato wifi, aggiunto supporto multimappa, aggiunto stato mop, oggetti fissi, mostra zone e punti durante la selezione nell'app, minimizza l'I / O del disco, minimizza i messaggi cancella ed estendi il registro,",
+          "es": "Cambios rotos, cambio de formato de mapa, estado de wifi agregado, soporte de multimapa agregado, estado de mop agregado, objetos fijos, mostrar zonas y puntos cuando se seleccionan en la aplicación, minimizar la E / S del disco, minimizar los mensajes, borrar y extender el registro,",
+          "pl": "Przełomowe zmiany, zmiana formatu mapy, dodano stan wifi, dodano obsługę wielu map, dodano stan mopstate, stałe obiekty, pokaż strefy i punkty podczas wyboru w aplikacji, zminimalizuj wejście / wyjście dysku, zminimalizuj czyszczenie wiadomości i rozszerz dziennik,",
+          "zh-cn": "重大更改，地图格式已更改，添加了wifi状态，添加了多图支持，添加了拖把状态，固定对象，在应用中进行选择时显示区域和点，最小化了磁盘I / O，最小化了消息清除并扩展了日志，"
+        },
         "3.1.1": {
           "en": "Breaking Change: Full rewrote, Please delete Adapter first before update",
           "de": "Breaking Change: Vollständig neu geschrieben. Bitte löschen Sie den Adapter zuerst, bevor Sie ihn aktualisieren",
@@ -224,8 +236,7 @@
         {
           "js-controller": ">=3.1.0"
         }
-      ],
-      "installedFrom": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/tarball/rebuild3"
+      ]
     },
     "encryptedNative": [
       "password"

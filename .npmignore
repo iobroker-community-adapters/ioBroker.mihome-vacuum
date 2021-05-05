@@ -1,6 +1,8 @@
 /**/*
 /gulpfile.js
 gulpfile.js
+tsconfig.json
+/test/*
 !/admin/**/*
 !/admin/*
 !/lib/**/*
