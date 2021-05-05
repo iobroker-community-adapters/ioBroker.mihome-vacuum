@@ -274,6 +274,12 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
+### 3.1.6 (05.05.2021)
+* minimize Disk write
+* minimized Messages 
+* changed warn Messages to debug
+* extend Debuglog to find error for e2 vacuum
+* added getStates when map is changed
 ### 3.1.5 (03.05.2021)
 * try fix map error
 * Map64 chnaged. now without img tags
