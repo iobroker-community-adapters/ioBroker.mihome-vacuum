@@ -17,6 +17,7 @@ const objects = require('./lib/objects');
 
 const ViomiManager = require('./lib/viomi');
 const VacuumManager = require('./lib/vacuum');
+const VacuumManager2 = require('./lib/vacuumsaphire');
 
 let DeviceModel;
 let connected = false;
@@ -36,8 +37,19 @@ const deviceList = {
 	'roborock.vacuum.m1s': VacuumManager,
 	'rockrobo.vacuum.v1': VacuumManager,
 	'roborock.vacuum.a10': VacuumManager,
-	'roborock.vacuum.a15': VacuumManager,	// Roborock S7
-	'roborock.vacuum.e2': VacuumManager 	//Roborock Xiaowa E2
+	'roborock.vacuum.a15': VacuumManager, // Roborock S7
+	'roborock.sweeper.e2v3': VacuumManager2,
+	'roborock.sweeper.e2v2': VacuumManager2,
+	'roborock.vacuum.e2': VacuumManager2,
+	'roborock.sweeper.c1v3': VacuumManager2,
+	'roborock.sweeper.c1v2': VacuumManager2,
+	'roborock.vacuum.c1': VacuumManager2,
+	'roborock.vacuum.a01': VacuumManager2,
+	'roborock.vacuum.a01v2': VacuumManager2,
+	'roborock.vacuum.a01v3': VacuumManager2,
+	'roborock.vacuum.a04': VacuumManager2,
+	'roborock.vacuum.a04v2': VacuumManager2,
+	'roborock.vacuum.a04v3': VacuumManager2
 
 };
 
@@ -150,17 +162,16 @@ class MihomeVacuum extends utils.Adapter {
 		if (deviceList[DeviceModel]) {
 			vacuum = new deviceList[DeviceModel](this, Miio, Map);
 		} else {
-			if(typeof DeviceModel !== 'undefined'){
+			if (typeof DeviceModel !== 'undefined') {
 				this.log.warn('Model ' + DeviceModel + ' not supported! Please open issue on git:  https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/issues');
 
 				//try to get stock Model maybe it is working
 				let FirstDevMod = DeviceModel.split('.')[0]
 				this.device = DeviceModel;
-	
+
 				if (FirstDevMod === 'viomi') vacuum = new ViomiManager(this, Miio);
 				else if (FirstDevMod === 'roborock') vacuum = new VacuumManager(this, Miio, Map);
-			}
-			else{
+			} else {
 				this.log.warn('Cant detect Device please select Device form Devicelist or enable the cloud of thr robot to get device infos');
 				this.log.warn('Falback to Stock miio Protocoll')
 				vacuum = new VacuumManager(this, Miio, Map);
