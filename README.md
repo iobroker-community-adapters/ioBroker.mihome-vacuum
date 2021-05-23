@@ -274,6 +274,9 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
+### 3.1.10 (23.05.2021)
+* error fixed
+* add sentry
 ### 3.1.6 (05.05.2021)
 * minimize Disk write
 * minimized Messages 

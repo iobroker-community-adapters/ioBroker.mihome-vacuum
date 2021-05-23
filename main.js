@@ -7,17 +7,13 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
-const dgram = require('dgram');
-const TimerManager = require('./lib/timerManager');
-const RoomManager = require('./lib/roomManager');
-const adapterName = require('./package.json').name.split('.').pop();
 const MapHelper = require('./lib/maphelper');
 const miio = require('./lib/miio');
 const objects = require('./lib/objects');
 
 const ViomiManager = require('./lib/viomi');
 const VacuumManager = require('./lib/vacuum');
-const VacuumManager2 = require('./lib/vacuumsaphire');
+//const VacuumManager2 = require('./lib/vacuumsaphire');
 
 let DeviceModel;
 let connected = false;
@@ -38,18 +34,18 @@ const deviceList = {
 	'rockrobo.vacuum.v1': VacuumManager,
 	'roborock.vacuum.a10': VacuumManager,
 	'roborock.vacuum.a15': VacuumManager, // Roborock S7
-	'roborock.sweeper.e2v3': VacuumManager2,
-	'roborock.sweeper.e2v2': VacuumManager2,
-	'roborock.vacuum.e2': VacuumManager2,
-	'roborock.sweeper.c1v3': VacuumManager2,
-	'roborock.sweeper.c1v2': VacuumManager2,
-	'roborock.vacuum.c1': VacuumManager2,
-	'roborock.vacuum.a01': VacuumManager2,
-	'roborock.vacuum.a01v2': VacuumManager2,
-	'roborock.vacuum.a01v3': VacuumManager2,
-	'roborock.vacuum.a04': VacuumManager2,
-	'roborock.vacuum.a04v2': VacuumManager2,
-	'roborock.vacuum.a04v3': VacuumManager2
+	// 'roborock.sweeper.e2v3': VacuumManager2,
+	// 'roborock.sweeper.e2v2': VacuumManager2,
+	// 'roborock.vacuum.e2': VacuumManager2,
+	// 'roborock.sweeper.c1v3': VacuumManager2,
+	// 'roborock.sweeper.c1v2': VacuumManager2,
+	// 'roborock.vacuum.c1': VacuumManager2,
+	// 'roborock.vacuum.a01': VacuumManager2,
+	// 'roborock.vacuum.a01v2': VacuumManager2,
+	// 'roborock.vacuum.a01v3': VacuumManager2,
+	// 'roborock.vacuum.a04': VacuumManager2,
+	// 'roborock.vacuum.a04v2': VacuumManager2,
+	// 'roborock.vacuum.a04v3': VacuumManager2
 
 };
 

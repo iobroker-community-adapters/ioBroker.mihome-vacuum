@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.1.9",
+    "version": "3.1.10",
     "news": {
+      "3.1.10": {
+        "en": "fixed error",
+        "de": "Fehler behoben",
+        "ru": "исправленная ошибка",
+        "pt": "erro corrigido",
+        "nl": "vaste fout",
+        "fr": "erreur corrigée",
+        "it": "errore risolto",
+        "es": "error fijo",
+        "pl": "naprawiony błąd",
+        "zh-cn": "固定错误"
+      },
       "3.1.7": {
         "en": "added Sentry, minimize messages, fix disk I/O ",
         "de": "Sentry hinzugefügt, Nachrichten minimiert, Festplatten-E / A repariert",
