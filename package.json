@@ -30,7 +30,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.4.0",
+    "@iobroker/adapter-core": "^2.5.0",
     "zlib": "^1.0.5",
     "canvas": "^2.7.0",
     "request": "^2.88.2",
