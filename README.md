@@ -274,6 +274,9 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
+### 3.2.0 (02.06.2021)
+* relase candidate
+* get consumable after reset
 ### 3.1.10 (23.05.2021)
 * error fixed
 * add sentry
