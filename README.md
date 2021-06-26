@@ -9,13 +9,11 @@
 [![Dependency Status](https://img.shields.io/david/iobroker-community-adapters/iobroker.mihome-vacuum.svg)](https://david-dm.org/iobroker-community-adapters/iobroker.mihome-vacuum)
 [![Known Vulnerabilities](https://snyk.io/test/github/iobroker-community-adapters/ioBroker.mihome-vacuum/badge.svg)](https://snyk.io/test/github/iobroker-community-adapters/ioBroker.mihome-vacuum)
 ![Test and Release](https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/workflows/Test%20and%20Release/badge.svg)
-<!-- ![Number of Installations (stable)](http://iobroker.live/badges/mihome-vacuum-stable.svg) -->
 [![NPM](https://nodei.co/npm/iobroker.mihome-vacuum.png?downloads=true)](https://nodei.co/npm/iobroker.mihome-vacuum/)
-
 
 [Deutsche beschreibung hier](README_de.md)
 
-This adapter allows you control the Xiaomi vacuum cleaner.
+This adapter allows you to control the Xiaomi vacuum cleaner.
 
 ## Content
  - [Known Errors](#known_errors)
@@ -37,7 +35,8 @@ This adapter allows you control the Xiaomi vacuum cleaner.
 - [widget](#widget)
 - [bugs](#bugs)
 - [Changelog](#changelog)
-## Supported Devices and Fetures
+
+## Supported Devices and Features
 
 Cleaner not supported? 
 [Vote Here!](https://doodle.com/poll/8m8238ridkifua99?utm_source=poll&utm_medium=link)
@@ -57,7 +56,7 @@ Cleaner not supported?
 
 ## Known Errors
 ### Error at installation
-if your installation runs in error. The canvas package could not be install
+if your installation runs in error. The canvas package could not be installed
 
 ``npm ERR! canvas@2.6.1 install: node-pre-gyp install --fallback-to-build
 npm ERR! Exit status 1``
@@ -72,14 +71,14 @@ sudo npm install canvas --unsafe-perm=true
 ``
 
 ###  HTTP error when getting token cookie{}
-sometimes you cant connect to the xiaomi cloud. Please open Browswer, go to Mihome and login. Enter the code you recieved via mail. After that the connection should work.
-
+Sometimes you can't connect to the xiaomi cloud. 
+Please open Browser, go to Mihome and login. Enter the code you received via mail. After that, the connection should work.
 
 ## Configuration
 Currently, finding the token is the biggest problem.
 PLease follow the instruction in the Link:
 
-[Token turorial](https://www.smarthomeassistent.de/token-auslesen-roborock-s6-roborock-s5-xiaomi-mi-robot-xiaowa/).
+[Token tutorial](https://www.smarthomeassistent.de/token-auslesen-roborock-s6-roborock-s5-xiaomi-mi-robot-xiaowa/).
 
 ### Adapter Configuration
 - For IP address, the IP address of the robot must be entered in the format "192.168.178.XX"
@@ -88,11 +87,13 @@ PLease follow the instruction in the Link:
 - Query Interval The time in ms in which the robot's status values are retrieved (should not be <10000)
 
 #### Control over Alexa
-In the config add alexa state is activated here is a hack is set an additional state "clean_home" it is a switch which starts at "true" the sucker and at "false" it goes home, it becomes automatically a smart device in the cloud Adapter created with the name "vacuum cleaner", which can be changed in the cloud adapter.
+In the config add alexa state is activated here is a hack is set an additional state "clean_home" it is a 
+switch which starts at "true" the sucker and at "false" - it goes home, 
+it becomes automatically a smart device in the cloud Adapter created with the name "vacuum cleaner", which can be changed in the cloud adapter.
 
-#### Resume paused zonecleaning with start button
-With this option enabled, the Vacuum will resume the zonecleaning when setting the "start" state to true if it was paused during a running zoneclean.
-If this option is disabled, the vacuum will start a new "normal cleaning" when you send the start command, even if it was paused during a running zoneclean.
+#### Resume paused zone-cleaning with start button
+With this option enabled, the Vacuum will resume the zone-cleaning when setting the "start" state to true if it was paused during a running zone-clean.
+If this option is disabled, the vacuum will start a new "normal cleaning" when you send the start command, even if it was paused during a running zone-clean.
 
 
 - Experimental: Using the checkbox "Send your own commands" objects are created, via which you can send and receive your own commands to the robot.
@@ -101,15 +102,16 @@ If this option is disabled, the vacuum will start a new "normal cleaning" when y
 If two robots are to be controlled via ioBroker, two instances must be created. The second robot must change its own port (default: 53421) so that both robots have different ports.
 
 ## Map Config
-There are two ways to get the map. The first get the map from the cloud. Therefor you have to log in and select the right robot from the list
+There are two ways to get the map. The first get the map from the cloud. Therefore you have to log in and select the right robot from the list
 
-Second way is the map from valetudo (only local connection). Therefor you have to root and install valetudo to your device. Vatudo you can use 
-[Valetudo RE](https://github.com/rand256/valetudo) or normal [Valetudo](https://github.com/Hypfer/Valetudo)
+Second way is the map from valetudo (only local connection). 
+Therefore you have to root and install valetudo to your device. 
+You can use [Valetudo RE](https://github.com/rand256/valetudo) or normal [Valetudo](https://github.com/Hypfer/Valetudo).
 
 ![Config](admin/valetudo_conf.png)
-- To use the map you have to selecte valetudo or original map in the config
+- To use the map you have to select valetudo or original map in the config
 - request Interval must be more than 1000 ms this is the intervall for update the html map
-- map intervaall must be more than 5000 ms this intervall updates the png Map file (you can use this for Telegram or vis or anything else)
+- map intervall must be more than 5000 ms this intervall updates the png Map file (you can use this for Telegram or vis or anything else)
 - color there you can select the colors for the map example:
 ```
 - #2211FF
@@ -117,7 +119,7 @@ Second way is the map from valetudo (only local connection). Therefor you have t
 - rgba(255,100,100,0.5) //for Transparent
 - green
 ```
-- robots there you can select differt robots or other vehicles for the map 
+- robots there you can select differet robots or other vehicles for the map 
 
 ### Map Usage
 The map is stored either as base64-raw or as PNG.
@@ -132,7 +134,8 @@ You can use both images as image source in the VIS you want. In HTML-style you c
 
 With additional style-tags you can resize and/or format the map style.
 
-To use the map in ```jarvis``` just use one of the datapoints as URL of the DisplayImage-Widget. There you can resize the image or the whole widget. In case of the responsive design of jarvis the Map will resize in case of the display size.
+To use the map in ```jarvis``` just use one of the data points as URL of the DisplayImage-Widget. 
+There you can resize the image or the whole widget. In case of the responsive design of jarvis the Map will resize in case of the display size.
 
 To display the map in ```ioBroker VIS``` you can use a normal html Widget e.g:
 
@@ -144,7 +147,7 @@ The use of the base64-map is faster and will display the position of the robot n
 
 ## Functions
 ### Commands of the S50 (second generation)
-The card size is always 52000mm x 52000mm thus values ​​from 0 to 51999mm are possible.
+The card size is always 52000mm x 52000mm thus values from 0 to 51999mm are possible.
 Unfortunately, the position and location of the card can not be queried, this can change from suction to suction. Used as a basis is always the last suction card, as well as in the app.
 If the robot only picks up one area and always builds the map the same way, you can reliably send it to places or have the area vacuumed.
 
@@ -153,7 +156,7 @@ In order to drive the vacuum cleaner to a point, the "goTo" object must be fille
 ```
 xVal, yval
 ```
-The values ​​must satisfy the above scope and indicate the x and y coordinates on the map.
+The values must satisfy the above scope and indicate the x and y coordinates on the map.
 
 Example:
 ```
@@ -196,21 +199,22 @@ The robot distinguishes between the commands in methods (methods) and parameters
 Under the object "mihome-vacuum.X.control.X_send_command" you can send your own commands to the robot.
 The object structure must look as follows: method; [params]
 
-Under the object "mihome-vacuum.X.control.X_get_response", the response is entered by the robot after sending. If parameters were queried, they appear here in the JSON format. If only one command was sent, the robot responds only with "0".
+Under the object "mihome-vacuum.X.control.X_get_response", the response is entered by the robot after sending. 
+If parameters were queried, they appear here in the JSON format. If only one command was sent, the robot responds only with "0".
 
 The following methods and parameters are supported:
 
-| method          | params                                                              | Beschreibung                                                                                           |
+| method          | params                                                              | Description                                                                                            |
 |-----------      |-------                                                              |-------------------                                                                                     |
 | get_timer       |                                                                     | Returns the set timerSetting the suction times BSp. 12 o'clock 30 in 5 days                            |
 | set_timer       | [["TIME_IN_MS",["30 12 * * 1,2,3,4,5",["start_clean",""]]]]         | Enable / disable timer                                                                                 |
-| upd_timer       | ["1481997713308","on/off"]                                          |                                                                                                        |
-|                 |                                                                     | Rescues the times of the Do Not Distrube                                                               |
+| upd_timer       | ["1481997713308","on/off"]                                          |                                                                                                        |
+|                 |                                                                     | Rescues the times of the Do Not Disturb                                                                |
 | get_dnd_timer   |                                                                     | Delete DND times                                                                                       |
 | close_dnd_timer |                                                                     | DND Setting h, min, h, min                                                                             |
 | set_dnd_timer   | [22,0,8,0]                                                          |                                                                                                        |
 |                 |                                                                     |                                                                                                        |
-| app_rc_start    |                                                                     | Start Romote Control                                                                                   |
+| app_rc_start    |                                                                     | Start Remote Control                                                                                   |
 | app_rc_end      |                                                                     | Finish Remote Control                                                                                  |
 | app_rc_move     |[{"seqnum":'0-1000',"velocity":VALUE1,"omega":VALUE2,"duration":VALUE3}]| Move. Sequence number must be continuous, VALUE1 (speed) = -0.3-0.3, VALUE2 (rotation) = -3.1-3.1, VALUE3 (duration)
 
@@ -270,57 +274,65 @@ The supported commands are:
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
 
 ## Bugs
-- occasional disconnections, however, this is not due to the adapter but mostly on its own networks
+- Occasional disconnections, however, this is not due to the adapter but mostly on its own networks
 - Widget at the time without function
 
 ## Changelog
 ### 3.2.0 (02.06.2021)
-* relase candidate
-* get consumable after reset
+* (MeisterTR) release candidate
+* (MeisterTR) get consumable after reset
+
 ### 3.1.10 (23.05.2021)
 * error fixed
 * add sentry
+
 ### 3.1.6 (05.05.2021)
 * minimize Disk write
 * minimized Messages 
 * changed warn Messages to debug
 * extend Debuglog to find error for e2 vacuum
 * added getStates when map is changed
+
 ### 3.1.5 (03.05.2021)
-* try fix map error
-* Map64 chnaged. now without img tags
-* add Multimap support (get romms and map when map is changed)
+* try to fix the map error
+* Map64 changed. now without img tags
+* add Multimap support (get rooms and map when map is changed)
 * select Multimaps
-* fix error eith zone coordinates
-* add Wifi
+* fix error with zone coordinates
+* add WiFi
 * fix connection Problems
 * fix Valetudo map
-* add Mopstate
+* add Mop state
 * fix some objects
 
 ### 3.1.1 (18.4.2021)
  * Full rewrite
  * Fix map bug with multiple vacuums
  * fix performance Problems
- * better conntection to vacuum
+ * better connection to vacuum
  * fix bug in ReloadMap button
  * Show Goto and Zone States ti find places
  * and many more...
+
 ### 2.2.5 (2021-04-02)
 * added S7 Support
 * bugfixes for S5 Max and others
+
 ### 2.2.4 (2020-09-15)
 * (dirkhe) add config for send Pause Before Home
+
 ### 2.2.3 (2020-08-20)
 * (dirkhe) room DP are not deleted, on map change 
+
 ### 2.2.0 (2020-08-13)
 * (MeisterTR) add test for Viomi and Dreame Api 
+
 ### 2.1.1 (2020-07-10)
 * (bluefox) Refactoring
 * (bluefox) Support of compact mode added
 
 ### 2.0.10 (2020-07-05)
-* try to starting of cleaning 3 times, if robot not answers and some fixes
+* try to start the cleaning 3 times, if robot not answers and some fixes
 
 ### 2.0.9 (2020-03-05)
 * (dirkhe) add state info for room channels and change queue info from number to JSON
@@ -332,7 +344,7 @@ The supported commands are:
 * (dirkhe) add Resuming after pause for rooms
 
 ### 2.0.6 (2020-02-17)
-* (MeisterTR) add roooms for s50 with map (cloud or Valetudo needed)
+* (MeisterTR) add rooms for s50 with map (cloud or Valetudo needed)
 
 ### 2.0.4 (2020-02-13)
 * (MeisterTR) add cloud login to get token
@@ -343,7 +355,7 @@ The supported commands are:
 ### 1.10.5 (2020-02-11)
 * send Ping only if not connected, otherwise get_status
 * set button states to true, if clicked
-* move Timermanager and roomManager to own libs
+* move timer manager and room manager to own libs
 
 ### 1.10.4 (2020-02-06)
 * (MeiserTR) add valetudo map support for gen3 and gen2 2XXX
@@ -361,11 +373,11 @@ The supported commands are:
 * (JoJ123) Added fan speed for MOP (S50+).
 
 ### 1.1.5 (2018-09-02)
-* (BuZZy1337) Added description for Status 16 and 17 (goTo and zonecleaning).
-* (BuZZy1337) Added setting for automatic resume of paused zonecleaning.
+* (BuZZy1337) Added description for Status 16 and 17 (goTo and zone cleaning).
+* (BuZZy1337) Added setting for automatic resume of paused zone cleaning.
 
 ### 1.1.4 (2018-08-24)
-* (BuZZy1337) Added possibility to resume a paused zoneclean (State: mihome-vacuum.X.control.resumeZoneClean)
+* (BuZZy1337) Added possibility to resume a paused zone clean (State: mihome-vacuum.X.control.resumeZoneClean)
 
 ### 1.1.3 (2018-07-11)
 * (BuZZy1337) fixed zoneCleanup state not working (vacuum was only leaving the dock, saying "Finished ZoneCleanup", and returned immediately back to the dock)
@@ -374,7 +386,7 @@ The supported commands are:
 * (BuZZy1337) fixed detection of new Firmware / Second generation Vacuum
 
 ### 1.1.1 (2018-04-17)
-* (MeisterTR) error catched , added states for new fw
+* (MeisterTR) error caught , added states for new fw
 
 ### 1.1.0 (2018-04-10)
 * (mswiege) Finished the widget
@@ -401,7 +413,7 @@ The supported commands are:
 * (MeisterTR) add option for crate switch for Alexa control
 
 ### 0.5.5 (2017-06-30)
-* (MeisterTR) add states, fetures, fix communication errors
+* (MeisterTR) add states, features, fix communication errors
 
 ### 0.3.2 (2017-06-07)
 * (MeisterTR) fix no communication after softwareupdate(Vers. 3.3.9)
