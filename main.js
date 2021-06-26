@@ -89,7 +89,7 @@ class MihomeVacuum extends utils.Adapter {
 		//create new miio class
 		Miio = new miio(this);
 
-		Miio.on('connect', () => {
+		Miio.on('connect', async () => {
 			this.log.debug('MAIN: Connected to device, try to get model..');
 			await this.getModel();
 			this.subscribeStates('*');
