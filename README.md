@@ -278,6 +278,10 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
+
+### WORK_IN_PROGRESS__
+* (Apollon77) Adjust several crash cases (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM-4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B)
+
 ### 3.2.0 (02.06.2021)
 * (MeisterTR) release candidate
 * (MeisterTR) get consumable after reset

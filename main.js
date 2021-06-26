@@ -91,9 +91,8 @@ class MihomeVacuum extends utils.Adapter {
 
 		Miio.on('connect', () => {
 			this.log.debug('MAIN: Connected to device, try to get model..');
-			this.getModel();
-
-
+			await this.getModel();
+			this.subscribeStates('*');
 		});
 
 		//check if Self send Commands is enabled
@@ -134,10 +133,10 @@ class MihomeVacuum extends utils.Adapter {
 			this.log.debug('Get Device data..' + i);
 			if (DeviceData) {
 				this.log.debug('Get Device data from robot..');
-				this.setModelInfoObject(DeviceData.result);
+				await this.setModelInfoObject(DeviceData.result);
 				DeviceModel = DeviceData.result.model;
 
-				this.setConnrection(true);
+				await this.setConnection(true);
 				break;
 			}
 		}
@@ -150,7 +149,7 @@ class MihomeVacuum extends utils.Adapter {
 		if (!DeviceData && configModel) {
 			this.log.warn('No Answer for DeviceModel use model from Config');
 			DeviceModel = configModel;
-			this.setModelInfoObject(JSON.parse(this.config.devices));
+			await this.setModelInfoObject(JSON.parse(this.config.devices));
 		}
 		this.log.debug('DeviceModel selected to: ' + DeviceModel);
 
@@ -199,7 +198,7 @@ class MihomeVacuum extends utils.Adapter {
 	 * Function to set the connection indicator
 	 * @param {boolean} indicator could be true or false
 	 */
-	async setConnrection(indicator) {
+	async setConnection(indicator) {
 		connected = indicator;
 		await this.setStateAsync('info.connection', {
 			val: indicator,
@@ -237,19 +236,8 @@ class MihomeVacuum extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
-		// Initialize your adapter here
-
 		// Reset the connection indicator during startup
-		this.setState('info.connection', false, true);
-		this.subscribeStates('*');
-
-
-		// examples for the checkPassword/checkGroup functions
-		let result = await this.checkPasswordAsync('admin', 'iobroker');
-		this.log.info('check user admin pw iobroker: ' + result);
-
-		result = await this.checkGroupAsync('admin', 'admin');
-		this.log.info('check group user admin group admin: ' + result);
+		this.setConnection(false);
 
 		Map = new MapHelper(null, this);
 		//MAP.Init(); // for Map
@@ -263,13 +251,11 @@ class MihomeVacuum extends utils.Adapter {
 	 */
 	onUnload(callback) {
 		try {
-			// Here you must clear all timeouts or intervals that may still be active
-			// clearTimeout(timeout1);
-			// clearTimeout(timeout2);
-			// ...
-			// clearInterval(interval1);
-
-			callback();
+			if (Miio) {
+				Miio.close(callback);
+			} else {
+				callback();
+			}
 		} catch (e) {
 			callback();
 		}
@@ -384,7 +370,7 @@ class MihomeVacuum extends utils.Adapter {
 					//respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
 					//await vacuum.onMessage(obj)
 					//this.log.warn('gottosent vacuu '+ JSON.stringify(obj))
-					respond(await vacuum.onMessage(obj))
+					vacuum && respond(await vacuum.onMessage(obj))
 					return
 			}
 		}
