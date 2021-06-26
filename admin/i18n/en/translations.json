@@ -34,6 +34,7 @@
     "connection settings": "connection settings",
     "day": "day",
     "disabled": "disabled",
+    "donateInformation": "Feel free to suggest new features or devices via Github or ioBroker forum. If you like this adapter, you very welcome to donate.",
     "enabled": "enabled",
     "get Status Intervall": "request Status in s",
     "get WiFi Intervall": "request WiFi Status in s",

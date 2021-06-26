@@ -34,6 +34,7 @@
     "connection settings": "paramètres de connexion",
     "day": "journée",
     "disabled": "désactivée",
+    "donateInformation": "N'hésitez pas à proposer de nouvelles fonctionnalités ou appareils via le forum Github ou ioBroker. Si vous aimez cet adaptateur, n'hésitez pas à faire un don.",
     "enabled": "activée",
     "get Status Intervall": "demander le statut en s",
     "get WiFi Intervall": "demande d'état WiFi en s",

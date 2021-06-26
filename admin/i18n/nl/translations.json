@@ -34,6 +34,7 @@
     "connection settings": "verbindingsinstellingen",
     "day": "dag",
     "disabled": "gehandicapt",
+    "donateInformation": "Voel je vrij om nieuwe functies of apparaten voor te stellen via Github of het ioBroker-forum. Als je deze adapter leuk vindt, ben je van harte welkom om te doneren.",
     "enabled": "ingeschakeld",
     "get Status Intervall": "verzoek Status in s",
     "get WiFi Intervall": "vraag WiFi-status aan in s",

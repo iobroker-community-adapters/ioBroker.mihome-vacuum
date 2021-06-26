@@ -34,6 +34,7 @@
     "connection settings": "连接设置",
     "day": "天",
     "disabled": "残障人士",
+    "donateInformation": "欢迎通过Github或ioBroker论坛建议新功能或设备。如果您喜欢此适配器，则非常欢迎您捐赠。",
     "enabled": "已启用",
     "get Status Intervall": "请求状态（以s为单位）",
     "get WiFi Intervall": "在s中请求WiFi状态",

@@ -50,7 +50,7 @@ jobs:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                node-version: [10.x, 12.x, 14.x, 16.x]
+                node-version: [12.x, 14.x, 16.x]
                 os: [ubuntu-latest, windows-latest, macos-latest]
 
         steps:
@@ -76,61 +76,78 @@ jobs:
               if: startsWith(runner.OS, 'windows')
               run: set DEBUG=testing:* & npm run test:integration
 
-# TODO: To enable automatic npm releases, create a token on npmjs.org 
-# Enter this token as a GitHub secret (with name NPM_TOKEN) in the repository options
-# Then uncomment the following block:
+  # Deploys the final package to NPM
+    deploy:
+        needs: [adapter-tests]
 
-#    # Deploys the final package to NPM
-#    deploy:
-#        needs: [adapter-tests]
-#
-#        # Trigger this step only when a commit on any branch is tagged with a version number
-#        if: |
-#            contains(github.event.head_commit.message, '[skip ci]') == false &&
-#            github.event_name == 'push' &&
-#            startsWith(github.ref, 'refs/tags/v')
-#
-#        runs-on: ubuntu-latest
-#        strategy:
-#            matrix:
-#                node-version: [14.x]
-#
-#        steps:
-#            - name: Checkout code
-#              uses: actions/checkout@v2
-#
-#            - name: Use Node.js ${{ matrix.node-version }}
-#              uses: actions/setup-node@v1
-#              with:
-#                  node-version: ${{ matrix.node-version }}
-#
-#            - name: Extract the version and commit body from the tag
-#              id: extract_release
-#              # The body may be multiline, therefore newlines and % need to be escaped
-#              run: |
-#                  VERSION="${{ github.ref }}"
-#                  VERSION=${VERSION##*/v}
-#                  echo "::set-output name=VERSION::$VERSION"
-#                  BODY=$(git show -s --format=%b)
-#                  BODY="${BODY//'%'/'%25'}"
-#                  BODY="${BODY//$'\n'/'%0A'}"
-#                  BODY="${BODY//$'\r'/'%0D'}"
-#                  echo "::set-output name=BODY::$BODY"
-#
-#            - name: Publish package to npm
-#              run: |
-#                  npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
-#                  npm whoami
-#                  npm publish
-#
-#            - name: Create Github Release
-#              uses: actions/create-release@v1
-#              env:
-#                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#              with:
-#                  tag_name: ${{ github.ref }}
-#                  release_name: Release v${{ steps.extract_release.outputs.VERSION }}
-#                  draft: false
-#                  # Prerelease versions create prereleases on Github
-#                  prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}
-#                  body: ${{ steps.extract_release.outputs.BODY }}
+        # Trigger this step only when a commit on master is tagged with a version number
+        if: |
+            contains(github.event.head_commit.message, '[skip ci]') == false &&
+            github.event_name == 'push' &&
+            github.event.base_ref == 'refs/heads/master' &&
+            startsWith(github.ref, 'refs/tags/')
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [14.x]
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v2.1.5
+              with:
+                  node-version: ${{ matrix.node-version }}
+
+            - name: Extract the version and commit body from the tag
+              id: extract_release
+              # The body may be multiline, therefore we need to escape some characters
+              run: |
+                  VERSION="${{ github.ref }}"
+                  VERSION=${VERSION##*/}
+                  VERSION=${VERSION##*v}
+                  echo "::set-output name=VERSION::$VERSION"
+                  BODY=$(git show -s --format=%b)
+                  BODY="${BODY//'%'/'%25'}"
+                  BODY="${BODY//$'\n'/'%0A'}"
+                  BODY="${BODY//$'\r'/'%0D'}"
+                  echo "::set-output name=BODY::$BODY"
+
+            - name: Install Dependencies
+              run: npm install
+
+        #      - name: Create a clean build
+        #        run: npm run build
+            - name: Publish package to npm
+              run: |
+                  npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+                  npm whoami
+                  npm publish
+
+            - name: Create Github Release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ github.ref }}
+                  release_name: Release v${{ steps.extract_release.outputs.VERSION }}
+                  draft: false
+                  # Prerelease versions create pre-releases on Github
+                  prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}
+                  body: ${{ steps.extract_release.outputs.BODY }}
+
+            - name: Notify Sentry.io about the release
+              run: |
+                  npm i -g @sentry/cli
+                  export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+                  export SENTRY_URL=https://sentry.iobroker.net
+                  export SENTRY_ORG=iobroker
+                  export SENTRY_PROJECT=iobroker-mihome-vacuum
+                  export SENTRY_VERSION=iobroker.mihome-vacuum@${{ steps.extract_release.outputs.VERSION }}
+                  sentry-cli releases new $SENTRY_VERSION
+                  sentry-cli releases set-commits $SENTRY_VERSION --auto
+                  sentry-cli releases finalize $SENTRY_VERSION
+
+              # Add the following line BEFORE finalize if sourcemap uploads are needed
+              # sentry-cli releases files $SENTRY_VERSION upload-sourcemaps build/

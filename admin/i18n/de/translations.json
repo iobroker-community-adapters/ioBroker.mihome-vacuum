@@ -34,6 +34,7 @@
     "connection settings": "Verbindungseinstellungen",
     "day": "Tag",
     "disabled": "deaktiviert",
+    "donateInformation": "Neue Geräte / Features können gerne über Github oder das ioBroker Forum angefragt werden. Wenn dieser Adapter gefällt / nützlich ist, sind Spenden herzlich Willkommen.",
     "enabled": "aktiviert",
     "get Status Intervall": "Status anfordern in s",
     "get WiFi Intervall": "WLAN-Status anfordern in s",
