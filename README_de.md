@@ -3,13 +3,17 @@
 
 [![Paypal Donation](https://img.shields.io/badge/paypal-donate%20|%20spenden-blue.svg)](https://www.paypal.com/paypalme/MeisterTR)
 
+![Number of Installations](http://iobroker.live/badges/mihome-vacuum-installed.svg)
+![Number of Installations](http://iobroker.live/badges/mihome-vacuum-stable.svg)
 [![NPM version](http://img.shields.io/npm/v/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
-[![Tests](https://travis-ci.org/iobroker-community-adapters/ioBroker.mihome-vacuum.svg?branch=master)](https://travis-ci.org/iobroker-community-adapters/ioBroker.mihome-vacuum)
 
-[![NPM](https://nodei.co/npm/iobroker.mihome-vacuum.png?downloads=true)](https://nodei.co/npm/iobroker.mihome-vacuum/)
+![Test and Release](https://github.com/iobroker-community-adapters/iobroker.mihome-vacuum/workflows/Test%20and%20Release/badge.svg)
+[![Translation status](https://weblate.iobroker.net/widgets/adapters/-/mihome-vacuum/svg-badge.svg)](https://weblate.iobroker.net/engage/adapters/?utm_source=widget)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
 
 This adapter allows you to control the Xiaomi vacuum cleaner.
+
+**This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and for information how to disable the error reporting see [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Sentry reporting is used starting with js-controller 3.0.
 
 ## Inhalt
 - [Einrichtung](#konfiguration)
