@@ -249,10 +249,6 @@
         ],
         "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.mihome-vacuum/master/admin/mihome-vacuum.png",
         "type": "household",
-        "config": {
-            "minWidth": 800,
-            "width ": 1224
-        },
         "messagebox": true,
         "connectionType": "local",
         "dataSource": "poll",

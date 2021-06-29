@@ -153,7 +153,7 @@ class MihomeVacuum extends utils.Adapter {
 		}
 		this.log.debug('DeviceModel selected to: ' + DeviceModel);
 
-		//we get a model so we can select a protocoll
+		//we get a model so we can select a protocol
 		if (deviceList[DeviceModel]) {
 			vacuum = new deviceList[DeviceModel](this, Miio, Map);
 		} else {
@@ -168,7 +168,7 @@ class MihomeVacuum extends utils.Adapter {
 				else if (FirstDevMod === 'roborock') vacuum = new VacuumManager(this, Miio, Map);
 			} else {
 				this.log.warn('Cant detect Device please select Device form Devicelist or enable the cloud of thr robot to get device infos');
-				this.log.warn('Falback to Stock miio Protocoll')
+				this.log.warn('Fallback to Stock miio Protocol')
 				vacuum = new VacuumManager(this, Miio, Map);
 			}
 		}
