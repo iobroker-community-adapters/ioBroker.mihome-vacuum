@@ -372,7 +372,7 @@ class MihomeVacuum extends utils.Adapter {
 					//this.log.warn('gottosent vacuu '+ JSON.stringify(obj))
 					if (!vacuum) {
 						return respond({
-							error: new Error('Not initialized');
+							error: new Error('Not initialized')
 						});
 					}
 					respond(await vacuum.onMessage(obj))
