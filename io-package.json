@@ -288,7 +288,16 @@
         "password"
     ],
     "native": {
+        "email": "",
         "password": "",
+        "server": "-",
+        "token": "",
+        "MiDevice": "",
+        "ip": "",
+        "enableMiMap": false,
+        "enableSelfCommands": false,
+        "sendPauseBeforeHome": false,
+        "enableResumeZone": false,
         "port": 54321,
         "ownPort": 53421,
         "pingInterval": 20000,
@@ -300,7 +309,7 @@
         "robot_select": "robot",
         "valetudo_requestIntervall": 2000,
         "valetudo_MapsaveIntervall": 5000,
-        "sendsPauseBeforeHome": false
+        "newmap": false
     },
     "instanceObjects": [
         {
@@ -316,10 +325,19 @@
             "type": "state",
             "common": {
                 "role": "indicator.connected",
-                "name": "If connected to CUL",
+                "name": "If connected to robot",
                 "type": "boolean",
                 "read": true,
                 "write": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "",
+            "type": "device",
+            "common": {
+                "name": "Vacuum robot",
+                "role": "vacuumCleaner"
             },
             "native": {}
         }

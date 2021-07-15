@@ -80,9 +80,9 @@ class MihomeVacuum extends utils.Adapter {
 			this.log.warn('Token not specified!');
 			return
 		}
-		//create default States
-		await Promise.all(objects.deviceInfo.map(async (o) => {
-			const contents = await this.setObjectNotExistsAsync('deviceInfo.' + o._id, o);
+		// create default States
+		await Promise.all(objects.deviceInfo.map(async o => {
+			await this.setObjectNotExistsAsync('deviceInfo' + (o._id ? '.' + o._id : ''), o);
 			this.log.debug('Create State for deviceInfo' + o._id);
 		}));
 
@@ -97,23 +97,23 @@ class MihomeVacuum extends utils.Adapter {
 
 		//check if Self send Commands is enabled
 		if (this.config.enableSelfCommands) {
-			objects.customComands.map(o => this.setObjectNotExistsAsync('control.' + o._id, o));
+			objects.customCommands.map(async o => await this.setObjectNotExistsAsync('control' + (o._id ? '.' + o._id : ''), o));
 		} else {
-			objects.customComands.map(o => this.delObj('control.' + o._id));
+			objects.customCommands.map(o => this.delObj('control' + (o._id ? '.' + o.id : '')));
 		}
 
 		//check if iotState is enabled
-		if (this.config.enableAlexa) {
+		if (true || this.config.enableAlexa) {
 			this.log.info('IOT enabled, create state');
-			objects.iotState.map(o => this.setObjectNotExistsAsync('control.' + o._id, o));
+			objects.iotState.map(o => this.setObjectNotExistsAsync('control' + (o._id ? '.' + o._id : ''), o));
 		} else {
 			this.log.info('IOT disabled, delete state');
-			objects.iotState.map(async o => await this.delObj('control.' + o._id));
+			objects.iotState.map(async o => await this.delObj('control' + (o._id ? '.' + o.id : '')));
 		}
 	}
 
 	/**
-	 * first communicaton to find out the model
+	 * first communication to find out the model
 	 */
 	async getModel() {
 		//try to get from Config
@@ -158,14 +158,17 @@ class MihomeVacuum extends utils.Adapter {
 			vacuum = new deviceList[DeviceModel](this, Miio, Map);
 		} else {
 			if (typeof DeviceModel !== 'undefined') {
-				this.log.warn('Model ' + DeviceModel + ' not supported! Please open issue on git:  https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/issues');
+				this.log.warn(`Model ${DeviceModel} not supported! Please open issue on git:  https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/issues`);
 
 				//try to get stock Model maybe it is working
 				let FirstDevMod = DeviceModel.split('.')[0]
 				this.device = DeviceModel;
 
-				if (FirstDevMod === 'viomi') vacuum = new ViomiManager(this, Miio);
-				else if (FirstDevMod === 'roborock') vacuum = new VacuumManager(this, Miio, Map);
+				if (FirstDevMod === 'viomi') {
+					vacuum = new ViomiManager(this, Miio);
+				} else if (FirstDevMod === 'roborock') {
+					vacuum = new VacuumManager(this, Miio, Map);
+				}
 			} else {
 				this.log.warn('Cant detect Device please select Device form Devicelist or enable the cloud of thr robot to get device infos');
 				this.log.warn('Fallback to Stock miio Protocol')
@@ -176,7 +179,7 @@ class MihomeVacuum extends utils.Adapter {
 
 	/**
 	 * function to set DeviceInfo
-	 * @param {any} deviceInfo Modelname from Xiaomi eg: viomi.vacuum.v8
+	 * @param {any} deviceInfo Model name from Xiaomi eg: viomi.vacuum.v8
 	 */
 	async setModelInfoObject(deviceInfo) {
 		await this.setStateAsync('deviceInfo.model', {
@@ -211,8 +214,7 @@ class MihomeVacuum extends utils.Adapter {
 			const DeviceData = await Miio.sendMessage('miIO.info');
 
 			this.log.debug('GETMODELFROMAPI:Data: ' + JSON.stringify(DeviceData));
-			return (DeviceData);
-
+			return DeviceData;
 		} catch (error) {
 			return null;
 		}
@@ -229,8 +231,6 @@ class MihomeVacuum extends utils.Adapter {
 			//... do nothing
 		}
 	}
-
-
 
 	/**
 	 * Is called when databases are connected and adapter received configuration.
@@ -288,11 +288,7 @@ class MihomeVacuum extends utils.Adapter {
 			return;
 		}
 
-		// Warning, state can be null if it was deleted
-		//this.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
-
 		// output to parser
-
 		const terms = id.split('.');
 		const command = terms.pop();
 
@@ -306,19 +302,19 @@ class MihomeVacuum extends utils.Adapter {
 				} catch (e) {
 					return this.setState('control.X_get_response', 'Could not send these params because its not in JSON format: ' + values[1], true);
 				}
-				this.log.info('send message: Method: ' + values[0] + ' Params: ' + values[1]);
+				this.log.info(`send message: Method: ${values[0]} Params: ${values[1]}`);
 			} else {
-				this.log.info('send message: Method: ' + values[0]);
+				this.log.info(`send message: Method: ${values[0]}`);
 			}
 			this.setStateAsync(id, state.val, true);
 
 			try {
 				const DeviceData = await Miio.sendMessage(values[0], params);
-				this.log.debug('Get self send data:' + JSON.stringify(DeviceData));
+				this.log.debug('Get self send data: ' + JSON.stringify(DeviceData));
 				this.setStateAsync('control.X_get_response', JSON.stringify(DeviceData.result), true);
 
 			} catch (error) {
-				this.setStateAsync('control.X_get_response', '[' + error + ']', true);
+				this.setStateAsync('control.X_get_response', `[${error}]`, true);
 			}
 		}
 		vacuum && vacuum.stateChange(id, state);
@@ -337,13 +333,12 @@ class MihomeVacuum extends utils.Adapter {
 				this.log.info('send command');
 
 				// Send response in callback if required
-				if (obj.callback) this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
+				obj.callback && this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
 			}
 		}
 		// responds to the adapter that sent the original message
-		const respond = response => {
+		const respond = response =>
 			obj.callback && this.sendTo(obj.from, obj.command, response, obj.callback);
-		};
 
 		// handle the message
 		if (obj) {
@@ -359,9 +354,7 @@ class MihomeVacuum extends utils.Adapter {
 						})
 						.catch(err => {
 							this.log.info('discover ' + err);
-							respond({
-								error: err
-							});
+							respond({error: err});
 						});
 					return;
 

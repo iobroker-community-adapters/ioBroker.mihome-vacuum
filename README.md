@@ -83,20 +83,20 @@ PLease follow the instruction in the Link:
 [Token tutorial](https://www.smarthomeassistent.de/token-auslesen-roborock-s6-roborock-s5-xiaomi-mi-robot-xiaowa/).
 
 ### Adapter Configuration
-- For IP address, the IP address of the robot must be entered in the format "192.168.178.XX"
+- For IP address, the IP address of the robot must be entered in the format `192.168.178.XX`
 - The port of the robot is set to "54321" by default, this should not be changed
 - Own port, should only be changed with second robot
 - Query Interval The time in ms in which the robot's status values are retrieved (should not be <10000)
 
 #### Control over Alexa
-In the config add alexa state is activated here is a hack is set an additional state "clean_home" it is a 
-switch which starts at "true" the sucker and at "false" - it goes home, 
-it becomes automatically a smart device in the cloud Adapter created with the name "vacuum cleaner", which can be changed in the cloud adapter.
+The special control state `clean_home` will be created for Alexa. 
+It is a switch which starts at `true` the sucker and at `false` it goes home.
+It becomes automatically a smart device in the cloud Adapter created 
+with the name "vacuum cleaner", which can be changed in the cloud adapter.
 
 #### Resume paused zone-cleaning with start button
 With this option enabled, the Vacuum will resume the zone-cleaning when setting the "start" state to true if it was paused during a running zone-clean.
 If this option is disabled, the vacuum will start a new "normal cleaning" when you send the start command, even if it was paused during a running zone-clean.
-
 
 - Experimental: Using the checkbox "Send your own commands" objects are created, via which you can send and receive your own commands to the robot.
 
@@ -104,42 +104,42 @@ If this option is disabled, the vacuum will start a new "normal cleaning" when y
 If two robots are to be controlled via ioBroker, two instances must be created. The second robot must change its own port (default: 53421) so that both robots have different ports.
 
 ## Map Config
-There are two ways to get the map. The first get the map from the cloud. Therefore you have to log in and select the right robot from the list
+There are two ways to get the map. The first get the map from the cloud. Therefore, you have to log in and select the right robot from the list
 
 Second way is the map from valetudo (only local connection). 
-Therefore you have to root and install valetudo to your device. 
+Therefore, you have to root and install valetudo to your device. 
 You can use [Valetudo RE](https://github.com/rand256/valetudo) or normal [Valetudo](https://github.com/Hypfer/Valetudo).
 
 ![Config](admin/valetudo_conf.png)
 - To use the map you have to select valetudo or original map in the config
-- request Interval must be more than 1000 ms this is the intervall for update the html map
-- map intervall must be more than 5000 ms this intervall updates the png Map file (you can use this for Telegram or vis or anything else)
-- color there you can select the colors for the map example:
+- Request interval must be more than 1000 ms this is the intervall for update the html map
+- Map intervall must be more than 5000 ms this intervall updates the png Map file (you can use this for Telegram or vis or anything else)
+- Color there you can select the colors for the map example:
 ```
 - #2211FF
 - rbg(255,200,190)
 - rgba(255,100,100,0.5) //for Transparent
 - green
 ```
-- robots there you can select differet robots or other vehicles for the map 
+- Robots there you can select different robots or other vehicles for the map 
 
 ### Map Usage
 The map is stored either as base64-raw or as PNG.
 
 You can find the map image in the following data points:
-- base64: ```mihome-vacuum.0.cleanmap.map64```
-- PNG: ```mihome-vacuum.0.cleanmap.mapURL```
+- base64: `mihome-vacuum.0.cleanmap.map64`
+- PNG: `mihome-vacuum.0.cleanmap.mapURL`
 
 You can use both images as image source in the VIS you want. In HTML-style you can use the image in this way:
 
-```<img src="mihome-vacuum.0.cleanmap.map64">```
+`<img src="mihome-vacuum.0.cleanmap.map64">`
 
 With additional style-tags you can resize and/or format the map style.
 
-To use the map in ```jarvis``` just use one of the data points as URL of the DisplayImage-Widget. 
+To use the map in `jarvis` just use one of the data points as URL of the DisplayImage-Widget. 
 There you can resize the image or the whole widget. In case of the responsive design of jarvis the Map will resize in case of the display size.
 
-To display the map in ```ioBroker VIS``` you can use a normal html Widget e.g:
+To display the map in `ioBroker VIS` you can use a normal html Widget e.g:
 
 ```
 [{"tpl":"tplHtml","data":{"g_fixed":false,"g_visibility":false,"g_css_font_text":false,"g_css_background":false,"g_css_shadow_padding":false,"g_css_border":false,"g_gestures":false,"g_signals":false,"g_last_change":false,"visibility-cond":"==","visibility-val":1,"visibility-groups-action":"hide","refreshInterval":"0","signals-cond-0":"==","signals-val-0":true,"signals-icon-0":"/vis/signals/lowbattery.png","signals-icon-size-0":0,"signals-blink-0":false,"signals-horz-0":0,"signals-vert-0":0,"signals-hide-edit-0":false,"signals-cond-1":"==","signals-val-1":true,"signals-icon-1":"/vis/signals/lowbattery.png","signals-icon-size-1":0,"signals-blink-1":false,"signals-horz-1":0,"signals-vert-1":0,"signals-hide-edit-1":false,"signals-cond-2":"==","signals-val-2":true,"signals-icon-2":"/vis/signals/lowbattery.png","signals-icon-size-2":0,"signals-blink-2":false,"signals-horz-2":0,"signals-vert-2":0,"signals-hide-edit-2":false,"lc-type":"last-change","lc-is-interval":true,"lc-is-moment":false,"lc-format":"","lc-position-vert":"top","lc-position-horz":"right","lc-offset-vert":0,"lc-offset-horz":0,"lc-font-size":"12px","lc-font-family":"","lc-font-style":"","lc-bkg-color":"","lc-color":"","lc-border-width":"0","lc-border-style":"","lc-border-color":"","lc-border-radius":10,"lc-zindex":0,"html":"{mihome-vacuum.0.map.map64}"},"style":{"left":"0","top":"0","width":"100%","height":"100%"},"widgetSet":"basic"}]
@@ -165,8 +165,7 @@ Example:
 24,850.26500
 ```
 
-
-#### zoneClean
+#### Zone cleaning
 To vacuum a zone, ZoneClean must be filled as follows:
 ```
 [X1, y1, x2, x2, count]
@@ -182,14 +181,15 @@ Example:
 ```
 [24117,26005,25767,27205,1], [24320,24693,25970,25843,1]
 ```
-#### rooms
+
+#### Rooms
 newer vacuum cleaner with the latest Home App supports the definition of rooms, see 
 [Video](https://www.youtube.com/watch?v=vEiUZzoXfPg)
 
 Each room in the current map has an index, which is then assigned to the room from the app. From the robot we only get a mapping with room number and index. The adapter queries these rooms every time the adapter starts and creates a channel for each room, which then knows the current room index. The same happens manually with the button loadRooms. This channel can then be assigned to the ioBroker rooms. If the button roomClean is pressed, the index of the card is determined and sent to the robot, so that it can then vacuum this room. Before that the FAN power is set for single room suction. If you don't have the possibility to name the rooms in the app yet, there is also the possibility to create such a channel manually by specifying the map index. It is also possible to add zone coordinates instead of mapIndex.
 If you want to clean several rooms spontaneously, you can do this via multiRoomClean by assigning the ioBroker rooms to this data point and then pressing the button.
 
-#### timer
+#### Timer
 As soon as the vacuum cleaner supports the room function (see above), it is also possible to create timers, which then trigger the corresponding room channels or determine their mapIndexes. 
 The timer could trigger via rooms and/or room channels directly.
 The timers themselves are created via the config area, but then become a data point. There, each timer can be activated/deactivated or skipped once. A direct start is also possible. The advantage of the ioBroker timers is that they can be displayed and used in the VIS and you can disconnect the robot from the internet, because the timers of the app are triggered from China.
@@ -198,10 +198,10 @@ The timers themselves are created via the config area, but then become a data po
 NOTE: This function should only be used by experts, as the sucker might be damaged by wrong commands
 
 The robot distinguishes between the commands in methods (methods) and parameters (params) which serve to specify the methods.
-Under the object "mihome-vacuum.X.control.X_send_command" you can send your own commands to the robot.
+Under the object `mihome-vacuum.X.control.X_send_command` you can send your own commands to the robot.
 The object structure must look as follows: method; [params]
 
-Under the object "mihome-vacuum.X.control.X_get_response", the response is entered by the robot after sending. 
+Under the object `mihome-vacuum.X.control.X_get_response`, the response is entered by the robot after sending. 
 If parameters were queried, they appear here in the JSON format. If only one command was sent, the robot responds only with "0".
 
 The following methods and parameters are supported:
@@ -209,16 +209,16 @@ The following methods and parameters are supported:
 | method          | params                                                              | Description                                                                                            |
 |-----------      |-------                                                              |-------------------                                                                                     |
 | get_timer       |                                                                     | Returns the set timerSetting the suction times BSp. 12 o'clock 30 in 5 days                            |
-| set_timer       | [["TIME_IN_MS",["30 12 * * 1,2,3,4,5",["start_clean",""]]]]         | Enable / disable timer                                                                                 |
-| upd_timer       | ["1481997713308","on/off"]                                          |                                                                                                        |
+| set_timer       | `[["TIME_IN_MS",["30 12 * * 1,2,3,4,5",["start_clean",""]]]]`       | Enable / disable timer                                                                                 |
+| upd_timer       | `["1481997713308","on/off"]`                                        |                                                                                                        |
 |                 |                                                                     | Rescues the times of the Do Not Disturb                                                                |
 | get_dnd_timer   |                                                                     | Delete DND times                                                                                       |
 | close_dnd_timer |                                                                     | DND Setting h, min, h, min                                                                             |
-| set_dnd_timer   | [22,0,8,0]                                                          |                                                                                                        |
+| set_dnd_timer   | `[22,0,8,0]`                                                        |                                                                                                        |
 |                 |                                                                     |                                                                                                        |
 | app_rc_start    |                                                                     | Start Remote Control                                                                                   |
 | app_rc_end      |                                                                     | Finish Remote Control                                                                                  |
-| app_rc_move     |[{"seqnum":'0-1000',"velocity":VALUE1,"omega":VALUE2,"duration":VALUE3}]| Move. Sequence number must be continuous, VALUE1 (speed) = -0.3-0.3, VALUE2 (rotation) = -3.1-3.1, VALUE3 (duration)
+| app_rc_move     | `[{"seqnum":'0-1000',"velocity":VALUE1,"omega":VALUE2,"duration":VALUE3}]`| Move. Sequence number must be continuous, VALUE1 (speed) = -0.3-0.3, VALUE2 (rotation) = -3.1-3.1, VALUE3 (duration)
 
 
 more methods and parameters you can find here ([Link](https://github.com/MeisterTR/XiaomiRobotVacuumProtocol)).
@@ -270,7 +270,7 @@ The supported commands are:
 | End the remote control function | `stopRemoteControl` | - none - |  |
 | clean room/rooms | `cleanRooms` | `rooms` | `rooms` is a comma separated String with enum.rooms.XXX |
 | clean segment | `cleanSegments` | `rooms` | `rooms` is an Array with mapIndex or comma separated String with mapIndex |
-| clean zone | `cleanZone` | `coordinates` | `coordinates` ist a String with coordinates and count, see [zoneClean](#zoneClean) |
+| clean zone | `cleanZone` | `coordinates` | `coordinates` ist a String with coordinates and count, see [zoneClean](#zonecleaning) |
 
 ## Widget
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
@@ -373,7 +373,7 @@ The supported commands are:
 ### 1.10.0 (2020-01-17)
 * (dirkhe) added room handling
 * (dirkhe) added Timer 
-* (dirkhe) changed featurehandling 
+* (dirkhe) changed feature handling 
 
 ### 1.1.6 (2018-12-06)
 * (JoJ123) Added fan speed for MOP (S50+).

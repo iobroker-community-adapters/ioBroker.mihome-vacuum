@@ -108,7 +108,7 @@
             if (!settings) return;
             $('.hidden').hide();
             //soad selection list
-            
+
             console.log('sett_'+ JSON.stringify(settings))
             loadSelect(settings['MiDevice'])
             settings.pingInterval= parseInt(settings.pingInterval/1000,10)
@@ -142,7 +142,7 @@
                     });
                 }
 
-                
+
             });
             //loadSelect()
             //setDevices();
@@ -332,7 +332,7 @@
 
         function  loadSelect(array) {
             let devices;
-            let text = "";
+            let text = '';
             try {
                 devices = JSON.parse(array)
             } catch (e) {
@@ -349,8 +349,6 @@
                     });
                     $('#devices').html(text).select();
             }
-
-
         }
 
         function setValue(key, value, onChange) {
@@ -402,34 +400,30 @@
                 name = timer.day.join('') + '_' + "0".concat(timer.hour).slice(-2) + '_' + "0".concat(timer.minute)
                     .slice(-2);
                 if (timerList[name])
-                    return showMessage(_('same starttime of 2 timer not possible'));
+                    return showMessage(_('same start time of 2 timer not possible'));
                 timerList[name] = timer
             }
 
-            socket.emit('getForeignStates', namespace + "timer.*", function (err, timerStates) {
+            socket.emit('getForeignStates', namespace + 'timer.*', function (err, timerStates) {
                 if (!err && timerStates) {
-
                     socket.emit('getObjectView', 'system', 'state', {
                         startkey: namespace + 'timer.',
                         endkey: namespace + 'timer.\u9999'
                     }, function (err, timerObjs) {
                         if (!err && timerObjs) {
                             for (let t in timerObjs.rows) {
-                                let timer = timerList[timerObjs.rows[t].id.split(".").pop()];
+                                let timer = timerList[timerObjs.rows[t].id.split('.').pop()];
                                 if (timer) {
-
                                     if (timer.channels && timer.channels.length) {
                                         timerObjs.rows[t].value.native.channels = timer.channels
                                     } else if (timerObjs.rows[t].value.native.channels) {
                                         delete timerObjs.rows[t].value.native.channels
-                                    } else
-                                        continue
+                                    } else {
+                                        continue;
+                                    }
                                     timerObjs.rows[t].value.native.nextProcessTime = 0
-                                    socket.emit('setObject', timerObjs.rows[t].id, timerObjs.rows[t]
-                                        .value);
-                                    socket.emit('setState', timerObjs.rows[t].id, {
-                                        ack: false
-                                    });
+                                    socket.emit('setObject', timerObjs.rows[t].id, timerObjs.rows[t].value);
+                                    socket.emit('setState', timerObjs.rows[t].id, {ack: false});
                                 }
                             }
                         }
@@ -437,7 +431,7 @@
                         var p;
                         for (let t in timerStates) {
                             let timerState = timerStates[t];
-                            name = t.split(".").pop();
+                            name = t.split('.').pop();
                             timer = timerList[name];
                             if (!timer) {
                                 socket.emit('delObject', t);
@@ -449,17 +443,19 @@
                                     }
                                 }
                             } else {
-                                if (!timer.enabled && timerState.val != -1)
+                                if (!timer.enabled && timerState.val != -1) {
                                     socket.emit('setState', t, -1);
+                                }
                                 for (let r in rooms) {
                                     p = rooms[r].timer.indexOf(t)
                                     if (p >= 0) {
-                                        if (timer.room.indexOf(r) == -1) {
+                                        if (!timer.room.includes(r)) {
                                             rooms[r].del.push(t);
                                             delete rooms[r].timer[p]
                                         }
-                                    } else if (timer.room.indexOf(r) >= 0)
+                                    } else if (timer.room.includes(r)) {
                                         rooms[r].add.push(t);
+                                    }
                                 }
                                 delete timerList[name];
                             }
@@ -467,7 +463,7 @@
 
                         for (let tn in timerList) {
                             timer = timerList[tn];
-                            let stateId = namespace + "timer." + tn;
+                            let stateId = namespace + 'timer.' + tn;
 
                             socket.emit('setObject', stateId, {
                                 type: 'state',
@@ -481,24 +477,27 @@
                                     max: 2,
                                     desc: 'timer',
                                     states: {
-                                        "1": _("enabled"),
-                                        "-1": _("disabled"),
-                                        "0": _("Skip Timer"),
-                                        "2": _("start now")
+                                        '1': _('enabled'),
+                                        '-1': _('disabled'),
+                                        '0': _('Skip Timer'),
+                                        '2': _('start now')
                                     }
                                 },
                                 native: {
                                     channels: timer.channels
                                 }
                             }, function (err, obj) {
-                                if (err) return showMessage(err, _('Error'), 'alert');
+                                if (err) {
+                                    return showMessage(err, _('Error'), 'alert');
+                                }
                                 socket.emit('setState', stateId, {
-                                    val: (timer.enabled ? '1' : -1),
+                                    val: timer.enabled ? '1' : -1,
                                     ack: false
                                 });
                             });
-                            for (let r in timer.room)
+                            for (let r in timer.room) {
                                 rooms[timer.room[r]].add.push(stateId);
+                            }
                         }
 
                         for (let r in rooms) {
@@ -508,8 +507,9 @@
                                     if (!err && obj) {
                                         for (let t in room.del) {
                                             p = obj.common.members.indexOf(room.del[t]);
-                                            if (p !== -1)
+                                            if (p !== -1) {
                                                 obj.common.members.splice(p, 1);
+                                            }
                                         }
                                         obj.common.members = obj.common.members.concat(room.add);
                                         room.timer = room.timer.concat(room.add);
@@ -523,7 +523,6 @@
                                 })
                             }
                         }
-
 
                         callback(obj);
                     });
@@ -555,11 +554,10 @@
                 </ul>
             </div>
 
-
             <div id="tab-main" class="col s12 page">
                 <div class="row">
                     <div class="col s12 m2 l1">
-                        <img src="mihome-vacuum.png" class="logo">
+                        <img src="mihome-vacuum.png" class="logo" alt="logo"/>
                     </div>
                 </div>
                 <div class="row">
@@ -569,8 +567,6 @@
                     <div class="col s12 m4 L4" style="padding-top: 10px">
                         <p class="subtitle translate">donateInformation</p>
                     </div>
-
-                    
                 </div>
                 <div class="col s12">
                     <h6 class="title translate" data-lang="Xiaomi cloud login">Cloud login</h6>
@@ -587,7 +583,7 @@
                     </div>
 
                     <div class="input-field col s12 m4 l2 ">
-                        <select class="value " id="server" type="text">
+                        <select class="value " id="server">
                             <option value="" disabled selected class="translate">server</option>
                             <option value="-">China</option>
                             <option value="sg">Singapur</option>
@@ -606,7 +602,7 @@
                 </div>
                 <div class="row">
                     <div class="col s12 m12 l12 input-field">
-                        <select class="value " id="devices" type="text">
+                        <select class="value " id="devices">
                             <option value="" disabled selected class="translate">Please get Devices first</option>
                         </select>
                         <label class="translate" for="devices">devices</label>
@@ -623,7 +619,7 @@
                 </div>
                 <div class="col s12 m4 l2 input-field hidden">
                     <input class="value" id="MiDevice" type="text" />
-                    <label class="translate" for="ip">device</label>
+                    <label class="translate" for="MiDevice">device</label>
                 </div>
                 <div class="row">
                     <div class="col s12 m4 l2 input-field">
@@ -671,10 +667,10 @@
                     <h6 class="title translate" data-lang="other settings">other settings</h6>
                 </div>
                 <div class="row">
-                    <div class="col s12 m6">
+                    <!--div class="col s12 m6">
                         <input class="value" id="enableAlexa" type="checkbox" />
                         <span class="translate">add a state for Alexa</span>
-                    </div>
+                    </div-->
                     <div class="col s12 m6">
                         <input class="value" id="enableSelfCommands" type="checkbox" />
                         <span class="translate">Send own commands</span>
@@ -684,11 +680,11 @@
                     <div class="col s12 m6">
                         <input class="value" id="sendPauseBeforeHome" type="checkbox" />
                         <span class="translate">send Pause Before Home</span>
-                    </div>                    
+                    </div>
                     <div class="col s4">
                         <input class="value" id="enableResumeZone" type="checkbox"
                             data-link="resume-paused-zonecleaning-with-start-button" />
-                        <span class="translate">Resume paused zonecleaning with start button</span>
+                        <span class="translate">Resume paused zone cleaning with start button</span>
                     </div>
                 </div>
             </div>
@@ -697,7 +693,7 @@
             <div id="tab-valetudo" class="col s12 page">
                 <div class="row">
                     <div class="col s6 m4 l2">
-                        <img src="valetudo_logo_small.svg" class="logo">
+                        <img src="valetudo_logo_small.svg" class="logo" alt="logo"/>
                     </div>
                 </div>
                 <div class="row">
@@ -711,7 +707,7 @@
                     </div>
                     <div class="col s4">
                         <input class="value" id="newmap" type="checkbox" />
-                        <span class="translate">Use new Map format with roomcolors</span>
+                        <span class="translate">Use new Map format with room colors</span>
                     </div>
                 </div>
                 <div class="row">
@@ -737,7 +733,7 @@
                             <option value="tank" data-icon="./tank.png">Tank</option>
                             <option value="spaceship" data-icon="./spaceship.png">Space ship</option>
                         </select>
-                        <label class="translate">Robot images</label>
+                        <label class="translate" for="robot_select">Robot images</label>
                     </div>
                 </div>
                 <div class="row">
@@ -747,12 +743,11 @@
                         </div>
                         <div class="path">
                         </div>
-                        <img class="robot" src="./robot1.png" height="42" width="42">
+                        <img class="robot" src="./robot1.png" height="42" width="42" alt="map"/>
                     </div>
                 </div>
-
-
             </div>
+
             <!-- Tabs Timer -->
             <div id="tab-timer" class="col s12 page">
                 <div class="col s12" id="timer">
@@ -788,10 +783,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-
 </body>
 
 </html>
