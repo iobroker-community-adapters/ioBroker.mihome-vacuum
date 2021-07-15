@@ -179,15 +179,15 @@ class MihomeVacuum extends utils.Adapter {
 	 * @param {any} deviceInfo Modelname from Xiaomi eg: viomi.vacuum.v8
 	 */
 	async setModelInfoObject(deviceInfo) {
-		this.setStateAsync('deviceInfo.model', {
+		await this.setStateAsync('deviceInfo.model', {
 			val: deviceInfo.model,
 			ack: true
 		});
-		this.setStateAsync('deviceInfo.fw_ver', {
+		await this.setStateAsync('deviceInfo.fw_ver', {
 			val: deviceInfo.fw_ver,
 			ack: true
 		});
-		this.setStateAsync('deviceInfo.mac', {
+		await this.setStateAsync('deviceInfo.mac', {
 			val: deviceInfo.mac,
 			ack: true
 		});
@@ -370,7 +370,12 @@ class MihomeVacuum extends utils.Adapter {
 					//respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
 					//await vacuum.onMessage(obj)
 					//this.log.warn('gottosent vacuu '+ JSON.stringify(obj))
-					vacuum && respond(await vacuum.onMessage(obj))
+					if (!vacuum) {
+						return respond({
+							error: new Error('Not initialized')
+						});
+					}
+					respond(await vacuum.onMessage(obj))
 					return
 			}
 		}
