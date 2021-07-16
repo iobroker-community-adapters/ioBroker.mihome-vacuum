@@ -280,7 +280,7 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
-### __WORK IN PROGRESS__
+### 3.2.2 (2021-07-16)
 * (bluefox) the communication is corrected
 * (bluefox) Added roles to be detected by type-detector
 

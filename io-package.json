@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "mihome-vacuum",
-        "version": "3.2.1",
+        "version": "3.2.2",
         "news": {
+            "3.2.2": {
+                "en": "the communication is corrected\nAdded roles to be detected by type-detector",
+                "de": "die kommunikation ist korrigiert\nRollen hinzugefügt, die vom Typdetektor erkannt werden sollen",
+                "ru": "сообщение исправлено\nДобавлены роли для обнаружения тип-детектором",
+                "pt": "a comunicação foi corrigida\nAdicionadas funções a serem detectadas pelo detector de tipo",
+                "nl": "de communicatie is gecorrigeerd\nRollen toegevoegd die moeten worden gedetecteerd door typedetector",
+                "fr": "la communication est corrigée\nRôles ajoutés à détecter par le détecteur de type",
+                "it": "la comunicazione è corretta\nRuoli aggiunti da rilevare dal tipo-rilevatore",
+                "es": "la comunicación se corrige\nSe agregaron roles para ser detectados por el detector de tipo",
+                "pl": "komunikacja jest poprawiona\nDodano role do wykrycia przez detektor typu type",
+                "zh-cn": "通讯已更正\n添加了由类型检测器检测的角色"
+            },
             "3.2.1": {
                 "en": "Adjust several crash cases (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM-4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B, IOBROKER-MIHOME-VACUUM-Q, IOBROKER-MIHOME-VACUUM-M)",
                 "de": "Mehrere Crashfälle einstellen (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM -4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B, IOBROKER-MIHOME-VACUUM-Q, IOBROKER-MIHOME-VACUUM-M)",
