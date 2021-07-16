@@ -280,6 +280,9 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
+### __WORK IN PROGRESS__
+* (bluefox) the communication is corrected
+* (bluefox) Added roles to be detected by type-detector
 
 ### 3.2.1 (2021-07-02)
 * (Apollon77) Adjust several crash cases (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM-4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B, IOBROKER-MIHOME-VACUUM-Q, IOBROKER-MIHOME-VACUUM-M)
