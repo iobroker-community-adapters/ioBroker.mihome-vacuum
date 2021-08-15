@@ -155,6 +155,7 @@ class MihomeVacuum extends utils.Adapter {
 
 		//we get a model so we can select a protocol
 		if (deviceList[DeviceModel]) {
+			this.device = DeviceModel;
 			vacuum = new deviceList[DeviceModel](this, Miio, Map);
 		} else {
 			if (typeof DeviceModel !== 'undefined') {
@@ -251,6 +252,9 @@ class MihomeVacuum extends utils.Adapter {
 	 */
 	onUnload(callback) {
 		try {
+			if (vacuum){
+				await vacuum.close();
+			}
 			if (Miio) {
 				Miio.close(callback);
 			} else {
