@@ -250,7 +250,7 @@ class MihomeVacuum extends utils.Adapter {
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
 	 * @param {() => void} callback
 	 */
-	onUnload(callback) {
+	async onUnload(callback) {
 		try {
 			if (vacuum){
 				await vacuum.close();
