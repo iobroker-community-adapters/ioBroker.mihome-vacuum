@@ -78,7 +78,9 @@ Please open Browser, go to Mihome and login. Enter the code you received via mai
 
 ## Configuration
 Currently, finding the token is the biggest problem.
-PLease follow the instruction in the Link:
+One option to extract the token is using this utility: https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor
+
+Otherwise please follow the instruction in the Link:
 
 [Token tutorial](https://www.smarthomeassistent.de/token-auslesen-roborock-s6-roborock-s5-xiaomi-mi-robot-xiaowa/).
 
