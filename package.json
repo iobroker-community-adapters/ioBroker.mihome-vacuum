@@ -38,7 +38,7 @@
     "treemap-js": "^1.2.1"
   },
   "devDependencies": {
-    "@alcalzone/release-script": "^2.2.1",
+    "@alcalzone/release-script": "^3.3.0",
     "@iobroker/testing": "^2.5.2",
     "@types/chai": "^4.2.21",
     "@types/chai-as-promised": "^7.1.4",
