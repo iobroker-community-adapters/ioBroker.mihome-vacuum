@@ -282,11 +282,10 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
-### __WORK IN PROGRESS__
+### 3.3.0 (2021-10-01)
 * (MeisterTR) fix no rooms for S5
 * (MeisterTR) fix IOBROKER-MIHOME-VACUUM-4 DB closed
 * (MeisterTR) fix connection error
-
 
 ### 3.2.2 (2021-07-16)
 * (bluefox) the communication is corrected
@@ -339,10 +338,10 @@ The supported commands are:
 * (dirkhe) add config for send Pause Before Home
 
 ### 2.2.3 (2020-08-20)
-* (dirkhe) room DP are not deleted, on map change 
+* (dirkhe) room DP are not deleted, on map change
 
 ### 2.2.0 (2020-08-13)
-* (MeisterTR) add test for Viomi and Dreame Api 
+* (MeisterTR) add test for Viomi and Dreame Api
 
 ### 2.1.1 (2020-07-10)
 * (bluefox) Refactoring
@@ -384,7 +383,7 @@ The supported commands are:
 ### 1.10.0 (2020-01-17)
 * (dirkhe) added room handling
 * (dirkhe) added Timer 
-* (dirkhe) changed feature handling 
+* (dirkhe) changed feature handling
 
 ### 1.1.6 (2018-12-06)
 * (JoJ123) Added fan speed for MOP (S50+).
