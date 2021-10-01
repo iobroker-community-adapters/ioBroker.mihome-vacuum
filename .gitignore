@@ -4,3 +4,6 @@ node_modules
 nbproject
 admin/i18n/flat.txt
 admin/i18n/*/flat.txt
+
+# ioBroker dev-server
+.dev-server/

@@ -285,6 +285,8 @@ The supported commands are:
 ### __WORK IN PROGRESS__
 * (MeisterTR) fix no rooms for S5
 * (MeisterTR) fix IOBROKER-MIHOME-VACUUM-4 DB closed
+* (MeisterTR) fix connection error
+
 
 ### 3.2.2 (2021-07-16)
 * (bluefox) the communication is corrected
