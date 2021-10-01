@@ -282,6 +282,9 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
+### __WORK IN PROGRESS__
+* (MeisterTR) fix IOBROKER-MIHOME-VACUUM-Z
+
 ### 3.3.0 (2021-10-01)
 * (MeisterTR) fix no rooms for S5
 * (MeisterTR) fix IOBROKER-MIHOME-VACUUM-4 DB closed
