@@ -282,7 +282,7 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
-### __WORK IN PROGRESS__
+### 3.3.1 (2021-10-02)
 * (MeisterTR) fix IOBROKER-MIHOME-VACUUM-Z
 * (MeisterTR) fix some errors
 
