@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.3.1",
+    "version": "3.3.2",
     "news": {
+      "3.3.2": {
+        "en": "fix IOBROKER-MIHOME-VACUUM-Z\nfix some errors",
+        "de": "fix IOBROKER-MIHOME-VAKUUM-Z\neinige Fehler beheben",
+        "ru": "исправить IOBROKER-MIHOME-VACUUM-Z\nисправить некоторые ошибки",
+        "pt": "corrigir IOBROKER-MIHOME-VACUUM-Z\nconsertar alguns erros",
+        "nl": "IOBROKER-MIHOME-VACUUM-Z . repareren\nenkele fouten herstellen",
+        "fr": "réparer IOBROKER-MIHOME-VACUUM-Z\ncorriger quelques erreurs",
+        "it": "fix IOBROKER-MIHOME-VACUUM-Z\ncorreggere alcuni errori",
+        "es": "arreglar IOBROKER-MIHOME-VACUUM-Z\ncorregir algunos errores",
+        "pl": "napraw IOBROKER-MIHOME-VACUUM-Z\nnapraw kilka błędów",
+        "zh-cn": "修复 IOBROKER-MIHOME-VACUUM-Z\n修复一些错误"
+      },
       "3.3.1": {
         "en": "fix IOBROKER-MIHOME-VACUUM-Z\nfix some errors",
         "de": "fix IOBROKER-MIHOME-VAKUUM-Z\neinige Fehler beheben",
