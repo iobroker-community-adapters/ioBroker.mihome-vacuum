@@ -26,6 +26,7 @@ const deviceList = {
 	'viomi.vacuum.v7': ViomiManager,
 	'viomi.vacuum.v8': ViomiManager,
 	'viomi.vacuum.v19': ViomiManager, //test
+	'viomi.vacuum.v13': ViomiManager, // added for test
 	'roborock.vacuum.s4': VacuumManager, // Roborock S4
 	'roborock.vacuum.s5': VacuumManager,
 	'roborock.vacuum.s5e': VacuumManager, // Roborock S5 Max
