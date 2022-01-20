@@ -282,9 +282,10 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
-### __WORK IN PROGRESS__
+### 3.3.3 (2022-01-20)
 * (Dirkhe) fixed some errors
-* (Dirkhe) add RC4 
+* (Dirkhe) add RC4
+
 ### 3.3.1 (2021-10-02)
 * (MeisterTR) fix IOBROKER-MIHOME-VACUUM-Z
 * (MeisterTR) fix some errors

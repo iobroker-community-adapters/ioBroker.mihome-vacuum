@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.3.2",
+    "version": "3.3.3",
     "news": {
+      "3.3.3": {
+        "en": "fixed some errors\nadd RC4",
+        "de": "einige Fehler behoben\nRC4 hinzufügen",
+        "ru": "исправлены некоторые ошибки\nдобавить RC4",
+        "pt": "corrigiu alguns erros\nadicionar RC4",
+        "nl": "enkele fouten verholpen\nvoeg RC4 . toe",
+        "fr": "corrigé quelques erreurs\najouter RC4",
+        "it": "corretti alcuni errori\naggiungere RC4",
+        "es": "corrigió algunos errores\nañadir RC4",
+        "pl": "naprawiono kilka błędów\ndodaj RC4",
+        "zh-cn": "修复了一些错误\n添加RC4"
+      },
       "3.3.2": {
         "en": "fix IOBROKER-MIHOME-VACUUM-Z\nfix some errors",
         "de": "fix IOBROKER-MIHOME-VAKUUM-Z\neinige Fehler beheben",
@@ -74,30 +86,6 @@
         "es": "error fijo",
         "pl": "naprawiony błąd",
         "zh-cn": "固定错误"
-      },
-      "3.1.7": {
-        "en": "added Sentry, minimize messages, fix disk I/O ",
-        "de": "Sentry hinzugefügt, Nachrichten minimiert, Festplatten-E / A repariert",
-        "ru": "добавлен Sentry, минимизация сообщений, исправление дискового ввода-вывода",
-        "pt": "adicionado Sentry, minimizar mensagens, consertar E / S de disco",
-        "nl": "Sentry toegevoegd, berichten minimaliseren, schijf I / O repareren",
-        "fr": "Ajout de Sentry, minimiser les messages, réparer les E / S de disque",
-        "it": "aggiunto Sentry, minimizza i messaggi, correggi l'I / O del disco",
-        "es": "Sentry agregado, minimizar mensajes, reparar E / S de disco",
-        "pl": "dodano Sentry, minimalizowanie wiadomości, naprawianie operacji wejścia / wyjścia dysku",
-        "zh-cn": "添加了Sentry，最大程度地减少了消息，修复了磁盘I / O"
-      },
-      "3.1.5": {
-        "en": "Breaking changes, Map format changed, added wifi state, added multimap support, added mopstate, fixed objects, show zones and points when selectiong in app, minmize disk I/O, minimize Messages clear and extend log,",
-        "de": "BREAKING CHANGE, Kartenformat geändert, WLAN-Status hinzugefügt, Multimap-Unterstützung hinzugefügt, Mopstate hinzugefügt, Objekte fixiert, Zonen und Punkte bei der Auswahl in der App anzeigen, Festplatten-E / A minimieren, Nachrichten löschen, Protokoll löschen und Protokoll erweitern,",
-        "ru": "Критические изменения, изменен формат карты, добавлено состояние Wi-Fi, добавлена поддержка нескольких карт, добавлено mopstate, фиксированные объекты, показаны зоны и точки при выборе в приложении, минимизация дискового ввода-вывода, минимизация сообщений, очистка и расширение журнала,",
-        "pt": "Quebrando mudanças, formato de mapa alterado, estado wi-fi adicionado, suporte multimap adicionado, adicionado mopstate, objetos fixos, mostrar zonas e pontos quando a seleçãog no aplicativo, minimizar E / S de disco, minimizar mensagens limpar e estender log,",
-        "nl": "Veranderingen verbreken, kaartformaat gewijzigd, wifi-status toegevoegd, multimap-ondersteuning toegevoegd, mopstate toegevoegd, vaste objecten, zones en punten weergeven bij selectie in de app, schijf-I / O verkleinen, berichten wissen minimaliseren en logboek uitbreiden,",
-        "fr": "Changements de rupture, format de carte changé, état wifi ajouté, prise en charge multimap, ajout de mopstate, objets fixes, afficher les zones et les points lors de la sélection dans l'application, minimiser les E / S du disque, minimiser les messages, effacer et étendre le journal,",
-        "it": "Cambiamenti decisivi, formato mappa modificato, aggiunto stato wifi, aggiunto supporto multimappa, aggiunto stato mop, oggetti fissi, mostra zone e punti durante la selezione nell'app, minimizza l'I / O del disco, minimizza i messaggi cancella ed estendi il registro,",
-        "es": "Cambios rotos, cambio de formato de mapa, estado de wifi agregado, soporte de multimapa agregado, estado de mop agregado, objetos fijos, mostrar zonas y puntos cuando se seleccionan en la aplicación, minimizar la E / S del disco, minimizar los mensajes, borrar y extender el registro,",
-        "pl": "Przełomowe zmiany, zmiana formatu mapy, dodano stan wifi, dodano obsługę wielu map, dodano stan mopstate, stałe obiekty, pokaż strefy i punkty podczas wyboru w aplikacji, zminimalizuj wejście / wyjście dysku, zminimalizuj czyszczenie wiadomości i rozszerz dziennik,",
-        "zh-cn": "重大更改，地图格式已更改，添加了wifi状态，添加了多图支持，添加了拖把状态，固定对象，在应用中进行选择时显示区域和点，最小化了磁盘I / O，最小化了消息清除并扩展了日志，"
       }
     },
     "title": "mihome-vacuum",
