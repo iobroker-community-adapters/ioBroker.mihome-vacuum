@@ -39,10 +39,12 @@
     "LICENSE",
     "main.js"
   ],
+  "optionalDependencies": {
+    "canvas": "^2.9.0"
+  },
   "dependencies": {
     "@iobroker/adapter-core": "^2.5.1",
     "zlib": "^1.0.5",
-    "canvas": "^2.8.0",
     "request": "^2.88.2",
     "treemap-js": "^1.2.1"
   },
