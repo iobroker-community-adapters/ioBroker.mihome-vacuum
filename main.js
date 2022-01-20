@@ -351,7 +351,7 @@ class MihomeVacuum extends utils.Adapter {
 			switch (obj.command) {
 				case 'discovery':
 					//adapter.log.info('discover' + JSON.stringify(obj))
-					Map.getDeviceStatus(obj.message.username, obj.message.password, obj.message.server, '{"getVirtualModel":false,"getHuamiDevices":0}')
+					Map.getDeviceStatus(obj.message.username, obj.message.password, obj.message.server)
 						.then(data => {
 							this.log.debug('discover__' + JSON.stringify(data));
 							respond(data);
