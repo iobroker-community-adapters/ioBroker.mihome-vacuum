@@ -43,7 +43,7 @@
     "canvas": "^2.9.0"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.5.1",
+    "@iobroker/adapter-core": "^2.6.0",
     "zlib": "^1.0.5",
     "request": "^2.88.2",
     "treemap-js": "^1.2.1"
