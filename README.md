@@ -69,6 +69,7 @@ sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev l
 ``
 
 ``
+cd /opt/iobroker/node_modules/iobroker.mihome-vacuum
 sudo npm install canvas --unsafe-perm=true
 ``
 
