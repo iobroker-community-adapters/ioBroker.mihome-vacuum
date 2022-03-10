@@ -68,9 +68,7 @@ Please install canvas and the libs manually with:
 sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 ``
 
-``
-sudo npm install canvas --unsafe-perm=true
-``
+switch into : `cd /opt/iobroker/node_modules/iobroker.mihome-vacuum` then `sudo npm install canvas --unsafe-perm=true`
 
 ###  HTTP error when getting token cookie{}
 Sometimes you can't connect to the xiaomi cloud. 
@@ -286,6 +284,10 @@ The supported commands are:
 ### __WORK IN PROGRESS__
 * (Apollon77) Fix several potential crash cases reported by Sentry
 
+### 3.3.5 (2022-02-07)
+* (Dirkhe) fixed some errors
+* (lasthead0) fix cyrillic issue RC4 lib#
+
 ### 3.3.3 (2022-01-20)
 * (Dirkhe) fixed some errors
 * (Dirkhe) add RC4
@@ -462,7 +464,7 @@ The supported commands are:
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2017-2021 bluefox <dogafox@gmail.com>
+Copyright (c) 2017-2022 bluefox <dogafox@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

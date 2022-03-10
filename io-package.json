@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.3.4",
+    "version": "3.3.5",
     "news": {
+      "3.3.5": {
+        "en": "RC4: fixed some errors",
+        "de": "RC4: einige Fehler behoben",
+        "ru": "RC4: исправлены некоторые ошибки",
+        "pt": "RC4: corrigiu alguns erros",
+        "nl": "RC4: enkele fouten verholpen",
+        "fr": "RC4: corrigé quelques erreurs",
+        "it": "RC4: corretti alcuni errori",
+        "es": "RC4: corrigió algunos errores",
+        "pl": "RC4: naprawiono kilka błędów",
+        "zh-cn": "RC4: 修复了一些错误"
+      },
       "3.3.4": {
         "en": "RC4: fixed some errors",
         "de": "RC4: einige Fehler behoben",
