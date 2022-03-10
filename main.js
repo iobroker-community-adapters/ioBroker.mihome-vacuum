@@ -132,8 +132,8 @@ class MihomeVacuum extends utils.Adapter {
 		for (let i = 0; i < 5; i++) {
 			DeviceData = await this.getModelFromApi();
 			this.log.debug('Get Device data..' + i);
-			if (DeviceData) {
-				this.log.debug('Get Device data from robot..');
+			if (DeviceData && DeviceData.result) {
+				this.log.debug(`Get Device data from robot.. ${JSON.stringify(DeviceData.result)}`);
 				await this.setModelInfoObject(DeviceData.result);
 				DeviceModel = DeviceData.result.model;
 
@@ -299,7 +299,7 @@ class MihomeVacuum extends utils.Adapter {
 
 		// Send own commands
 		if (command === 'X_send_command') {
-			const values = (state.val || '').trim().split(';');
+			const values = (state.val || '').toString().trim().split(';');
 			let params = [''];
 			if (values[1]) {
 				try {
@@ -352,7 +352,7 @@ class MihomeVacuum extends utils.Adapter {
 			switch (obj.command) {
 				case 'discovery':
 					//adapter.log.info('discover' + JSON.stringify(obj))
-					Map.getDeviceStatus(obj.message.username, obj.message.password, obj.message.server)
+					Map && Map.getDeviceStatus(obj.message.username, obj.message.password, obj.message.server)
 						.then(data => {
 							this.log.debug('discover__' + JSON.stringify(data));
 							respond(data);

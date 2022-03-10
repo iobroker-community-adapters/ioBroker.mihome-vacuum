@@ -282,6 +282,10 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
+
+### __WORK IN PROGRESS__
+* (Apollon77) Fix several potential crash cases reported by Sentry
+
 ### 3.3.3 (2022-01-20)
 * (Dirkhe) fixed some errors
 * (Dirkhe) add RC4
