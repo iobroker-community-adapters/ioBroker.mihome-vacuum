@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.3.5",
+    "version": "3.3.6",
     "news": {
+      "3.3.6": {
+        "en": "fix spotclean",
+        "de": "fleckenrein reparieren",
+        "ru": "исправить точечная очистка",
+        "pt": "corrigir spotclean",
+        "nl": "repareer spotclean",
+        "fr": "réparer les taches",
+        "it": "riparare spotclean",
+        "es": "arreglar spotclean",
+        "pl": "naprawić punktowo",
+        "zh-cn": "修复污点"
+      },      
       "3.3.5": {
         "en": "RC4: fixed some errors",
         "de": "RC4: einige Fehler behoben",
