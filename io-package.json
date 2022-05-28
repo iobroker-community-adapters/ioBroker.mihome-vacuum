@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.3.6",
+    "version": "3.4.0",
     "news": {
+      "3.4.0": {
+        "en": "Fix several potential crash cases reported by Sentry",
+        "de": "Beheben Sie mehrere potenzielle Absturzfälle, die von Sentry gemeldet wurden",
+        "ru": "Исправьте несколько потенциальных случаев сбоя, о которых сообщил Sentry.",
+        "pt": "Corrige vários casos de travamento em potencial relatados pelo Sentinela",
+        "nl": "Los verschillende potentiële crashgevallen op die door Sentry zijn gemeld",
+        "fr": "Correction de plusieurs cas de plantage potentiels signalés par Sentry",
+        "it": "Risolvi diversi potenziali casi di crash segnalati da Sentry",
+        "es": "Solucionar varios casos de fallas potenciales informados por Sentry",
+        "pl": "Napraw kilka potencjalnych przypadków awarii zgłoszonych przez Sentry",
+        "zh-cn": "修复 Sentry 报告的几个潜在崩溃案例"
+      },
       "3.3.6": {
         "en": "fix spotclean",
         "de": "fleckenrein reparieren",
@@ -14,7 +26,7 @@
         "es": "arreglar spotclean",
         "pl": "naprawić punktowo",
         "zh-cn": "修复污点"
-      },      
+      },
       "3.3.5": {
         "en": "RC4: fixed some errors",
         "de": "RC4: einige Fehler behoben",
@@ -74,54 +86,6 @@
         "es": "arreglar IOBROKER-MIHOME-VACUUM-Z\ncorregir algunos errores",
         "pl": "napraw IOBROKER-MIHOME-VACUUM-Z\nnapraw kilka błędów",
         "zh-cn": "修复 IOBROKER-MIHOME-VACUUM-Z\n修复一些错误"
-      },
-      "3.3.0": {
-        "en": "fix no rooms for S5\nfix IOBROKER-MIHOME-VACUUM-4 DB closed\nfix connection error",
-        "de": "Fix keine Räume für S5\nfix IOBROKER-MIHOME-VACUUM-4 DB geschlossen\nVerbindungsfehler beheben",
-        "ru": "исправить нет номеров для S5\nисправить БД IOBROKER-MIHOME-VACUUM-4 закрыта\nисправить ошибку подключения",
-        "pt": "não consertar quartos para S5\ncorrigir IOBROKER-MIHOME-VACUUM-4 DB fechado\nconsertar erro de conexão",
-        "nl": "repareer geen kamers voor S5\nrepareren IOBROKER-MIHOME-VACUUM-4 DB gesloten\nverbindingsfout oplossen",
-        "fr": "réparer aucune chambre pour S5\nFix IOBROKER-MIHOME-VACUUM-4 DB fermé\ncorriger l'erreur de connexion",
-        "it": "sistemare nessuna stanza per S5\nfix IOBROKER-MIHOME-VACUUM-4 DB chiuso\ncorreggere l'errore di connessione",
-        "es": "arreglar no hay habitaciones para S5\narreglar IOBROKER-MIHOME-VACUUM-4 DB cerrado\narreglar error de conexión",
-        "pl": "nie napraw pokojów dla S5\nnapraw IOBROKER-MIHOME-VACUUM-4 DB zamknięty\nnapraw błąd połączenia",
-        "zh-cn": "修复 S5 没有房间\n修复 IOBROKER-MIHOME-VACUUM-4 DB 关闭\n修复连接错误"
-      },
-      "3.2.2": {
-        "en": "the communication is corrected\nAdded roles to be detected by type-detector",
-        "de": "die kommunikation ist korrigiert\nRollen hinzugefügt, die vom Typdetektor erkannt werden sollen",
-        "ru": "сообщение исправлено\nДобавлены роли для обнаружения тип-детектором",
-        "pt": "a comunicação foi corrigida\nAdicionadas funções a serem detectadas pelo detector de tipo",
-        "nl": "de communicatie is gecorrigeerd\nRollen toegevoegd die moeten worden gedetecteerd door typedetector",
-        "fr": "la communication est corrigée\nRôles ajoutés à détecter par le détecteur de type",
-        "it": "la comunicazione è corretta\nRuoli aggiunti da rilevare dal tipo-rilevatore",
-        "es": "la comunicación se corrige\nSe agregaron roles para ser detectados por el detector de tipo",
-        "pl": "komunikacja jest poprawiona\nDodano role do wykrycia przez detektor typu type",
-        "zh-cn": "通讯已更正\n添加了由类型检测器检测的角色"
-      },
-      "3.2.1": {
-        "en": "Adjust several crash cases (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM-4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B, IOBROKER-MIHOME-VACUUM-Q, IOBROKER-MIHOME-VACUUM-M)",
-        "de": "Mehrere Crashfälle einstellen (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM -4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B, IOBROKER-MIHOME-VACUUM-Q, IOBROKER-MIHOME-VACUUM-M)",
-        "ru": "Отрегулируйте несколько случаев сбоя (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM-A -4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B, IOBROKER-MIHOME-VACUUM-Q, IOBROKER-MIHOME-VACUUM-M)",
-        "pt": "Ajustar vários casos de falha (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER -4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B, IOBROKER-MIHOME-VACUUM-Q, IOBROKER-MIHOME-VACUUM-M)",
-        "nl": "Pas verschillende crashgevallen aan (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM -4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B, IOBROKER-MIHOME-VACUUM-Q, IOBROKER-MIHOME-VACUUM-M)",
-        "fr": "Ajuster plusieurs cas de crash (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM -4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B, IOBROKER-MIHOME-VACUUM-Q, IOBROKER-MIHOME-VACUUM-M)",
-        "it": "Regola diversi crash case (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM -4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B, IOBROKER-MIHOME-VACUUM-Q, IOBROKER-MIHOME-VACUUM-M)",
-        "es": "Ajuste varios casos de colisión (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-MI -4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B, IOBROKER-MIHOME-VACUUM-Q, IOBROKER-MIHOME-VACUUM-M)",
-        "pl": "Dostosuj kilka przypadków awarii (IOBROKER-MIHOME-VACUUM-K, IOBROKER-MIHOME-VACUUM-J, IOBROKER-MIHOME-VACUUM-F, IOBROKER-MIHOME-VACUUM-7, IOBROKER-MIHOME-VACUUM-A, IOBROKER-MIHOME-VACUUM -4, IOBROKER-MIHOME-VACUUM-G, IOBROKER-MIHOME-VACUUM-C, IOBROKER-MIHOME-VACUUM-B, IOBROKER-MIHOME-VACUUM-Q, IOBROKER-MIHOME-VACUUM-M)",
-        "zh-cn": "调整几个崩溃案例（IOBROKER-MIHOME-VACUUM-K、IOBROKER-MIHOME-VACUUM-J、IOBROKER-MIHOME-VACUUM-F、IOBROKER-MIHOME-VACUUM-7、IOBROKER-MIHOME-VACUUM-A、IOBROKER-MIHOME-VACUUM -4、IOBROKER-MIHOME-VACUUM-G、IOBROKER-MIHOME-VACUUM-C、IOBROKER-MIHOME-VACUUM-B、IOBROKER-MIHOME-VACUUM-Q、IOBROKER-MIHOME-VACUUM-M)"
-      },
-      "3.2.0": {
-        "en": "fixed error",
-        "de": "Fehler behoben",
-        "ru": "исправленная ошибка",
-        "pt": "erro corrigido",
-        "nl": "vaste fout",
-        "fr": "erreur corrigée",
-        "it": "errore risolto",
-        "es": "error fijo",
-        "pl": "naprawiony błąd",
-        "zh-cn": "固定错误"
       }
     },
     "title": "mihome-vacuum",

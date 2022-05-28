@@ -280,12 +280,12 @@ The supported commands are:
 - Widget at the time without function
 
 ## Changelog
-
-### __WORK IN PROGRESS__
+### 3.4.0 (2022-05-28)
 * (Apollon77) Fix several potential crash cases reported by Sentry
 
 ### 3.3.6 (2022-05-03)
 * (Dirkhe) fix spotcleaning
+
 ### 3.3.5 (2022-02-07)
 * (Dirkhe) fixed some errors
 * (lasthead0) fix cyrillic issue RC4 lib#
