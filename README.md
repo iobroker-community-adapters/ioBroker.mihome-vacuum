@@ -106,7 +106,7 @@ If this option is disabled, the vacuum will start a new "normal cleaning" when y
 - Experimental: Using the checkbox "Send your own commands" objects are created, via which you can send and receive your own commands to the robot.
 
 #### Second robot
-If two robots are to be controlled via ioBroker, two instances must be created. The second robot must change its own port (default: 53421) so that both robots have different ports.
+If two robots are to be controlled via ioBroker, two instances must be created. For the second robot the own port (default: 53421) for IoBroker must changed, so that both robots can archieve ioBroker via different ports.
 
 ## Map Config
 There are two ways to get the map. The first get the map from the cloud. Therefore, you have to log in and select the right robot from the list
