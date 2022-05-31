@@ -281,9 +281,9 @@ The supported commands are:
 
 <!--
     Placeholder for the next version (at the beginning of the line):
-    ## **WORK IN PROGRESS**
+    ### **WORK IN PROGRESS**
 -->
-## **WORK IN PROGRESS**
+### **WORK IN PROGRESS**
 * (deher) add missed Vacuum states
 * (deher) add dock state Waste water tank full
 
