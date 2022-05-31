@@ -74,6 +74,11 @@ switch into : `cd /opt/iobroker/node_modules/iobroker.mihome-vacuum` then `sudo 
 Sometimes you can't connect to the xiaomi cloud. 
 Please open Browser, go to Mihome and login. Enter the code you received via mail. After that, the connection should work.
 
+PLease be sure, that you robot is connected with the Mihome App and NOT with the Roborock App
+
+### No connection with S7
+Currently there is a problem, if the robot and ioBroker are not use the same subnet.
+
 ## Configuration
 Currently, finding the token is the biggest problem.
 One option to extract the token is using this utility: https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor
@@ -284,7 +289,8 @@ The supported commands are:
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-* add Roborock S6 Pure
+* (deher) add Roborock S6 Pure model
+* (deher) add some Hints in readme
 ### 3.4.1 (2022-05-31)
 * (deher) add missed Vacuum states
 * (deher) add dock state Waste water tank full
