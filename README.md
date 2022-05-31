@@ -285,6 +285,7 @@ The supported commands are:
 -->
 ## **WORK IN PROGRESS**
 * (deher) add missed Vacuum states
+* (deher) add dock state Waste water tank full
 
 ### 3.4.0 (2022-05-28)
 * (Apollon77) Fix several potential crash cases reported by Sentry
