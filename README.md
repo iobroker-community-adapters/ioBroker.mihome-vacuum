@@ -283,7 +283,7 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 3.4.1 (2022-05-31)
 * (deher) add missed Vacuum states
 * (deher) add dock state Waste water tank full
 
