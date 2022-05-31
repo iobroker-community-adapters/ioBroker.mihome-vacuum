@@ -279,7 +279,13 @@ The supported commands are:
 - Occasional disconnections, however, this is not due to the adapter but mostly on its own networks
 - Widget at the time without function
 
-## Changelog
+<!--
+    Placeholder for the next version (at the beginning of the line):
+    ## **WORK IN PROGRESS**
+-->
+## **WORK IN PROGRESS**
+* (deher) add missed Vacuum states
+
 ### 3.4.0 (2022-05-28)
 * (Apollon77) Fix several potential crash cases reported by Sentry
 
