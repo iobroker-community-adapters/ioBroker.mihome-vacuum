@@ -283,8 +283,7 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### __WORK IN PROGRESS__
+### 3.4.2 (2022-06-24)
 * (Apollon77) Update dependencies to allow better automatic rebuild
 
 ### 3.4.1 (2022-05-31)
