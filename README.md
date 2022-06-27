@@ -291,6 +291,9 @@ The supported commands are:
 ### **WORK IN PROGRESS**
 * (deher) add Roborock S6 Pure model
 * (deher) add some Hints in readme
+### 3.4.2 (2022-06-24)
+* (Apollon77) Update dependencies to allow better automatic rebuild
+
 ### 3.4.1 (2022-05-31)
 * (deher) add missed Vacuum states
 * (deher) add dock state Waste water tank full
