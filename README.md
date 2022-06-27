@@ -204,26 +204,28 @@ NOTE: This function should only be used by experts, as the sucker might be damag
 
 The robot distinguishes between the commands in methods (methods) and parameters (params) which serve to specify the methods.
 Under the object `mihome-vacuum.X.control.X_send_command` you can send your own commands to the robot.
-The object structure must look as follows: method; [params]
+The object structure must look as follows: method; [params], eg ``` app_segment_clean;[18,20] ```
 
 Under the object `mihome-vacuum.X.control.X_get_response`, the response is entered by the robot after sending. 
 If parameters were queried, they appear here in the JSON format. If only one command was sent, the robot responds only with "0".
 
 The following methods and parameters are supported:
 
-| method          | params                                                              | Description                                                                                            |
-|-----------      |-------                                                              |-------------------                                                                                     |
-| get_timer       |                                                                     | Returns the set timerSetting the suction times BSp. 12 o'clock 30 in 5 days                            |
-| set_timer       | `[["TIME_IN_MS",["30 12 * * 1,2,3,4,5",["start_clean",""]]]]`       | Enable / disable timer                                                                                 |
-| upd_timer       | `["1481997713308","on/off"]`                                        |                                                                                                        |
-|                 |                                                                     | Rescues the times of the Do Not Disturb                                                                |
-| get_dnd_timer   |                                                                     | Delete DND times                                                                                       |
-| close_dnd_timer |                                                                     | DND Setting h, min, h, min                                                                             |
-| set_dnd_timer   | `[22,0,8,0]`                                                        |                                                                                                        |
-|                 |                                                                     |                                                                                                        |
-| app_rc_start    |                                                                     | Start Remote Control                                                                                   |
-| app_rc_end      |                                                                     | Finish Remote Control                                                                                  |
-| app_rc_move     | `[{"seqnum":'0-1000',"velocity":VALUE1,"omega":VALUE2,"duration":VALUE3}]`| Move. Sequence number must be continuous, VALUE1 (speed) = -0.3-0.3, VALUE2 (rotation) = -3.1-3.1, VALUE3 (duration)
+| method          | params                                                              | Description                                                                              |
+|-----------      |-------                                                              |-------------------                                                                       |
+| get_timer       |                                                                     | Returns the set timerSetting the suction times BSp. 12 o'clock 30 in 5 days              |
+| set_timer       | `[["TIME_IN_MS",["30 12 * * 1,2,3,4,5",["start_clean",""]]]]`       | Enable / disable timer                                                                   |
+| upd_timer       | `["1481997713308","on/off"]`                                        |                                                                                          |
+|                 |                                                                     | Rescues the times of the Do Not Disturb                                                  |
+| get_dnd_timer   |                                                                     | Delete DND times                                                                         |
+| close_dnd_timer |                                                                     | DND Setting h, min, h, min                                                               |
+| set_dnd_timer   | `[22,0,8,0]`                                                        |                                                                                          |
+|                 |                                                                     |                                                                                          |
+| app_rc_start    |                                                                     | Start Remote Control                                                                     |
+| app_rc_end      |                                                                     | Finish Remote Control                                                                    |
+| app_rc_move     | `[{"seqnum":'0-1000',"velocity":VALUE1,"omega":VALUE2,"duration":VALUE3}]`| Move. Sequence number must be continuous, VALUE1 (speed) = -0.3-0.3, VALUE2 (rotation) = -3.1-3.1, VALUE3 (duration)|
+|                 |                                                                     |                                                                                          |
+| app_segment_clean | `[12,15]`                                                         | clean romm with Index 12 and 15                                                          |
 
 
 more methods and parameters you can find here ([Link](https://github.com/MeisterTR/XiaomiRobotVacuumProtocol)).
@@ -242,9 +244,15 @@ A couple of predefined commands can also be issued this way:
 ```
 sendTo("mihome-vacuum.0", 
     commandName, 
+    param, 
+    function (response) { /* do something with the result */}
+);
+sendTo("mihome-vacuum.0", 
+    commandName, 
     {param1: value1, param2: value2, ...}, 
     function (response) { /* do something with the result */}
 );
+
 ```
 The supported commands are:
 
@@ -290,7 +298,9 @@ The supported commands are:
 -->
 ### **WORK IN PROGRESS**
 * (deher) add Roborock S6 Pure model
-* (deher) add some Hints in readme
+* (deher) add/extend some Hints in readme
+* (deher) add additional log info for cleanRooms
+
 ### 3.4.2 (2022-06-24)
 * (Apollon77) Update dependencies to allow better automatic rebuild
 

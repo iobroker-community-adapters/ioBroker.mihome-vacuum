@@ -174,7 +174,7 @@ HINWEIS: Diese Funktion sollte nur von Experten genutzt werden, da durch falsche
 
 Der Roboter unterscheidet bei den Kommandos in Methoden (method) und Parameter(params) die zur spezifizierung der Methoden dienen.
 Under dem Object `mihome-vacuum.X.control.X_send_command` können eigene Kommandos an den Roboter gesendet werden.
-Der Objektaufbau muss dabei wie folgt aussehen: method;[params]
+Der Objektaufbau muss dabei wie folgt aussehen: method;[params], zb: ``` app_segment_clean;[18,20] ```
 
 Unter dem Objekt `mihome-vacuum.X.control.X_get_response` wird nach dem Absenden die Antwort vom Roboter eingetragen. 
 Wurden Parameter abgefragt erscheinen sie hier im JSON Format, wurde nur ein Befehl gesendet, antwortet der Roboter nur mit "0".
@@ -194,12 +194,19 @@ Folgende Methoden und Parameter werden unterstützt:
 |app_rc_start     |                                                                     | Remote Control starten                                                                                 |
 |app_rc_end       |                                                                     | Remote Control beenden                                                                                 |
 |app_rc_move      |[{"seqnum":'0-1000',"velocity":WERT1,"omega":WERT2,"duration":WERT3}]| Bewegung. Sequenznummer muss fortlaufend sein, WERT1(Geschw.) = -0.3 - 0.3, WERT2(Drehung) = -3.1 - 3.1, WERT3(Dauer)|
+|                                                                                          |
+| app_segment_clean | `[12,15]`                                                         | reinige Raum mit dem Index 12 und 15                                                          |
 
 Mehr Methoden und Parameter können sie hier finden ([Link](https://github.com/MeisterTR/XiaomiRobotVacuumProtocol)).
 
 ### Eigene Kommandos per sendTo schicken
 Es ist auch möglich, per `sendTo` eigene Kommandos aus anderen Adaptern zu senden. Die Benutzung ist wie folgt:
 ```
+sendTo("mihome-vacuum.0", 
+    commandName, 
+    param, 
+    function (response) { /* do something with the result */}
+);
 sendTo("mihome-vacuum.0", "sendCustomCommand", 
     {method: "method_id", params: [...] /* optional*/}, 
     function (response) { /* Ergebnis auswerten */}
