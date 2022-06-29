@@ -300,6 +300,7 @@ The supported commands are:
 * (deher) add Roborock S6 Pure model
 * (deher) add/extend some Hints in readme
 * (deher) add additional log info for cleanRooms
+* (deher) fix error for wrong map-dp
 
 ### 3.4.2 (2022-06-24)
 * (Apollon77) Update dependencies to allow better automatic rebuild
