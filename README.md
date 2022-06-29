@@ -296,7 +296,7 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 3.5.0 (2022-06-29)
 * (deher) add Roborock S6 Pure model
 * (deher) add/extend some Hints in readme
 * (deher) add additional log info for cleanRooms
