@@ -284,6 +284,9 @@ The supported commands are:
 | clean room/rooms | `cleanRooms` | `rooms` | `rooms` is a comma separated String with enum.rooms.XXX |
 | clean segment | `cleanSegments` | `rooms` | `rooms` is an Array with mapIndex or comma separated String with mapIndex |
 | clean zone | `cleanZone` | `coordinates` | `coordinates` ist a String with coordinates and count, see [zoneClean](#zonecleaning) |
+| start Dust collecting | `startDustCollect` | - keine - |  |
+| stop Dust collecting | `stopDustCollect` | - keine - |  |
+
 
 ## Widget
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
@@ -296,6 +299,9 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (deher) add dust collecting
+
 ### 3.5.0 (2022-06-29)
 * (deher) add Roborock S6 Pure model
 * (deher) add/extend some Hints in readme

@@ -254,6 +254,8 @@ Die unterstützten Kommandos sind:
 | Raum/Räume saugen | `cleanRooms` | `rooms` | `rooms` ist ein komma separierter String mit enum.rooms.XXX |
 | Segment saugen | `cleanSegments` | `rooms` | `rooms` ist Array mit mapIndex oder komma separierter String mit mapIndex |
 | Zone saugen | `cleanZone` | `coordinates` | `coordinates` ist ein String mit Koordinaten und die Anzahl Durchläufe, siehe [zoneClean](#zoneClean) |
+| Dreck absaugen starten | `startDustCollect` | - keine - |  |
+| Dreck absaugen stoppen | `stopDustCollect` | - keine - |  |
 
 ## Widget
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
