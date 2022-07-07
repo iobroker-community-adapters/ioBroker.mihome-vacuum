@@ -299,7 +299,7 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 3.6.0 (2022-07-07)
 * (deher) add dust collecting
 
 ### 3.5.0 (2022-06-29)

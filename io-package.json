@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.5.0",
+    "version": "3.6.0",
     "news": {
+      "3.6.0": {
+        "en": "add dust collecting",
+        "de": "staub sammeln",
+        "ru": "добавить пыль собирая",
+        "pt": "adicionar coleta de poeira",
+        "nl": "stof verzamelen",
+        "fr": "ajouter la poussière",
+        "it": "aggiungere la raccolta di polvere",
+        "es": "añadir polvo recolectando",
+        "pl": "dodać",
+        "zh-cn": "b. 增量"
+      },
       "3.5.0": {
         "en": "add Roborock S6 Pure model\nadd/extend some Hints in readme\nadd additional log info for cleanRooms\nfix error for wrong map-dp",
         "de": "roborock S6 Reines Modell\nfügen Sie einige Hinweise in readme hinzu\nzusätzliche Log-Info für cleanRooms hinzufügen\nfehler beheben für falsche map-dp",
@@ -64,18 +76,6 @@
         "zh-cn": "修复污点"
       },
       "3.3.5": {
-        "en": "RC4: fixed some errors",
-        "de": "RC4: einige Fehler behoben",
-        "ru": "RC4: исправлены некоторые ошибки",
-        "pt": "RC4: corrigiu alguns erros",
-        "nl": "RC4: enkele fouten verholpen",
-        "fr": "RC4: corrigé quelques erreurs",
-        "it": "RC4: corretti alcuni errori",
-        "es": "RC4: corrigió algunos errores",
-        "pl": "RC4: naprawiono kilka błędów",
-        "zh-cn": "RC4: 修复了一些错误"
-      },
-      "3.3.4": {
         "en": "RC4: fixed some errors",
         "de": "RC4: einige Fehler behoben",
         "ru": "RC4: исправлены некоторые ошибки",
