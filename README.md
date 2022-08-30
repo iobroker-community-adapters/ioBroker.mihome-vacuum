@@ -254,7 +254,7 @@ sendTo("mihome-vacuum.0",
 );
 
 ```
-if only a single param is needed, you can send a string otherwise you have to use an object with expected params, eg:
+if only a single param is possible, you can send a string only otherwise you have to use an object with expected params, eg:
 ```
 sendTo("mihome-vacuum.0", 
     "setFanSpeed", 
@@ -299,8 +299,8 @@ The supported commands are:
 | Issue a move command for remote control | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | Sequence number must be sequentially, Duration is in ms |
 | End the remote control function | `stopRemoteControl` | - none - |  |
 | clean room/rooms | `cleanRooms` | `rooms` | `rooms` is a comma separated String with enum.rooms.XXX |
-| clean segment | `cleanSegments` | `rooms` | `rooms` is an Array with mapIndex or comma separated String with mapIndex |
-| clean zone | `cleanZone` | `coordinates` | `coordinates` ist a String with coordinates and count, see [zoneClean](#zonecleaning) |
+| clean segment | `cleanSegments` | `rooms`[,`waterBoxMode`,`fanSpeed`] | `rooms` is an Array with mapIndex or comma separated String with mapIndex |
+| clean zone | `cleanZone` | `coordinates`[,`waterBoxMode`,`fanSpeed`] | `coordinates` ist a String with coordinates and count, see [zoneClean](#zonecleaning) |
 | start Dust collecting | `startDustCollect` | - none - |  |
 | stop Dust collecting | `stopDustCollect` | - none - |  |
 
@@ -318,6 +318,7 @@ The supported commands are:
 -->
 ### **WORK IN PROGRESS**
     accept custom commands with single paramter
+    optional parameter waterboxMode and fanSpeed for cleanSegments and cleanZone 
 
 ### 3.6.0 (2022-07-07)
 * (deher) add dust collecting

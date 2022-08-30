@@ -225,7 +225,7 @@ sendTo("mihome-vacuum.0",
 );
 ```
 
-Wenn nur ein einzelner Parameter benötigt wird, kann man den auch direkt als String senden, sonst muß ein object mit den erwarteten Parametern gesendet werden, zb:
+Wenn nur ein einzelner Parameter möglich ist, kann man den auch direkt als String senden, sonst muß ein object mit den erwarteten Parametern gesendet werden, zb:
 ```
 sendTo("mihome-vacuum.0", 
     "setFanSpeed", 
@@ -263,12 +263,14 @@ Die unterstützten Kommandos sind:
 | *Nicht-stören*-Timer löschen | `deleteDNDTimer` | - keine - |  |
 | Saugstufe abrufen | `getFanSpeed` | - keine - |  |
 | Saugstufe festlegen | `setFanSpeed` | `fanSpeed` | `fanSpeed` ist eine Zahl zwischen 1 und 100 |
+| Wischstufe abrufen | `getWaterBoxMode` | - none - |  |
+| Wischstufe festlegen | `setWaterBoxMode` | `waterBoxMode` | `waterBoxMode` ist eine Zahl zwischen 200 and 204 |
 | Fernsteuerungsfunktion starten | `startRemoteControl` | - keine - |  |
 | Bewegungskommando für Fernsteuerung absetzen | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | sequenceNumber muss sequentiell sein, Dauer ist in ms |
 | Fernsteuerungsfunktion beenden | `stopRemoteControl` | - keine - |  |
 | Raum/Räume saugen | `cleanRooms` | `rooms` | `rooms` ist ein komma separierter String mit enum.rooms.XXX |
-| Segment saugen | `cleanSegments` | `rooms` | `rooms` ist Array mit mapIndex oder komma separierter String mit mapIndex |
-| Zone saugen | `cleanZone` | `coordinates` | `coordinates` ist ein String mit Koordinaten und die Anzahl Durchläufe, siehe [zoneClean](#zoneClean) |
+| Segment saugen | `cleanSegments`[,`waterBoxMode`,`fanSpeed`] | `rooms` | `rooms` ist Array mit mapIndex oder komma separierter String mit mapIndex |
+| Zone saugen | `cleanZone` | `coordinates`[,`waterBoxMode`,`fanSpeed`] | `coordinates` ist ein String mit Koordinaten und die Anzahl Durchläufe, siehe [zoneClean](#zoneClean) |
 | Dreck absaugen starten | `startDustCollect` | - keine - |  |
 | Dreck absaugen stoppen | `stopDustCollect` | - keine - |  |
 
