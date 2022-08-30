@@ -202,14 +202,9 @@ Mehr Methoden und Parameter können sie hier finden ([Link](https://github.com/M
 ### Eigene Kommandos per sendTo schicken
 Es ist auch möglich, per `sendTo` eigene Kommandos aus anderen Adaptern zu senden. Die Benutzung ist wie folgt:
 ```
-sendTo("mihome-vacuum.0", 
-    commandName, 
-    param, 
-    function (response) { /* do something with the result */}
-);
 sendTo("mihome-vacuum.0", "sendCustomCommand", 
     {method: "method_id", params: [...] /* optional*/}, 
-    function (response) { /* Ergebnis auswerten */}
+    function (response) { /* do something with the result */}
 );
 ```
 mit `method_id` und `params` nach obiger Definition.
@@ -220,9 +215,29 @@ Eine handvoll vordefinierter Kommandos kann auch folgendermaßen abgesetzt werde
 ```
 sendTo("mihome-vacuum.0", 
     commandName, 
+    param, 
+    function (response) { /* do something with the result */}
+);
+sendTo("mihome-vacuum.0", 
+    commandName, 
     {param1: value1, param2: value2, ...}, 
     function (response) { /* do something with the result */}
 );
+```
+
+Wenn nur ein einzelner Parameter benötigt wird, kann man den auch direkt als String senden, sonst muß ein object mit den erwarteten Parametern gesendet werden, zb:
+```
+sendTo("mihome-vacuum.0", 
+    "setFanSpeed", 
+    "105", 
+    function (response) { /* do something with the result */}
+);
+sendTo("mihome-vacuum.0", 
+    "setFanSpeed", 
+    {"fanSpeed" : 105}, 
+    function (response) { /* do something with the result */}
+);
+
 ```
 Die unterstützten Kommandos sind:
 

@@ -254,6 +254,21 @@ sendTo("mihome-vacuum.0",
 );
 
 ```
+if only a single param is needed, you can send a string otherwise you have to use an object with expected params, eg:
+```
+sendTo("mihome-vacuum.0", 
+    "setFanSpeed", 
+    "105", 
+    function (response) { /* do something with the result */}
+);
+sendTo("mihome-vacuum.0", 
+    "setFanSpeed", 
+    {"fanSpeed" : 105}, 
+    function (response) { /* do something with the result */}
+);
+
+```
+
 The supported commands are:
 
 | Description | `commandName` | Required params | Remarks |
@@ -278,14 +293,16 @@ The supported commands are:
 | Delete the *do not disturb* timer | `deleteDNDTimer` | - none - |  |
 | Retrieve the current fan speed | `getFanSpeed` | - none - |  |
 | Set a new fan speed | `setFanSpeed` | `fanSpeed` | `fanSpeed` is a number between 1 and 100 |
+| Retrieve the current waterbox mode | `getWaterBoxMode` | - none - |  |
+| Set a waterbox mode | `setWaterBoxMode` | `waterBoxMode` | `waterBoxMode` is a number between 200 and 204 |
 | Start the remote control function | `startRemoteControl` | - none - |  |
 | Issue a move command for remote control | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | Sequence number must be sequentially, Duration is in ms |
 | End the remote control function | `stopRemoteControl` | - none - |  |
 | clean room/rooms | `cleanRooms` | `rooms` | `rooms` is a comma separated String with enum.rooms.XXX |
 | clean segment | `cleanSegments` | `rooms` | `rooms` is an Array with mapIndex or comma separated String with mapIndex |
 | clean zone | `cleanZone` | `coordinates` | `coordinates` ist a String with coordinates and count, see [zoneClean](#zonecleaning) |
-| start Dust collecting | `startDustCollect` | - keine - |  |
-| stop Dust collecting | `stopDustCollect` | - keine - |  |
+| start Dust collecting | `startDustCollect` | - none - |  |
+| stop Dust collecting | `stopDustCollect` | - none - |  |
 
 
 ## Widget
@@ -299,6 +316,9 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+    accept custom commands with single paramter
+
 ### 3.6.0 (2022-07-07)
 * (deher) add dust collecting
 
