@@ -319,6 +319,7 @@ The supported commands are:
 ### **WORK IN PROGRESS**
     accept custom commands with single paramter
     optional parameter waterboxMode and fanSpeed for cleanSegments and cleanZone 
+    fix crash on message send (#652)
 
 ### 3.6.0 (2022-07-07)
 * (deher) add dust collecting

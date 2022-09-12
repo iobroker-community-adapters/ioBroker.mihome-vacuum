@@ -7,3 +7,4 @@ admin/i18n/*/flat.txt
 
 # ioBroker dev-server
 .dev-server/
+.vscode/launch.json
