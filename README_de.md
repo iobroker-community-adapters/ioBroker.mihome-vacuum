@@ -52,7 +52,7 @@ sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev l
 ``
 
 ``
-sudo npm install canvas --unsafe-perm=true
+sudo npm install canvas
 ``
 
 
