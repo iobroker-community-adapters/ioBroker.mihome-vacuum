@@ -294,6 +294,8 @@ The supported commands are:
 | Retrieve the current fan speed | `getFanSpeed` | - none - |  |
 | Set a new fan speed | `setFanSpeed` | `fanSpeed` | `fanSpeed` is a number between 1 and 100 |
 | Retrieve the current waterbox mode | `getWaterBoxMode` | - none - |  |
+| Set a mop mode | `setMopMode` | `mopMode` | `mopMode` is a number between 300 and 303 |
+| Retrieve the current mop mode | `getMopMode` | - none - |  |
 | Set a waterbox mode | `setWaterBoxMode` | `waterBoxMode` | `waterBoxMode` is a number between 200 and 204 |
 | Start the remote control function | `startRemoteControl` | - none - |  |
 | Issue a move command for remote control | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | Sequence number must be sequentially, Duration is in ms |
@@ -320,6 +322,7 @@ The supported commands are:
     accept custom commands with single paramter
     optional parameter waterboxMode and fanSpeed for cleanSegments and cleanZone 
     fix crash on message send (#652)
+    add mop mode (#670)
 
 ### 3.6.0 (2022-07-07)
 * (deher) add dust collecting
