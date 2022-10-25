@@ -323,6 +323,7 @@ The supported commands are:
     optional parameter waterboxMode and fanSpeed for cleanSegments and cleanZone 
     fix crash on message send (#652)
     add mop mode (#670)
+    adapt fan_power for S7 Ultra(#677)
 
 ### 3.6.0 (2022-07-07)
 * (deher) add dust collecting
