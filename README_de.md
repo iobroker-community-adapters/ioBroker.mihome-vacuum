@@ -52,7 +52,7 @@ sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev l
 ``
 
 ``
-sudo npm install canvas --unsafe-perm=true
+sudo npm install canvas
 ``
 
 
@@ -202,14 +202,9 @@ Mehr Methoden und Parameter können sie hier finden ([Link](https://github.com/M
 ### Eigene Kommandos per sendTo schicken
 Es ist auch möglich, per `sendTo` eigene Kommandos aus anderen Adaptern zu senden. Die Benutzung ist wie folgt:
 ```
-sendTo("mihome-vacuum.0", 
-    commandName, 
-    param, 
-    function (response) { /* do something with the result */}
-);
 sendTo("mihome-vacuum.0", "sendCustomCommand", 
     {method: "method_id", params: [...] /* optional*/}, 
-    function (response) { /* Ergebnis auswerten */}
+    function (response) { /* do something with the result */}
 );
 ```
 mit `method_id` und `params` nach obiger Definition.
@@ -220,9 +215,29 @@ Eine handvoll vordefinierter Kommandos kann auch folgendermaßen abgesetzt werde
 ```
 sendTo("mihome-vacuum.0", 
     commandName, 
+    param, 
+    function (response) { /* do something with the result */}
+);
+sendTo("mihome-vacuum.0", 
+    commandName, 
     {param1: value1, param2: value2, ...}, 
     function (response) { /* do something with the result */}
 );
+```
+
+Wenn nur ein einzelner Parameter möglich ist, kann man den auch direkt als String senden, sonst muß ein object mit den erwarteten Parametern gesendet werden, zb:
+```
+sendTo("mihome-vacuum.0", 
+    "setFanSpeed", 
+    "105", 
+    function (response) { /* do something with the result */}
+);
+sendTo("mihome-vacuum.0", 
+    "setFanSpeed", 
+    {"fanSpeed" : 105}, 
+    function (response) { /* do something with the result */}
+);
+
 ```
 Die unterstützten Kommandos sind:
 
@@ -248,12 +263,16 @@ Die unterstützten Kommandos sind:
 | *Nicht-stören*-Timer löschen | `deleteDNDTimer` | - keine - |  |
 | Saugstufe abrufen | `getFanSpeed` | - keine - |  |
 | Saugstufe festlegen | `setFanSpeed` | `fanSpeed` | `fanSpeed` ist eine Zahl zwischen 1 und 100 |
+| Wischstufe abrufen | `getWaterBoxMode` | - none - |  |
+| Wischstufe festlegen | `setWaterBoxMode` | `waterBoxMode` | `waterBoxMode` ist eine Zahl zwischen 200 and 204 |
+| Wisch modus abrufen | `getMopMode` | - none - |  |
+| Wisch modus festlegen | `setMopMode` | `mopMode` | `mopMode` ist eine Zahl zwischen 300 and 303 |
 | Fernsteuerungsfunktion starten | `startRemoteControl` | - keine - |  |
 | Bewegungskommando für Fernsteuerung absetzen | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | sequenceNumber muss sequentiell sein, Dauer ist in ms |
 | Fernsteuerungsfunktion beenden | `stopRemoteControl` | - keine - |  |
 | Raum/Räume saugen | `cleanRooms` | `rooms` | `rooms` ist ein komma separierter String mit enum.rooms.XXX |
-| Segment saugen | `cleanSegments` | `rooms` | `rooms` ist Array mit mapIndex oder komma separierter String mit mapIndex |
-| Zone saugen | `cleanZone` | `coordinates` | `coordinates` ist ein String mit Koordinaten und die Anzahl Durchläufe, siehe [zoneClean](#zoneClean) |
+| Segment saugen | `cleanSegments` | `rooms` \| {rooms:`rooms`,waterBoxMode:`waterBoxMode`,fanSpeed:`fanSpeed`} | `rooms` ist Array mit mapIndex oder komma separierter String mit mapIndex |
+| Zone saugen | `cleanZone` | `coordinates` \| {coordinates:`coordinates`,waterBoxMode:`waterBoxMode`,fanSpeed:`fanSpeed`} | `coordinates` ist ein String mit Koordinaten und die Anzahl Durchläufe, siehe [zoneClean](#zoneClean) |
 | Dreck absaugen starten | `startDustCollect` | - keine - |  |
 | Dreck absaugen stoppen | `stopDustCollect` | - keine - |  |
 
