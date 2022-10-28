@@ -318,7 +318,7 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 3.7.0 (2022-10-28)
     accept custom commands with single paramter
     optional parameter waterboxMode and fanSpeed for cleanSegments and cleanZone 
     fix crash on message send (#652)
