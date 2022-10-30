@@ -318,10 +318,13 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (deher) remove deprecated node 12.x Version for workflow
 ### 3.8.0 (2022-10-30)
 * (deher) fix missing stock command for mop_mode
 * (deher) add mop mode also for cleanSegments and cleanZone
 * (deher) add mop mode also for rooms
+* (MeisterTR) map zooming amd show carpet
 
 ### 3.7.0 (2022-10-28)
 * (deher) accept custom commands with single paramter
