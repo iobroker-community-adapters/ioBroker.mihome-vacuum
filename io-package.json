@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.7.0",
+    "version": "3.8.0",
     "news": {
+      "3.8.0": {
+        "en": "fix missing stock command for mop_mode\nadd mop mode also for cleanSegments and cleanZone\nadd mop mode also for rooms",
+        "de": "fehlerbehebung für mop_mode\nmop-Modus auch für cleanSegments und cleanZone hinzufügen\nmop-modus auch für zimmer hinzufügen",
+        "ru": "исправить недостающую команду запаса для mop_mode\nдобавить режим mop также для CleanSegments и cleanZone\nдобавьте режим mop также для комнат",
+        "pt": "corrigir o comando de stock ausente para mop_mode\nadicionar modo de esfregão também para cleanSegments e cleanZone\nadicionar modo de esfregão também para quartos",
+        "nl": "vermissingscommando voor dweil\nvoeg mode toe voor schoonmaak en schoonzoon\nvoeg mode toe voor kamers",
+        "fr": "correction de la commande stock manquante pour mop_mode\najouter le mode mop aussi pour cleanSegments et cleanZone\najouter le mode mop aussi pour les chambres",
+        "it": "correggere il comando di azione mancante per mop_mode\naggiungere la modalità mop anche per cleanSegments e cleanZone\naggiungere la modalità mop anche per le camere",
+        "es": "fijar el comando stock perdido para mop_mode\nañadir modo de mop también para cleanSegments y cleanZone\nañadir modo de mop también para las habitaciones",
+        "pl": "ulepszenie\ndodaje również mody do czystego i czystego zespołomu\nmoda dodają także do pomieszczeń",
+        "uk": "виправлення відсутніх команд для mop_mode\nдодати режим mop також для очищення\nдодати режим mop також для кімнат",
+        "zh-cn": "fix 失踪的车队指挥官;mode\n补充清洁垃圾和清洁垃圾的模型\n会议室增购方式"
+      },
       "3.7.0": {
         "en": "accept custom commands with single paramter\n    optional parameter waterboxMode and fanSpeed for cleanSegments and cleanZone \n    fix crash on message send (#652)\n    add mop mode (#670)\n    adapt fan_power for S7 Ultra(#677)",
         "de": "benutzerdefinierte befehle mit einzelnen paramter akzeptieren\noptionaler Parameter waterboxMode und FanSpeed für cleanSegments und cleanZone\ncrash auf nachricht senden beheben (#652)\nmop mode hinzufügen (#670)\nfan_power für S7 Ultra (#677) anpassen",
@@ -75,18 +88,6 @@
         "es": "Solucionar varios casos de fallas potenciales informados por Sentry",
         "pl": "Napraw kilka potencjalnych przypadków awarii zgłoszonych przez Sentry",
         "zh-cn": "修复 Sentry 报告的几个潜在崩溃案例"
-      },
-      "3.3.6": {
-        "en": "fix spotclean",
-        "de": "fleckenrein reparieren",
-        "ru": "исправить точечная очистка",
-        "pt": "corrigir spotclean",
-        "nl": "repareer spotclean",
-        "fr": "réparer les taches",
-        "it": "riparare spotclean",
-        "es": "arreglar spotclean",
-        "pl": "naprawić punktowo",
-        "zh-cn": "修复污点"
       }
     },
     "title": "mihome-vacuum",
