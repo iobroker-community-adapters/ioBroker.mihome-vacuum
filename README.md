@@ -301,8 +301,8 @@ The supported commands are:
 | Issue a move command for remote control | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | Sequence number must be sequentially, Duration is in ms |
 | End the remote control function | `stopRemoteControl` | - none - |  |
 | clean room/rooms | `cleanRooms` | `rooms` | `rooms` is a comma separated String with enum.rooms.XXX |
-| clean segment | `cleanSegments` | `rooms` \| {rooms:`rooms`,waterBoxMode:`waterBoxMode`,fanSpeed:`fanSpeed`} | `rooms` is a number or an Array with mapIndex or comma separated String with mapIndex |
-| clean zone | `cleanZone` | `coordinates` \| {coordinates:`coordinates`,waterBoxMode:`waterBoxMode`,fanSpeed:`fanSpeed`} | `coordinates` is a String with coordinates and count, see [zoneClean](#zonecleaning) |
+| clean segment | `cleanSegments` | `rooms` \| {rooms:`rooms`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`} | `rooms` is a number or an Array with mapIndex or comma separated String with mapIndex |
+| clean zone | `cleanZone` | `coordinates` \| {coordinates:`coordinates`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`} | `coordinates` is a String with coordinates and count, see [zoneClean](#zonecleaning) |
 | start Dust collecting | `startDustCollect` | - none - |  |
 | stop Dust collecting | `stopDustCollect` | - none - |  |
 
@@ -320,6 +320,8 @@ The supported commands are:
 -->
 ### **WORK IN PROGRESS**
 * (deher) fix missing stock command for mop_mode
+* (deher) add mop mode also for cleanSegments and cleanZone
+* (deher) add mop mode also for rooms
 
 ### 3.7.0 (2022-10-28)
 * (deher) accept custom commands with single paramter
