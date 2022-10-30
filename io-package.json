@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.8.0",
+    "version": "3.8.1",
     "news": {
+      "3.8.1": {
+        "en": "remove deprecated node 12.x Version for workflow",
+        "de": "deprecated node 12.x entfernen Ausführung für den Workflow",
+        "ru": "удалить deprecated node 12.x Версия для workflow",
+        "pt": "remover o nó despregado 12.x Versão para fluxo de trabalho",
+        "nl": "verwijder node 12. Versie voor werkvloer",
+        "fr": "supprimer noeud déprécié 12.x Version pour workflow",
+        "it": "rimuovere nodo deprecato 12.x Versione per flusso di lavoro",
+        "es": "remove deprecated node 12.x Versión para el flujo de trabajo",
+        "pl": "usunąć węzeł 12.x Wersja robocza",
+        "uk": "видалити депресований вузол 12.x Версія для робочого процесу",
+        "zh-cn": "删除第12x号建议。 工作流程的处理"
+      },
       "3.8.0": {
         "en": "fix missing stock command for mop_mode\nadd mop mode also for cleanSegments and cleanZone\nadd mop mode also for rooms",
         "de": "fehlerbehebung für mop_mode\nmop-Modus auch für cleanSegments und cleanZone hinzufügen\nmop-modus auch für zimmer hinzufügen",
@@ -76,18 +89,6 @@
         "es": "agregar estados de vacío perdidos\nagregar estado del muelle Depósito de aguas residuales lleno",
         "pl": "dodaj pominięte stany próżni\ndodaj stan dokowania Pełny zbiornik na ścieki",
         "zh-cn": "添加错过的真空状态\n添加码头状态 废水箱已满"
-      },
-      "3.4.0": {
-        "en": "Fix several potential crash cases reported by Sentry",
-        "de": "Beheben Sie mehrere potenzielle Absturzfälle, die von Sentry gemeldet wurden",
-        "ru": "Исправьте несколько потенциальных случаев сбоя, о которых сообщил Sentry.",
-        "pt": "Corrige vários casos de travamento em potencial relatados pelo Sentinela",
-        "nl": "Los verschillende potentiële crashgevallen op die door Sentry zijn gemeld",
-        "fr": "Correction de plusieurs cas de plantage potentiels signalés par Sentry",
-        "it": "Risolvi diversi potenziali casi di crash segnalati da Sentry",
-        "es": "Solucionar varios casos de fallas potenciales informados por Sentry",
-        "pl": "Napraw kilka potencjalnych przypadków awarii zgłoszonych przez Sentry",
-        "zh-cn": "修复 Sentry 报告的几个潜在崩溃案例"
       }
     },
     "title": "mihome-vacuum",
