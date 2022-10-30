@@ -318,12 +318,15 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (deher) fix missing stock command for mop_mode
+
 ### 3.7.0 (2022-10-28)
-    accept custom commands with single paramter
-    optional parameter waterboxMode and fanSpeed for cleanSegments and cleanZone 
-    fix crash on message send (#652)
-    add mop mode (#670)
-    adapt fan_power for S7 Ultra(#677)
+* (deher) accept custom commands with single paramter
+* (deher) optional parameter waterboxMode and fanSpeed for cleanSegments and cleanZone 
+* (deher) fix crash on message send (#652)
+* (deher) add mop mode (#670)
+* (deher) adapt fan_power for S7 Ultra(#677)
 
 ### 3.6.0 (2022-07-07)
 * (deher) add dust collecting
