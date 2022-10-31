@@ -318,9 +318,10 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 3.8.2 (2022-10-31)
 * (deher) Bump canvas to 2.10.2
 * (deher) disable map, if CANVAS not installed #681
+
 ### 3.8.1 (2022-10-30)
 * (deher) remove deprecated node 12.x Version for workflow
 

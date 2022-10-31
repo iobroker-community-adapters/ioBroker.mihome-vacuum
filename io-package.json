@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.8.1",
+    "version": "3.8.2",
     "news": {
+      "3.8.2": {
+        "en": "Bump canvas to 2.10.2\ndisable map, if CANVAS not installed #681",
+        "de": "Pumpleinwand bis 2.10.2\nkarte deaktivieren, wenn CANVAS nicht installiert #681",
+        "ru": "Прыжок до 2.10.2\nотключить карту, если CANVAS не установлен #681",
+        "pt": "Bump canvas para 2.10.2\ndesativar o mapa, se CANVAS não instalado #681",
+        "nl": "Bump canvas 2.10.2\nals de CANVAS niet geïnstalleerd is",
+        "fr": "Toile à embout à 2.10.2\ncarte désactive, si CANVAS n'est pas installé #681",
+        "it": "Tela di scarico a 2.10.2\ndisabilitare la mappa, se CANVAS non installato #681",
+        "es": "Lona de bomba a 2.10.2\ndeshable mapa, si CANVAS no instalado #681",
+        "pl": "Płótno Bumpa 2.10.2\nw przypadku, gdy CANVAS nie zainstalowało #681 map",
+        "uk": "Помилка полотно до 2.10.2\nвідключити карту, якщо CANVAS не встановлений #681",
+        "zh-cn": "倾销可能破坏210.2\n无可区分的地图,如果中央广播公司没有安装编号681"
+      },
       "3.8.1": {
         "en": "remove deprecated node 12.x Version for workflow",
         "de": "deprecated node 12.x entfernen Ausführung für den Workflow",
@@ -77,18 +90,6 @@
         "es": "Actualizar las dependencias para permitir una mejor reconstrucción automática",
         "pl": "Odpowiadanie zależności pozwala na lepszą automatyczną przebudowę",
         "zh-cn": "B. 改善自动重建的新的依赖"
-      },
-      "3.4.1": {
-        "en": "add missed Vacuum states\nadd dock state Waste water tank full",
-        "de": "fehlende Vakuumzustände hinzufügen\nDockstatus hinzufügen Abwassertank voll",
-        "ru": "добавить пропущенные состояния вакуума\nдобавить состояние дока Резервуар для сточных вод полный",
-        "pt": "adicionar estados de vácuo perdidos\nadicionar estado da doca Tanque de águas residuais cheio",
-        "nl": "voeg gemiste vacuümstatussen toe\ndokstatus toevoegen Afvalwatertank vol",
-        "fr": "ajouter les états de vide manqués\najouter l'état du quai Réservoir d'eaux usées plein",
-        "it": "aggiungi stati di vuoto mancati\naggiungi stato banchina Serbatoio acque nere pieno",
-        "es": "agregar estados de vacío perdidos\nagregar estado del muelle Depósito de aguas residuales lleno",
-        "pl": "dodaj pominięte stany próżni\ndodaj stan dokowania Pełny zbiornik na ścieki",
-        "zh-cn": "添加错过的真空状态\n添加码头状态 废水箱已满"
       }
     },
     "title": "mihome-vacuum",
