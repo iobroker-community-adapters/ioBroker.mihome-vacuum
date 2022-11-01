@@ -318,7 +318,7 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-    ### **WORK IN PROGRESS**
+### **WORK IN PROGRESS**
 * (deher) change logging from timeouts
 * (deher) hide parts of token in log
 
