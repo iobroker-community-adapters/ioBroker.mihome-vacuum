@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.8.2",
+    "version": "3.8.3",
     "news": {
+      "3.8.3": {
+        "en": "change logging from timeouts\nhide parts of token in log",
+        "de": "änderung der protokollierung von timeouts\nteile von token im log verbergen",
+        "ru": "изменить вход из timeouts\nскрыть части токена в логе",
+        "pt": "mudar o registro de timeouts\nesconder partes de token em log",
+        "nl": "veranderingsplaats van time-outs\nverberg onderdelen van token in logboek",
+        "fr": "changement de connexion à partir de timeouts\ncacher des parties de jeton dans le journal",
+        "it": "cambiamento di registrazione da timeout\nnascondere parti di token nel registro",
+        "es": "cambio de registro de los timeouts\nocultar partes de ficha en el registro",
+        "pl": "zmiana logowania z czasu na czasy\nukrycia symbolu w logu",
+        "uk": "зміна входу з часових маршрутів\nприховані частини токен в журналі",
+        "zh-cn": "b. 从时间推移而变化\n隐藏在逻辑中的部分"
+      },
       "3.8.2": {
         "en": "Bump canvas to 2.10.2\ndisable map, if CANVAS not installed #681",
         "de": "Pumpleinwand bis 2.10.2\nkarte deaktivieren, wenn CANVAS nicht installiert #681",
@@ -78,18 +91,6 @@
         "es": "añadir Roborock S6 Modelo puro\nañadir/extender algunos Hints en readme\nañadir información adicional de registro para habitaciones limpias\nerror de solución para error mapa-dp",
         "pl": "roborock S6 model Pure\ndodanie lub rozszerzenie niektórych Hintów\ndodaje dodatkową informację o czystej Rusi\nnaprawić błąd w błędzie map-dp",
         "zh-cn": "增 编 采购模式\n在读者中增添/删除了一些Hint\n增加用于清洁罗曼的标志\nf 错误地图错误错误"
-      },
-      "3.4.2": {
-        "en": "Update dependencies to allow better automatic rebuild",
-        "de": "Aktualisieren Sie Abhängigkeiten, um eine bessere automatische Wiederherstellung zu ermöglichen",
-        "ru": "Обновить зависимости, чтобы лучше автоматическое восстановление",
-        "pt": "Atualizar dependências para permitir uma melhor reconstrução automática",
-        "nl": "Update afhankelijkheid om betere automatische reconstructie toe te staan",
-        "fr": "Mettre à jour les dépendances pour permettre une meilleure reconstruction automatique",
-        "it": "Aggiornare le dipendenze per consentire una migliore ricostruzione automatica",
-        "es": "Actualizar las dependencias para permitir una mejor reconstrucción automática",
-        "pl": "Odpowiadanie zależności pozwala na lepszą automatyczną przebudowę",
-        "zh-cn": "B. 改善自动重建的新的依赖"
       }
     },
     "title": "mihome-vacuum",
