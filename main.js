@@ -129,7 +129,7 @@ class MihomeVacuum extends utils.Adapter {
 			configModel = null;
 		}
 		const objModel = await this.getStateAsync('deviceInfo.model');
-		this.log.debug('GETMODELFROMAPI: objModel: ' + JSON.stringify(objModel));
+		this.log.debug('GETMODELFROMAPI: objModel: ' + JSON.stringify(objModel).replace(/"token":"(.{10}).+"/g,'"token":"$1XXXXXX"'));
 
 		let DeviceData;
 		// try 5 times to get data
@@ -137,7 +137,7 @@ class MihomeVacuum extends utils.Adapter {
 			DeviceData = await this.getModelFromApi();
 			this.log.debug('Get Device data..' + i);
 			if (DeviceData && DeviceData.result) {
-				this.log.debug(`Get Device data from robot.. ${JSON.stringify(DeviceData.result)}`);
+				this.log.debug(`Get Device data from robot.. ${JSON.stringify(DeviceData.result).replace(/"token":"(.{10}).+"/g,'"token":"$1XXXXXX"')}`);
 				await this.setModelInfoObject(DeviceData.result);
 				DeviceModel = DeviceData.result.model;
 
@@ -219,7 +219,7 @@ class MihomeVacuum extends utils.Adapter {
 		try {
 			const DeviceData = await Miio.sendMessage('miIO.info');
 
-			this.log.debug('GETMODELFROMAPI:Data: ' + JSON.stringify(DeviceData));
+			this.log.debug('GETMODELFROMAPI:Data: ' + JSON.stringify(DeviceData).replace(/"token":"(.{10}).+"/g,'"token":"$1XXXXXX"'));
 			return DeviceData;
 		} catch (error) {
 			return null;
