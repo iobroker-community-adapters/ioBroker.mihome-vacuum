@@ -318,6 +318,10 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+    ### **WORK IN PROGRESS**
+* (deher) change logging from timeouts
+* (deher) hide parts of token in log
+
 ### 3.8.2 (2022-10-31)
 * (deher) Bump canvas to 2.10.2
 * (deher) disable map, if CANVAS not installed #681

@@ -136,7 +136,7 @@ class MihomeVacuum extends utils.Adapter {
 		for (let i = 0; i < 5; i++) {
 			DeviceData = await this.getModelFromApi();
 			this.log.debug('Get Device data..' + i);
-			if (DeviceData && DeviceData.result) {
+			if (DeviceData) {
 				this.log.debug(`Get Device data from robot.. ${JSON.stringify(DeviceData.result).replace(/"token":"(.{10}).+"/g,'"token":"$1XXXXXX"')}`);
 				await this.setModelInfoObject(DeviceData.result);
 				DeviceModel = DeviceData.result.model;
@@ -146,7 +146,7 @@ class MihomeVacuum extends utils.Adapter {
 			}
 		}
 		if (!DeviceData && objModel && objModel.val) {
-			this.log.warn('YOUR DEVICE IS CONNECTED BUT DID NOT ANSWER YET - CONNECTION CAN TAKE UP TO 10 MINUTES - PLEASE BE PATIENT AND DO NOT TURN THE ADAPTER OFF');
+			this.log.error('YOUR DEVICE IS CONNECTED BUT DID NOT ANSWER YET - CONNECTION CAN TAKE UP TO 10 MINUTES - PLEASE BE PATIENT AND DO NOT TURN THE ADAPTER OFF');
 			this.log.warn('No Answer for DeviceModel use old one');
 			DeviceModel = objModel.val;
 		}
@@ -220,7 +220,7 @@ class MihomeVacuum extends utils.Adapter {
 			const DeviceData = await Miio.sendMessage('miIO.info');
 
 			this.log.debug('GETMODELFROMAPI:Data: ' + JSON.stringify(DeviceData).replace(/"token":"(.{10}).+"/g,'"token":"$1XXXXXX"'));
-			return DeviceData;
+			return DeviceData.result ? DeviceData : null;
 		} catch (error) {
 			return null;
 		}
