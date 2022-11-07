@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.8.3",
+    "version": "3.8.4",
     "news": {
+      "3.8.4": {
+        "en": "change logging for sendMessage to debug",
+        "de": "änderung der Anmeldung für sendMessage to debug",
+        "ru": "изменить вход для sendMessage to debug",
+        "pt": "alterar o registro para sendMessage para depurar",
+        "nl": "veranderingslogie voor verzending",
+        "fr": "change logging for sendMessage to debug",
+        "it": "cambiamento logging per sendMessage a debug",
+        "es": "cambio de registro para enviarMessage para depurar",
+        "pl": "zmiana logowania na wysyłanie Message do debugowania",
+        "uk": "змінити заголовок для відправкиОцінка на дебур",
+        "zh-cn": "转送Message的改变"
+      },
       "3.8.3": {
         "en": "change logging from timeouts\nhide parts of token in log",
         "de": "änderung der protokollierung von timeouts\nteile von token im log verbergen",
@@ -79,18 +92,6 @@
         "es": "añadir polvo recolectando",
         "pl": "dodać",
         "zh-cn": "b. 增量"
-      },
-      "3.5.0": {
-        "en": "add Roborock S6 Pure model\nadd/extend some Hints in readme\nadd additional log info for cleanRooms\nfix error for wrong map-dp",
-        "de": "roborock S6 Reines Modell\nfügen Sie einige Hinweise in readme hinzu\nzusätzliche Log-Info für cleanRooms hinzufügen\nfehler beheben für falsche map-dp",
-        "ru": "добавить Roborock S6 Чистая модель\nдобавьте/дополните некоторые советы в readme\nдобавить дополнительную информацию о журнале для CleanRooms\nисправить ошибку для неправильной карты-dp",
-        "pt": "adicionar Roborock S6 Modelo puro\nadd/extend some Hints in readme\nadicionar informações de log adicionais para cleanRooms\ncorrigir erro para map-dp errado",
-        "nl": "roborock S6 Pure model\nvertaling:\nvoeg extra log info toe voor schoonmaakmiddelen\nvergissing voor verkeerde kaarten",
-        "fr": "ajouter Roborock S6 Modèle pur\najouter/allonger quelques conseils dans readme\najouter des informations supplémentaires pour cleanRooms\ncorriger l'erreur pour le mauvais plan-dp",
-        "it": "aggiungere Roborock S6 Modello puro\naggiungere / estendere alcuni suggerimenti in lettura\naggiungere ulteriori informazioni di log per cleanRooms\nerrore corretto per mappa-dp sbagliato",
-        "es": "añadir Roborock S6 Modelo puro\nañadir/extender algunos Hints en readme\nañadir información adicional de registro para habitaciones limpias\nerror de solución para error mapa-dp",
-        "pl": "roborock S6 model Pure\ndodanie lub rozszerzenie niektórych Hintów\ndodaje dodatkową informację o czystej Rusi\nnaprawić błąd w błędzie map-dp",
-        "zh-cn": "增 编 采购模式\n在读者中增添/删除了一些Hint\n增加用于清洁罗曼的标志\nf 错误地图错误错误"
       }
     },
     "title": "mihome-vacuum",

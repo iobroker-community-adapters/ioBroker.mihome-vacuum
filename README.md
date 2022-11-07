@@ -318,7 +318,7 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 3.8.4 (2022-11-07)
 * (deher) change logging for sendMessage to debug
 
 ### 3.8.3 (2022-11-01)
