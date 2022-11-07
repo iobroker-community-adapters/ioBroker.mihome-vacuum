@@ -319,7 +319,8 @@ The supported commands are:
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-* (deher) change logmessage "not connected" to warn
+* (deher) change logging for sendMessage to debug
+
 ### 3.8.3 (2022-11-01)
 * (deher) change logging from timeouts
 * (deher) hide parts of token in log
