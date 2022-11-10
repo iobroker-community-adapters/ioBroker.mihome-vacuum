@@ -40,21 +40,7 @@ Am besten folgt man der Anleitung des folgenden Links:
 [Token Vorgehensweise](https://www.smarthomeassistent.de/token-auslesen-roborock-s6-roborock-s5-xiaomi-mi-robot-xiaowa/).
 
 ### Fehler bei der Installation
-Wenn der Adapter nicht installiert werden kann, kann Canvas nicht installiert werden
-
-``npm ERR! canvas@2.6.1 install: node-pre-gyp install --fallback-to-build
-npm ERR! Exit status 1``
-
-Dann müssen folgende Pakete und Bibliotheken selber installiert werden:
-
-``
-sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
-``
-
-``
-sudo npm install canvas
-``
-
+siehe englische Readme
 
 ### Adapterkonfiguration
 - Bei IP-Adresse muss die IP-Adresse des Roboters eingegeben werden im Format `192.168.178.XX`

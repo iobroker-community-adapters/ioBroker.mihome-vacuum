@@ -40,9 +40,6 @@ This adapter allows you to control the Xiaomi vacuum cleaner.
 
 ## Supported Devices and Features
 
-Cleaner not supported? 
-[Vote Here!](https://doodle.com/poll/8m8238ridkifua99?utm_source=poll&utm_medium=link)
-
 | Device                | Basic Control             | history               | rooms               | map                 | 
 |:------------------    |:-------------------:      |:-------------------:  |:-------------------:|:-------------------:|
 | viomi.vacuum.v6       | :heavy_check_mark:        | :x:                   |:x:                  | :x:                 |
@@ -68,12 +65,13 @@ Please install canvas and the libs manually with:
 sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 ``
 
-switch into : `cd /opt/iobroker/node_modules/iobroker.mihome-vacuum` then `sudo npm install canvas`
+switch into : `cd /opt/iobroker/node_modules/iobroker.mihome-vacuum` then `npm install canvas`
 
-###  HTTP error when getting token cookie{}
+### HTTP error when getting token cookie{}
 Sometimes you can't connect to the xiaomi cloud. 
 Please open Browser, go to Mihome and login. Enter the code you received via mail. After that, the connection should work.
 
+### Gets only Helo message Timeout
 PLease be sure, that you robot is connected with the Mihome App and NOT with the Roborock App
 
 ### No connection with S7
@@ -318,48 +316,52 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (Dirkhe) move parseErrors to debug level
+* (Dirkhe) avoid new instanziierung on reconnect
+
 ### 3.8.4 (2022-11-07)
-* (deher) change logging for sendMessage to debug
+* (Dirkhe) change logging for sendMessage to debug
 
 ### 3.8.3 (2022-11-01)
-* (deher) change logging from timeouts
-* (deher) hide parts of token in log
+* (Dirkhe) change logging from timeouts
+* (Dirkhe) hide parts of token in log
 
 ### 3.8.2 (2022-10-31)
-* (deher) Bump canvas to 2.10.2
-* (deher) disable map, if CANVAS not installed #681
+* (Dirkhe) Bump canvas to 2.10.2
+* (Dirkhe) disable map, if CANVAS not installed #681
 
 ### 3.8.1 (2022-10-30)
-* (deher) remove deprecated node 12.x Version for workflow
+* (Dirkhe) remove deprecated node 12.x Version for workflow
 
 ### 3.8.0 (2022-10-30)
-* (deher) fix missing stock command for mop_mode
-* (deher) add mop mode also for cleanSegments and cleanZone
-* (deher) add mop mode also for rooms
+* (Dirkhe) fix missing stock command for mop_mode
+* (Dirkhe) add mop mode also for cleanSegments and cleanZone
+* (Dirkhe) add mop mode also for rooms
 * (MeisterTR) map zooming amd show carpet
 
 ### 3.7.0 (2022-10-28)
-* (deher) accept custom commands with single paramter
-* (deher) optional parameter waterboxMode and fanSpeed for cleanSegments and cleanZone 
-* (deher) fix crash on message send (#652)
-* (deher) add mop mode (#670)
-* (deher) adapt fan_power for S7 Ultra(#677)
+* (Dirkhe) accept custom commands with single paramter
+* (Dirkhe) optional parameter waterboxMode and fanSpeed for cleanSegments and cleanZone 
+* (Dirkhe) fix crash on message send (#652)
+* (Dirkhe) add mop mode (#670)
+* (Dirkhe) adapt fan_power for S7 Ultra(#677)
 
 ### 3.6.0 (2022-07-07)
-* (deher) add dust collecting
+* (Dirkhe) add dust collecting
 
 ### 3.5.0 (2022-06-29)
-* (deher) add Roborock S6 Pure model
-* (deher) add/extend some Hints in readme
-* (deher) add additional log info for cleanRooms
-* (deher) fix error for wrong map-dp
+* (Dirkhe) add Roborock S6 Pure model
+* (Dirkhe) add/extend some Hints in readme
+* (Dirkhe) add additional log info for cleanRooms
+* (Dirkhe) fix error for wrong map-dp
 
 ### 3.4.2 (2022-06-24)
 * (Apollon77) Update dependencies to allow better automatic rebuild
 
 ### 3.4.1 (2022-05-31)
-* (deher) add missed Vacuum states
-* (deher) add dock state Waste water tank full
+* (Dirkhe) add missed Vacuum states
+* (Dirkhe) add dock state Waste water tank full
 
 ### 3.4.0 (2022-05-28)
 * (Apollon77) Fix several potential crash cases reported by Sentry
