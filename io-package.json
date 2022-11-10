@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.8.4",
+    "version": "3.8.5",
     "news": {
+      "3.8.5": {
+        "en": "move parseErrors to debug level\navoid new instanziierung on reconnect",
+        "de": "bewegung Parse Fehler zum Debug Level\nneue instanziierung auf wiederverschaltung vermeiden",
+        "ru": "переместить parse Ошибки для отладки уровня\nизбегать нового instanziierung на reconnect",
+        "pt": "parse de movimento Erros para depurar o nível\nevitar novos instanziierung na reconectação",
+        "nl": "verhuizen Erroren om niveau te debuggen\nvermijd nieuwe instanzierung",
+        "fr": "bougez parse Erreurs au niveau debug\néviter un nouvel instanziierung sur reconnect",
+        "it": "spostare la parse Errori di debug livello\nevitare nuovi instanziierung sulla riconnessione",
+        "es": "muévete. Errores para depurar el nivel\nevitar nuevo instanziierung en la reconexión",
+        "pl": "parsa ruchowa Poziom roztworu\nunikanie nowego połączenia",
+        "uk": "переїзд Помилки на рівень відключення\nуникнути нового інстанцієну на відключення",
+        "zh-cn": "工程 降级\n避免新的塔吉克斯坦ziierung"
+      },
       "3.8.4": {
         "en": "change logging for sendMessage to debug",
         "de": "änderung der Anmeldung für sendMessage to debug",
@@ -80,18 +93,6 @@
         "pl": "przyjmuje się dokonywane polecenia z jednym paramtera\nopcjonalnie opcjonalna skrzynka wodna „Mode” i „HaveSpeed” dla czystej segregacji i czystego Zene\nrezultat\nadaptacja mody (#670)\nfan_power for S7 Ultra(#677) (ang.)",
         "uk": "прийняти користувальницькі команди з одним параметром\nопціональний параметр waterboxMode і вентиляторSpeed для очищенняSegments і cleanZone\nзафіксувати аварійний відлік повідомлень (#652)\nadd mop режим (#670)\nадаптувати вентилятор_power для S7 Ultra(#677)",
         "zh-cn": "接受有单一渠道的习惯指挥\n清洁垃圾和清洁垃圾的替代参数水箱\nfix 发送信息时的事故(第652号)\n增编模式(第670号)\n变暖:S7 Ultra(第677号)的力量"
-      },
-      "3.6.0": {
-        "en": "add dust collecting",
-        "de": "staub sammeln",
-        "ru": "добавить пыль собирая",
-        "pt": "adicionar coleta de poeira",
-        "nl": "stof verzamelen",
-        "fr": "ajouter la poussière",
-        "it": "aggiungere la raccolta di polvere",
-        "es": "añadir polvo recolectando",
-        "pl": "dodać",
-        "zh-cn": "b. 增量"
       }
     },
     "title": "mihome-vacuum",
