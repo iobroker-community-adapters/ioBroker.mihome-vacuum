@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.8.5",
+    "version": "3.8.6",
     "news": {
+      "3.8.6": {
+        "en": "Fix type for roomMopMode",
+        "de": "Fixtyp für Zimmer MopMode",
+        "ru": "Fix тип для комнаты Начало",
+        "pt": "Tipo de fixação para o quarto MopModelo",
+        "nl": "Fix type voor kamer Mopmode",
+        "fr": "Type fixe pour la chambre MopMode",
+        "it": "Tipo di fissaggio per camera MopMode",
+        "es": "Tipo de fijación para la habitación MopMode",
+        "pl": "Fix MopMode",
+        "uk": "Фіксований тип для приміщення МопМод",
+        "zh-cn": "会议室类型 Mop Mode"
+      },
       "3.8.5": {
         "en": "move parseErrors to debug level\navoid new instanziierung on reconnect",
         "de": "bewegung Parse Fehler zum Debug Level\nneue instanziierung auf wiederverschaltung vermeiden",
@@ -80,19 +93,6 @@
         "pl": "ulepszenie\ndodaje również mody do czystego i czystego zespołomu\nmoda dodają także do pomieszczeń",
         "uk": "виправлення відсутніх команд для mop_mode\nдодати режим mop також для очищення\nдодати режим mop також для кімнат",
         "zh-cn": "fix 失踪的车队指挥官;mode\n补充清洁垃圾和清洁垃圾的模型\n会议室增购方式"
-      },
-      "3.7.0": {
-        "en": "accept custom commands with single paramter\n    optional parameter waterboxMode and fanSpeed for cleanSegments and cleanZone \n    fix crash on message send (#652)\n    add mop mode (#670)\n    adapt fan_power for S7 Ultra(#677)",
-        "de": "benutzerdefinierte befehle mit einzelnen paramter akzeptieren\noptionaler Parameter waterboxMode und FanSpeed für cleanSegments und cleanZone\ncrash auf nachricht senden beheben (#652)\nmop mode hinzufügen (#670)\nfan_power für S7 Ultra (#677) anpassen",
-        "ru": "принять пользовательские команды с одним параметром\nопционный параметр waterboxMode и fanSpeed для cleanSegments и cleanZone\nисправить аварии на сообщение отправить (#652)\nдобавить режим mop (#670)\nадаптировать вентилятор_силу для S7 Ultra(#677)",
-        "pt": "aceitar comandos personalizados com único parâmetro\ncaixa de água do parâmetro opcionalMode e ventiladorSpeed para cleanSegments e cleanZone\ncorrigir acidente na mensagem enviar (#652)\nadicionar modo de esfregão (#670)\nadaptar fan_power para S7 Ultra(#677)",
-        "nl": "accepteer de gebruikelijke commando's met één paramter\noptie parameter waterboxMode en fans van schoonheid en schoonmaakmiddelen\nvertaling:\nvoeg mode toe\nvertaling:",
-        "fr": "accepter les commandes personnalisées avec un seul paramter\noptionnel paramètre waterboxMode et fanSpeed for cleanSegments and cleanZone\ncorrection du crash du message (#652)\najouter le mode mop (#670)\nadapter fan_power pour S7 Ultra(#677)",
-        "it": "accettare comandi personalizzati con singolo paramter\nparametro opzionale waterboxMode e ventilatoreSpeed per cleanSegments e cleanZone\ncorreggere l'incidente sul messaggio (#652)\naggiungere la modalità mop (#670)\nadattare fan_power per S7 Ultra(#677)",
-        "es": "aceptar comandos personalizados con sola paramter\ncaja de agua del parámetro opcionalMode y ventiladorHablado para limpiarSegmentos y cleanZone\ncorrido del mensaje enviar (#652)\nañadir modo de mop (#670)\nadapt fan_power for S7 Ultra(#677)",
-        "pl": "przyjmuje się dokonywane polecenia z jednym paramtera\nopcjonalnie opcjonalna skrzynka wodna „Mode” i „HaveSpeed” dla czystej segregacji i czystego Zene\nrezultat\nadaptacja mody (#670)\nfan_power for S7 Ultra(#677) (ang.)",
-        "uk": "прийняти користувальницькі команди з одним параметром\nопціональний параметр waterboxMode і вентиляторSpeed для очищенняSegments і cleanZone\nзафіксувати аварійний відлік повідомлень (#652)\nadd mop режим (#670)\nадаптувати вентилятор_power для S7 Ultra(#677)",
-        "zh-cn": "接受有单一渠道的习惯指挥\n清洁垃圾和清洁垃圾的替代参数水箱\nfix 发送信息时的事故(第652号)\n增编模式(第670号)\n变暖:S7 Ultra(第677号)的力量"
       }
     },
     "title": "mihome-vacuum",
