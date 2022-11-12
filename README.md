@@ -316,6 +316,9 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+* (deher) Fix type for roomMopMode
 ### 3.8.5 (2022-11-10)
 * (Dirkhe) move parseErrors to debug level
 * (Dirkhe) avoid new instanziierung on reconnect
