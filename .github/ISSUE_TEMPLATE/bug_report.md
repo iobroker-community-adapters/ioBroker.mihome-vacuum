@@ -1,9 +1,10 @@
 ---
 name: Bug report
 about: Something is not working as it should
-title: ""
-labels: ""
-assignees: ""
+title: ''
+labels: ''
+assignees: ''
+
 ---
 
 <!--
@@ -35,4 +36,3 @@ If applicable, add screenshots and logfiles to help explain your problem.
 -   JS-Controller version: <js-controller-version> <!-- determine this with `iobroker -v` on the console -->
 -   Node version: <node-version> <!-- determine this with `node -v` on the console -->
 -   vacuum cleaner: <device-model>
-
