@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.8.6",
+    "version": "3.8.7",
     "news": {
+      "3.8.7": {
+        "en": "fix typo from translation for battary_live (based on viomi id) #629\nfix crash, if cloud-roomID is empty #702",
+        "de": "fix typo aus übersetzung für battary_live (basierend auf viomi id) #629\ncrash beheben, wenn Cloud-Zimmer ID ist leer #702",
+        "ru": "исправить typo от перевода для battary_live (основано на viomi id) #629\nисправить сбой, если облако ID пуста #702",
+        "pt": "corrigir typo da tradução para battary_live (baseado em viomi id) #629\ncorrigir acidente, se a sala de nuvem ID está vazio #702",
+        "nl": "quality over quantity (qoq) releases vertaling:\nals wolkenkamer ID is leeg",
+        "fr": "corriger le typo de la traduction pour battary_live (basé sur viomi id) #629\nréparer l'accident, si la salle de nuage ID est vide #702",
+        "it": "fix typo dalla traduzione per battary_live (basato su viomi id) #629\nfix crash, se cloud-room ID è vuoto #702",
+        "es": "fix typo from translation for battary_live (based on viomi id) #629\narreglar el accidente, si cuarto de nube La identificación está vacía",
+        "pl": "reakcja ta z tłumaczenia na żywo (na podstawie viomi id.)\nuszkodzenia naprawcze, jeśli chodzi o pomieszczenie chmury. ID jest pusty #702",
+        "uk": "фіксувати типо з перекладу для battary_live (на основі viomi id) #629\nфіксувати аварійну катастрофу, якщо хмарний номер Лот No702",
+        "zh-cn": "f 用于图表的翻译(基于维生素)的类型\nfix 碰撞,如果云雾 ID是空洞的第702号"
+      },
       "3.8.6": {
         "en": "Fix type for roomMopMode",
         "de": "Fixtyp für Zimmer MopMode",
@@ -80,19 +93,6 @@
         "pl": "usunąć węzeł 12.x Wersja robocza",
         "uk": "видалити депресований вузол 12.x Версія для робочого процесу",
         "zh-cn": "删除第12x号建议。 工作流程的处理"
-      },
-      "3.8.0": {
-        "en": "fix missing stock command for mop_mode\nadd mop mode also for cleanSegments and cleanZone\nadd mop mode also for rooms",
-        "de": "fehlerbehebung für mop_mode\nmop-Modus auch für cleanSegments und cleanZone hinzufügen\nmop-modus auch für zimmer hinzufügen",
-        "ru": "исправить недостающую команду запаса для mop_mode\nдобавить режим mop также для CleanSegments и cleanZone\nдобавьте режим mop также для комнат",
-        "pt": "corrigir o comando de stock ausente para mop_mode\nadicionar modo de esfregão também para cleanSegments e cleanZone\nadicionar modo de esfregão também para quartos",
-        "nl": "vermissingscommando voor dweil\nvoeg mode toe voor schoonmaak en schoonzoon\nvoeg mode toe voor kamers",
-        "fr": "correction de la commande stock manquante pour mop_mode\najouter le mode mop aussi pour cleanSegments et cleanZone\najouter le mode mop aussi pour les chambres",
-        "it": "correggere il comando di azione mancante per mop_mode\naggiungere la modalità mop anche per cleanSegments e cleanZone\naggiungere la modalità mop anche per le camere",
-        "es": "fijar el comando stock perdido para mop_mode\nañadir modo de mop también para cleanSegments y cleanZone\nañadir modo de mop también para las habitaciones",
-        "pl": "ulepszenie\ndodaje również mody do czystego i czystego zespołomu\nmoda dodają także do pomieszczeń",
-        "uk": "виправлення відсутніх команд для mop_mode\nдодати режим mop також для очищення\nдодати режим mop також для кімнат",
-        "zh-cn": "fix 失踪的车队指挥官;mode\n补充清洁垃圾和清洁垃圾的模型\n会议室增购方式"
       }
     },
     "title": "mihome-vacuum",
