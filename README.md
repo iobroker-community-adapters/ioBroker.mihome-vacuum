@@ -316,6 +316,10 @@ The supported commands are:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (deher) fix typo from translation for battary_live (based on viomi id) #629
+* (deher) fix crash, if cloud-roomID is empty #702
+
 ### 3.8.6 (2022-11-12)
 * (deher) Fix type for roomMopMode
 
