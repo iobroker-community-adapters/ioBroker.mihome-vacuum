@@ -1,15 +1,16 @@
 ---
 name: neue Geräte (deutsch)
 about: Bei supportwusch für neue Geräte
-title: ""
-labels: ""
-assignees: ""
+title: ''
+labels: ''
+assignees: ''
+
 ---
 
 **Infos zum Gerät:**
-
--   Marke
--   Modell
+Achtung! Aktuell nur Roborock Geräte anfragen
+-   roborock
+-   modell
 -   Bezeichnung (z.B roborock.vacuum.a15)
 
 **Wichtig**  
