@@ -314,14 +314,17 @@ The supported commands are:
 
 <!--
     Placeholder for the next version (at the beginning of the line):
-    ### **WORK IN PROGRESS**
+### **WORK IN PROGRESS**
+* () 
 -->
+### **WORK IN PROGRESS**
+* (Dirkhe) fix behaviour of pauseResume #623
 ### 3.8.7 (2022-11-26)
-* (deher) fix typo from translation for battary_live (based on viomi id) #629
-* (deher) fix crash, if cloud-roomID is empty #702
+* (Dirkhe) fix typo from translation for battary_live (based on viomi id) #629
+* (Dirkhe) fix crash, if cloud-roomID is empty #702
 
 ### 3.8.6 (2022-11-12)
-* (deher) Fix type for roomMopMode
+* (Dirkhe) Fix type for roomMopMode
 
 ### 3.8.5 (2022-11-10)
 * (Dirkhe) move parseErrors to debug level
