@@ -314,11 +314,12 @@ The supported commands are:
 
 <!--
     Placeholder for the next version (at the beginning of the line):
-### **WORK IN PROGRESS**
-* () 
+    ### **WORK IN PROGRESS**
+    * () 
 -->
 ### **WORK IN PROGRESS**
 * (Dirkhe) fix behaviour of pauseResume #623
+
 ### 3.8.7 (2022-11-26)
 * (Dirkhe) fix typo from translation for battary_live (based on viomi id) #629
 * (Dirkhe) fix crash, if cloud-roomID is empty #702
