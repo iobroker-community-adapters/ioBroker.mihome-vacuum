@@ -317,7 +317,7 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-### **WORK IN PROGRESS**
+### 3.8.8 (2022-11-30)
 * (Dirkhe) fix behaviour of pauseResume #623
 
 ### 3.8.7 (2022-11-26)

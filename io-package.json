@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.8.7",
+    "version": "3.8.8",
     "news": {
+      "3.8.8": {
+        "en": "fix behaviour of pauseResume #623",
+        "de": "fixes Verhalten der PauseResume #623",
+        "ru": "исправить поведение pauseResume #623",
+        "pt": "corrigir comportamento de pauseResume #623",
+        "nl": "#623",
+        "fr": "correction du comportement de pauseResume #623",
+        "it": "correggere il comportamento della pausaResume #623",
+        "es": "arreglar el comportamiento de la pausaResume #623",
+        "pl": "regulamin nr 623",
+        "uk": "виправлена поведінка паузиРезум #623",
+        "zh-cn": "f 九 父权行为"
+      },
       "3.8.7": {
         "en": "fix typo from translation for battary_live (based on viomi id) #629\nfix crash, if cloud-roomID is empty #702",
         "de": "fix typo aus übersetzung für battary_live (basierend auf viomi id) #629\ncrash beheben, wenn Cloud-Zimmer ID ist leer #702",
@@ -80,19 +93,6 @@
         "pl": "Płótno Bumpa 2.10.2\nw przypadku, gdy CANVAS nie zainstalowało #681 map",
         "uk": "Помилка полотно до 2.10.2\nвідключити карту, якщо CANVAS не встановлений #681",
         "zh-cn": "倾销可能破坏210.2\n无可区分的地图,如果中央广播公司没有安装编号681"
-      },
-      "3.8.1": {
-        "en": "remove deprecated node 12.x Version for workflow",
-        "de": "deprecated node 12.x entfernen Ausführung für den Workflow",
-        "ru": "удалить deprecated node 12.x Версия для workflow",
-        "pt": "remover o nó despregado 12.x Versão para fluxo de trabalho",
-        "nl": "verwijder node 12. Versie voor werkvloer",
-        "fr": "supprimer noeud déprécié 12.x Version pour workflow",
-        "it": "rimuovere nodo deprecato 12.x Versione per flusso di lavoro",
-        "es": "remove deprecated node 12.x Versión para el flujo de trabajo",
-        "pl": "usunąć węzeł 12.x Wersja robocza",
-        "uk": "видалити депресований вузол 12.x Версія для робочого процесу",
-        "zh-cn": "删除第12x号建议。 工作流程的处理"
       }
     },
     "title": "mihome-vacuum",
