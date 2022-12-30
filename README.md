@@ -52,6 +52,12 @@ This adapter allows you to control the Xiaomi vacuum cleaner.
 | roborock.vacuum.m1s   | :heavy_check_mark:        | :heavy_check_mark:    |:heavy_check_mark:   |:heavy_check_mark:   |
 | roborock.vacuum.a10   | :heavy_check_mark:        | :heavy_check_mark:    |:heavy_check_mark:   |:heavy_check_mark:   |
 | roborock.vacuum.a15   | :heavy_check_mark:        | :heavy_check_mark:    |:heavy_check_mark:   |:heavy_check_mark:   |
+| dreame.vacuum.r2205   | :heavy_check_mark:        | :x:                   |:x:                  | :x:                 |
+| dreame.vacuum.p2027   | :heavy_check_mark:        | :x:                   |:x:                  | :x:                 |
+| dreame.vacuum.p2036   | :heavy_check_mark:        | :x:                   |:x:                  | :x:                 |
+| dreame.vacuum.p2114a  | :heavy_check_mark:        | :x:                   |:x:                  | :x:                 |
+| dreame.vacuum.r2216o  | :heavy_check_mark:        | :x:                   |:x:                  | :x:                 |
+| dreame.vacuum.p2009   | :heavy_check_mark:        | :x:                   |:x:                  | :x:                 |
 
 ## Known Errors
 ### Error at installation
