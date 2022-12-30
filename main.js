@@ -13,6 +13,7 @@ const objects = require('./lib/objects');
 
 const ViomiManager = require('./lib/viomi');
 const VacuumManager = require('./lib/vacuum');
+const DreameManager = require('./lib/dreame');
 //const VacuumManager2 = require('./lib/vacuumsaphire');
 
 let DeviceModel;
@@ -51,6 +52,19 @@ const deviceList = {
 	// 'roborock.vacuum.a04': VacuumManager2,
 	// 'roborock.vacuum.a04v2': VacuumManager2,
 	// 'roborock.vacuum.a04v3': VacuumManager2
+	'dreame.vacuum.r2205': DreameManager, // Dreame D10 Plus
+	'dreame.vacuum.r2216o': DreameManager, // Dreame L10S Pro
+	'dreame.vacuum.r2228o': DreameManager, // Dreame L10S Ultra
+	'dreame.vacuum.p2008': DreameManager, // Dreame F9
+	'dreame.vacuum.p2009': DreameManager, // Dreame D9
+	'dreame.vacuum.p2027': DreameManager, // Dreame W10
+	'dreame.vacuum.p2028': DreameManager, // Dreame Z10 Pro
+	'dreame.vacuum.p2029': DreameManager, // Dreame L10 Pro
+	'dreame.vacuum.p2036': DreameManager, // Trouver Finder LDS Cleaner
+	'dreame.vacuum.p2041o': DreameManager, // Xiaomi Vacuum Mop 2 Pro+
+	'dreame.vacuum.p2114a': DreameManager, // Xiaomi Robot Vacuum X10 Plus
+	'dreame.vacuum.p2148o': DreameManager, // Xiaomi Mijia Ultra Slim
+	'dreame.vacuum.p2156o': DreameManager, // MOVA Z500
 
 };
 
@@ -71,7 +85,6 @@ class MihomeVacuum extends utils.Adapter {
 	}
 
 	async main() {
-
 		this.config.port = parseInt(this.config.port, 10) || 54321;
 		this.config.ownPort = parseInt(this.config.ownPort, 10) || 53421;
 		this.config.pingInterval = parseInt(this.config.pingInterval, 10) || 20000;
@@ -174,6 +187,8 @@ class MihomeVacuum extends utils.Adapter {
 					vacuum = new ViomiManager(this, Miio);
 				} else if (FirstDevMod === 'roborock') {
 					vacuum = new VacuumManager(this, Miio, Map);
+				} else if (FirstDevMod === 'dreame') {
+					vacuum = new DreameManager(this, Miio, Map);
 				}
 			} else {
 				this.log.warn('Cant detect Device please select Device form Devicelist or enable the cloud of thr robot to get device infos');
