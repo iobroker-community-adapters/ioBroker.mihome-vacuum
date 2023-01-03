@@ -321,6 +321,7 @@ The supported commands are:
 -->
 ### **WORK IN PROGRESS**
 * (Dirkhe) add Mop washing #679
+* (Dirkhe) trigger pauseResume only, if correct state is given #623
 
 ### 3.8.8 (2022-11-30)
 * (Dirkhe) fix behaviour of pauseResume #623
