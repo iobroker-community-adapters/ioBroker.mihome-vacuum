@@ -257,7 +257,7 @@ Die unterstützten Kommandos sind:
 | Bewegungskommando für Fernsteuerung absetzen | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | sequenceNumber muss sequentiell sein, Dauer ist in ms |
 | Fernsteuerungsfunktion beenden | `stopRemoteControl` | - keine - |  |
 | Raum/Räume saugen | `cleanRooms` | `rooms` | `rooms` ist ein komma separierter String mit enum.rooms.XXX |
-| Segment saugen | `cleanSegments` | `rooms` \| {rooms:`rooms`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`} | `rooms` ist Array mit mapIndex oder komma separierter String mit mapIndex |
+| Segment saugen | `cleanSegments` | `rooms` \| {rooms:`rooms`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`,repeat:`iterations`} | `rooms` ist Array mit mapIndex oder komma separierter String mit mapIndex |
 | Zone saugen | `cleanZone` | `coordinates` \| {coordinates:`coordinates`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`} | `coordinates` ist ein String mit Koordinaten und die Anzahl Durchläufe, siehe [zoneClean](#zoneClean) |
 | Dreck absaugen starten | `startDustCollect` | - keine - |  |
 | Dreck absaugen stoppen | `stopDustCollect` | - keine - |  |

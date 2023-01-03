@@ -300,7 +300,7 @@ The supported commands are:
 | End the remote control function | `stopRemoteControl` | - none - |  |
 | clean room/rooms | `cleanRooms` | `rooms` | `rooms` is a comma separated String with enum.rooms.XXX |
 | clean segment | `cleanSegments` | `rooms` \| {rooms:`rooms`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`} | `rooms` is a number or an Array with mapIndex or comma separated String with mapIndex |
-| clean zone | `cleanZone` | `coordinates` \| {coordinates:`coordinates`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`} | `coordinates` is a String with coordinates and count, see [zoneClean](#zonecleaning) |
+| clean zone | `cleanZone` | `coordinates` \| {coordinates:`coordinates`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`,repeat:`iterations`} | `coordinates` is a String with coordinates and count, see [zoneClean](#zonecleaning) |
 | start Dust collecting | `startDustCollect` | - none - |  |
 | stop Dust collecting | `stopDustCollect` | - none - |  |
 | start Mop washing | `startWashMop` | - none - |  |
@@ -322,6 +322,7 @@ The supported commands are:
 ### **WORK IN PROGRESS**
 * (Dirkhe) add Mop washing #679
 * (Dirkhe) trigger pauseResume only, if correct state is given #623
+* (Dirkhe) add multiple clean iterations (repeat) #690
 
 ### 3.8.8 (2022-11-30)
 * (Dirkhe) fix behaviour of pauseResume #623
