@@ -303,6 +303,8 @@ The supported commands are:
 | clean zone | `cleanZone` | `coordinates` \| {coordinates:`coordinates`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`} | `coordinates` is a String with coordinates and count, see [zoneClean](#zonecleaning) |
 | start Dust collecting | `startDustCollect` | - none - |  |
 | stop Dust collecting | `stopDustCollect` | - none - |  |
+| start Mop washing | `startWashMop` | - none - |  |
+| stop Mop washing | `stopWashMop` | - none - |  |
 
 
 ## Widget
@@ -317,6 +319,9 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
+### **WORK IN PROGRESS**
+* (Dirkhe) add Mop washing #679
+
 ### 3.8.8 (2022-11-30)
 * (Dirkhe) fix behaviour of pauseResume #623
 

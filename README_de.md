@@ -261,6 +261,8 @@ Die unterstützten Kommandos sind:
 | Zone saugen | `cleanZone` | `coordinates` \| {coordinates:`coordinates`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`} | `coordinates` ist ein String mit Koordinaten und die Anzahl Durchläufe, siehe [zoneClean](#zoneClean) |
 | Dreck absaugen starten | `startDustCollect` | - keine - |  |
 | Dreck absaugen stoppen | `stopDustCollect` | - keine - |  |
+| Mop waschen starten | `startWashMop` | - none - |  |
+| Mop waschen stoppen | `stopWashMop` | - none - |  |
 
 ## Widget
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
