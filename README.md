@@ -319,7 +319,7 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-### **WORK IN PROGRESS**
+### 3.9.0 (2023-01-04)
 * (Dirkhe) add Mop washing #679
 * (Dirkhe) trigger pauseResume only, if correct state is given #623
 * (Dirkhe) add multiple clean iterations (repeat) #690

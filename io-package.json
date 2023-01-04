@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.8.8",
+    "version": "3.9.0",
     "news": {
+      "3.9.0": {
+        "en": "add Mop washing #679\ntrigger pauseResume only, if correct state is given #623\nadd multiple clean iterations (repeat) #690\nhousekeeping",
+        "de": "hinzufügen Mop Waschen #679\ntrigger PauseResume nur, wenn der korrekte Zustand #623 gegeben ist\nmehrere saubere iterationen hinzufügen (repeat) #690\nhauswirtschaft",
+        "ru": "добавить Mop стирка #679\nтриггер pauseResume только, если правильное состояние дано #623\nдобавить несколько чистых итераций (повторить) #690\nдомашняя уборка",
+        "pt": "adicionar Mop lavagem #679\ngatilho pauseResume apenas, se o estado correto é dado #623\nadicionar várias iterações limpas (repetir) #690\nserviço de limpeza",
+        "nl": "voeg Mop wassen 679\nalleen de juiste staat wordt gegeven\n#690\nhuishouding",
+        "fr": "ajouter le lavage Mop #679\ntrigger pauseResume seulement, si l'état correct est donné #623\najouter plusieurs itérations propres (repeat) #690\nménage",
+        "it": "aggiungi Mop lavaggio #679\nattivare pausaRiprendere solo, se lo stato corretto è dato #623\naggiungere più cancellazioni (repeat) #690\npulizia",
+        "es": "añadir Mop lavado #679\npausa del gatilloResume sólo, si el estado correcto se da #623\nañadir varias iteraciones limpias (repetir) #690\nlimpieza",
+        "pl": "dodarzenie numeru 679\npowracanie się jedynie, jeśli poprawne stany zostaną podane numerem 623\ndodaje wiele iteracji (odc\nhousekeeping",
+        "uk": "додати миття Mop #679\nтригер pauseResume тільки, якщо правильний стан дається #623\nдодати кілька чистої ітерації (повтор) #690\nприбирання",
+        "zh-cn": "增加编号:679\n只有正确的国家才有触发爱国情绪。\n第690号补充多种清洁剂(补充)\n住房"
+      },
       "3.8.8": {
         "en": "fix behaviour of pauseResume #623",
         "de": "fixes Verhalten der PauseResume #623",
@@ -80,19 +93,6 @@
         "pl": "zmiana logowania z czasu na czasy\nukrycia symbolu w logu",
         "uk": "зміна входу з часових маршрутів\nприховані частини токен в журналі",
         "zh-cn": "b. 从时间推移而变化\n隐藏在逻辑中的部分"
-      },
-      "3.8.2": {
-        "en": "Bump canvas to 2.10.2\ndisable map, if CANVAS not installed #681",
-        "de": "Pumpleinwand bis 2.10.2\nkarte deaktivieren, wenn CANVAS nicht installiert #681",
-        "ru": "Прыжок до 2.10.2\nотключить карту, если CANVAS не установлен #681",
-        "pt": "Bump canvas para 2.10.2\ndesativar o mapa, se CANVAS não instalado #681",
-        "nl": "Bump canvas 2.10.2\nals de CANVAS niet geïnstalleerd is",
-        "fr": "Toile à embout à 2.10.2\ncarte désactive, si CANVAS n'est pas installé #681",
-        "it": "Tela di scarico a 2.10.2\ndisabilitare la mappa, se CANVAS non installato #681",
-        "es": "Lona de bomba a 2.10.2\ndeshable mapa, si CANVAS no instalado #681",
-        "pl": "Płótno Bumpa 2.10.2\nw przypadku, gdy CANVAS nie zainstalowało #681 map",
-        "uk": "Помилка полотно до 2.10.2\nвідключити карту, якщо CANVAS не встановлений #681",
-        "zh-cn": "倾销可能破坏210.2\n无可区分的地图,如果中央广播公司没有安装编号681"
       }
     },
     "title": "mihome-vacuum",
