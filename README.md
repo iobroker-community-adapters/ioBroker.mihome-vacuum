@@ -323,6 +323,7 @@ The supported commands are:
 * (Dirkhe) add Mop washing #679
 * (Dirkhe) trigger pauseResume only, if correct state is given #623
 * (Dirkhe) add multiple clean iterations (repeat) #690
+* (Dirkhe) housekeeping
 
 ### 3.8.8 (2022-11-30)
 * (Dirkhe) fix behaviour of pauseResume #623

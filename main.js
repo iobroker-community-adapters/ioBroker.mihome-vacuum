@@ -13,7 +13,6 @@ const objects = require('./lib/objects');
 
 const ViomiManager = require('./lib/viomi');
 const VacuumManager = require('./lib/vacuum');
-//const VacuumManager2 = require('./lib/vacuumsaphire');
 
 let DeviceModel;
 let connected = false;
