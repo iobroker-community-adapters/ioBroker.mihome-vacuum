@@ -314,11 +314,15 @@ The supported commands are:
 - Occasional disconnections, however, this is not due to the adapter but mostly on its own networks
 - Widget at the time without function
 
+## Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):
-    ### **WORK IN PROGRESS**
+    
     * () 
 -->
+### **WORK IN PROGRESS**
+* (Dirkhe) add step property to repeat DP
+
 ### 3.9.0 (2023-01-04)
 * (Dirkhe) add Mop washing #679
 * (Dirkhe) trigger pauseResume only, if correct state is given #623
