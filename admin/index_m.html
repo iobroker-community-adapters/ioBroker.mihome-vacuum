@@ -101,6 +101,7 @@
         var namespace;
         var rooms = {}
         var active = false;
+        var curToken;
 
         // the function loadSettings has to exist ...
         function load(settings, onChange) {
@@ -113,6 +114,7 @@
             loadSelect(settings['MiDevice'])
             settings.pingInterval= parseInt(settings.pingInterval/1000,10)
             settings.wifiInterval= parseInt(settings.wifiInterval/1000,10)
+            curToken= settings.token;
 
             $('.value').each(function () {
                 var key = $(this).attr('id');
@@ -390,6 +392,8 @@
             obj.ip = (obj.ip || '').trim();
             obj.email = (obj.email || '').trim();
             obj.token = (obj.token || '').trim();
+            if (obj.token != curToken)
+                obj.unsupported= {}; 
 
             let newTimerArray = table2values('timer');
             let timerList = {};

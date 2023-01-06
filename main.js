@@ -114,7 +114,19 @@ class MihomeVacuum extends utils.Adapter {
 			this.log.info('IOT disabled, delete state');
 			objects.iotState.map(async o => await this.delObj('control' + (o._id ? '.' + o.id : '')));
 		}
+		if (!this.config.unsupported){
+			this.updateConfig({unsupported:{}}); 
+			this.config.unsupported= {};
+		}
 	}
+
+	setUnsupportedFeature(key){
+		const newVal= {unsupported:{}};
+		newVal.unsupported[key]= true;
+		this.updateConfig(newVal);
+		this.config.unsupported[key]= true;
+	}
+	
 
 	/**
 	 * first communication to find out the model

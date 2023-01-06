@@ -317,9 +317,14 @@ The supported commands are:
 ## Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):
-    
+    ### **WORK IN PROGRESS**
     * () 
 -->
+
+### **WORK IN PROGRESS**
+* (Dirkhe) add function setUnsupportedFeature; if token changed, all stored unsupported Features will be cleared
+* (dirkhe) fix bug from 3.9.1 for supported repeat devices
+
 ### 3.9.1 (2023-01-06)
 * (Dirkhe) add step property to repeat DP
 * (Dirkhe) add Queue Fallback mode for repeat
