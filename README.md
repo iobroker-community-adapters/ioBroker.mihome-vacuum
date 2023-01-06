@@ -322,6 +322,7 @@ The supported commands are:
 -->
 ### **WORK IN PROGRESS**
 * (Dirkhe) add step property to repeat DP
+* (Dirkhe) add Queue Fallback mode for repeat
 
 ### 3.9.0 (2023-01-04)
 * (Dirkhe) add Mop washing #679
