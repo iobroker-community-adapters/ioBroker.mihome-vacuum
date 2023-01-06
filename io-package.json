@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.9.1",
+    "version": "3.9.2",
     "news": {
+      "3.9.2": {
+        "en": "add function setUnsupportedFeature; if token changed, all stored unsupported Features will be cleared\nfix bug from 3.9.1 for supported repeat devices",
+        "de": "hinzufügen Funktion setUnsupportedFeature; wenn Token geändert, alle gespeicherten nicht unterstützt Funktionen werden gelöscht\nfehler von 3.9.1 für unterstützte repeatgeräte beheben",
+        "ru": "добавить функцию setUnsupportedFeature; если токен изменен, все сохраненные не поддерживается Особенности будут очищены\nисправить баг от 3.9.1 для поддерживаемых повторных устройств",
+        "pt": "add function setUnsupportedFeature; se token alterado, todos armazenados não suportados As características serão compensadas\ncorrigir o erro de 3.9.1 para dispositivos de repetição compatíveis",
+        "nl": "voeg functioneren toegevoegd Feature, als het token veranderde, alles opgeslagen is Features zal worden gezuiverd\nvertaling:",
+        "fr": "add function setUnsupportedFeature; if token changed, all kept unsupported Les caractéristiques seront dégagées\ncorrection de bug à partir de 3.9.1 pour les appareils à répétition pris en charge",
+        "it": "aggiungere il set funzioneUnsupportedFeature; se il token è cambiato, tutti memorizzati non supportato Le caratteristiche saranno cancellate\nfix bug da 3.9.1 per i dispositivi di ripetizione supportati",
+        "es": "añadir conjunto de funcionesUnsupportedFeature; si el token cambió, todos almacenados sin soporte Las características serán limpiadas\nsolucionar fallo de 3.9.1 para dispositivos de repetición compatibles",
+        "pl": "dodanie funkcji ułożone jest niespodzianką; jeśli token się zmienił, wszystkie przechowywane nie wspierane. Poprawki będą oczyszczone\nużytkownik od 3.9.1 dla potwierdzonych urządzeń rejestracyjnych",
+        "uk": "add function setUnsupportedFeature; якщо token змінив, всі збережені непідтримувані Особливості будуть очищені\nвиправити помилку від 3.9.1 для підтримуваних повторних пристроїв",
+        "zh-cn": "a. 附加职能 提名将予以明确。\nf 从3.9.1起,用于支持重复装置"
+      },
       "3.9.1": {
         "en": "add step property to repeat DP\nadd Queue Fallback mode for repeat\nremove wrong clearQueue button",
         "de": "schritt-Eigenschaft hinzufügen, um DP zu wiederholen\nqueue Fallback-Modus für Wiederholung hinzufügen\nentfernen falsch klar Queue-Taste",
@@ -80,19 +93,6 @@
         "pl": "parsa ruchowa Poziom roztworu\nunikanie nowego połączenia",
         "uk": "переїзд Помилки на рівень відключення\nуникнути нового інстанцієну на відключення",
         "zh-cn": "工程 降级\n避免新的塔吉克斯坦ziierung"
-      },
-      "3.8.4": {
-        "en": "change logging for sendMessage to debug",
-        "de": "änderung der Anmeldung für sendMessage to debug",
-        "ru": "изменить вход для sendMessage to debug",
-        "pt": "alterar o registro para sendMessage para depurar",
-        "nl": "veranderingslogie voor verzending",
-        "fr": "change logging for sendMessage to debug",
-        "it": "cambiamento logging per sendMessage a debug",
-        "es": "cambio de registro para enviarMessage para depurar",
-        "pl": "zmiana logowania na wysyłanie Message do debugowania",
-        "uk": "змінити заголовок для відправкиОцінка на дебур",
-        "zh-cn": "转送Message的改变"
       }
     },
     "title": "mihome-vacuum",

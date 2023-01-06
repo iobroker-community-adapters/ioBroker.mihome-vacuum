@@ -320,8 +320,7 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-
-### **WORK IN PROGRESS**
+### 3.9.2 (2023-01-06)
 * (Dirkhe) add function setUnsupportedFeature; if token changed, all stored unsupported Features will be cleared
 * (dirkhe) fix bug from 3.9.1 for supported repeat devices
 
