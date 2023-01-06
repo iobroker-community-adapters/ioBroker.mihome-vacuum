@@ -320,7 +320,7 @@ The supported commands are:
     
     * () 
 -->
-### **WORK IN PROGRESS**
+### 3.9.1 (2023-01-06)
 * (Dirkhe) add step property to repeat DP
 * (Dirkhe) add Queue Fallback mode for repeat
 * (Dirkhe) remove wrong clearQueue button
