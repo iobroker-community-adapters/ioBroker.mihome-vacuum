@@ -13,6 +13,7 @@ const objects = require('./lib/objects');
 
 const ViomiManager = require('./lib/viomi');
 const VacuumManager = require('./lib/vacuum');
+const { doResetHistory } = require('@iobroker/testing/build/tests/unit/mocks/tools');
 
 let DeviceModel;
 let connected = false;
@@ -63,6 +64,7 @@ class MihomeVacuum extends utils.Adapter {
 			...options,
 			name: 'mihome-vacuum',
 		});
+		this.unsupportedFeatures = "|";
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
 		this.on('message', this.onMessage.bind(this));
@@ -114,19 +116,28 @@ class MihomeVacuum extends utils.Adapter {
 			this.log.info('IOT disabled, delete state');
 			objects.iotState.map(async o => await this.delObj('control' + (o._id ? '.' + o.id : '')));
 		}
-		if (!this.config.unsupported){
-			this.updateConfig({unsupported:{}}); 
-			this.config.unsupported= {};
+
+		this.getStateAsync("deviceInfo.unsupported").then((obj) => {
+			if (obj && typeof obj.val == "string") {
+				this.unsupportedFeatures = obj.val;
+				if (!this.unsupportedFeatures.endsWith("|"))
+					this.unsupportedFeatures.concat("|");
+				if (!this.unsupportedFeatures.startsWith("|"))
+					this.unsupportedFeatures = "|" + this.unsupportedFeatures;
+			}
+		})
+	}
+
+	isUnsupportedFeature(key) {
+		return this.unsupportedFeatures.indexOf("|" + key + "|") >= 0;
+	}
+	setUnsupportedFeature(key) {
+		if (this.unsupportedFeatures.indexOf("|" + key + "|") == -1) {
+			this.unsupportedFeatures += key + "|";
+			this.setStateAsync("deviceInfo.unsupported", this.unsupportedFeatures, true);
 		}
 	}
 
-	setUnsupportedFeature(key){
-		const newVal= {unsupported:{}};
-		newVal.unsupported[key]= true;
-		this.updateConfig(newVal);
-		this.config.unsupported[key]= true;
-	}
-	
 
 	/**
 	 * first communication to find out the model
@@ -140,7 +151,7 @@ class MihomeVacuum extends utils.Adapter {
 			configModel = null;
 		}
 		const objModel = await this.getStateAsync('deviceInfo.model');
-		this.log.debug('GETMODELFROMAPI: objModel: ' + JSON.stringify(objModel).replace(/"token":"(.{10}).+"/g,'"token":"$1XXXXXX"'));
+		this.log.debug('GETMODELFROMAPI: objModel: ' + JSON.stringify(objModel).replace(/"token":"(.{10}).+"/g, '"token":"$1XXXXXX"'));
 
 		let DeviceData;
 		// try 5 times to get data
@@ -148,7 +159,7 @@ class MihomeVacuum extends utils.Adapter {
 			DeviceData = await this.getModelFromApi();
 			this.log.debug('Get Device data..' + i);
 			if (DeviceData) {
-				this.log.debug(`Get Device data from robot.. ${JSON.stringify(DeviceData.result).replace(/"token":"(.{10}).+"/g,'"token":"$1XXXXXX"')}`);
+				this.log.debug(`Get Device data from robot.. ${JSON.stringify(DeviceData.result).replace(/"token":"(.{10}).+"/g, '"token":"$1XXXXXX"')}`);
 				await this.setModelInfoObject(DeviceData.result);
 				DeviceModel = DeviceData.result.model;
 
@@ -230,7 +241,7 @@ class MihomeVacuum extends utils.Adapter {
 		try {
 			const DeviceData = await Miio.sendMessage('miIO.info');
 
-			this.log.debug('GETMODELFROMAPI:Data: ' + JSON.stringify(DeviceData).replace(/"token":"(.{10}).+"/g,'"token":"$1XXXXXX"'));
+			this.log.debug('GETMODELFROMAPI:Data: ' + JSON.stringify(DeviceData).replace(/"token":"(.{10}).+"/g, '"token":"$1XXXXXX"'));
 			return DeviceData.result ? DeviceData : null;
 		} catch (error) {
 			return null;
@@ -268,7 +279,7 @@ class MihomeVacuum extends utils.Adapter {
 	 */
 	async onUnload(callback) {
 		try {
-			if (vacuum){
+			if (vacuum) {
 				await vacuum.close();
 			}
 			if (Miio) {
@@ -374,11 +385,11 @@ class MihomeVacuum extends utils.Adapter {
 						})
 						.catch(err => {
 							this.log.info('discover ' + err);
-							respond({error: err});
+							respond({ error: err });
 						});
 					return;
 
-					// ======================================================================
+				// ======================================================================
 				default:
 					//respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
 					//await vacuum.onMessage(obj)

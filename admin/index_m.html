@@ -393,7 +393,7 @@
             obj.email = (obj.email || '').trim();
             obj.token = (obj.token || '').trim();
             if (obj.token != curToken)
-                obj.unsupported= {}; 
+                socket.emit('setState', namespace + 'deviceInfo.unsupported', { val: '', ack: true });
 
             let newTimerArray = table2values('timer');
             let timerList = {};
