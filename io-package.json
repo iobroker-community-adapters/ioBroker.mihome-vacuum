@@ -200,6 +200,15 @@
   },
   "instanceObjects": [
     {
+      "_id": "",
+      "type": "meta",
+      "common": {
+        "name": "User files for mihome-vacuum",
+        "type": "meta.user"
+      },
+      "native": {}
+    },
+    {
       "_id": "info",
       "type": "channel",
       "common": {
@@ -227,6 +236,6 @@
         "role": "vacuumCleaner"
       },
       "native": {}
-    }
+    }   
   ]
 }

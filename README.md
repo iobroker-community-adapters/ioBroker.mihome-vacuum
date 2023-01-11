@@ -322,6 +322,7 @@ The supported commands are:
 -->
 ### **WORK IN PROGRESS**
 * (Dirkhe) fix loosing passwort in config
+* (Dirkhe) move map Url to userspace instead of admin space #735
 
 ### 3.9.2 (2023-01-06)
 * (Dirkhe) add function setUnsupportedFeature; if token changed, all stored unsupported Features will be cleared
