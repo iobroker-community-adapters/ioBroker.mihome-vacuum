@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.9.3",
+    "version": "3.9.4",
     "news": {
+      "3.9.4": {
+        "en": "cleanmap.mapURL typo fixed",
+        "de": "sauberkarte.mapURL typo fix",
+        "ru": "cleanmap.mapURL typo фиксированный",
+        "pt": "limpeza. Tipo fixo",
+        "nl": "schoonmaak. typo gerepareerd",
+        "fr": "cleanmap.mapURL typo fixed",
+        "it": "pulizia.mapURL tipo fisso",
+        "es": "cleanmap.mapURL Tipo fijo",
+        "pl": "czyste mapy. typosta",
+        "uk": "карта сайту Типо фіксований",
+        "zh-cn": "清洁金 固定类型"
+      },
       "3.9.3": {
         "en": "fix loosing passwort in config\nmove map Url to userspace instead of admin space #735\nchange mapUrl to /mihome-vacuum.0.userfiles/actualMap.png",
         "de": "fix loosing passwort in config\nkarte anzeigen Url zu Benutzerraum statt Admin-Raum #735\nmapUrl zu mihome-vacuum.0.userfiles/istualMap.png",
@@ -80,19 +93,6 @@
         "pl": "reakcja ta z tłumaczenia na żywo (na podstawie viomi id.)\nuszkodzenia naprawcze, jeśli chodzi o pomieszczenie chmury. ID jest pusty #702",
         "uk": "фіксувати типо з перекладу для battary_live (на основі viomi id) #629\nфіксувати аварійну катастрофу, якщо хмарний номер Лот No702",
         "zh-cn": "f 用于图表的翻译(基于维生素)的类型\nfix 碰撞,如果云雾 ID是空洞的第702号"
-      },
-      "3.8.6": {
-        "en": "Fix type for roomMopMode",
-        "de": "Fixtyp für Zimmer MopMode",
-        "ru": "Fix тип для комнаты Начало",
-        "pt": "Tipo de fixação para o quarto MopModelo",
-        "nl": "Fix type voor kamer Mopmode",
-        "fr": "Type fixe pour la chambre MopMode",
-        "it": "Tipo di fissaggio per camera MopMode",
-        "es": "Tipo de fijación para la habitación MopMode",
-        "pl": "Fix MopMode",
-        "uk": "Фіксований тип для приміщення МопМод",
-        "zh-cn": "会议室类型 Mop Mode"
       }
     },
     "title": "mihome-vacuum",

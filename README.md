@@ -320,8 +320,9 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-### **WORK IN PROGRESS**
+### 3.9.4 (2023-01-11)
 * (Dirkhe) cleanmap.mapURL typo fixed
+
 ### 3.9.3 (2023-01-11)
 * (Dirkhe) fix loosing passwort in config
 * (Dirkhe) move map Url to userspace instead of admin space #735
