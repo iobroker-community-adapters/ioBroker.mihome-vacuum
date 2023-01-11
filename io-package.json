@@ -200,7 +200,7 @@
   },
   "instanceObjects": [
     {
-      "_id": "",
+      "_id": "userfiles",
       "type": "meta",
       "common": {
         "name": "User files for mihome-vacuum",
