@@ -13,7 +13,6 @@ const objects = require('./lib/objects');
 
 const ViomiManager = require('./lib/viomi');
 const VacuumManager = require('./lib/vacuum');
-const { doResetHistory } = require('@iobroker/testing/build/tests/unit/mocks/tools');
 
 let DeviceModel;
 let connected = false;
