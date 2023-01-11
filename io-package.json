@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.9.2",
+    "version": "3.9.3",
     "news": {
+      "3.9.3": {
+        "en": "fix loosing passwort in config\nmove map Url to userspace instead of admin space #735\nchange mapUrl to /mihome-vacuum.0.userfiles/actualMap.png",
+        "de": "fix loosing passwort in config\nkarte anzeigen Url zu Benutzerraum statt Admin-Raum #735\nmapUrl zu mihome-vacuum.0.userfiles/istualMap.png",
+        "ru": "исправить loosing passwort в config\nперейти карту Url в userspace вместо админ-пространства #735\nизменить картуUrl to mihome-vacuum.0.userfiles/actualMap.png",
+        "pt": "corrigir a passwort loosing em config\nmapa de movimento Url para userspace em vez de espaço admin #735\nalterar o mapaUrl para mihome-vacuum.0.userfiles/actualMap.png",
+        "nl": "losing passwort in configuur\nbeweeg kaart Url naar gebruikersruimte in plaats van administratie 735\nverander de kaarturl naar mihome-vacuüm.0",
+        "fr": "fix loosing passwort in config\nmove map Url à l'espace utilisateur au lieu de l'espace administrateur #735\nmodifier la carteUrl to mihome-vacuum.0.userfiles/actualMap.png",
+        "it": "fix loosing passwort in configurazione\nspostare la mappa Url to userspace invece di admin spazio #735\ncambiare mappaUrl a mihome-vacuum.0.userfiles/actualMap.png",
+        "es": "fijación de la camisa de fuerza en config\nmapa Url a espacio de usuario en lugar de espacio de administración #735\ncambio de mapaUrl a mihome-vacuum.0.userfiles/actualMap.png",
+        "pl": "naprawić przechodnię w konfiguracji\nmapa Odcinek dla przestrzeni użytkownika zamiast przestrzeni adminowej #735\nmapUrl to mihome-vacuum.0.userfiles/actualMap.png",
+        "uk": "фіксувати лоосинг пасорт в конфігурації\nперемістити карту Урл до простору користувачів замість адмін-простору #735\njavaScript licenses API Веб-сайт Go1.13.8",
+        "zh-cn": "f 固定在墓地的通行证\n地图 F. 要求使用空间而不是专注空间\n改变图Url to mihome-vacuum.0.userfiles/actual Map.png"
+      },
       "3.9.2": {
         "en": "add function setUnsupportedFeature; if token changed, all stored unsupported Features will be cleared\nfix bug from 3.9.1 for supported repeat devices",
         "de": "hinzufügen Funktion setUnsupportedFeature; wenn Token geändert, alle gespeicherten nicht unterstützt Funktionen werden gelöscht\nfehler von 3.9.1 für unterstützte repeatgeräte beheben",
@@ -80,19 +93,6 @@
         "pl": "Fix MopMode",
         "uk": "Фіксований тип для приміщення МопМод",
         "zh-cn": "会议室类型 Mop Mode"
-      },
-      "3.8.5": {
-        "en": "move parseErrors to debug level\navoid new instanziierung on reconnect",
-        "de": "bewegung Parse Fehler zum Debug Level\nneue instanziierung auf wiederverschaltung vermeiden",
-        "ru": "переместить parse Ошибки для отладки уровня\nизбегать нового instanziierung на reconnect",
-        "pt": "parse de movimento Erros para depurar o nível\nevitar novos instanziierung na reconectação",
-        "nl": "verhuizen Erroren om niveau te debuggen\nvermijd nieuwe instanzierung",
-        "fr": "bougez parse Erreurs au niveau debug\néviter un nouvel instanziierung sur reconnect",
-        "it": "spostare la parse Errori di debug livello\nevitare nuovi instanziierung sulla riconnessione",
-        "es": "muévete. Errores para depurar el nivel\nevitar nuevo instanziierung en la reconexión",
-        "pl": "parsa ruchowa Poziom roztworu\nunikanie nowego połączenia",
-        "uk": "переїзд Помилки на рівень відключення\nуникнути нового інстанцієну на відключення",
-        "zh-cn": "工程 降级\n避免新的塔吉克斯坦ziierung"
       }
     },
     "title": "mihome-vacuum",
@@ -236,6 +236,6 @@
         "role": "vacuumCleaner"
       },
       "native": {}
-    }   
+    }
   ]
 }
