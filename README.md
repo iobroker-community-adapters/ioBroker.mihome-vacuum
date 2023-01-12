@@ -320,6 +320,8 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
+ ### **WORK IN PROGRESS**
+* (Dirkhe) change type of unsupported features
 ### 3.9.4 (2023-01-11)
 * (Dirkhe) cleanmap.mapURL typo fixed
 
