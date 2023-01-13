@@ -320,9 +320,10 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-### **WORK IN PROGRESS**
+### 3.9.5 (2023-01-13)
 * (Dirkhe) change type of unsupported features
 * (Dirkhe) fix button/command loadRooms
+
 ### 3.9.4 (2023-01-11)
 * (Dirkhe) cleanmap.mapURL typo fixed
 
