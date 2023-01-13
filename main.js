@@ -33,7 +33,7 @@ const deviceList = {
 	'roborock.vacuum.a08': VacuumManager, // Roborock S6 Pure
 	'roborock.vacuum.m1s': VacuumManager,
 	'rockrobo.vacuum.v1': VacuumManager,
-	'roborock.vacuum.a10': VacuumManager,
+	'roborock.vacuum.a10': VacuumManager, // Roborock S6 MaxV
 	'roborock.vacuum.a15': VacuumManager, // Roborock S7
 	'roborock.vacuum.a27': VacuumManager, // Roborock S7 MaxV 
 	'roborock.vacuum.a38': VacuumManager, // Roborock Q7 Max
