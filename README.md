@@ -320,6 +320,8 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
+### **WORK IN PROGRESS**
+* (Dirkhe) check also stockcommands in onMessage 
 ### 3.9.5 (2023-01-13)
 * (Dirkhe) change type of unsupported features
 * (Dirkhe) fix button/command loadRooms
