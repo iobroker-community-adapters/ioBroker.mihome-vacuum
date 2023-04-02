@@ -15,7 +15,7 @@ const ViomiManager = require('./lib/viomi');
 const VacuumManager = require('./lib/vacuum');
 
 let DeviceModel;
-let connected = false;
+// @ts-ignore
 let Miio;
 let vacuum = null;
 let Map;
@@ -35,7 +35,7 @@ const deviceList = {
 	'rockrobo.vacuum.v1': VacuumManager,
 	'roborock.vacuum.a10': VacuumManager, // Roborock S6 MaxV
 	'roborock.vacuum.a15': VacuumManager, // Roborock S7
-	'roborock.vacuum.a27': VacuumManager, // Roborock S7 MaxV 
+	'roborock.vacuum.a27': VacuumManager, // Roborock S7 MaxV
 	'roborock.vacuum.a38': VacuumManager, // Roborock Q7 Max
 	'roborock.vacuum.a62': VacuumManager, // Roborock S7 Pro Ultra
 	// 'roborock.sweeper.e2v3': VacuumManager2,
@@ -63,7 +63,7 @@ class MihomeVacuum extends utils.Adapter {
 			...options,
 			name: 'mihome-vacuum',
 		});
-		this.unsupportedFeatures = "|";
+		this.unsupportedFeatures = '|';
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
 		this.on('message', this.onMessage.bind(this));
@@ -72,21 +72,28 @@ class MihomeVacuum extends utils.Adapter {
 
 	async main() {
 
+		// @ts-ignore
 		this.config.port = parseInt(this.config.port, 10) || 54321;
+		// @ts-ignore
 		this.config.ownPort = parseInt(this.config.ownPort, 10) || 53421;
+		// @ts-ignore
 		this.config.pingInterval = parseInt(this.config.pingInterval, 10) || 20000;
 
 		// Abfrageintervall mindestens 10 sec.
+		// @ts-ignore
 		if (this.config.pingInterval < 10000) {
+			// @ts-ignore
 			this.config.pingInterval = 10000;
 		}
 
+		// @ts-ignore
 		if (!this.config.token) {
 			this.log.warn('Token not specified!');
-			return
+			return;
 		}
 		// create default States
 		await Promise.all(objects.deviceInfo.map(async o => {
+			// @ts-ignore
 			await this.setObjectNotExistsAsync('deviceInfo' + (o._id ? '.' + o._id : ''), o);
 			this.log.debug('Create State for deviceInfo' + o._id);
 		}));
@@ -101,39 +108,43 @@ class MihomeVacuum extends utils.Adapter {
 		});
 
 		//check if Self send Commands is enabled
+		// @ts-ignore
 		if (this.config.enableSelfCommands) {
+			// @ts-ignore
 			objects.customCommands.map(async o => await this.setObjectNotExistsAsync('control' + (o._id ? '.' + o._id : ''), o));
 		} else {
 			objects.customCommands.map(o => this.delObj('control' + (o._id ? '.' + o.id : '')));
 		}
 
 		//check if iotState is enabled
-		if (true || this.config.enableAlexa) {
+		// @ts-ignore
+		if (this.config.enableAlexa) {
 			this.log.info('IOT enabled, create state');
+			// @ts-ignore
 			objects.iotState.map(o => this.setObjectNotExistsAsync('control' + (o._id ? '.' + o._id : ''), o));
 		} else {
 			this.log.info('IOT disabled, delete state');
 			objects.iotState.map(async o => await this.delObj('control' + (o._id ? '.' + o.id : '')));
 		}
 
-		this.getStateAsync("deviceInfo.unsupported").then((obj) => {
-			if (obj && typeof obj.val == "string") {
+		this.getStateAsync('deviceInfo.unsupported').then((obj) => {
+			if (obj && typeof obj.val == 'string') {
 				this.unsupportedFeatures = obj.val;
-				if (!this.unsupportedFeatures.endsWith("|"))
-					this.unsupportedFeatures.concat("|");
-				if (!this.unsupportedFeatures.startsWith("|"))
-					this.unsupportedFeatures = "|" + this.unsupportedFeatures;
+				if (!this.unsupportedFeatures.endsWith('|'))
+					this.unsupportedFeatures.concat('|');
+				if (!this.unsupportedFeatures.startsWith('|'))
+					this.unsupportedFeatures = '|' + this.unsupportedFeatures;
 			}
-		})
+		});
 	}
 
 	isUnsupportedFeature(key) {
-		return this.unsupportedFeatures.indexOf("|" + key + "|") >= 0;
+		return this.unsupportedFeatures.indexOf('|' + key + '|') >= 0;
 	}
 	setUnsupportedFeature(key) {
-		if (this.unsupportedFeatures.indexOf("|" + key + "|") == -1) {
-			this.unsupportedFeatures += key + "|";
-			this.setStateAsync("deviceInfo.unsupported", this.unsupportedFeatures, true);
+		if (this.unsupportedFeatures.indexOf('|' + key + '|') == -1) {
+			this.unsupportedFeatures += key + '|';
+			this.setStateAsync('deviceInfo.unsupported', this.unsupportedFeatures, true);
 		}
 	}
 
@@ -145,6 +156,7 @@ class MihomeVacuum extends utils.Adapter {
 		//try to get from Config
 		let configModel;
 		try {
+			// @ts-ignore
 			configModel = JSON.parse(this.config.devices).model;
 		} catch (e) {
 			configModel = null;
@@ -175,6 +187,7 @@ class MihomeVacuum extends utils.Adapter {
 		if (!DeviceData && configModel) {
 			this.log.warn('No Answer for DeviceModel use model from Config');
 			DeviceModel = configModel;
+			// @ts-ignore
 			await this.setModelInfoObject(JSON.parse(this.config.devices));
 		}
 		this.log.debug('DeviceModel selected to: ' + DeviceModel);
@@ -188,7 +201,7 @@ class MihomeVacuum extends utils.Adapter {
 				this.log.warn(`Model ${DeviceModel} not supported! Please open issue on git:  https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/issues`);
 
 				//try to get stock Model maybe it is working
-				let FirstDevMod = DeviceModel.split('.')[0]
+				const FirstDevMod = DeviceModel.split('.')[0];
 				this.device = DeviceModel;
 
 				if (FirstDevMod === 'viomi') {
@@ -198,7 +211,7 @@ class MihomeVacuum extends utils.Adapter {
 				}
 			} else {
 				this.log.warn('Cant detect Device please select Device form Devicelist or enable the cloud of thr robot to get device infos');
-				this.log.warn('Fallback to Stock miio Protocol')
+				this.log.warn('Fallback to Stock miio Protocol');
 				vacuum = new VacuumManager(this, Miio, Map);
 			}
 		}
@@ -229,7 +242,6 @@ class MihomeVacuum extends utils.Adapter {
 	 * @param {boolean} indicator could be true or false
 	 */
 	async setConnection(indicator) {
-		connected = indicator;
 		await this.setStateAsync('info.connection', {
 			val: indicator,
 			ack: true
@@ -372,11 +384,11 @@ class MihomeVacuum extends utils.Adapter {
 
 		// handle the message
 		if (obj) {
-			let params;
 
 			switch (obj.command) {
 				case 'discovery':
 					//adapter.log.info('discover' + JSON.stringify(obj))
+					// @ts-ignore
 					Map && Map.getDeviceStatus(obj.message.username, obj.message.password, obj.message.server)
 						.then(data => {
 							this.log.debug('discover__' + JSON.stringify(data));
@@ -398,8 +410,8 @@ class MihomeVacuum extends utils.Adapter {
 							error: new Error('Not initialized')
 						});
 					}
-					respond(await vacuum.onMessage(obj))
-					return
+					respond(await vacuum.onMessage(obj));
+					return;
 			}
 		}
 	}
