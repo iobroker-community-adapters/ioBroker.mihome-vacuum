@@ -1,0 +1,3 @@
+build/
+.prettierrc.js
+**/.eslintrc.js
