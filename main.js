@@ -118,7 +118,8 @@ class MihomeVacuum extends utils.Adapter {
 
 		//check if iotState is enabled
 		// @ts-ignore
-		if (this.config.enableAlexa) {
+		// eslint-disable-next-line no-constant-condition
+		if (true || this.config.enableAlexa) {
 			this.log.info('IOT enabled, create state');
 			// @ts-ignore
 			objects.iotState.map(o => this.setObjectNotExistsAsync('control' + (o._id ? '.' + o._id : ''), o));
