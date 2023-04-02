@@ -294,7 +294,7 @@ The supported commands are:
 | Retrieve the current waterbox mode | `getWaterBoxMode` | - none - |  |
 | Set a mop mode | `setMopMode` | `mopMode` | `mopMode` is a number between 300 and 303 |
 | Retrieve the current mop mode | `getMopMode` | - none - |  |
-| Set a waterbox mode | `setWaterBoxMode` | `waterBoxMode` | `waterBoxMode` is a number between 200 and 204 |
+| Set a waterbox mode | `setWaterBoxMode` | `waterBoxMode`\| {waterBoxMode:`waterBoxMode`,waterBoxLevel:`waterBoxLevel`} | `waterBoxMode` is a number between 200 and 204 or 207, then you have to proved also `waterBoxLevel` as number between 1 - 30 |
 | Start the remote control function | `startRemoteControl` | - none - |  |
 | Issue a move command for remote control | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | Sequence number must be sequentially, Duration is in ms |
 | End the remote control function | `stopRemoteControl` | - none - |  |
@@ -322,6 +322,8 @@ The supported commands are:
 -->
 ### **WORK IN PROGRESS**
 * (Dirkhe) check also stockcommands in onMessage 
+* (Dirkhe) add feature waterbox level #755
+
 ### 3.9.5 (2023-01-13)
 * (Dirkhe) change type of unsupported features
 * (Dirkhe) fix button/command loadRooms
