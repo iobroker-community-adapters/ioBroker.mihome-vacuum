@@ -40,7 +40,7 @@
     "main.js"
   ],
   "optionalDependencies": {
-    "canvas": "^2.11.0"
+    "canvas": "^2.11.2"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.6.8",
