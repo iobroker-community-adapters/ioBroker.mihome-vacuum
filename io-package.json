@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.9.5",
+    "version": "3.10.0",
     "news": {
+      "3.10.0": {
+        "en": "check also stockcommands in onMessage \nadd feature waterbox level #755",
+        "de": "überprüfen auch Stockcommands in onMessage\nfunktion wasserbox level hinzufügen",
+        "ru": "проверить также Stockcommands в onMesage\nдобавить функцию waterbox level #755",
+        "pt": "verificar também stockcommands em Portugal\nadicionar nível de caixa de água recurso #755",
+        "nl": "controle en ook aandelen in de massa\nvertaling:",
+        "fr": "vérifier également stockcommands in onMessage\najouter le niveau de la boîte à eau #755",
+        "it": "controllare anche stockcommands in onMessage\naggiungere il livello del waterbox #755",
+        "es": "check also stockcommands in onMessage\nañadir característica nivel de caja de agua #755",
+        "pl": "sprawozdanie w sprawie Message\npoziom wody #755",
+        "uk": "перевірити також панчіх в onMessage\nadd features waterbox рівень #755",
+        "zh-cn": "还检查Message的库存情况\na. 增加特有水箱,第755号"
+      },
       "3.9.5": {
         "en": "change type of unsupported features\nfix button/command loadRooms",
         "de": "änderung der art der nicht unterstützten funktionen\nfix-Taste / Befehlslast Zimmer",
@@ -80,19 +93,6 @@
         "pl": "dodarzenie numeru 679\npowracanie się jedynie, jeśli poprawne stany zostaną podane numerem 623\ndodaje wiele iteracji (odc\nhousekeeping",
         "uk": "додати миття Mop #679\nтригер pauseResume тільки, якщо правильний стан дається #623\nдодати кілька чистої ітерації (повтор) #690\nприбирання",
         "zh-cn": "增加编号:679\n只有正确的国家才有触发爱国情绪。\n第690号补充多种清洁剂(补充)\n住房"
-      },
-      "3.8.8": {
-        "en": "fix behaviour of pauseResume #623",
-        "de": "fixes Verhalten der PauseResume #623",
-        "ru": "исправить поведение pauseResume #623",
-        "pt": "corrigir comportamento de pauseResume #623",
-        "nl": "#623",
-        "fr": "correction du comportement de pauseResume #623",
-        "it": "correggere il comportamento della pausaResume #623",
-        "es": "arreglar el comportamiento de la pausaResume #623",
-        "pl": "regulamin nr 623",
-        "uk": "виправлена поведінка паузиРезум #623",
-        "zh-cn": "f 九 父权行为"
       }
     },
     "title": "mihome-vacuum",

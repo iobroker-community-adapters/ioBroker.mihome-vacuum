@@ -320,7 +320,7 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-### **WORK IN PROGRESS**
+### 3.10.0 (2023-04-07)
 * (Dirkhe) check also stockcommands in onMessage 
 * (Dirkhe) add feature waterbox level #755
 
