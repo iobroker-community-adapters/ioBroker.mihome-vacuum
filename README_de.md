@@ -250,7 +250,7 @@ Die unterstützten Kommandos sind:
 | Saugstufe abrufen | `getFanSpeed` | - keine - |  |
 | Saugstufe festlegen | `setFanSpeed` | `fanSpeed` | `fanSpeed` ist eine Zahl zwischen 1 und 100 |
 | Wischstufe abrufen | `getWaterBoxMode` | - none - |  |
-| Wischstufe festlegen | `setWaterBoxMode` | `waterBoxMode` | `waterBoxMode` ist eine Zahl zwischen 200 and 204 |
+| Wischstufe festlegen | `setWaterBoxMode` | `waterBoxMode`\| {waterBoxMode:`waterBoxMode`,waterBoxLevel:`waterBoxLevel`}  | `waterBoxMode` ist eine Zahl zwischen 200 and 204 oder 207 -> dann muss noch `waterBoxLevel` als Zahl zwischen 1 bis 30 mitgegeben werden |
 | Wisch modus abrufen | `getMopMode` | - none - |  |
 | Wisch modus festlegen | `setMopMode` | `mopMode` | `mopMode` ist eine Zahl zwischen 300 and 303 |
 | Fernsteuerungsfunktion starten | `startRemoteControl` | - keine - |  |
