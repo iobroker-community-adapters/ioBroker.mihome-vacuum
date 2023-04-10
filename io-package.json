@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "3.10.0",
+    "version": "3.10.1",
     "news": {
+      "3.10.1": {
+        "en": "fix waterBoxLevel \nfix overwriting of roomStates from global",
+        "de": "wasser BoxLevel\nfixes Überschreiben von roomStates aus der globalen",
+        "ru": "исправить воду BoxУровень\nисправить перезапись комнатГосударства от глобального",
+        "pt": "fixar água Nível de caixa\ncorrigir a substituição de quartoEstados do global",
+        "nl": "water repareren. BoxLevel\nvertaling:",
+        "fr": "eau BoxLevel\ncorriger l'écrasement des états de chambre du monde",
+        "it": "acqua potabile Scatola girevole\ncorrezione sovrascrittura di roomStates da globale",
+        "es": "agua BoxLevel\nfijar la sobreescritura de los Estados de la sala del mundo",
+        "pl": "naprawa wody BoxLevel\nprzepisywanie kominy ze strony globalnej",
+        "uk": "фіксація води Бодибилдерши\nфіксація перезапису кімнатних",
+        "zh-cn": "fix 水 框\nf 将全球会议室国家分开"
+      },
       "3.10.0": {
         "en": "check also stockcommands in onMessage \nadd feature waterbox level #755",
         "de": "überprüfen auch Stockcommands in onMessage\nfunktion wasserbox level hinzufügen",
@@ -80,19 +93,6 @@
         "pl": "dostarczanie własności do powtórzenia DP\nqueue Fallback mode\nusunąć guzik",
         "uk": "додати крок нерухомості, щоб повторити ДП\nadd Queue Fallback режим повторення\nвидалити неправильно Клацніть кнопку",
         "zh-cn": "增加资产以重复DP\n增加重犯法例\n消除错误 A. 配额但顿"
-      },
-      "3.9.0": {
-        "en": "add Mop washing #679\ntrigger pauseResume only, if correct state is given #623\nadd multiple clean iterations (repeat) #690\nhousekeeping",
-        "de": "hinzufügen Mop Waschen #679\ntrigger PauseResume nur, wenn der korrekte Zustand #623 gegeben ist\nmehrere saubere iterationen hinzufügen (repeat) #690\nhauswirtschaft",
-        "ru": "добавить Mop стирка #679\nтриггер pauseResume только, если правильное состояние дано #623\nдобавить несколько чистых итераций (повторить) #690\nдомашняя уборка",
-        "pt": "adicionar Mop lavagem #679\ngatilho pauseResume apenas, se o estado correto é dado #623\nadicionar várias iterações limpas (repetir) #690\nserviço de limpeza",
-        "nl": "voeg Mop wassen 679\nalleen de juiste staat wordt gegeven\n#690\nhuishouding",
-        "fr": "ajouter le lavage Mop #679\ntrigger pauseResume seulement, si l'état correct est donné #623\najouter plusieurs itérations propres (repeat) #690\nménage",
-        "it": "aggiungi Mop lavaggio #679\nattivare pausaRiprendere solo, se lo stato corretto è dato #623\naggiungere più cancellazioni (repeat) #690\npulizia",
-        "es": "añadir Mop lavado #679\npausa del gatilloResume sólo, si el estado correcto se da #623\nañadir varias iteraciones limpias (repetir) #690\nlimpieza",
-        "pl": "dodarzenie numeru 679\npowracanie się jedynie, jeśli poprawne stany zostaną podane numerem 623\ndodaje wiele iteracji (odc\nhousekeeping",
-        "uk": "додати миття Mop #679\nтригер pauseResume тільки, якщо правильний стан дається #623\nдодати кілька чистої ітерації (повтор) #690\nприбирання",
-        "zh-cn": "增加编号:679\n只有正确的国家才有触发爱国情绪。\n第690号补充多种清洁剂(补充)\n住房"
       }
     },
     "title": "mihome-vacuum",

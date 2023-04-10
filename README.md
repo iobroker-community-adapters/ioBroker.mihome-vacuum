@@ -320,8 +320,7 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-
-### **WORK IN PROGRESS**
+### 3.10.1 (2023-04-10)
 * (Dirkhe) fix waterBoxLevel 
 * (Dirkhe) fix overwriting of roomStates from global
 
