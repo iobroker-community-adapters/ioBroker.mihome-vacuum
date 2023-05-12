@@ -320,6 +320,9 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
+### 3.11.0 (2023-05-12)
+* (TA2k) fix too much map request to prevent map rate limit in the app
+
 ### 3.10.1 (2023-04-10)
 * (Dirkhe) fix waterBoxLevel 
 * (Dirkhe) fix overwriting of roomStates from global
