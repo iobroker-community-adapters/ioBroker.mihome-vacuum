@@ -307,15 +307,17 @@ The supported commands are:
 | Retrieve the current waterbox mode | `getWaterBoxMode` | - none - |  |
 | Set a mop mode | `setMopMode` | `mopMode` | `mopMode` is a number between 300 and 303 |
 | Retrieve the current mop mode | `getMopMode` | - none - |  |
-| Set a waterbox mode | `setWaterBoxMode` | `waterBoxMode` | `waterBoxMode` is a number between 200 and 204 |
+| Set a waterbox mode | `setWaterBoxMode` | `waterBoxMode`\| {waterBoxMode:`waterBoxMode`,waterBoxLevel:`waterBoxLevel`} | `waterBoxMode` is a number between 200 and 204 or 207 -> then you have to provede also `waterBoxLevel` as number between 1 - 30 |
 | Start the remote control function | `startRemoteControl` | - none - |  |
 | Issue a move command for remote control | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | Sequence number must be sequentially, Duration is in ms |
 | End the remote control function | `stopRemoteControl` | - none - |  |
 | clean room/rooms | `cleanRooms` | `rooms` | `rooms` is a comma separated String with enum.rooms.XXX |
 | clean segment | `cleanSegments` | `rooms` \| {rooms:`rooms`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`} | `rooms` is a number or an Array with mapIndex or comma separated String with mapIndex |
-| clean zone | `cleanZone` | `coordinates` \| {coordinates:`coordinates`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`} | `coordinates` is a String with coordinates and count, see [zoneClean](#zonecleaning) |
+| clean zone | `cleanZone` | `coordinates` \| {coordinates:`coordinates`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`,repeat:`iterations`} | `coordinates` is a String with coordinates and count, see [zoneClean](#zonecleaning) |
 | start Dust collecting | `startDustCollect` | - none - |  |
 | stop Dust collecting | `stopDustCollect` | - none - |  |
+| start Mop washing | `startWashMop` | - none - |  |
+| stop Mop washing | `stopWashMop` | - none - |  |
 
 
 ## Widget
@@ -325,6 +327,7 @@ The supported commands are:
 - Occasional disconnections, however, this is not due to the adapter but mostly on its own networks
 - Widget at the time without function
 
+## Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
@@ -332,6 +335,44 @@ The supported commands are:
 -->
 ### **WORK IN PROGRESS**
 * (DemigodCode) inital version of dream support
+### 3.11.0 (2023-05-12)
+* (TA2k) fix too much map request to prevent map rate limit in the app
+
+### 3.10.1 (2023-04-10)
+* (Dirkhe) fix waterBoxLevel 
+* (Dirkhe) fix overwriting of roomStates from global
+
+### 3.10.0 (2023-04-07)
+* (Dirkhe) check also stockcommands in onMessage 
+* (Dirkhe) add feature waterbox level #755
+
+### 3.9.5 (2023-01-13)
+* (Dirkhe) change type of unsupported features
+* (Dirkhe) fix button/command loadRooms
+
+### 3.9.4 (2023-01-11)
+* (Dirkhe) cleanmap.mapURL typo fixed
+
+### 3.9.3 (2023-01-11)
+* (Dirkhe) fix loosing passwort in config
+* (Dirkhe) move map Url to userspace instead of admin space #735
+* (Dirkhe) change mapUrl to /mihome-vacuum.0.userfiles/actualMap.png
+
+### 3.9.2 (2023-01-06)
+* (Dirkhe) add function setUnsupportedFeature; if token changed, all stored unsupported Features will be cleared
+* (dirkhe) fix bug from 3.9.1 for supported repeat devices
+
+### 3.9.1 (2023-01-06)
+* (Dirkhe) add step property to repeat DP
+* (Dirkhe) add Queue Fallback mode for repeat
+* (Dirkhe) remove wrong clearQueue button
+
+### 3.9.0 (2023-01-04)
+* (Dirkhe) add Mop washing #679
+* (Dirkhe) trigger pauseResume only, if correct state is given #623
+* (Dirkhe) add multiple clean iterations (repeat) #690
+* (Dirkhe) housekeeping
+
 ### 3.8.8 (2022-11-30)
 * (Dirkhe) fix behaviour of pauseResume #623
 

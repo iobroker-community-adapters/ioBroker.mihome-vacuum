@@ -250,17 +250,19 @@ Die unterstützten Kommandos sind:
 | Saugstufe abrufen | `getFanSpeed` | - keine - |  |
 | Saugstufe festlegen | `setFanSpeed` | `fanSpeed` | `fanSpeed` ist eine Zahl zwischen 1 und 100 |
 | Wischstufe abrufen | `getWaterBoxMode` | - none - |  |
-| Wischstufe festlegen | `setWaterBoxMode` | `waterBoxMode` | `waterBoxMode` ist eine Zahl zwischen 200 and 204 |
+| Wischstufe festlegen | `setWaterBoxMode` | `waterBoxMode`\| {waterBoxMode:`waterBoxMode`,waterBoxLevel:`waterBoxLevel`}  | `waterBoxMode` ist eine Zahl zwischen 200 and 204 oder 207 -> dann muss noch `waterBoxLevel` als Zahl zwischen 1 bis 30 mitgegeben werden |
 | Wisch modus abrufen | `getMopMode` | - none - |  |
 | Wisch modus festlegen | `setMopMode` | `mopMode` | `mopMode` ist eine Zahl zwischen 300 and 303 |
 | Fernsteuerungsfunktion starten | `startRemoteControl` | - keine - |  |
 | Bewegungskommando für Fernsteuerung absetzen | `move` | `velocity`, `angularVelocity`, `duration`, `sequenceNumber` | sequenceNumber muss sequentiell sein, Dauer ist in ms |
 | Fernsteuerungsfunktion beenden | `stopRemoteControl` | - keine - |  |
 | Raum/Räume saugen | `cleanRooms` | `rooms` | `rooms` ist ein komma separierter String mit enum.rooms.XXX |
-| Segment saugen | `cleanSegments` | `rooms` \| {rooms:`rooms`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`} | `rooms` ist Array mit mapIndex oder komma separierter String mit mapIndex |
+| Segment saugen | `cleanSegments` | `rooms` \| {rooms:`rooms`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`,repeat:`iterations`} | `rooms` ist Array mit mapIndex oder komma separierter String mit mapIndex |
 | Zone saugen | `cleanZone` | `coordinates` \| {coordinates:`coordinates`,waterBoxMode:`waterBoxMode`,mopMode:`mopMode`,fanSpeed:`fanSpeed`} | `coordinates` ist ein String mit Koordinaten und die Anzahl Durchläufe, siehe [zoneClean](#zoneClean) |
 | Dreck absaugen starten | `startDustCollect` | - keine - |  |
 | Dreck absaugen stoppen | `stopDustCollect` | - keine - |  |
+| Mop waschen starten | `startWashMop` | - none - |  |
+| Mop waschen stoppen | `stopWashMop` | - none - |  |
 
 ## Widget
 ![Widget](widgets/mihome-vacuum/img/previewControl.png)
