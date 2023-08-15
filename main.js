@@ -24,22 +24,23 @@ let Map;
 const deviceList = {
 	//'mijia.vacuum.v2' : MiotVacuum, //  Modell: Xiaomi mijia g1
 	//'dreame.vacuum.mc1808' : MiotVacuum, //  Modell: Xioami mijia 1c
-	'viomi.vacuum.v7': ViomiManager,
-	'viomi.vacuum.v8': ViomiManager,
-	'viomi.vacuum.v19': ViomiManager, //test
-	'viomi.vacuum.v13': ViomiManager, // added for test
-	'roborock.vacuum.s4': VacuumManager, // Roborock S4
-	'roborock.vacuum.s5': VacuumManager,
-	'roborock.vacuum.s5e': VacuumManager, // Roborock S5 Max
-	'roborock.vacuum.s6': VacuumManager,
-	'roborock.vacuum.a08': VacuumManager, // Roborock S6 Pure
-	'roborock.vacuum.m1s': VacuumManager,
-	'rockrobo.vacuum.v1': VacuumManager,
-	'roborock.vacuum.a10': VacuumManager, // Roborock S6 MaxV
-	'roborock.vacuum.a15': VacuumManager, // Roborock S7
-	'roborock.vacuum.a27': VacuumManager, // Roborock S7 MaxV
-	'roborock.vacuum.a38': VacuumManager, // Roborock Q7 Max
-	'roborock.vacuum.a62': VacuumManager, // Roborock S7 Pro Ultra
+	"viomi.vacuum.v7": ViomiManager,
+	"viomi.vacuum.v8": ViomiManager,
+	"viomi.vacuum.v19": ViomiManager, //test
+	"viomi.vacuum.v13": ViomiManager, // added for test
+	"roborock.vacuum.s4": VacuumManager, // Roborock S4
+	"roborock.vacuum.s5": VacuumManager,
+	"roborock.vacuum.s5e": VacuumManager, // Roborock S5 Max
+	"roborock.vacuum.s6": VacuumManager,
+	"roborock.vacuum.a08": VacuumManager, // Roborock S6 Pure
+	"roborock.vacuum.m1s": VacuumManager,
+	"rockrobo.vacuum.v1": VacuumManager,
+	"roborock.vacuum.a10": VacuumManager, // Roborock S6 MaxV
+	"roborock.vacuum.a15": VacuumManager, // Roborock S7
+	"roborock.vacuum.a27": VacuumManager, // Roborock S7 MaxV
+	"roborock.vacuum.a38": VacuumManager, // Roborock Q7 Max
+	"roborock.vacuum.a62": VacuumManager, // Roborock S7 Pro Ultra
+	"roborock.vacuum.a70": VacuumManager, // Roborock S8 Ultra Pro
 	// 'roborock.sweeper.e2v3': VacuumManager2,
 	// 'roborock.sweeper.e2v2': VacuumManager2,
 	// 'roborock.vacuum.e2': VacuumManager2,
@@ -52,20 +53,19 @@ const deviceList = {
 	// 'roborock.vacuum.a04': VacuumManager2,
 	// 'roborock.vacuum.a04v2': VacuumManager2,
 	// 'roborock.vacuum.a04v3': VacuumManager2
-	'dreame.vacuum.r2205': DreameManager, // Dreame D10 Plus
-	'dreame.vacuum.r2216o': DreameManager, // Dreame L10S Pro
-	'dreame.vacuum.r2228o': DreameManager, // Dreame L10S Ultra
-	'dreame.vacuum.p2008': DreameManager, // Dreame F9
-	'dreame.vacuum.p2009': DreameManager, // Dreame D9
-	'dreame.vacuum.p2027': DreameManager, // Dreame W10
-	'dreame.vacuum.p2028': DreameManager, // Dreame Z10 Pro
-	'dreame.vacuum.p2029': DreameManager, // Dreame L10 Pro
-	'dreame.vacuum.p2036': DreameManager, // Trouver Finder LDS Cleaner
-	'dreame.vacuum.p2041o': DreameManager, // Xiaomi Vacuum Mop 2 Pro+
-	'dreame.vacuum.p2114a': DreameManager, // Xiaomi Robot Vacuum X10 Plus
-	'dreame.vacuum.p2148o': DreameManager, // Xiaomi Mijia Ultra Slim
-	'dreame.vacuum.p2156o': DreameManager, // MOVA Z500
-
+	"dreame.vacuum.r2205": DreameManager, // Dreame D10 Plus
+	"dreame.vacuum.r2216o": DreameManager, // Dreame L10S Pro
+	"dreame.vacuum.r2228o": DreameManager, // Dreame L10S Ultra
+	"dreame.vacuum.p2008": DreameManager, // Dreame F9
+	"dreame.vacuum.p2009": DreameManager, // Dreame D9
+	"dreame.vacuum.p2027": DreameManager, // Dreame W10
+	"dreame.vacuum.p2028": DreameManager, // Dreame Z10 Pro
+	"dreame.vacuum.p2029": DreameManager, // Dreame L10 Pro
+	"dreame.vacuum.p2036": DreameManager, // Trouver Finder LDS Cleaner
+	"dreame.vacuum.p2041o": DreameManager, // Xiaomi Vacuum Mop 2 Pro+
+	"dreame.vacuum.p2114a": DreameManager, // Xiaomi Robot Vacuum X10 Plus
+	"dreame.vacuum.p2148o": DreameManager, // Xiaomi Mijia Ultra Slim
+	"dreame.vacuum.p2156o": DreameManager, // MOVA Z500
 };
 
 class MihomeVacuum extends utils.Adapter {
