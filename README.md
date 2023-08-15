@@ -335,6 +335,7 @@ The supported commands are:
 -->
 ### **WORK IN PROGRESS**
 * (DemigodCode) inital version of dream support
+* (Dirkhe) add Roborock S8 Ultra Pro
 ### 3.11.0 (2023-05-12)
 * (TA2k) fix too much map request to prevent map rate limit in the app
 
