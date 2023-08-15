@@ -42,6 +42,9 @@
   "optionalDependencies": {
     "canvas": "^2.11.2"
   },
+  "engines": {
+    "node": ">=16"
+  },
   "dependencies": {
     "@iobroker/adapter-core": "^3.0.3",
     "zlib": "^1.0.5",
