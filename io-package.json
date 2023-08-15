@@ -1,237 +1,241 @@
 {
-	"common": {
-		"name": "mihome-vacuum",
-		"version": "3.11.0",
-		"news": {
-			"3.11.0": {
-				"en": "fix too much map request to prevent map rate limit in the app",
-				"de": "Reduziert der Mapanfrage um ein Blockieren der Kartenansicht in der App zu verhindern",
-				"ru": "исправить слишком много запроса карты, чтобы предотвратить ограничение скорости карты в приложении",
-				"pt": "corrigir demasiada solicitação de mapa para evitar o limite de taxa de mapa no aplicativo",
-				"nl": "teveel kaartverzoek om de limiet van de kaart te voorkomen",
-				"fr": "fixer trop de demande de carte pour empêcher la limite de taux de carte dans l'application",
-				"it": "fissare troppo richiesta mappa per evitare il limite di velocità della mappa nell'app",
-				"es": "fijar demasiada solicitud de mapa para evitar el límite de velocidad de mapa en la aplicación",
-				"pl": "umożliwia to rozwiązanie zbyt dużej mapy, aby zapobiec ograniczaniu tempa map w aplikacji",
-				"uk": "виправити занадто багато запиту на картографію, щоб запобігти обмеження швидкості карти в додатку",
-				"zh-cn": "fix 要求防止图表率限制过高"
-			},
-			"3.10.1": {
-				"en": "fix waterBoxLevel \nfix overwriting of roomStates from global",
-				"de": "wasser BoxLevel\nfixes Überschreiben von roomStates aus der globalen",
-				"ru": "исправить воду BoxУровень\nисправить перезапись комнатГосударства от глобального",
-				"pt": "fixar água Nível de caixa\ncorrigir a substituição de quartoEstados do global",
-				"nl": "water repareren. BoxLevel\nvertaling:",
-				"fr": "eau BoxLevel\ncorriger l'écrasement des états de chambre du monde",
-				"it": "acqua potabile Scatola girevole\ncorrezione sovrascrittura di roomStates da globale",
-				"es": "agua BoxLevel\nfijar la sobreescritura de los Estados de la sala del mundo",
-				"pl": "naprawa wody BoxLevel\nprzepisywanie kominy ze strony globalnej",
-				"uk": "фіксація води Бодибилдерши\nфіксація перезапису кімнатних",
-				"zh-cn": "fix 水 框\nf 将全球会议室国家分开"
-			},
-			"3.10.0": {
-				"en": "check also stockcommands in onMessage \nadd feature waterbox level #755",
-				"de": "überprüfen auch Stockcommands in onMessage\nfunktion wasserbox level hinzufügen",
-				"ru": "проверить также Stockcommands в onMesage\nдобавить функцию waterbox level #755",
-				"pt": "verificar também stockcommands em Portugal\nadicionar nível de caixa de água recurso #755",
-				"nl": "controle en ook aandelen in de massa\nvertaling:",
-				"fr": "vérifier également stockcommands in onMessage\najouter le niveau de la boîte à eau #755",
-				"it": "controllare anche stockcommands in onMessage\naggiungere il livello del waterbox #755",
-				"es": "check also stockcommands in onMessage\nañadir característica nivel de caja de agua #755",
-				"pl": "sprawozdanie w sprawie Message\npoziom wody #755",
-				"uk": "перевірити також панчіх в onMessage\nadd features waterbox рівень #755",
-				"zh-cn": "还检查Message的库存情况\na. 增加特有水箱,第755号"
-			},
-			"3.9.5": {
-				"en": "change type of unsupported features\nfix button/command loadRooms",
-				"de": "änderung der art der nicht unterstützten funktionen\nfix-Taste / Befehlslast Zimmer",
-				"ru": "изменить тип неподдерживаемых функций\nисправить кнопку/командная нагрузка Комнаты",
-				"pt": "tipo de mudança de recursos não suportados\ncorrigir botão/carga de comando Quartos",
-				"nl": "veranderingstypes onbelangrijke kenmerken\nlos knop/command lading Kamers",
-				"fr": "type de changement de caractéristiques non supportées\nbouton de correction/charge de commande Chambres",
-				"it": "cambiamento tipo di caratteristiche non supportate\npulsante di fissaggio/comando carico Camere",
-				"es": "cambiar tipo de características sin soporte\nbotón de fijación/carga manual Habitaciones",
-				"pl": "zmienny typ bez wsparcia\nprzycisk Pokój",
-				"uk": "зміна типу непідтримуваних функцій\nклацніть кнопку/командоване навантаження Номери",
-				"zh-cn": "b. 改变无支持的特点\nfix 但顿/住宿 会议室"
-			},
-			"3.9.4": {
-				"en": "cleanmap.mapURL typo fixed",
-				"de": "sauberkarte.mapURL typo fix",
-				"ru": "cleanmap.mapURL typo фиксированный",
-				"pt": "limpeza. Tipo fixo",
-				"nl": "schoonmaak. typo gerepareerd",
-				"fr": "cleanmap.mapURL typo fixed",
-				"it": "pulizia.mapURL tipo fisso",
-				"es": "cleanmap.mapURL Tipo fijo",
-				"pl": "czyste mapy. typosta",
-				"uk": "карта сайту Типо фіксований",
-				"zh-cn": "清洁金 固定类型"
-			},
-			"3.9.3": {
-				"en": "fix loosing passwort in config\nmove map Url to userspace instead of admin space #735\nchange mapUrl to /mihome-vacuum.0.userfiles/actualMap.png",
-				"de": "fix loosing passwort in config\nkarte anzeigen Url zu Benutzerraum statt Admin-Raum #735\nmapUrl zu mihome-vacuum.0.userfiles/istualMap.png",
-				"ru": "исправить loosing passwort в config\nперейти карту Url в userspace вместо админ-пространства #735\nизменить картуUrl to mihome-vacuum.0.userfiles/actualMap.png",
-				"pt": "corrigir a passwort loosing em config\nmapa de movimento Url para userspace em vez de espaço admin #735\nalterar o mapaUrl para mihome-vacuum.0.userfiles/actualMap.png",
-				"nl": "losing passwort in configuur\nbeweeg kaart Url naar gebruikersruimte in plaats van administratie 735\nverander de kaarturl naar mihome-vacuüm.0",
-				"fr": "fix loosing passwort in config\nmove map Url à l'espace utilisateur au lieu de l'espace administrateur #735\nmodifier la carteUrl to mihome-vacuum.0.userfiles/actualMap.png",
-				"it": "fix loosing passwort in configurazione\nspostare la mappa Url to userspace invece di admin spazio #735\ncambiare mappaUrl a mihome-vacuum.0.userfiles/actualMap.png",
-				"es": "fijación de la camisa de fuerza en config\nmapa Url a espacio de usuario en lugar de espacio de administración #735\ncambio de mapaUrl a mihome-vacuum.0.userfiles/actualMap.png",
-				"pl": "naprawić przechodnię w konfiguracji\nmapa Odcinek dla przestrzeni użytkownika zamiast przestrzeni adminowej #735\nmapUrl to mihome-vacuum.0.userfiles/actualMap.png",
-				"uk": "фіксувати лоосинг пасорт в конфігурації\nперемістити карту Урл до простору користувачів замість адмін-простору #735\njavaScript licenses API Веб-сайт Go1.13.8",
-				"zh-cn": "f 固定在墓地的通行证\n地图 F. 要求使用空间而不是专注空间\n改变图Url to mihome-vacuum.0.userfiles/actual Map.png"
-			},
-			"3.9.2": {
-				"en": "add function setUnsupportedFeature; if token changed, all stored unsupported Features will be cleared\nfix bug from 3.9.1 for supported repeat devices",
-				"de": "hinzufügen Funktion setUnsupportedFeature; wenn Token geändert, alle gespeicherten nicht unterstützt Funktionen werden gelöscht\nfehler von 3.9.1 für unterstützte repeatgeräte beheben",
-				"ru": "добавить функцию setUnsupportedFeature; если токен изменен, все сохраненные не поддерживается Особенности будут очищены\nисправить баг от 3.9.1 для поддерживаемых повторных устройств",
-				"pt": "add function setUnsupportedFeature; se token alterado, todos armazenados não suportados As características serão compensadas\ncorrigir o erro de 3.9.1 para dispositivos de repetição compatíveis",
-				"nl": "voeg functioneren toegevoegd Feature, als het token veranderde, alles opgeslagen is Features zal worden gezuiverd\nvertaling:",
-				"fr": "add function setUnsupportedFeature; if token changed, all kept unsupported Les caractéristiques seront dégagées\ncorrection de bug à partir de 3.9.1 pour les appareils à répétition pris en charge",
-				"it": "aggiungere il set funzioneUnsupportedFeature; se il token è cambiato, tutti memorizzati non supportato Le caratteristiche saranno cancellate\nfix bug da 3.9.1 per i dispositivi di ripetizione supportati",
-				"es": "añadir conjunto de funcionesUnsupportedFeature; si el token cambió, todos almacenados sin soporte Las características serán limpiadas\nsolucionar fallo de 3.9.1 para dispositivos de repetición compatibles",
-				"pl": "dodanie funkcji ułożone jest niespodzianką; jeśli token się zmienił, wszystkie przechowywane nie wspierane. Poprawki będą oczyszczone\nużytkownik od 3.9.1 dla potwierdzonych urządzeń rejestracyjnych",
-				"uk": "add function setUnsupportedFeature; якщо token змінив, всі збережені непідтримувані Особливості будуть очищені\nвиправити помилку від 3.9.1 для підтримуваних повторних пристроїв",
-				"zh-cn": "a. 附加职能 提名将予以明确。\nf 从3.9.1起,用于支持重复装置"
-			},
-			"3.9.1": {
-				"en": "add step property to repeat DP\nadd Queue Fallback mode for repeat\nremove wrong clearQueue button",
-				"de": "schritt-Eigenschaft hinzufügen, um DP zu wiederholen\nqueue Fallback-Modus für Wiederholung hinzufügen\nentfernen falsch klar Queue-Taste",
-				"ru": "добавить шаг собственности, чтобы повторить DP\nдобавить Queue Fallback режим для повторения\nудалить неправильно ясно Квест кнопка",
-				"pt": "adicionar propriedade passo para repetir DP\nadicionar modo Queue Fallback para repetir\nremover o erro claro Botão de fila",
-				"nl": "voeg stap eigendom toe om DP te herhalen\nqueue Fallback modus\nverwijder het. Queue Button",
-				"fr": "ajouter la propriété étape pour répéter DP\najouter le mode Queue Fallback pour répéter\nsupprimer Bouton Queue",
-				"it": "aggiungere la proprietà passo per ripetere DP\naggiungere la modalità Queue Fallback per ripetere\nrimuovere erroneamente chiaro Pulsante di coda",
-				"es": "añadir propiedad paso para repetir DP\nañadir Queue Fallback modo para repetir\neliminar el mal claro Botón de búsqueda",
-				"pl": "dostarczanie własności do powtórzenia DP\nqueue Fallback mode\nusunąć guzik",
-				"uk": "додати крок нерухомості, щоб повторити ДП\nadd Queue Fallback режим повторення\nвидалити неправильно Клацніть кнопку",
-				"zh-cn": "增加资产以重复DP\n增加重犯法例\n消除错误 A. 配额但顿"
-			}
-		},
-		"title": "mihome-vacuum",
-		"titleLang": {
-			"en": "Control of Xiaomi/Roborock vacuum cleaner",
-			"de": "Steuerung des Staubsaugers Xiaomi/Roborock",
-			"ru": "Управление пылесосом Xiaomi/Roborock",
-			"pt": "Controle do aspirador Xiaomi/Roborock",
-			"nl": "Bediening van Xiaomi/Roborock stofzuiger",
-			"fr": "Contrôle de l'aspirateur Xiaomi/Roborock",
-			"it": "Controllo dell'aspirapolvere Xiaomi/Roborock",
-			"es": "Control de la aspiradora Xiaomi/Roborock",
-			"pl": "Kontrola odkurzacza Xiaomi/Roborock",
-			"zh-cn": "小米/罗伯克吸尘器的控制"
-		},
-		"desc": {
-			"en": "This adapter allows control Xiaomi vacuum cleaner",
-			"de": "Dieser Adapter ermöglicht die Steuerung Xiaomi Staubsauger",
-			"ru": "Этот адаптер позволяет контролировать пылесос Xiaomi",
-			"pt": "Este adaptador permite controle Xiaomi aspirador de pó",
-			"nl": "Met deze adapter kunt u de Xiaomi-stofzuiger bedienen",
-			"fr": "Cet adaptateur permet de contrôler l'aspirateur Xiaomi",
-			"it": "Questo adattatore consente il controllo dell'aspirapolvere Xiaomi",
-			"es": "Este adaptador permite el control del aspirador Xiaomi",
-			"pl": "Ten adapter umożliwia kontrolę odkurzacza Xiaomi",
-			"zh-cn": "这款适配器可以控制小米吸尘器"
-		},
-		"authors": ["bluefox <dogafox@gmail.com>"],
-		"osDependencies": {
-			"linux": ["libcairo2-dev", "libpango1.0-dev", "libjpeg-dev", "libgif-dev", "librsvg2-dev"]
-		},
-		"license": "MIT",
-		"platform": "Javascript/Node.js",
-		"mode": "daemon",
-		"loglevel": "info",
-		"materialize": true,
-		"compact": true,
-		"icon": "mihome-vacuum.png",
-		"readme": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/README.md",
-		"keywords": ["url", "html", "file", "mihome-vacuum"],
-		"extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.mihome-vacuum/master/admin/mihome-vacuum.png",
-		"type": "household",
-		"messagebox": true,
-		"connectionType": "local",
-		"dataSource": "poll",
-		"tier": 2,
-		"dependencies": [
-			{
-				"js-controller": ">=3.1.0"
-			}
-		],
-		"globalDependencies": [
-			{
-				"admin": ">=4.0.9"
-			}
-		],
-		"plugins": {
-			"sentry": {
-				"dsn": "https://b93cc849b5544d1682e20820bf56d636@sentry.iobroker.net/46"
-			}
-		}
-	},
-	"encryptedNative": ["password"],
-	"protectedNative": ["password"],
-	"native": {
-		"email": "",
-		"password": "",
-		"server": "-",
-		"token": "",
-		"MiDevice": "",
-		"ip": "",
-		"enableMiMap": false,
-		"enableSelfCommands": false,
-		"sendPauseBeforeHome": false,
-		"enableResumeZone": false,
-		"port": 54321,
-		"ownPort": 53421,
-		"pingInterval": 20000,
-		"wifiInterval": 60000,
-		"valetudo_enable": false,
-		"valetudo_color_floor": "#56affc",
-		"valetudo_color_wall": "#b3edff",
-		"valetudo_color_path": "#FFFFFF",
-		"robot_select": "robot",
-		"valetudo_requestIntervall": 2000,
-		"valetudo_MapsaveIntervall": 5000,
-		"newmap": false
-	},
-	"instanceObjects": [
-		{
-			"_id": "userfiles",
-			"type": "meta",
-			"common": {
-				"name": "User files for mihome-vacuum",
-				"type": "meta.user"
-			},
-			"native": {}
-		},
-		{
-			"_id": "info",
-			"type": "channel",
-			"common": {
-				"name": "Information"
-			},
-			"native": {}
-		},
-		{
-			"_id": "info.connection",
-			"type": "state",
-			"common": {
-				"role": "indicator.connected",
-				"name": "If connected to robot",
-				"type": "boolean",
-				"read": true,
-				"write": false
-			},
-			"native": {}
-		},
-		{
-			"_id": "",
-			"type": "device",
-			"common": {
-				"name": "Vacuum robot",
-				"role": "vacuumCleaner"
-			},
-			"native": {}
-		}
-	]
+  "common": {
+    "name": "mihome-vacuum",
+    "version": "4.0.0",
+    "news": {
+      "4.0.0": {
+        "en": "inital version of dream support\nadd Roborock S8 Ultra Pro",
+        "de": "initale version der traumunterstützung\nroborock S8 Ultra Pro",
+        "ru": "инитальная версия поддержки мечты\nдобавить Roborock S8 Ultra Pro",
+        "pt": "versão inital de apoio aos sonhos\nadicionar Roborock S8 Ultra Pro",
+        "nl": "initiaal versie van droomondersteuning\nvoeg Roborock S8 Ultra Pro",
+        "fr": "version inital du support de rêve\najouter Roborock S8 Ultra Pro",
+        "it": "versione inital del supporto dei sogni\naggiungere Roborock S8 Ultra Pro",
+        "es": "versión inital de soporte de sueño\nañadir Roborock S8 Ultra Pro",
+        "pl": "inicjatywna wersja snu\nroborock S8 Ultra",
+        "uk": "ідеальна версія сновидіння\nдодати Roborock S8 Ultra Pro",
+        "zh-cn": "理想支持的逻辑版本\n增 编"
+      },
+      "3.11.0": {
+        "en": "fix too much map request to prevent map rate limit in the app",
+        "de": "Reduziert der Mapanfrage um ein Blockieren der Kartenansicht in der App zu verhindern",
+        "ru": "исправить слишком много запроса карты, чтобы предотвратить ограничение скорости карты в приложении",
+        "pt": "corrigir demasiada solicitação de mapa para evitar o limite de taxa de mapa no aplicativo",
+        "nl": "teveel kaartverzoek om de limiet van de kaart te voorkomen",
+        "fr": "fixer trop de demande de carte pour empêcher la limite de taux de carte dans l'application",
+        "it": "fissare troppo richiesta mappa per evitare il limite di velocità della mappa nell'app",
+        "es": "fijar demasiada solicitud de mapa para evitar el límite de velocidad de mapa en la aplicación",
+        "pl": "umożliwia to rozwiązanie zbyt dużej mapy, aby zapobiec ograniczaniu tempa map w aplikacji",
+        "uk": "виправити занадто багато запиту на картографію, щоб запобігти обмеження швидкості карти в додатку",
+        "zh-cn": "fix 要求防止图表率限制过高"
+      },
+      "3.10.1": {
+        "en": "fix waterBoxLevel \nfix overwriting of roomStates from global",
+        "de": "wasser BoxLevel\nfixes Überschreiben von roomStates aus der globalen",
+        "ru": "исправить воду BoxУровень\nисправить перезапись комнатГосударства от глобального",
+        "pt": "fixar água Nível de caixa\ncorrigir a substituição de quartoEstados do global",
+        "nl": "water repareren. BoxLevel\nvertaling:",
+        "fr": "eau BoxLevel\ncorriger l'écrasement des états de chambre du monde",
+        "it": "acqua potabile Scatola girevole\ncorrezione sovrascrittura di roomStates da globale",
+        "es": "agua BoxLevel\nfijar la sobreescritura de los Estados de la sala del mundo",
+        "pl": "naprawa wody BoxLevel\nprzepisywanie kominy ze strony globalnej",
+        "uk": "фіксація води Бодибилдерши\nфіксація перезапису кімнатних",
+        "zh-cn": "fix 水 框\nf 将全球会议室国家分开"
+      },
+      "3.10.0": {
+        "en": "check also stockcommands in onMessage \nadd feature waterbox level #755",
+        "de": "überprüfen auch Stockcommands in onMessage\nfunktion wasserbox level hinzufügen",
+        "ru": "проверить также Stockcommands в onMesage\nдобавить функцию waterbox level #755",
+        "pt": "verificar também stockcommands em Portugal\nadicionar nível de caixa de água recurso #755",
+        "nl": "controle en ook aandelen in de massa\nvertaling:",
+        "fr": "vérifier également stockcommands in onMessage\najouter le niveau de la boîte à eau #755",
+        "it": "controllare anche stockcommands in onMessage\naggiungere il livello del waterbox #755",
+        "es": "check also stockcommands in onMessage\nañadir característica nivel de caja de agua #755",
+        "pl": "sprawozdanie w sprawie Message\npoziom wody #755",
+        "uk": "перевірити також панчіх в onMessage\nadd features waterbox рівень #755",
+        "zh-cn": "还检查Message的库存情况\na. 增加特有水箱,第755号"
+      },
+      "3.9.5": {
+        "en": "change type of unsupported features\nfix button/command loadRooms",
+        "de": "änderung der art der nicht unterstützten funktionen\nfix-Taste / Befehlslast Zimmer",
+        "ru": "изменить тип неподдерживаемых функций\nисправить кнопку/командная нагрузка Комнаты",
+        "pt": "tipo de mudança de recursos não suportados\ncorrigir botão/carga de comando Quartos",
+        "nl": "veranderingstypes onbelangrijke kenmerken\nlos knop/command lading Kamers",
+        "fr": "type de changement de caractéristiques non supportées\nbouton de correction/charge de commande Chambres",
+        "it": "cambiamento tipo di caratteristiche non supportate\npulsante di fissaggio/comando carico Camere",
+        "es": "cambiar tipo de características sin soporte\nbotón de fijación/carga manual Habitaciones",
+        "pl": "zmienny typ bez wsparcia\nprzycisk Pokój",
+        "uk": "зміна типу непідтримуваних функцій\nклацніть кнопку/командоване навантаження Номери",
+        "zh-cn": "b. 改变无支持的特点\nfix 但顿/住宿 会议室"
+      },
+      "3.9.4": {
+        "en": "cleanmap.mapURL typo fixed",
+        "de": "sauberkarte.mapURL typo fix",
+        "ru": "cleanmap.mapURL typo фиксированный",
+        "pt": "limpeza. Tipo fixo",
+        "nl": "schoonmaak. typo gerepareerd",
+        "fr": "cleanmap.mapURL typo fixed",
+        "it": "pulizia.mapURL tipo fisso",
+        "es": "cleanmap.mapURL Tipo fijo",
+        "pl": "czyste mapy. typosta",
+        "uk": "карта сайту Типо фіксований",
+        "zh-cn": "清洁金 固定类型"
+      },
+      "3.9.3": {
+        "en": "fix loosing passwort in config\nmove map Url to userspace instead of admin space #735\nchange mapUrl to /mihome-vacuum.0.userfiles/actualMap.png",
+        "de": "fix loosing passwort in config\nkarte anzeigen Url zu Benutzerraum statt Admin-Raum #735\nmapUrl zu mihome-vacuum.0.userfiles/istualMap.png",
+        "ru": "исправить loosing passwort в config\nперейти карту Url в userspace вместо админ-пространства #735\nизменить картуUrl to mihome-vacuum.0.userfiles/actualMap.png",
+        "pt": "corrigir a passwort loosing em config\nmapa de movimento Url para userspace em vez de espaço admin #735\nalterar o mapaUrl para mihome-vacuum.0.userfiles/actualMap.png",
+        "nl": "losing passwort in configuur\nbeweeg kaart Url naar gebruikersruimte in plaats van administratie 735\nverander de kaarturl naar mihome-vacuüm.0",
+        "fr": "fix loosing passwort in config\nmove map Url à l'espace utilisateur au lieu de l'espace administrateur #735\nmodifier la carteUrl to mihome-vacuum.0.userfiles/actualMap.png",
+        "it": "fix loosing passwort in configurazione\nspostare la mappa Url to userspace invece di admin spazio #735\ncambiare mappaUrl a mihome-vacuum.0.userfiles/actualMap.png",
+        "es": "fijación de la camisa de fuerza en config\nmapa Url a espacio de usuario en lugar de espacio de administración #735\ncambio de mapaUrl a mihome-vacuum.0.userfiles/actualMap.png",
+        "pl": "naprawić przechodnię w konfiguracji\nmapa Odcinek dla przestrzeni użytkownika zamiast przestrzeni adminowej #735\nmapUrl to mihome-vacuum.0.userfiles/actualMap.png",
+        "uk": "фіксувати лоосинг пасорт в конфігурації\nперемістити карту Урл до простору користувачів замість адмін-простору #735\njavaScript licenses API Веб-сайт Go1.13.8",
+        "zh-cn": "f 固定在墓地的通行证\n地图 F. 要求使用空间而不是专注空间\n改变图Url to mihome-vacuum.0.userfiles/actual Map.png"
+      }
+    },
+    "title": "mihome-vacuum",
+    "titleLang": {
+      "en": "Control of Xiaomi/Roborock vacuum cleaner",
+      "de": "Steuerung des Staubsaugers Xiaomi/Roborock",
+      "ru": "Управление пылесосом Xiaomi/Roborock",
+      "pt": "Controle do aspirador Xiaomi/Roborock",
+      "nl": "Bediening van Xiaomi/Roborock stofzuiger",
+      "fr": "Contrôle de l'aspirateur Xiaomi/Roborock",
+      "it": "Controllo dell'aspirapolvere Xiaomi/Roborock",
+      "es": "Control de la aspiradora Xiaomi/Roborock",
+      "pl": "Kontrola odkurzacza Xiaomi/Roborock",
+      "zh-cn": "小米/罗伯克吸尘器的控制"
+    },
+    "desc": {
+      "en": "This adapter allows control Xiaomi vacuum cleaner",
+      "de": "Dieser Adapter ermöglicht die Steuerung Xiaomi Staubsauger",
+      "ru": "Этот адаптер позволяет контролировать пылесос Xiaomi",
+      "pt": "Este adaptador permite controle Xiaomi aspirador de pó",
+      "nl": "Met deze adapter kunt u de Xiaomi-stofzuiger bedienen",
+      "fr": "Cet adaptateur permet de contrôler l'aspirateur Xiaomi",
+      "it": "Questo adattatore consente il controllo dell'aspirapolvere Xiaomi",
+      "es": "Este adaptador permite el control del aspirador Xiaomi",
+      "pl": "Ten adapter umożliwia kontrolę odkurzacza Xiaomi",
+      "zh-cn": "这款适配器可以控制小米吸尘器"
+    },
+    "authors": [
+      "bluefox <dogafox@gmail.com>"
+    ],
+    "osDependencies": {
+      "linux": [
+        "libcairo2-dev",
+        "libpango1.0-dev",
+        "libjpeg-dev",
+        "libgif-dev",
+        "librsvg2-dev"
+      ]
+    },
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "loglevel": "info",
+    "materialize": true,
+    "compact": true,
+    "icon": "mihome-vacuum.png",
+    "readme": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/README.md",
+    "keywords": [
+      "url",
+      "html",
+      "file",
+      "mihome-vacuum"
+    ],
+    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.mihome-vacuum/master/admin/mihome-vacuum.png",
+    "type": "household",
+    "messagebox": true,
+    "connectionType": "local",
+    "dataSource": "poll",
+    "tier": 2,
+    "dependencies": [
+      {
+        "js-controller": ">=3.1.0"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=4.0.9"
+      }
+    ],
+    "plugins": {
+      "sentry": {
+        "dsn": "https://b93cc849b5544d1682e20820bf56d636@sentry.iobroker.net/46"
+      }
+    }
+  },
+  "encryptedNative": [
+    "password"
+  ],
+  "protectedNative": [
+    "password"
+  ],
+  "native": {
+    "email": "",
+    "password": "",
+    "server": "-",
+    "token": "",
+    "MiDevice": "",
+    "ip": "",
+    "enableMiMap": false,
+    "enableSelfCommands": false,
+    "sendPauseBeforeHome": false,
+    "enableResumeZone": false,
+    "port": 54321,
+    "ownPort": 53421,
+    "pingInterval": 20000,
+    "wifiInterval": 60000,
+    "valetudo_enable": false,
+    "valetudo_color_floor": "#56affc",
+    "valetudo_color_wall": "#b3edff",
+    "valetudo_color_path": "#FFFFFF",
+    "robot_select": "robot",
+    "valetudo_requestIntervall": 2000,
+    "valetudo_MapsaveIntervall": 5000,
+    "newmap": false
+  },
+  "instanceObjects": [
+    {
+      "_id": "userfiles",
+      "type": "meta",
+      "common": {
+        "name": "User files for mihome-vacuum",
+        "type": "meta.user"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "If connected to robot",
+        "type": "boolean",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "",
+      "type": "device",
+      "common": {
+        "name": "Vacuum robot",
+        "role": "vacuumCleaner"
+      },
+      "native": {}
+    }
+  ]
 }
