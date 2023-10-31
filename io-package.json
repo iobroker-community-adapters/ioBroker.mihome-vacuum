@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "4.0.0",
+    "version": "4.1.0",
     "news": {
+      "4.1.0": {
+        "en": "update dependecies\nadd Roborock S8 and P10\nrework consumable features",
+        "de": "aktualisierung der abhängigkeiten\nroborock S8 und P10 hinzufügen\nwiederverwendbare merkmale",
+        "ru": "обновление зависимостей\nдобавить Roborock S8 и P10\nrework потребляемые функции",
+        "pt": "atualizações\nadicionar Roborock S8 e P10\nrecursos consumíveis retrabalho",
+        "nl": "vertaling:\nboeg Roborock S8 en P10\nreageerbare kenmerken",
+        "fr": "mettre à jour les dépendances\najouter Roborock S8 et P10\nrework caractéristiques consommables",
+        "it": "dipendenze di aggiornamento\naggiungere Roborock S8 e P10\ncaratteristiche di consumo di rilavoro",
+        "es": "dependencias de actualización\nañadir Roborock S8 y P10\nfunciones consumibles reelaborables",
+        "pl": "aktualizacja\nroborock S8 i P10\nrework",
+        "uk": "оновлення залежності\nдодати Roborock S8 і P10\nпереробляти обмежені можливості",
+        "zh-cn": "a. 最新依赖情况\n增加Roborock S8和P10\n恢复原状"
+      },
       "4.0.0": {
         "en": "inital version of dream support\nadd Roborock S8 Ultra Pro",
         "de": "initale version der traumunterstützung\nroborock S8 Ultra Pro",
@@ -80,19 +93,6 @@
         "pl": "czyste mapy. typosta",
         "uk": "карта сайту Типо фіксований",
         "zh-cn": "清洁金 固定类型"
-      },
-      "3.9.3": {
-        "en": "fix loosing passwort in config\nmove map Url to userspace instead of admin space #735\nchange mapUrl to /mihome-vacuum.0.userfiles/actualMap.png",
-        "de": "fix loosing passwort in config\nkarte anzeigen Url zu Benutzerraum statt Admin-Raum #735\nmapUrl zu mihome-vacuum.0.userfiles/istualMap.png",
-        "ru": "исправить loosing passwort в config\nперейти карту Url в userspace вместо админ-пространства #735\nизменить картуUrl to mihome-vacuum.0.userfiles/actualMap.png",
-        "pt": "corrigir a passwort loosing em config\nmapa de movimento Url para userspace em vez de espaço admin #735\nalterar o mapaUrl para mihome-vacuum.0.userfiles/actualMap.png",
-        "nl": "losing passwort in configuur\nbeweeg kaart Url naar gebruikersruimte in plaats van administratie 735\nverander de kaarturl naar mihome-vacuüm.0",
-        "fr": "fix loosing passwort in config\nmove map Url à l'espace utilisateur au lieu de l'espace administrateur #735\nmodifier la carteUrl to mihome-vacuum.0.userfiles/actualMap.png",
-        "it": "fix loosing passwort in configurazione\nspostare la mappa Url to userspace invece di admin spazio #735\ncambiare mappaUrl a mihome-vacuum.0.userfiles/actualMap.png",
-        "es": "fijación de la camisa de fuerza en config\nmapa Url a espacio de usuario en lugar de espacio de administración #735\ncambio de mapaUrl a mihome-vacuum.0.userfiles/actualMap.png",
-        "pl": "naprawić przechodnię w konfiguracji\nmapa Odcinek dla przestrzeni użytkownika zamiast przestrzeni adminowej #735\nmapUrl to mihome-vacuum.0.userfiles/actualMap.png",
-        "uk": "фіксувати лоосинг пасорт в конфігурації\nперемістити карту Урл до простору користувачів замість адмін-простору #735\njavaScript licenses API Веб-сайт Go1.13.8",
-        "zh-cn": "f 固定在墓地的通行证\n地图 F. 要求使用空间而不是专注空间\n改变图Url to mihome-vacuum.0.userfiles/actual Map.png"
       }
     },
     "title": "mihome-vacuum",

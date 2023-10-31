@@ -333,7 +333,7 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-### **WORK IN PROGRESS**
+### 4.1.0 (2023-10-31)
 * (Dirkhe) update dependecies
 * (Dirkhe) add Roborock S8 and P10
 * (Dirkhe) rework consumable features
