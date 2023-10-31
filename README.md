@@ -333,6 +333,10 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
+### **WORK IN PROGRESS**
+* (Dirkhe) update dependecies
+* (Dirkhe) add Roborock S8 and P10
+
 ### 4.0.0 (2023-08-15)
 * (DemigodCode) inital version of dream support
 * (Dirkhe) add Roborock S8 Ultra Pro

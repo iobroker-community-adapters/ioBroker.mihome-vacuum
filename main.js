@@ -39,8 +39,10 @@ const deviceList = {
 	"roborock.vacuum.a15": VacuumManager, // Roborock S7
 	"roborock.vacuum.a27": VacuumManager, // Roborock S7 MaxV
 	"roborock.vacuum.a38": VacuumManager, // Roborock Q7 Max
+	"roborock.vacuum.a51": VacuumManager, // Roborock S8
 	"roborock.vacuum.a62": VacuumManager, // Roborock S7 Pro Ultra
 	"roborock.vacuum.a70": VacuumManager, // Roborock S8 Ultra Pro
+	"roborock.vacuum.a74": VacuumManager, // Roborock P10
 	// 'roborock.sweeper.e2v3': VacuumManager2,
 	// 'roborock.sweeper.e2v2': VacuumManager2,
 	// 'roborock.vacuum.e2': VacuumManager2,
