@@ -227,7 +227,7 @@ class MihomeVacuum extends utils.Adapter {
 				} else if (FirstDevMod === 'roborock') {
 					vacuum = new VacuumManager(this, Miio, Map);
 				} else if (FirstDevMod === 'dreame') {
-					vacuum = new DreameManager(this, Miio, Map);
+					vacuum = new DreameManager(this, Miio);
 				}
 			} else {
 				this.log.warn('Cant detect Device please select Device form Devicelist or enable the cloud of thr robot to get device infos');
