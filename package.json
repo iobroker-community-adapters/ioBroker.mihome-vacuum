@@ -55,7 +55,7 @@
     "@alcalzone/release-script": "^3.6.0",
     "@alcalzone/release-script-plugin-iobroker": "^3.6.0",
     "@iobroker/testing": "^4.1.0",
-    "@types/chai": "^4.3.9",
+    "@types/chai": "^4.3.10",
     "@types/chai-as-promised": "^7.1.8",
     "@types/gulp": "^4.0.17",
     "@types/mocha": "^10.0.4",
