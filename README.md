@@ -333,6 +333,9 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
+### **WORK IN PROGRESS**
+    * (Dirkhe) adapt stockConsumables to dreame
+     
 ### 4.1.0 (2023-10-31)
 * (Dirkhe) update dependecies
 * (Dirkhe) add Roborock S8 and P10
