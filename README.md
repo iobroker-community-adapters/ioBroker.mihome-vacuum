@@ -334,8 +334,10 @@ The supported commands are:
     * () 
 -->
 ### **WORK IN PROGRESS**
-    * (Dirkhe) adapt stockConsumables to dreame
-     
+* (Dirkhe) adapt stockConsumables to dreame
+* (dirkhe) fix url #886
+
+
 ### 4.1.0 (2023-10-31)
 * (Dirkhe) update dependecies
 * (Dirkhe) add Roborock S8 and P10
