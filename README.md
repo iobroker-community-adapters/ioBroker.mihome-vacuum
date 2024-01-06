@@ -333,10 +333,9 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-### **WORK IN PROGRESS**
+### 4.1.1 (2024-01-06)
 * (Dirkhe) adapt stockConsumables to dreame
 * (dirkhe) fix url #886
-
 
 ### 4.1.0 (2023-10-31)
 * (Dirkhe) update dependecies

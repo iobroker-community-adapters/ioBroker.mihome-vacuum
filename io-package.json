@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "4.1.0",
+    "version": "4.1.1",
     "news": {
+      "4.1.1": {
+        "en": "adapt stockConsumables to dreame\nfix url #886",
+        "de": "zubehör Bequemlichkeiten zum Träumen\nurl #886",
+        "ru": "адаптер Консуммы, чтобы мечтать\nисправить #886",
+        "pt": "adaptar o estoque Consumíveis para sonhar\ncorrigir url #886",
+        "nl": "voorraad aanpassen Verbruiksgoederen om te dromen\nfix url #886",
+        "fr": "adapter le stock Consommables à rêver\nrèglement n° 886",
+        "it": "azione adatta Consumabili a sognare\ncorrezione url #886",
+        "es": "adapt stock Consumibles para soñar\nfijar url #886",
+        "pl": "dostosować zasoby Materiały eksploatacyjne do zanurzenia\nfix url # 886",
+        "uk": "адаптивний запас Здатні мрії\nзафіксувати виворіт #886",
+        "zh-cn": "调整存量 做梦的消耗品\n修复url #886"
+      },
       "4.1.0": {
         "en": "update dependecies\nadd Roborock S8 and P10\nrework consumable features",
         "de": "aktualisierung der abhängigkeiten\nroborock S8 und P10 hinzufügen\nwiederverwendbare merkmale",
@@ -80,19 +93,6 @@
         "pl": "zmienny typ bez wsparcia\nprzycisk Pokój",
         "uk": "зміна типу непідтримуваних функцій\nклацніть кнопку/командоване навантаження Номери",
         "zh-cn": "b. 改变无支持的特点\nfix 但顿/住宿 会议室"
-      },
-      "3.9.4": {
-        "en": "cleanmap.mapURL typo fixed",
-        "de": "sauberkarte.mapURL typo fix",
-        "ru": "cleanmap.mapURL typo фиксированный",
-        "pt": "limpeza. Tipo fixo",
-        "nl": "schoonmaak. typo gerepareerd",
-        "fr": "cleanmap.mapURL typo fixed",
-        "it": "pulizia.mapURL tipo fisso",
-        "es": "cleanmap.mapURL Tipo fijo",
-        "pl": "czyste mapy. typosta",
-        "uk": "карта сайту Типо фіксований",
-        "zh-cn": "清洁金 固定类型"
       }
     },
     "title": "mihome-vacuum",
