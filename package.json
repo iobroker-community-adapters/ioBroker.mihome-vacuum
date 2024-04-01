@@ -47,7 +47,6 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.0.6",
-    "zlib": "^1.0.5",
     "request": "^2.88.2",
     "treemap-js": "^1.2.1"
   },
