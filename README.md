@@ -333,6 +333,10 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
+### **WORK IN PROGRESS**
+* (mcm1957) Adapter requires node.js 18 and js-controller >= 5 now
+* (mcm1957) Dependencies have been updated
+
 ### 4.1.1 (2024-01-06)
 * (Dirkhe) adapt stockConsumables to dreame
 * (dirkhe) fix url #886
