@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "4.1.1",
+    "version": "4.2.0",
     "news": {
+      "4.2.0": {
+        "en": "Adapter requires node.js 18 and js-controller >= 5 now\nDependencies have been updated\nupdate dependecies\nreplace zlib with native zlib",
+        "de": "Adapter benötigt node.js 18 und js-controller >= 5 jetzt\nAbhängigkeiten wurden aktualisiert\naktualisierung der abhängigkeiten\nersetzen zlib mit nativem zlib",
+        "ru": "Адаптер требует node.js 18 и js-controller >= 5 сейчас\nЗависимость обновлена\nобновление\nзаменить zlib на родной zlib",
+        "pt": "Adapter requer node.js 18 e js-controller >= 5 agora\nAs dependências foram atualizadas\natualizações\nsubstituir zlib com zlib nativo",
+        "nl": "Adapter vereist node.js 18 en js-controller Nu 5\nAfhankelijkheden zijn bijgewerkt\nafhankelijkheden bijwerken\nzlib vervangen door native zlib",
+        "fr": "Adaptateur nécessite node.js 18 et js-controller >= 5 maintenant\nLes dépendances ont été actualisées\nmettre à jour les dépendances\nremplacer zlib par zlib natif",
+        "it": "Adattatore richiede node.js 18 e js-controller >= 5 ora\nLe dipendenze sono state aggiornate\ndipendenze dell'aggiornamento\nsostituire zlib con zlib nativo",
+        "es": "Adaptador requiere node.js 18 y js-controller √= 5 ahora\nSe han actualizado las dependencias\ndependencias de actualización\nreemplazar zlib con zlib nativo",
+        "pl": "Adapter wymaga node.js 18 i sterownika js- > = 5 teraz\nZaktualizowano zależności\nuaktualnianie zależności\nzastąpić zlib natywnym zlib",
+        "uk": "Адаптер вимагає node.js 18 і js-controller >= 5 тепер\nЗалежність було оновлено\nоновлення залежності\nзамінити zlib з рідною zlib",
+        "zh-cn": "适配器需要节点.js 18和js控制器 QQ 现在5号\n依赖关系已更新\n更新依赖关系\n将 zlib 替换为本地 zlib"
+      },
       "4.1.1": {
         "en": "adapt stockConsumables to dreame\nfix url #886",
         "de": "zubehör Bequemlichkeiten zum Träumen\nurl #886",
@@ -80,19 +93,6 @@
         "pl": "sprawozdanie w sprawie Message\npoziom wody #755",
         "uk": "перевірити також панчіх в onMessage\nadd features waterbox рівень #755",
         "zh-cn": "还检查Message的库存情况\na. 增加特有水箱,第755号"
-      },
-      "3.9.5": {
-        "en": "change type of unsupported features\nfix button/command loadRooms",
-        "de": "änderung der art der nicht unterstützten funktionen\nfix-Taste / Befehlslast Zimmer",
-        "ru": "изменить тип неподдерживаемых функций\nисправить кнопку/командная нагрузка Комнаты",
-        "pt": "tipo de mudança de recursos não suportados\ncorrigir botão/carga de comando Quartos",
-        "nl": "veranderingstypes onbelangrijke kenmerken\nlos knop/command lading Kamers",
-        "fr": "type de changement de caractéristiques non supportées\nbouton de correction/charge de commande Chambres",
-        "it": "cambiamento tipo di caratteristiche non supportate\npulsante di fissaggio/comando carico Camere",
-        "es": "cambiar tipo de características sin soporte\nbotón de fijación/carga manual Habitaciones",
-        "pl": "zmienny typ bez wsparcia\nprzycisk Pokój",
-        "uk": "зміна типу непідтримуваних функцій\nклацніть кнопку/командоване навантаження Номери",
-        "zh-cn": "b. 改变无支持的特点\nfix 但顿/住宿 会议室"
       }
     },
     "title": "mihome-vacuum",

@@ -333,7 +333,7 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-### **WORK IN PROGRESS**
+### 4.2.0 (2024-04-01)
 * (mcm1957) Adapter requires node.js 18 and js-controller >= 5 now
 * (mcm1957) Dependencies have been updated
 * (dirkhe) update dependecies
