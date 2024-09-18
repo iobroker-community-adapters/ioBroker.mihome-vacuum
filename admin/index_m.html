@@ -96,6 +96,59 @@
                 transform: rotate(360deg);
             }
         }
+
+        /* Styling for small Screen (Responsive) */
+        @media screen and (max-width: 768px) {
+
+            #timer,
+            #timer thead,
+            #timer tbody,
+            #timer th,
+            #timer td,
+            #timer tr {
+                display: block;
+                width: 100%;
+            }
+
+            #timer thead tr {
+                display: none;
+            }
+
+            #timer tr {
+                margin-bottom: 15px;
+                border: 1px solid #ddd;
+                padding: 10px;
+                background: #f9f9f9;
+            }
+
+            #timer td {
+                display: block;
+                text-align: left;
+                padding: 10px;
+                box-sizing: border-box;
+                position: relative;
+            }
+
+            #timer td:before {
+                content: attr(data-name);
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+                color: #333;
+            }
+
+            #timer td:nth-of-type(2) {
+                text-align: center !important;
+            }
+
+            .adapter-body {
+                overflow: hidden;
+            }
+
+            .m [type=checkbox]+span:not(.lever) {
+                height: auto;
+            }
+        }
     </style>
     <script type="text/javascript">
         var namespace;
@@ -110,11 +163,11 @@
             $('.hidden').hide();
             //soad selection list
 
-            console.log('sett_'+ JSON.stringify(settings))
+            console.log('sett_' + JSON.stringify(settings))
             loadSelect(settings['MiDevice'])
-            settings.pingInterval= parseInt(settings.pingInterval/1000,10)
-            settings.wifiInterval= parseInt(settings.wifiInterval/1000,10)
-            curToken= settings.token;
+            settings.pingInterval = parseInt(settings.pingInterval / 1000, 10)
+            settings.wifiInterval = parseInt(settings.wifiInterval / 1000, 10)
+            curToken = settings.token;
 
             $('.value').each(function () {
                 var key = $(this).attr('id');
@@ -123,7 +176,7 @@
                     $key.prop('checked', settings[key]).change(function () {
 
                         if ($('#enableMiMap').prop('checked') || $('#valetudo_enable').prop(
-                                'checked')) {
+                            'checked')) {
                             $('.map-setting').removeClass('disabled');
                         } else {
                             $('.map-setting').addClass('disabled');
@@ -134,10 +187,10 @@
                         onChange();
                     });
                 } else {
-                    if ($key.attr('id') === 'devices'){
+                    if ($key.attr('id') === 'devices') {
 
                     }
-                    $key.val(settings[key]).change(function ()  {
+                    $key.val(settings[key]).change(function () {
                         onChange();
                     }).keyup(function () {
                         onChange();
@@ -274,7 +327,7 @@
                                 let timerState = timerStates[timerObjs.rows[t].id];
                                 if (timerState)
                                     timerState.channels = timerObjs.rows[t].value.native
-                                    .channels
+                                        .channels
                             }
                         }
 
@@ -332,7 +385,7 @@
             onChange(false);
         }
 
-        function  loadSelect(array) {
+        function loadSelect(array) {
             let devices;
             let text = '';
             try {
@@ -343,13 +396,13 @@
             }
             if (Array.isArray(devices)) {
                 devices.forEach(function (entry) {
-                        text += "<option value='" + JSON.stringify(entry) + "' >" + entry
-                            .model + ' - token: ' + entry.token + ' - ip: ' + (entry.localip ?
-                                entry.localip : '') + '</option>';
+                    text += "<option value='" + JSON.stringify(entry) + "' >" + entry
+                        .model + ' - token: ' + entry.token + ' - ip: ' + (entry.localip ?
+                            entry.localip : '') + '</option>';
 
-                        //check if in config
-                    });
-                    $('#devices').html(text).select();
+                    //check if in config
+                });
+                $('#devices').html(text).select();
             }
         }
 
@@ -427,7 +480,7 @@
                                     }
                                     timerObjs.rows[t].value.native.nextProcessTime = 0
                                     socket.emit('setObject', timerObjs.rows[t].id, timerObjs.rows[t].value);
-                                    socket.emit('setState', timerObjs.rows[t].id, {ack: false});
+                                    socket.emit('setState', timerObjs.rows[t].id, { ack: false });
                                 }
                             }
                         }
@@ -543,16 +596,16 @@
             <!-- Tabs navigation -->
             <div class="col s12">
                 <ul class="tabs">
-                    <li class="tab col s2">
+                    <li class="tab col s4">
                         <a href="#tab-main" class="translate" data-lang="Main">Options</a>
                     </li>
-                    <li class="tab col s2">
+                    <li class="tab col s4">
                         <a href="#tab-settings" class="translate" data-lang="Settings">Settings</a>
                     </li>
-                    <li class="tab col s2 map-setting">
+                    <li class="tab col s6 map-setting">
                         <a href="#tab-valetudo" class="translate" data-lang="Map settings">Map settings</a>
                     </li>
-                    <li class="tab col s2">
+                    <li class="tab col s4">
                         <a href="#tab-timer" class="translate" data-lang="Timer">Timer</a>
                     </li>
                 </ul>
@@ -560,13 +613,15 @@
 
             <div id="tab-main" class="col s12 page">
                 <div class="row">
-                    <div class="col s12 m2 l1">
-                        <img src="mihome-vacuum.png" class="logo" alt="logo"/>
+                    <div class="col s6 m2 l1">
+                        <img src="mihome-vacuum.png" class="logo" alt="logo" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col s12 m3 L2" style="padding-top: 10px">
-                        <a target="_blank" href="https://paypal.me/MeisterTR"><img src="https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-200px.png" alt="PayPal" /></a>
+                        <a target="_blank" href="https://paypal.me/MeisterTR"><img
+                                src="https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-200px.png"
+                                alt="PayPal" /></a>
                     </div>
                     <div class="col s12 m4 L4" style="padding-top: 10px">
                         <p class="subtitle translate">donateInformation</p>
@@ -597,10 +652,10 @@
                         </select>
                         <label class="translate" for="server">Server</label>
                     </div>
-                    <div class="col s5 m3 l2">
+                    <div class="col s12 m3 l2">
                         <a id="getDevices" class=" btn-small translate">get devices<span></span></a>
                     </div>
-                    <div class="col s2 ">
+                    <div class="col s12 ">
                         <div class="loader seenot" id="loader1"> </div>
                     </div>
                 </div>
@@ -685,7 +740,7 @@
                         <input class="value" id="sendPauseBeforeHome" type="checkbox" />
                         <span class="translate">send Pause Before Home</span>
                     </div>
-                    <div class="col s4">
+                    <div class="col s10">
                         <input class="value" id="enableResumeZone" type="checkbox"
                             data-link="resume-paused-zonecleaning-with-start-button" />
                         <span class="translate">Resume paused zone cleaning with start button</span>
@@ -697,7 +752,7 @@
             <div id="tab-valetudo" class="col s12 page">
                 <div class="row">
                     <div class="col s6 m4 l2">
-                        <img src="valetudo_logo_small.svg" class="logo" alt="logo"/>
+                        <img src="valetudo_logo_small.svg" class="logo" alt="logo" />
                     </div>
                 </div>
                 <div class="row">
@@ -709,7 +764,7 @@
                         <input class="value" id="valetudo_MapsaveIntervall" size="15" />
                         <label class="translate" for="valetudo_MapsaveIntervall">Map save intervall</label>
                     </div>
-                    <div class="col s4">
+                    <div class="col s12">
                         <input class="value" id="newmap" type="checkbox" />
                         <span class="translate">Use new Map format with room colors</span>
                     </div>
@@ -747,7 +802,7 @@
                         </div>
                         <div class="path">
                         </div>
-                        <img class="robot" src="./robot1.png" height="42" width="42" alt="map"/>
+                        <img class="robot" src="./robot1.png" height="42" width="42" alt="map" />
                     </div>
                 </div>
             </div>
@@ -756,11 +811,11 @@
             <div id="tab-timer" class="col s12 page">
                 <div class="col s12" id="timer">
                     <div class="row">
-                        <div class="col">
+                        <div class="col s12">
                             <a class="btn-floating waves-effect waves-light blue table-button-add"><i
                                     class="material-icons translate">add</i></a>
                         </div>
-                        <h6 class="col s11 translate">add timer and choose room channels directly and/or choose rooms,
+                        <h6 class="col s12 translate">add timer and choose room channels directly and/or choose rooms,
                             which finds assigned room channels</h6>
                     </div>
                     <div class="table-values-div">
