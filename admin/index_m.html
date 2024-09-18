@@ -99,6 +99,7 @@
 
         /* Styling for small Screen (Responsive) */
         @media screen and (max-width: 768px) {
+
             #timer,
             #timer thead,
             #timer tbody,
@@ -705,20 +706,25 @@
                         <label class="translate" for="wifiInterval">get WiFi Intervall</label>
                     </div>
                 </div>
-                <div class="col s12">
-                    <h6 class="title translate" data-lang="map">map</h6>
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="title translate" data-lang="map">map</h6>
+                    </div>
                 </div>
-                <div class="col s12 m6">
-                    <input class="value" id="enableMiMap" type="checkbox" />
-                    <span class="translate">enable Map from xiaomi cloud</span>
+                <div class="row">
+                    <div class="col s12 m6">
+                        <input class="value" id="enableMiMap" type="checkbox" />
+                        <span class="translate">enable Map from xiaomi cloud</span>
+                    </div>
+                    <div class="col s12 m6 l2">
+                        <input class="value" id="valetudo_enable" type="checkbox" />
+                        <span class="translate">Enable Valetudo</span>
+                    </div>
                 </div>
-                <div class="col s12 m6 l2">
-                    <input class="value" id="valetudo_enable" type="checkbox" />
-                    <span class="translate">Enable Valetudo</span>
-                </div>
-
-                <div class="col s12">
-                    <h6 class="title translate" data-lang="other settings">other settings</h6>
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="title translate" data-lang="other settings">other settings</h6>
+                    </div>
                 </div>
                 <div class="row">
                     <!--div class="col s12 m6">
@@ -759,7 +765,9 @@
                         <input class="value" id="valetudo_MapsaveIntervall" size="15" />
                         <label class="translate" for="valetudo_MapsaveIntervall">Map save intervall</label>
                     </div>
-                    <div class="col s12">
+                </div>
+                <div class="row">
+                    <div class="col s12 m4 l2">
                         <input class="value" id="newmap" type="checkbox" />
                         <span class="translate">Use new Map format with room colors</span>
                     </div>
