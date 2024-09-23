@@ -124,17 +124,40 @@
             #timer td {
                 display: block;
                 text-align: left;
-                padding: 10px;
+                padding: 5px;
                 box-sizing: border-box;
                 position: relative;
             }
 
             #timer td:before {
-                content: attr(data-name);
                 font-weight: bold;
                 display: block;
                 margin-bottom: 5px;
                 color: #333;
+            }
+
+            #timer td:nth-of-type(1) {
+                margin-bottom: 2.0rem;
+            }
+
+            #timer td:nth-of-type(2)::before {
+                content: var(--my-day);
+            }
+
+            #timer td:nth-of-type(3)::before {
+                content: var(--my-hour);
+            }
+
+            #timer td:nth-of-type(4)::before {
+                content: var(--my-minute);
+            }
+
+            #timer td:nth-of-type(5)::before {
+                content: var(--my-rooms);
+            }
+
+            #timer td:nth-of-type(6)::before {
+                content: var(--my-channels);
             }
 
             .adapter-body {
@@ -305,6 +328,7 @@
                         channelStr += ';' + channel._id.split('.').pop() + '/' + channel.common.name
                     }
                 }
+                translateTable(channelStr);
                 if (channelStr.length) {
                     $('#timer th[data-name=channels]').data('options', channelStr.slice(1));
                 } else {
@@ -379,6 +403,25 @@
                 });
             });
             onChange(false);
+        }
+
+        function translateTable(channelStr) {
+            const element = document.querySelector('#timer');
+
+            const day = _('day');
+            const hour = _('hour');
+            const minute = _('minute');
+            const rooms = _('rooms');
+            const channels = _('channels');
+
+            element.style.setProperty('--my-day', `"${day}"`);
+            element.style.setProperty('--my-hour', `"${hour}"`);
+            element.style.setProperty('--my-minute', `"${minute}"`);
+            element.style.setProperty('--my-rooms', `"${rooms}"`);
+
+            if (channelStr.length) {
+                element.style.setProperty('--my-channels', `"${channels}"`);
+            }
         }
 
         function loadSelect(array) {
