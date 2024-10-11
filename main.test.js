@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * This is a dummy TypeScript test file using chai and mocha
@@ -9,10 +9,10 @@
 
 // tslint:disable:no-unused-expression
 
-const { expect } = require('chai');
+const { expect } = require("chai");
 // import { functionToTest } from "./moduleToTest";
 
-describe('module to test => function to test', () => {
+describe("module to test => function to test", () => {
 	// initializing logic
 	const expected = 5;
 
@@ -24,7 +24,6 @@ describe('module to test => function to test', () => {
 		result.should.equal(expected);
 	});
 	// ... more tests => it
-
 });
 
 // ... more test suites => describe
