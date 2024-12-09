@@ -66,6 +66,7 @@ const deviceList = {
 	"dreame.vacuum.p2036": DreameManager, // Trouver Finder LDS Cleaner
 	"dreame.vacuum.p2041o": DreameManager, // Xiaomi Vacuum Mop 2 Pro+
 	"dreame.vacuum.p2114a": DreameManager, // Xiaomi Robot Vacuum X10 Plus
+	"xiaomi.vacuum.c102gl": DreameManager, // Xiaomi Robot Vacuum X20 Plus
 	"dreame.vacuum.p2148o": DreameManager, // Xiaomi Mijia Ultra Slim
 	"dreame.vacuum.p2156o": DreameManager, // MOVA Z500
 };
