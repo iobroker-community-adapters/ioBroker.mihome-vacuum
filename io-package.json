@@ -129,10 +129,12 @@
 			"license": "MIT",
 			"type": "free"
 		},
+		"adminUI": {
+			"config": "materialize"
+		},
 		"platform": "Javascript/Node.js",
 		"mode": "daemon",
 		"loglevel": "info",
-		"materialize": true,
 		"compact": true,
 		"icon": "mihome-vacuum.png",
 		"readme": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/README.md",

@@ -334,6 +334,7 @@ The supported commands are:
     * () 
 -->
 ### **WORK IN PROGRESS**
+* (JimmyBondi) added dreame error messages
 * (simatec) responsive design added
 * (deher) update dependecies and linting
 
