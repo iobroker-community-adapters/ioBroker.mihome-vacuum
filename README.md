@@ -333,7 +333,7 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-### **WORK IN PROGRESS**
+### 4.3.0 (2025-01-02)
 * (JimmyBondi) added dreame error messages
 * (simatec) responsive design added
 * (deher) update dependecies and linting
