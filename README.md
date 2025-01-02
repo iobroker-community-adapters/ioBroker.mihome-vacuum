@@ -638,7 +638,7 @@ The supported commands are:
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2023-2024 iobroker community developers <iobroker-community-adapters@gmx.de>  
+Copyright (c) 2023-2025 iobroker community developers <iobroker-community-adapters@gmx.de>  
 Copyright (c) 2017-2023 bluefox <dogafox@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
