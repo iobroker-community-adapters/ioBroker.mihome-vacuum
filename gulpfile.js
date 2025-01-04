@@ -166,7 +166,7 @@ function languages2words(src) {
         }
     }
     // read actual words.js
-    const aWords = readWordJs();
+    const aWords = readWordJs(src);
 
     const temporaryIgnore = ['flat.txt'];
     if (aWords) {
@@ -294,6 +294,19 @@ gulp.task('translate', async function () {
         if (iopackage.common.desc) {
             console.log('Translate Description');
             await translateNotExisting(iopackage.common.desc, null, yandex);
+        }
+
+        if (iopackage.messages) {
+            console.log('Translate Messages');
+            for (const msg of iopackage.messages) {
+                if (msg.title) {
+                    await translateNotExisting(msg.title, null, yandex);
+                }
+                if (msg.text) {
+                    console.log(msg.text.en);
+                    await translateNotExisting(msg.text, null, yandex);
+                }
+            }
         }
 
         if (fs.existsSync('./admin/i18n/en/translations.json')) {
