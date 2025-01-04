@@ -1,249 +1,288 @@
 {
-  "common": {
-    "name": "mihome-vacuum",
-    "version": "4.3.0",
-    "news": {
-      "4.3.0": {
-        "en": "added dreame error messages\nresponsive design added\nupdate dependecies and linting",
-        "de": "traumhafte fehlermeldungen hinzugefügt\nansprechendes design hinzugefügt\naktualisieren von abhängigkeiten und hinweisen",
-        "ru": "добавленные сообщения об ошибках сна\nадаптивный дизайн добавлен\nобновление иждивенчества и линтинг",
-        "pt": "adicionado mensagens de erro de sonho\ndesign responsivo adicionado\ndependências de atualização e forro",
-        "nl": "toegevoegd droomfoutmeldingen\nresponsief ontwerp toegevoegd\nupdate afhankelijkheden en linting",
-        "fr": "messages d'erreur de rêve ajouté\ndesign adapté ajouté\nmettre à jour les dépendances et le lintage",
-        "it": "messaggi di errore sognanti aggiunti\ndesign reattivo aggiunto\naggiornamento dipendenze e linting",
-        "es": "mensajes de error de sueño\ndiseño sensible añadido\ndependencias de actualización y revestimiento",
-        "pl": "dodane komunikaty błędów dreame\nresponsible design added\naktualizacji zależności i lintowania",
-        "uk": "додано повідомлення про помилку dreame\nдодано адаптивний дизайн\nоновлення залежності і linting",
-        "zh-cn": "添加 dreame 错误消息\n添加应答设计\n更新依赖关系和内嵌"
-      },
-      "4.2.0": {
-        "en": "Adapter requires node.js 18 and js-controller >= 5 now\nDependencies have been updated\nupdate dependecies\nreplace zlib with native zlib",
-        "de": "Adapter benötigt node.js 18 und js-controller >= 5 jetzt\nAbhängigkeiten wurden aktualisiert\naktualisierung der abhängigkeiten\nersetzen zlib mit nativem zlib",
-        "ru": "Адаптер требует node.js 18 и js-controller >= 5 сейчас\nЗависимость обновлена\nобновление\nзаменить zlib на родной zlib",
-        "pt": "Adapter requer node.js 18 e js-controller >= 5 agora\nAs dependências foram atualizadas\natualizações\nsubstituir zlib com zlib nativo",
-        "nl": "Adapter vereist node.js 18 en js-controller Nu 5\nAfhankelijkheden zijn bijgewerkt\nafhankelijkheden bijwerken\nzlib vervangen door native zlib",
-        "fr": "Adaptateur nécessite node.js 18 et js-controller >= 5 maintenant\nLes dépendances ont été actualisées\nmettre à jour les dépendances\nremplacer zlib par zlib natif",
-        "it": "Adattatore richiede node.js 18 e js-controller >= 5 ora\nLe dipendenze sono state aggiornate\ndipendenze dell'aggiornamento\nsostituire zlib con zlib nativo",
-        "es": "Adaptador requiere node.js 18 y js-controller √= 5 ahora\nSe han actualizado las dependencias\ndependencias de actualización\nreemplazar zlib con zlib nativo",
-        "pl": "Adapter wymaga node.js 18 i sterownika js- > = 5 teraz\nZaktualizowano zależności\nuaktualnianie zależności\nzastąpić zlib natywnym zlib",
-        "uk": "Адаптер вимагає node.js 18 і js-controller >= 5 тепер\nЗалежність було оновлено\nоновлення залежності\nзамінити zlib з рідною zlib",
-        "zh-cn": "适配器需要节点.js 18和js控制器 QQ 现在5号\n依赖关系已更新\n更新依赖关系\n将 zlib 替换为本地 zlib"
-      },
-      "4.1.1": {
-        "en": "adapt stockConsumables to dreame\nfix url #886",
-        "de": "zubehör Bequemlichkeiten zum Träumen\nurl #886",
-        "ru": "адаптер Консуммы, чтобы мечтать\nисправить #886",
-        "pt": "adaptar o estoque Consumíveis para sonhar\ncorrigir url #886",
-        "nl": "voorraad aanpassen Verbruiksgoederen om te dromen\nfix url #886",
-        "fr": "adapter le stock Consommables à rêver\nrèglement n° 886",
-        "it": "azione adatta Consumabili a sognare\ncorrezione url #886",
-        "es": "adapt stock Consumibles para soñar\nfijar url #886",
-        "pl": "dostosować zasoby Materiały eksploatacyjne do zanurzenia\nfix url # 886",
-        "uk": "адаптивний запас Здатні мрії\nзафіксувати виворіт #886",
-        "zh-cn": "调整存量 做梦的消耗品\n修复url #886"
-      },
-      "4.1.0": {
-        "en": "update dependecies\nadd Roborock S8 and P10\nrework consumable features",
-        "de": "aktualisierung der abhängigkeiten\nroborock S8 und P10 hinzufügen\nwiederverwendbare merkmale",
-        "ru": "обновление зависимостей\nдобавить Roborock S8 и P10\nrework потребляемые функции",
-        "pt": "atualizações\nadicionar Roborock S8 e P10\nrecursos consumíveis retrabalho",
-        "nl": "vertaling:\nboeg Roborock S8 en P10\nreageerbare kenmerken",
-        "fr": "mettre à jour les dépendances\najouter Roborock S8 et P10\nrework caractéristiques consommables",
-        "it": "dipendenze di aggiornamento\naggiungere Roborock S8 e P10\ncaratteristiche di consumo di rilavoro",
-        "es": "dependencias de actualización\nañadir Roborock S8 y P10\nfunciones consumibles reelaborables",
-        "pl": "aktualizacja\nroborock S8 i P10\nrework",
-        "uk": "оновлення залежності\nдодати Roborock S8 і P10\nпереробляти обмежені можливості",
-        "zh-cn": "a. 最新依赖情况\n增加Roborock S8和P10\n恢复原状"
-      },
-      "4.0.0": {
-        "en": "inital version of dream support\nadd Roborock S8 Ultra Pro",
-        "de": "initale version der traumunterstützung\nroborock S8 Ultra Pro",
-        "ru": "инитальная версия поддержки мечты\nдобавить Roborock S8 Ultra Pro",
-        "pt": "versão inital de apoio aos sonhos\nadicionar Roborock S8 Ultra Pro",
-        "nl": "initiaal versie van droomondersteuning\nvoeg Roborock S8 Ultra Pro",
-        "fr": "version inital du support de rêve\najouter Roborock S8 Ultra Pro",
-        "it": "versione inital del supporto dei sogni\naggiungere Roborock S8 Ultra Pro",
-        "es": "versión inital de soporte de sueño\nañadir Roborock S8 Ultra Pro",
-        "pl": "inicjatywna wersja snu\nroborock S8 Ultra",
-        "uk": "ідеальна версія сновидіння\nдодати Roborock S8 Ultra Pro",
-        "zh-cn": "理想支持的逻辑版本\n增 编"
-      },
-      "3.11.0": {
-        "en": "fix too much map request to prevent map rate limit in the app",
-        "de": "Reduziert der Mapanfrage um ein Blockieren der Kartenansicht in der App zu verhindern",
-        "ru": "исправить слишком много запроса карты, чтобы предотвратить ограничение скорости карты в приложении",
-        "pt": "corrigir demasiada solicitação de mapa para evitar o limite de taxa de mapa no aplicativo",
-        "nl": "teveel kaartverzoek om de limiet van de kaart te voorkomen",
-        "fr": "fixer trop de demande de carte pour empêcher la limite de taux de carte dans l'application",
-        "it": "fissare troppo richiesta mappa per evitare il limite di velocità della mappa nell'app",
-        "es": "fijar demasiada solicitud de mapa para evitar el límite de velocidad de mapa en la aplicación",
-        "pl": "umożliwia to rozwiązanie zbyt dużej mapy, aby zapobiec ograniczaniu tempa map w aplikacji",
-        "uk": "виправити занадто багато запиту на картографію, щоб запобігти обмеження швидкості карти в додатку",
-        "zh-cn": "fix 要求防止图表率限制过高"
-      },
-      "3.10.1": {
-        "en": "fix waterBoxLevel \nfix overwriting of roomStates from global",
-        "de": "wasser BoxLevel\nfixes Überschreiben von roomStates aus der globalen",
-        "ru": "исправить воду BoxУровень\nисправить перезапись комнатГосударства от глобального",
-        "pt": "fixar água Nível de caixa\ncorrigir a substituição de quartoEstados do global",
-        "nl": "water repareren. BoxLevel\nvertaling:",
-        "fr": "eau BoxLevel\ncorriger l'écrasement des états de chambre du monde",
-        "it": "acqua potabile Scatola girevole\ncorrezione sovrascrittura di roomStates da globale",
-        "es": "agua BoxLevel\nfijar la sobreescritura de los Estados de la sala del mundo",
-        "pl": "naprawa wody BoxLevel\nprzepisywanie kominy ze strony globalnej",
-        "uk": "фіксація води Бодибилдерши\nфіксація перезапису кімнатних",
-        "zh-cn": "fix 水 框\nf 将全球会议室国家分开"
-      }
+    "common": {
+        "name": "mihome-vacuum",
+        "version": "4.3.0",
+        "news": {
+            "4.3.0": {
+                "en": "added dreame error messages\nresponsive design added\nupdate dependecies and linting",
+                "de": "traumhafte fehlermeldungen hinzugefügt\nansprechendes design hinzugefügt\naktualisieren von abhängigkeiten und hinweisen",
+                "ru": "добавленные сообщения об ошибках сна\nадаптивный дизайн добавлен\nобновление иждивенчества и линтинг",
+                "pt": "adicionado mensagens de erro de sonho\ndesign responsivo adicionado\ndependências de atualização e forro",
+                "nl": "toegevoegd droomfoutmeldingen\nresponsief ontwerp toegevoegd\nupdate afhankelijkheden en linting",
+                "fr": "messages d'erreur de rêve ajouté\ndesign adapté ajouté\nmettre à jour les dépendances et le lintage",
+                "it": "messaggi di errore sognanti aggiunti\ndesign reattivo aggiunto\naggiornamento dipendenze e linting",
+                "es": "mensajes de error de sueño\ndiseño sensible añadido\ndependencias de actualización y revestimiento",
+                "pl": "dodane komunikaty błędów dreame\nresponsible design added\naktualizacji zależności i lintowania",
+                "uk": "додано повідомлення про помилку dreame\nдодано адаптивний дизайн\nоновлення залежності і linting",
+                "zh-cn": "添加 dreame 错误消息\n添加应答设计\n更新依赖关系和内嵌"
+            },
+            "4.2.0": {
+                "en": "Adapter requires node.js 18 and js-controller >= 5 now\nDependencies have been updated\nupdate dependecies\nreplace zlib with native zlib",
+                "de": "Adapter benötigt node.js 18 und js-controller >= 5 jetzt\nAbhängigkeiten wurden aktualisiert\naktualisierung der abhängigkeiten\nersetzen zlib mit nativem zlib",
+                "ru": "Адаптер требует node.js 18 и js-controller >= 5 сейчас\nЗависимость обновлена\nобновление\nзаменить zlib на родной zlib",
+                "pt": "Adapter requer node.js 18 e js-controller >= 5 agora\nAs dependências foram atualizadas\natualizações\nsubstituir zlib com zlib nativo",
+                "nl": "Adapter vereist node.js 18 en js-controller Nu 5\nAfhankelijkheden zijn bijgewerkt\nafhankelijkheden bijwerken\nzlib vervangen door native zlib",
+                "fr": "Adaptateur nécessite node.js 18 et js-controller >= 5 maintenant\nLes dépendances ont été actualisées\nmettre à jour les dépendances\nremplacer zlib par zlib natif",
+                "it": "Adattatore richiede node.js 18 e js-controller >= 5 ora\nLe dipendenze sono state aggiornate\ndipendenze dell'aggiornamento\nsostituire zlib con zlib nativo",
+                "es": "Adaptador requiere node.js 18 y js-controller √= 5 ahora\nSe han actualizado las dependencias\ndependencias de actualización\nreemplazar zlib con zlib nativo",
+                "pl": "Adapter wymaga node.js 18 i sterownika js- > = 5 teraz\nZaktualizowano zależności\nuaktualnianie zależności\nzastąpić zlib natywnym zlib",
+                "uk": "Адаптер вимагає node.js 18 і js-controller >= 5 тепер\nЗалежність було оновлено\nоновлення залежності\nзамінити zlib з рідною zlib",
+                "zh-cn": "适配器需要节点.js 18和js控制器 QQ 现在5号\n依赖关系已更新\n更新依赖关系\n将 zlib 替换为本地 zlib"
+            },
+            "4.1.1": {
+                "en": "adapt stockConsumables to dreame\nfix url #886",
+                "de": "zubehör Bequemlichkeiten zum Träumen\nurl #886",
+                "ru": "адаптер Консуммы, чтобы мечтать\nисправить #886",
+                "pt": "adaptar o estoque Consumíveis para sonhar\ncorrigir url #886",
+                "nl": "voorraad aanpassen Verbruiksgoederen om te dromen\nfix url #886",
+                "fr": "adapter le stock Consommables à rêver\nrèglement n° 886",
+                "it": "azione adatta Consumabili a sognare\ncorrezione url #886",
+                "es": "adapt stock Consumibles para soñar\nfijar url #886",
+                "pl": "dostosować zasoby Materiały eksploatacyjne do zanurzenia\nfix url # 886",
+                "uk": "адаптивний запас Здатні мрії\nзафіксувати виворіт #886",
+                "zh-cn": "调整存量 做梦的消耗品\n修复url #886"
+            },
+            "4.1.0": {
+                "en": "update dependecies\nadd Roborock S8 and P10\nrework consumable features",
+                "de": "aktualisierung der abhängigkeiten\nroborock S8 und P10 hinzufügen\nwiederverwendbare merkmale",
+                "ru": "обновление зависимостей\nдобавить Roborock S8 и P10\nrework потребляемые функции",
+                "pt": "atualizações\nadicionar Roborock S8 e P10\nrecursos consumíveis retrabalho",
+                "nl": "vertaling:\nboeg Roborock S8 en P10\nreageerbare kenmerken",
+                "fr": "mettre à jour les dépendances\najouter Roborock S8 et P10\nrework caractéristiques consommables",
+                "it": "dipendenze di aggiornamento\naggiungere Roborock S8 e P10\ncaratteristiche di consumo di rilavoro",
+                "es": "dependencias de actualización\nañadir Roborock S8 y P10\nfunciones consumibles reelaborables",
+                "pl": "aktualizacja\nroborock S8 i P10\nrework",
+                "uk": "оновлення залежності\nдодати Roborock S8 і P10\nпереробляти обмежені можливості",
+                "zh-cn": "a. 最新依赖情况\n增加Roborock S8和P10\n恢复原状"
+            },
+            "4.0.0": {
+                "en": "inital version of dream support\nadd Roborock S8 Ultra Pro",
+                "de": "initale version der traumunterstützung\nroborock S8 Ultra Pro",
+                "ru": "инитальная версия поддержки мечты\nдобавить Roborock S8 Ultra Pro",
+                "pt": "versão inital de apoio aos sonhos\nadicionar Roborock S8 Ultra Pro",
+                "nl": "initiaal versie van droomondersteuning\nvoeg Roborock S8 Ultra Pro",
+                "fr": "version inital du support de rêve\najouter Roborock S8 Ultra Pro",
+                "it": "versione inital del supporto dei sogni\naggiungere Roborock S8 Ultra Pro",
+                "es": "versión inital de soporte de sueño\nañadir Roborock S8 Ultra Pro",
+                "pl": "inicjatywna wersja snu\nroborock S8 Ultra",
+                "uk": "ідеальна версія сновидіння\nдодати Roborock S8 Ultra Pro",
+                "zh-cn": "理想支持的逻辑版本\n增 编"
+            },
+            "3.11.0": {
+                "en": "fix too much map request to prevent map rate limit in the app",
+                "de": "Reduziert der Mapanfrage um ein Blockieren der Kartenansicht in der App zu verhindern",
+                "ru": "исправить слишком много запроса карты, чтобы предотвратить ограничение скорости карты в приложении",
+                "pt": "corrigir demasiada solicitação de mapa para evitar o limite de taxa de mapa no aplicativo",
+                "nl": "teveel kaartverzoek om de limiet van de kaart te voorkomen",
+                "fr": "fixer trop de demande de carte pour empêcher la limite de taux de carte dans l'application",
+                "it": "fissare troppo richiesta mappa per evitare il limite di velocità della mappa nell'app",
+                "es": "fijar demasiada solicitud de mapa para evitar el límite de velocidad de mapa en la aplicación",
+                "pl": "umożliwia to rozwiązanie zbyt dużej mapy, aby zapobiec ograniczaniu tempa map w aplikacji",
+                "uk": "виправити занадто багато запиту на картографію, щоб запобігти обмеження швидкості карти в додатку",
+                "zh-cn": "fix 要求防止图表率限制过高"
+            },
+            "3.10.1": {
+                "en": "fix waterBoxLevel \nfix overwriting of roomStates from global",
+                "de": "wasser BoxLevel\nfixes Überschreiben von roomStates aus der globalen",
+                "ru": "исправить воду BoxУровень\nисправить перезапись комнатГосударства от глобального",
+                "pt": "fixar água Nível de caixa\ncorrigir a substituição de quartoEstados do global",
+                "nl": "water repareren. BoxLevel\nvertaling:",
+                "fr": "eau BoxLevel\ncorriger l'écrasement des états de chambre du monde",
+                "it": "acqua potabile Scatola girevole\ncorrezione sovrascrittura di roomStates da globale",
+                "es": "agua BoxLevel\nfijar la sobreescritura de los Estados de la sala del mundo",
+                "pl": "naprawa wody BoxLevel\nprzepisywanie kominy ze strony globalnej",
+                "uk": "фіксація води Бодибилдерши\nфіксація перезапису кімнатних",
+                "zh-cn": "fix 水 框\nf 将全球会议室国家分开"
+            }
+        },
+        "titleLang": {
+            "en": "Control of Xiaomi/Roborock vacuum cleaner",
+            "de": "Steuerung des Staubsaugers Xiaomi/Roborock",
+            "ru": "Управление пылесосом Xiaomi/Roborock",
+            "pt": "Controle do aspirador Xiaomi/Roborock",
+            "nl": "Bediening van Xiaomi/Roborock stofzuiger",
+            "fr": "Contrôle de l'aspirateur Xiaomi/Roborock",
+            "it": "Controllo dell'aspirapolvere Xiaomi/Roborock",
+            "es": "Control de la aspiradora Xiaomi/Roborock",
+            "pl": "Kontrola odkurzacza Xiaomi/Roborock",
+            "uk": "Керування пилососом Xiaomi/Roborock",
+            "zh-cn": "小米/罗伯克吸尘器的控制"
+        },
+        "desc": {
+            "en": "This adapter allows control Xiaomi vacuum cleaner",
+            "de": "Dieser Adapter ermöglicht die Steuerung Xiaomi Staubsauger",
+            "ru": "Этот адаптер позволяет контролировать пылесос Xiaomi",
+            "pt": "Este adaptador permite controle Xiaomi aspirador de pó",
+            "nl": "Met deze adapter kunt u de Xiaomi-stofzuiger bedienen",
+            "fr": "Cet adaptateur permet de contrôler l'aspirateur Xiaomi",
+            "it": "Questo adattatore consente il controllo dell'aspirapolvere Xiaomi",
+            "es": "Este adaptador permite el control del aspirador Xiaomi",
+            "pl": "Ten adapter umożliwia kontrolę odkurzacza Xiaomi",
+            "uk": "Цей адаптер дозволяє керувати пилососом Xiaomi",
+            "zh-cn": "这款适配器可以控制小米吸尘器"
+        },
+        "authors": [
+            "bluefox <dogafox@gmail.com>"
+        ],
+        "osDependencies": {
+            "linux": [
+                "libcairo2-dev",
+                "libpango1.0-dev",
+                "libjpeg-dev",
+                "libgif-dev",
+                "librsvg2-dev"
+            ]
+        },
+        "licenseInformation": {
+            "license": "MIT",
+            "type": "free"
+        },
+        "adminUI": {
+            "config": "materialize"
+        },
+        "platform": "Javascript/Node.js",
+        "mode": "daemon",
+        "loglevel": "info",
+        "compact": true,
+        "icon": "mihome-vacuum.png",
+        "readme": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/README.md",
+        "keywords": [
+            "url",
+            "html",
+            "file",
+            "mihome-vacuum"
+        ],
+        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.mihome-vacuum/master/admin/mihome-vacuum.png",
+        "type": "household",
+        "messagebox": true,
+        "connectionType": "local",
+        "dataSource": "poll",
+        "tier": 2,
+        "dependencies": [
+            {
+                "js-controller": ">=5.0.19"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=4.0.9"
+            }
+        ],
+        "plugins": {
+            "sentry": {
+                "dsn": "https://b93cc849b5544d1682e20820bf56d636@sentry.iobroker.net/46"
+            }
+        }
     },
-    "titleLang": {
-      "en": "Control of Xiaomi/Roborock vacuum cleaner",
-      "de": "Steuerung des Staubsaugers Xiaomi/Roborock",
-      "ru": "Управление пылесосом Xiaomi/Roborock",
-      "pt": "Controle do aspirador Xiaomi/Roborock",
-      "nl": "Bediening van Xiaomi/Roborock stofzuiger",
-      "fr": "Contrôle de l'aspirateur Xiaomi/Roborock",
-      "it": "Controllo dell'aspirapolvere Xiaomi/Roborock",
-      "es": "Control de la aspiradora Xiaomi/Roborock",
-      "pl": "Kontrola odkurzacza Xiaomi/Roborock",
-      "uk": "Керування пилососом Xiaomi/Roborock",
-      "zh-cn": "小米/罗伯克吸尘器的控制"
-    },
-    "desc": {
-      "en": "This adapter allows control Xiaomi vacuum cleaner",
-      "de": "Dieser Adapter ermöglicht die Steuerung Xiaomi Staubsauger",
-      "ru": "Этот адаптер позволяет контролировать пылесос Xiaomi",
-      "pt": "Este adaptador permite controle Xiaomi aspirador de pó",
-      "nl": "Met deze adapter kunt u de Xiaomi-stofzuiger bedienen",
-      "fr": "Cet adaptateur permet de contrôler l'aspirateur Xiaomi",
-      "it": "Questo adattatore consente il controllo dell'aspirapolvere Xiaomi",
-      "es": "Este adaptador permite el control del aspirador Xiaomi",
-      "pl": "Ten adapter umożliwia kontrolę odkurzacza Xiaomi",
-      "uk": "Цей адаптер дозволяє керувати пилососом Xiaomi",
-      "zh-cn": "这款适配器可以控制小米吸尘器"
-    },
-    "authors": [
-      "bluefox <dogafox@gmail.com>"
+    "encryptedNative": [
+        "password",
+        "token"
     ],
-    "osDependencies": {
-      "linux": [
-        "libcairo2-dev",
-        "libpango1.0-dev",
-        "libjpeg-dev",
-        "libgif-dev",
-        "librsvg2-dev"
-      ]
-    },
-    "licenseInformation": {
-      "license": "MIT",
-      "type": "free"
-    },
-    "adminUI": {
-      "config": "materialize"
-    },
-    "platform": "Javascript/Node.js",
-    "mode": "daemon",
-    "loglevel": "info",
-    "compact": true,
-    "icon": "mihome-vacuum.png",
-    "readme": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/blob/master/README.md",
-    "keywords": [
-      "url",
-      "html",
-      "file",
-      "mihome-vacuum"
+    "protectedNative": [
+        "password",
+        "token"
     ],
-    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.mihome-vacuum/master/admin/mihome-vacuum.png",
-    "type": "household",
-    "messagebox": true,
-    "connectionType": "local",
-    "dataSource": "poll",
-    "tier": 2,
-    "dependencies": [
-      {
-        "js-controller": ">=5.0.19"
-      }
+    "messages": [
+        {
+            "condition": {
+                "operand": "and",
+                "rules": [
+                    "oldVersion<5.0.0",
+                    "newVersion>=5.0.0"
+                ]
+            },
+            "title": {
+                "en": "Important notice!",
+                "de": "Wichtiger Hinweis!",
+                "ru": "Важное замечание!",
+                "pt": "Notícia importante!",
+                "nl": "Belangrijke mededeling!",
+                "fr": "Avis important!",
+                "it": "Avviso IMPORTANTE!",
+                "es": "Noticia importante!",
+                "pl": "Ważna uwaga!",
+                "zh-cn": "重要通知!"
+            },
+            "text": {
+                "en": "BREAKING CHANGE - After update you have to click get-Device in settings and choose your robor again and save",
+                "de": "WICHTIGSTE ÄNDERUNG – Nach dem Update müssen Sie in den Einstellungen auf „Get-Device“ klicken, Ihren Robor erneut auswählen und speichern",
+                "ru": "СЕРЬЕЗНОЕ ИЗМЕНЕНИЕ. После обновления вам нужно нажать «Получить устройство» в настройках, снова выбрать свой робот и сохранить его.",
+                "pt": "MUDANÇA DE QUEBRA - Após a atualização você deve clicar em get-Device nas configurações e escolher seu robor novamente e salvar",
+                "nl": "BREAKING CHANGE - Na de update moet je in de instellingen op Get-Device klikken en je robor opnieuw kiezen en opslaan",
+                "fr": "CHANGEMENT RUPTURE - Après la mise à jour, vous devez cliquer sur Obtenir l'appareil dans les paramètres, choisir à nouveau votre robot et enregistrer",
+                "it": "MODIFICA ROTANTE - Dopo l'aggiornamento devi fare clic su Ottieni dispositivo nelle impostazioni, scegliere nuovamente il tuo robor e salvare",
+                "es": "CAMBIO IMPORTANTE: después de la actualización, debe hacer clic en Obtener dispositivo en la configuración, elegir su robot nuevamente y guardar.",
+                "pl": "PRZERWA ZMIANY - Po aktualizacji musisz kliknąć opcję Pobierz urządzenie w ustawieniach, ponownie wybrać robota i zapisać",
+                "zh-cn": "重大更改 - 更新后，您必须单击设置中的“获取设备”，然后再次选择您的机器人并保存"
+            },
+            "level": "warn",
+            "buttons": [
+                "agree",
+                "cancel"
+            ]
+        }
     ],
-    "globalDependencies": [
-      {
-        "admin": ">=4.0.9"
-      }
-    ],
-    "plugins": {
-      "sentry": {
-        "dsn": "https://b93cc849b5544d1682e20820bf56d636@sentry.iobroker.net/46"
-      }
-    }
-  },
-  "encryptedNative": [
-    "password",
-    "token"
-  ],
-  "protectedNative": [
-    "password",
-    "token"
-  ],
-  "native": {
-    "email": "",
-    "password": "",
-    "server": "-",
-    "token": "",
-    "MiDevice": "",
-    "ip": "",
-    "enableMiMap": false,
-    "enableSelfCommands": false,
-    "sendPauseBeforeHome": false,
-    "enableResumeZone": false,
-    "port": 54321,
-    "ownPort": 53421,
-    "pingInterval": 20000,
-    "wifiInterval": 60000,
-    "valetudo_enable": false,
-    "valetudo_color_floor": "#56affc",
-    "valetudo_color_wall": "#b3edff",
-    "valetudo_color_path": "#FFFFFF",
-    "robot_select": "robot",
-    "valetudo_requestIntervall": 2000,
-    "valetudo_MapsaveIntervall": 5000,
-    "newmap": false
-  },
-  "instanceObjects": [
-    {
-      "_id": "userfiles",
-      "type": "meta",
-      "common": {
-        "name": "User files for mihome-vacuum",
-        "type": "meta.user"
-      },
-      "native": {}
+    "native": {
+        "email": "",
+        "password": "",
+        "server": "-",
+        "token": "",
+        "ip": "",
+        "enableMiMap": false,
+        "enableSelfCommands": false,
+        "sendPauseBeforeHome": false,
+        "enableResumeZone": false,
+        "port": 54321,
+        "ownPort": 53421,
+        "pingInterval": 20000,
+        "wifiInterval": 60000,
+        "valetudo_enable": false,
+        "valetudo_color_floor": "#56affc",
+        "valetudo_color_wall": "#b3edff",
+        "valetudo_color_path": "#FFFFFF",
+        "robot_select": "robot",
+        "valetudo_requestIntervall": 2000,
+        "valetudo_MapsaveIntervall": 5000,
+        "newmap": false
     },
-    {
-      "_id": "info",
-      "type": "channel",
-      "common": {
-        "name": "Information"
-      },
-      "native": {}
-    },
-    {
-      "_id": "info.connection",
-      "type": "state",
-      "common": {
-        "role": "indicator.connected",
-        "name": "If connected to robot",
-        "type": "boolean",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "",
-      "type": "device",
-      "common": {
-        "name": "Vacuum robot",
-        "role": "vacuumCleaner"
-      },
-      "native": {}
-    }
-  ]
+    "instanceObjects": [
+        {
+            "_id": "userfiles",
+            "type": "meta",
+            "common": {
+                "name": "User files for mihome-vacuum",
+                "type": "meta.user"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "If connected to robot",
+                "type": "boolean",
+                "read": true,
+                "write": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "",
+            "type": "device",
+            "common": {
+                "name": "Vacuum robot",
+                "role": "vacuumCleaner"
+            },
+            "native": {}
+        }
+    ]
 }

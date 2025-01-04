@@ -333,7 +333,11 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-### 4.3.0 (2025-01-02)
+### **WORK IN PROGRESS**
+* (deher) token from config now encrypted, user has to re-choose device in settings
+* (deher) some fixes in UI Setting
+
+### 4.3.0 (2025-01-02) rejected
 * (JimmyBondi) added dreame error messages
 * (simatec) responsive design added
 * (deher) update dependecies and linting

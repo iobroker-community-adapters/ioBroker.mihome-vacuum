@@ -28,6 +28,7 @@
     "test": "npm run test:js && npm run test:package",
     "check": "tsc --noEmit -p tsconfig.check.json",
     "lint": "eslint -c eslint.config.mjs .",
+    "translate": "gulp translateAndUpdateWordsJS",
     "release": "release-script"
   },
   "files": [

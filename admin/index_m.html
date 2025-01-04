@@ -183,8 +183,8 @@
             $('.hidden').hide();
             //soad selection list
 
-            console.log('sett_' + JSON.stringify(settings))
-            loadSelect(settings['MiDevice'])
+            //console.log('sett_' + JSON.stringify(settings))
+            //loadSelect(settings['MiDevice'])
             settings.pingInterval = parseInt(settings.pingInterval / 1000, 10)
             settings.wifiInterval = parseInt(settings.wifiInterval / 1000, 10)
             curToken = settings.token;
@@ -207,14 +207,13 @@
                         onChange();
                     });
                 } else {
-                    if ($key.attr('id') === 'devices') {
-
+                    if ( $key.data("store") != 'no') {
+                        $key.val(settings[key]).change(function () {
+                            onChange();
+                        }).keyup(function () {
+                            onChange();
+                        });
                     }
-                    $key.val(settings[key]).change(function () {
-                        onChange();
-                    }).keyup(function () {
-                        onChange();
-                    });
                 }
 
 
@@ -248,10 +247,10 @@
 
             // wenn device selection changed.
             $('#devices').change(function () {
-                let tmp = JSON.parse($(this).val());
+                let tmp = JSON.parse($(this).val() || {});
                 console.log("changed....devices" + $(this).val())
-                setValue('token', tmp.token, onChange);
-                setValue('ip', tmp.localip, onChange);
+                setValue('token', tmp.token || '', onChange);
+                setValue('ip', tmp.localip || '', onChange);
             });
 
             $('#getDevices').on('click', function () {
@@ -268,7 +267,7 @@
                 let pass = $('#password').val();
                 let user = $('#email').val();
                 let server = $('#server').val();
-                console.log("send to..." + user + " server: " + server);
+                //console.log("send to..." + user + " server: " + server);
 
                 if (typeof (server) == 'undefinded' || server == '') {
                     $getDevices.removeClass('disabled');
@@ -283,7 +282,7 @@
                     server: server
                 }, function (result) {
 
-                    console.log(JSON.stringify(result));
+                    //console.log(JSON.stringify(result));
                     $getDevices.removeClass('disabled');
                     $('#loader1').addClass('seenot');
 
@@ -300,7 +299,7 @@
                     rawdevices = arr;
                     let text = "";
 
-                    setValue('MiDevice', JSON.stringify(arr), onChange);
+                    setValue('MiDevice', JSON.stringify(arr));
 
                     arr.forEach(function (entry) {
                         text += "<option value='" + JSON.stringify(entry) + "' >" + entry
@@ -309,7 +308,7 @@
 
                         //check if in config
                     });
-                    $devicelist.html(text).select();
+                    $devicelist.html('<option>' + _('choose Device') + '</option>' + text).select();
                 });
 
             });
@@ -449,19 +448,11 @@
         function setValue(key, value, onChange) {
             var $key = $('#' + key + '.value');
             if ($key.attr('type') === 'checkbox') {
-                $key.prop('checked', value).on('change', function () {
-                    onChange();
-                });
+                $key.prop('checked', value);
             } else {
-                $key.val(value).on('change', function () {
-                    if ($(this).attr('id') === 'type') {
-                        showHideSettings();
-                    }
-                    onChange();
-                }).on('keyup', function () {
-                    onChange();
-                });
+                $key.val(value);
             }
+            $key.trigger('change')
         }
 
         function save(callback) {
@@ -500,6 +491,8 @@
                     return showMessage(_('same start time of 2 timer not possible'));
                 timerList[name] = timer
             }
+            delete obj.devices;
+            delete obj.MiDevice
 
             socket.emit('getForeignStates', namespace + 'timer.*', function (err, timerStates) {
                 if (!err && timerStates) {
@@ -630,7 +623,7 @@
 </head>
 
 <body>
-    <div class="m adapter-container">
+    <form class="m adapter-container">
 
         <div class="row">
             <!-- Tabs navigation -->
@@ -703,7 +696,7 @@
                 </div>
                 <div class="row">
                     <div class="col s12 m12 l12 input-field">
-                        <select class="value " id="devices">
+                        <select class="value " id="devices" data-store="no">
                             <option value="" disabled selected class="translate">Please get Devices first</option>
                         </select>
                         <label class="translate" for="devices">devices</label>
@@ -721,7 +714,7 @@
                     </div>
                 </div>
                 <div class="col s12 m4 l2 input-field hidden">
-                    <input class="value" id="MiDevice" type="text" />
+                    <input class="value" id="MiDevice" type="text" data-store="no" />
                     <label class="translate" for="MiDevice">device</label>
                 </div>
                 <div class="row">
@@ -894,7 +887,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </body>
 
 </html>
