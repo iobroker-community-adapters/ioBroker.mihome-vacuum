@@ -333,7 +333,7 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-### **WORK IN PROGRESS**
+### 5.0.0 (2025-01-04)
 * (deher) token from config now encrypted, user has to re-choose device in settings
 * (deher) some fixes in UI Setting
 
