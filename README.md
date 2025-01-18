@@ -334,6 +334,7 @@ The supported commands are:
     * () 
 -->
 ### **WORK IN PROGRESS**
+* (AlexAchilleus) Added mop pad status and some states for Dreame/Xiaomi 
 * (deher) change model handling
 ### 5.0.0 (2025-01-04)
 * (deher) token from config now encrypted, user has to re-choose device in settings
