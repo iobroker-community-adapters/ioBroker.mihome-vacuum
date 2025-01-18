@@ -184,7 +184,6 @@
             //soad selection list
 
             //console.log('sett_' + JSON.stringify(settings))
-            //loadSelect(settings['MiDevice'])
             settings.pingInterval = parseInt(settings.pingInterval / 1000, 10)
             settings.wifiInterval = parseInt(settings.wifiInterval / 1000, 10)
             curToken = settings.token;
@@ -251,6 +250,7 @@
                 console.log("changed....devices" + $(this).val())
                 setValue('token', tmp.token || '', onChange);
                 setValue('ip', tmp.localip || '', onChange);
+                setValue('model', tmp.model || '', onChange);
             });
 
             $('#getDevices').on('click', function () {
@@ -298,8 +298,6 @@
 
                     rawdevices = arr;
                     let text = "";
-
-                    setValue('MiDevice', JSON.stringify(arr));
 
                     arr.forEach(function (entry) {
                         text += "<option value='" + JSON.stringify(entry) + "' >" + entry
@@ -492,8 +490,10 @@
                 timerList[name] = timer
             }
             delete obj.devices;
-            delete obj.MiDevice
-
+            if (obj.MiDevice){
+                delete obj.MiDevice; // is not ,onger needed, but contains decryted token
+            }
+            
             socket.emit('getForeignStates', namespace + 'timer.*', function (err, timerStates) {
                 if (!err && timerStates) {
                     socket.emit('getObjectView', 'system', 'state', {
@@ -708,14 +708,24 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s12 m5 l3 input-field">
+                    <div class="col s12 m5 l2 input-field">
                         <input class="value" id="token" size="60" maxlength="96" type="text" />
                         <label for="token" class="translate">Token</label>
                     </div>
-                </div>
-                <div class="col s12 m4 l2 input-field hidden">
-                    <input class="value" id="MiDevice" type="text" data-store="no" />
-                    <label class="translate" for="MiDevice">device</label>
+                    <div class="col s12 m4 l2 input-field">
+                        <input class="value" id="model" type="text" />
+                        <label class="translate" for="model">model</label>
+                    </div>
+                    <div class="col s12 m4 l2 input-field">
+                        <select class="value" id="manager">
+                            <option value="" selected>auto</option>
+                            <option value="roborock">Roborock</option>
+                            <option value="dreame">Dream</option>
+                            <option value="viomi">Viomi</option>
+                            <option value="xiaomi">Xiaomi</option>
+                        </select>
+                        <label for="manager">manager</label>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col s12 m4 l2 input-field">
