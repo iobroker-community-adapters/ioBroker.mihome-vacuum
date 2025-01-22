@@ -278,6 +278,17 @@
       },
       "native": {}
     },
+    {"_id": "info.IPAddress",
+      "type": "state",
+      "common": {
+        "role": "info.ip",
+        "name": "IP adress of robot",
+        "type": "string",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    },
     {
       "_id": "",
       "type": "device",

@@ -67,6 +67,11 @@ class MihomeVacuum extends utils.Adapter {
 
         Miio.on('connect', async () => {
             this.log.debug('MAIN: Connected to device, try to get model..');
+            this.setState('info.IPAddress', {
+                // @ts-expect-error var not defined
+                val: this.config.ip,
+                ack: true,
+            });
             await this.getModel();
             if (!vacuum) {
                 return;
@@ -174,6 +179,7 @@ class MihomeVacuum extends utils.Adapter {
         const mangerList = {
             viomi: ViomiManager,
             roborock: VacuumManager,
+            rockrobo: VacuumManager,
             dreame: DreameManager,
             xiaomi: DreameManager,
         };
