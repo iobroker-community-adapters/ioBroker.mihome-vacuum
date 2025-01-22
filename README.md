@@ -333,9 +333,10 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
-### **WORK IN PROGRESS**
+### 5.2.0 (2025-01-22)
 * (deher) add IP Adress to info
 * (deher) assign rockrobo (valetudo) to roborock Manager
+
 ### 5.1.0 (2025-01-18)
 * (AlexAchilleus) Added mop pad status and some states for Dreame/Xiaomi 
 * (deher) change model handling

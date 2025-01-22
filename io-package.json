@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "5.1.0",
+    "version": "5.2.0",
     "news": {
+      "5.2.0": {
+        "en": "add IP Adress to info\nassign rockrobo (valetudo) to roborock Manager",
+        "de": "iP-Adresse hinzufügen\nrockrobo (valetudo) dem roborock Manager zuordnen",
+        "ru": "добавить IP адрес в информацию\nназначить Rockrobo (valetudo) менеджеру по разбойникам",
+        "pt": "adicionar endereço IP para informações\natribuir rockrobo (vatudo) ao gerente de roborock",
+        "nl": "iP adres toevoegen aan info\nrockrobo (valetudo) toewijzen aan Roborock Manager",
+        "fr": "ajouter IP Adresse à info\naffecter rockrobo (valetudo) au gestionnaire de roborock",
+        "it": "aggiungere indirizzo IP alle informazioni\nassegnare rockrobo (valetudo) a roborock Manager",
+        "es": "añadir IP Dirección a info\nasignar rockrobo (valetudo) a roborock Manager",
+        "pl": "dodaj adres IP do informacji\nprzydzielić rockrobo (valetudo) do roborock Manager",
+        "uk": "додати IP-адресу на інформацію\nпризначте рокробо (valetudo) до roborock Manager",
+        "zh-cn": "将 IP 服装添加到信息中\n指定 Rockrobo( valetudo) 为 Roborock 管理器"
+      },
       "5.1.0": {
         "en": "Added mop pad status and some states for Dreame/Xiaomi \nchange model handling",
         "de": "Hinzugefügt Mop Pad Status und einige Zustände für Dreame/Xiaomi\nänderung modellhandling",
@@ -80,19 +93,6 @@
         "pl": "aktualizacja\nroborock S8 i P10\nrework",
         "uk": "оновлення залежності\nдодати Roborock S8 і P10\nпереробляти обмежені можливості",
         "zh-cn": "a. 最新依赖情况\n增加Roborock S8和P10\n恢复原状"
-      },
-      "4.0.0": {
-        "en": "inital version of dream support\nadd Roborock S8 Ultra Pro",
-        "de": "initale version der traumunterstützung\nroborock S8 Ultra Pro",
-        "ru": "инитальная версия поддержки мечты\nдобавить Roborock S8 Ultra Pro",
-        "pt": "versão inital de apoio aos sonhos\nadicionar Roborock S8 Ultra Pro",
-        "nl": "initiaal versie van droomondersteuning\nvoeg Roborock S8 Ultra Pro",
-        "fr": "version inital du support de rêve\najouter Roborock S8 Ultra Pro",
-        "it": "versione inital del supporto dei sogni\naggiungere Roborock S8 Ultra Pro",
-        "es": "versión inital de soporte de sueño\nañadir Roborock S8 Ultra Pro",
-        "pl": "inicjatywna wersja snu\nroborock S8 Ultra",
-        "uk": "ідеальна версія сновидіння\nдодати Roborock S8 Ultra Pro",
-        "zh-cn": "理想支持的逻辑版本\n增 编"
       }
     },
     "titleLang": {
@@ -278,7 +278,8 @@
       },
       "native": {}
     },
-    {"_id": "info.IPAddress",
+    {
+      "_id": "info.IPAddress",
       "type": "state",
       "common": {
         "role": "info.ip",
