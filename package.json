@@ -58,7 +58,7 @@
         "@alcalzone/release-script-plugin-manual-review": "^3.7.0",
         "@iobroker/eslint-config": "^1.0.0",
         "@iobroker/testing": "^5.0.4",
-        "@types/chai": "^5.2.1",
+        "@types/chai": "^5.2.2",
         "@types/chai-as-promised": "^8.0.2",
         "@types/gulp": "^4.0.17",
         "@types/mocha": "^10.0.10",
