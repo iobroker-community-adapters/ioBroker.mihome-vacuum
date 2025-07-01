@@ -41,7 +41,7 @@
         "main.js"
     ],
     "optionalDependencies": {
-        "canvas": "^3.1.0"
+        "canvas": "^3.1.2"
     },
     "engines": {
         "node": ">=18"
