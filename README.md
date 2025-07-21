@@ -333,22 +333,24 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
+### **WORK IN PROGRESS**
+* (dirkhe) update dependecies
 ### 5.2.0 (2025-01-22)
-* (deher) add IP Adress to info
-* (deher) assign rockrobo (valetudo) to roborock Manager
+* (dirkhe) add IP Adress to info
+* (dirkhe) assign rockrobo (valetudo) to roborock Manager
 
 ### 5.1.0 (2025-01-18)
 * (AlexAchilleus) Added mop pad status and some states for Dreame/Xiaomi 
-* (deher) change model handling
+* (dirkhe) change model handling
 
 ### 5.0.0 (2025-01-04)
-* (deher) token from config now encrypted, user has to re-choose device in settings
-* (deher) some fixes in UI Setting
+* (dirkhe) token from config now encrypted, user has to re-choose device in settings
+* (dirkhe) some fixes in UI Setting
 
 ### 4.3.0 (2025-01-02) rejected
 * (JimmyBondi) added dreame error messages
 * (simatec) responsive design added
-* (deher) update dependecies and linting
+* (dirkhe) update dependecies and linting
 
 ### 4.2.0 (2024-04-01)
 * (mcm1957) Adapter requires node.js 18 and js-controller >= 5 now
