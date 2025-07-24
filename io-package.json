@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "5.2.0",
+    "version": "5.3.0",
     "news": {
+      "5.3.0": {
+        "en": "update dependecies\nreplace request with axios\nfix login issues by replacing and moving code to XiaomiCloudConnector",
+        "de": "aktualisierung der abhängigkeiten\nersetzen anfrage mit axios\nfix Login-Probleme durch Austausch und Verschieben von Code auf XiaomiCloudConnector",
+        "ru": "обновление зависимостей\nзамена запроса на axios\nисправить проблемы с входом, заменив и переместив код в XiaomiCloudConnector",
+        "pt": "atualizar dependências\nsubstituir o pedido por axios\ncorrigir problemas de login substituindo e movendo código para XiaomiCloudConnector",
+        "nl": "afhankelijkheden bijwerken\nverzoek vervangen door axios\nfix login problemen door het vervangen en verplaatsen van code naar XiaomiCloudConnector",
+        "fr": "mettre à jour les dépendances\nremplacer la demande par axios\ncorrection des problèmes de connexion en remplaçant et en déplaçant le code vers XiaomiCloudConnector",
+        "it": "dipendenze dell'aggiornamento\nsostituire la richiesta con assios\nrisolvere i problemi di login sostituendo e spostando il codice a XiaomiCloudConnector",
+        "es": "dependencias de actualización\nreemplazar la solicitud por axios\nsolucionar problemas de inicio de sesión reemplazando y moviendo código a XiaomiCloudConnector",
+        "pl": "uaktualnianie zależności\nzastąp wniosek aksjozami\nnaprawić problemy logowania poprzez zastąpienie i przeniesienie kodu do XiaomiCloudConnector",
+        "uk": "оновлення залежності\nзамінити запит з axios\nвиправлено проблеми логіну за допомогою заміни та переміщення коду до XiaomiCloudConnector",
+        "zh-cn": "更新依赖关系\n将请求替换为轴\n通过替换和移动代码到 XiaomiCloud 连接器来修正登录问题"
+      },
       "5.2.0": {
         "en": "add IP Adress to info\nassign rockrobo (valetudo) to roborock Manager",
         "de": "iP-Adresse hinzufügen\nrockrobo (valetudo) dem roborock Manager zuordnen",
@@ -80,19 +93,6 @@
         "pl": "dostosować zasoby Materiały eksploatacyjne do zanurzenia\nfix url # 886",
         "uk": "адаптивний запас Здатні мрії\nзафіксувати виворіт #886",
         "zh-cn": "调整存量 做梦的消耗品\n修复url #886"
-      },
-      "4.1.0": {
-        "en": "update dependecies\nadd Roborock S8 and P10\nrework consumable features",
-        "de": "aktualisierung der abhängigkeiten\nroborock S8 und P10 hinzufügen\nwiederverwendbare merkmale",
-        "ru": "обновление зависимостей\nдобавить Roborock S8 и P10\nrework потребляемые функции",
-        "pt": "atualizações\nadicionar Roborock S8 e P10\nrecursos consumíveis retrabalho",
-        "nl": "vertaling:\nboeg Roborock S8 en P10\nreageerbare kenmerken",
-        "fr": "mettre à jour les dépendances\najouter Roborock S8 et P10\nrework caractéristiques consommables",
-        "it": "dipendenze di aggiornamento\naggiungere Roborock S8 e P10\ncaratteristiche di consumo di rilavoro",
-        "es": "dependencias de actualización\nañadir Roborock S8 y P10\nfunciones consumibles reelaborables",
-        "pl": "aktualizacja\nroborock S8 i P10\nrework",
-        "uk": "оновлення залежності\nдодати Roborock S8 і P10\nпереробляти обмежені можливості",
-        "zh-cn": "a. 最新依赖情况\n增加Roborock S8和P10\n恢复原状"
       }
     },
     "titleLang": {
