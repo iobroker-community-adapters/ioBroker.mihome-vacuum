@@ -335,6 +335,8 @@ The supported commands are:
 -->
 ### **WORK IN PROGRESS**
 * (dirkhe) update dependecies
+* (dirkhe) replace request with axios
+* (dirkhe) fix login issues by replacing and moving code to XiaomiCloudConnector
 ### 5.2.0 (2025-01-22)
 * (dirkhe) add IP Adress to info
 * (dirkhe) assign rockrobo (valetudo) to roborock Manager

@@ -175,6 +175,7 @@
         var rooms = {}
         var active = false;
         var curToken;
+        var authObj= null;
 
         // the function loadSettings has to exist ...
         function load(settings, onChange) {
@@ -254,8 +255,8 @@
             });
 
             $('#getDevices').on('click', function () {
-                var $getDevices = $('#getDevices');
-                var $devicelist = $('#devices')
+                let $getDevices = $('#getDevices');
+                let $captcha= $('#captcha');
 
                 if (!active) {
                     console.log("Not_active");
@@ -275,38 +276,36 @@
                     showToast(_('no server selected'));
                     return
                 }
-
+                if (!authObj){
+                    authObj= {
+                        password: pass,
+                        username: user,
+                        captCode: true
+                    }
+                }
+                if ($captcha.val()){
+                    authObj.captCode= $captcha.val();
+                }
                 sendTo(adapter + "." + instance, 'discovery', {
-                    password: pass,
-                    username: user,
+                    authObj: authObj,
                     server: server
                 }, function (result) {
-
                     //console.log(JSON.stringify(result));
-                    $getDevices.removeClass('disabled');
-                    $('#loader1').addClass('seenot');
-
-                    // $('#token').hide();
-                    //  $('#ip').hide();
-
-                    var arr = result;
-
-                    if (arr.error) {
-                        showToast(_('ERROR: ' + arr.error));
-                        return;
+                    if (result.err) {
+                        if (result.captchaUrl) {
+                            $('#captchaImg').attr("src", result.captchaUrl).removeClass('seenot');
+                            $captcha.attr("value", '').parent().removeClass('seenot');
+                            showToast(_('Please solve captcha'));
+                            authObj = result;
+                        } 
+                        showToast(_('ERROR: ' + result.err));
+                    } else {
+                        $('#captchaImg').addClass('seenot');
+                        $captcha.parent().addClass('seenot');
+                        setDevices(result);
                     }
-
-                    rawdevices = arr;
-                    let text = "";
-
-                    arr.forEach(function (entry) {
-                        text += "<option value='" + JSON.stringify(entry) + "' >" + entry
-                            .model + ' - token: ' + entry.token + ' - ip: ' + (entry.localip ?
-                                entry.localip : '') + '</option>';
-
-                        //check if in config
-                    });
-                    $devicelist.html('<option>' + _('choose Device') + '</option>' + text).select();
+                    $getDevices.removeClass('disabled');
+                    $('#loader1').addClass('seenot');                   
                 });
 
             });
@@ -401,6 +400,25 @@
                 });
             });
             onChange(false);
+        }
+
+        function setDevices(arr){
+            rawdevices = arr;
+            let text = "";
+
+            for (let homeId in arr){
+                for (let device  of arr[homeId].result.device_info){
+                    const entry= {
+                        token: device.token,
+                        localip: device.localip,
+                        model:device.model
+                    }
+                    text += "<option value='" + JSON.stringify(entry) + "' >" + entry
+                        .model + ' - token: ' + entry.token + ' - ip: ' + (entry.localip ?
+                            entry.localip : '') + '</option>';
+                }
+            }
+            $('#devices').html('<option>' + _('choose Device') + '</option>' + text).select();
         }
 
         function translateTable(channelStr) {
@@ -651,16 +669,6 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s12 m3 L2" style="padding-top: 10px">
-                        <a target="_blank" href="https://paypal.me/MeisterTR"><img
-                                src="https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-200px.png"
-                                alt="PayPal" /></a>
-                    </div>
-                    <div class="col s12 m4 L4" style="padding-top: 10px">
-                        <p class="subtitle translate">donateInformation</p>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col s12">
                         <h6 class="title translate" data-lang="Xiaomi cloud login">Cloud login</h6>
                     </div>
@@ -687,11 +695,16 @@
                         </select>
                         <label class="translate" for="server">Server</label>
                     </div>
+                    <div class="col s12 m3 l2 input-field seenot">
+                        <input id="captcha" size="3" type="text" />
+                        <label class="translate" for="captcha">enter captcha</label>
+                    </div>
                     <div class="col s12 m3 l2">
                         <a id="getDevices" class=" btn-small translate">get devices<span></span></a>
                     </div>
                     <div class="col s12 ">
                         <div class="loader seenot" id="loader1"> </div>
+                        <img class="seenot" width="400" id="captchaImg" />
                     </div>
                 </div>
                 <div class="row">

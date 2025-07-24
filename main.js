@@ -7,7 +7,7 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
-const MapHelper = require('./lib/maphelper');
+const XiaomiCloudConnector = require('./lib/XiaomiCloudConnector');
 const miio = require('./lib/miio');
 const objects = require('./lib/objects');
 
@@ -19,7 +19,7 @@ const DreameManager = require('./lib/dreame');
 // @ts-expect-ignore
 let Miio;
 let vacuum = null;
-let Map;
+let XiaomiApi = null;
 
 class MihomeVacuum extends utils.Adapter {
     constructor(options) {
@@ -171,7 +171,7 @@ class MihomeVacuum extends utils.Adapter {
         //we get a model so we can select a protocol
         if (manager) {
             this.device = DeviceModel;
-            vacuum = new manager(this, Miio, Map);
+            vacuum = new manager(this, Miio);
         }
     }
 
@@ -318,10 +318,6 @@ class MihomeVacuum extends utils.Adapter {
     async onReady() {
         // Reset the connection indicator during startup
         this.setConnection(false);
-
-        Map = new MapHelper(null, this);
-        //MAP.Init(); // for Map
-
         this.main();
     }
 
@@ -436,21 +432,29 @@ class MihomeVacuum extends utils.Adapter {
         // handle the message
         if (obj) {
             switch (obj.command) {
-                case 'discovery':
-                    //adapter.log.info('discover' + JSON.stringify(obj))
-                    if (Map) {
-                        Map.getDeviceStatus(obj.message.username, obj.message.password, obj.message.server)
-                            .then(data => {
-                                this.log.debug(`discover__${JSON.stringify(data)}`);
-                                respond(data);
-                            })
-                            .catch(err => {
-                                this.log.info(`discover ${err}`);
-                                respond({ error: err });
-                            });
+                case 'discovery': {
+                    if (!XiaomiApi) {
+                        XiaomiApi = new XiaomiCloudConnector(this.log, obj.message.authObj);
+                    } else {
+                        XiaomiApi.init(obj.message.authObj);
                     }
+                    XiaomiApi.login()
+                        .then(result => {
+                            if (result.ok) {
+                                return XiaomiApi.getDevices(obj.message.server).then(data => {
+                                    this.log.debug(`discover__${JSON.stringify(data)}`);
+                                    respond(data);
+                                    return;
+                                });
+                            }
+                            respond(result);
+                        })
+                        .catch(result => {
+                            this.log.info(`discover ${result.err}`);
+                            respond(result);
+                        });
                     return;
-
+                }
                 // ======================================================================
                 default:
                     //respond(predefinedResponses.ERROR_UNKNOWN_COMMAND);
