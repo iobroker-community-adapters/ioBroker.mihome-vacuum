@@ -8,3 +8,6 @@ admin/i18n/*/flat.txt
 # ioBroker dev-server
 .dev-server/
 .vscode/launch.json
+
+#ignore .commitinfo created by ioBroker release script
+.commitinfo
