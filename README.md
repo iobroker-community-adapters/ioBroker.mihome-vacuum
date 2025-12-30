@@ -333,6 +333,11 @@ The supported commands are:
     ### **WORK IN PROGRESS**
     * () 
 -->
+
+### **WORK IN PROGRESS**
+- (copilot) Adapter requires js-controller >= 6.0.11 now
+- (copilot) Adapter requires admin >= 7.6.17 now
+
 ### 5.3.0 (2025-07-24)
 * (dirkhe) update dependecies
 * (dirkhe) replace request with axios
@@ -655,6 +660,8 @@ The supported commands are:
 ## License
 The MIT License (MIT)
 
+
+Copyright (c) 2026 iobroker-community-adapters <iobroker-community-adapters@gmx.de>  
 Copyright (c) 2023-2025 iobroker community developers <iobroker-community-adapters@gmx.de>  
 Copyright (c) 2017-2023 bluefox <dogafox@gmail.com>
 
