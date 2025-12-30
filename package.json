@@ -47,7 +47,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.2.3",
+    "@iobroker/adapter-core": "^3.3.2",
     "qs": "^6.14.0"
   },
   "devDependencies": {
