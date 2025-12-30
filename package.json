@@ -11,10 +11,10 @@
     "url": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/issues"
   },
   "license": "MIT",
-  "author": {
-    "name": "bluefox",
-    "email": "dogafox@gmail.com"
-  },
+  "author": "bluefox <dogafox@gmail.com>",
+  "contributors": [
+    "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
+  ],
   "main": "main.js",
   "repository": {
     "type": "git",
