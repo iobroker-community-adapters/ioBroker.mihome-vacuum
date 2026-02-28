@@ -1,9 +1,37 @@
 # ioBroker Adapter Development with GitHub Copilot
 
-**Version:** 0.4.0
+**Version:** 0.5.7  
 **Template Source:** https://github.com/DrozmotiX/ioBroker-Copilot-Instructions
 
 This file contains instructions and best practices for GitHub Copilot when working on ioBroker adapter development.
+
+---
+
+## 📑 Table of Contents
+
+1. [Project Context](#project-context)
+2. [Code Quality & Standards](#code-quality--standards)
+   - [Code Style Guidelines](#code-style-guidelines)
+   - [ESLint Configuration](#eslint-configuration)
+3. [Testing](#testing)
+   - [Unit Testing](#unit-testing)
+   - [Integration Testing](#integration-testing)
+   - [API Testing with Credentials](#api-testing-with-credentials)
+4. [Development Best Practices](#development-best-practices)
+   - [Dependency Management](#dependency-management)
+   - [HTTP Client Libraries](#http-client-libraries)
+   - [Error Handling](#error-handling)
+5. [Admin UI Configuration](#admin-ui-configuration)
+   - [JSON-Config Setup](#json-config-setup)
+   - [Translation Management](#translation-management)
+6. [Documentation](#documentation)
+   - [README Updates](#readme-updates)
+   - [Changelog Management](#changelog-management)
+7. [CI/CD & GitHub Actions](#cicd--github-actions)
+   - [Workflow Configuration](#workflow-configuration)
+   - [Testing Integration](#testing-integration)
+
+---
 
 ## Project Context
 
@@ -14,7 +42,7 @@ You are working on an ioBroker adapter. ioBroker is an integration platform for 
 This adapter enables control of Xiaomi/Roborock vacuum cleaners through ioBroker. Key features include:
 
 - **Supported Devices**: Xiaomi Mi Robot, Roborock S5/S6/S7/S8, Dreame vacuum cleaners, and Valetudo-flashed devices
-- **Core Functionality**: 
+- **Core Functionality**:
   - Robot control (start/stop/pause/dock)
   - Real-time status monitoring
   - Zone and room-based cleaning
@@ -36,47 +64,122 @@ This adapter enables control of Xiaomi/Roborock vacuum cleaners through ioBroker
   - Xiaomi cloud API for device discovery
   - Various vacuum-specific communication protocols
 
+---
+
+## Code Quality & Standards
+
+### Code Style Guidelines
+
+- Follow JavaScript/TypeScript best practices
+- Use async/await for asynchronous operations
+- Implement proper resource cleanup in `unload()` method
+- Use semantic versioning for adapter releases
+- Include proper JSDoc comments for public methods
+
+**Timer and Resource Cleanup Example:**
+```javascript
+private connectionTimer?: NodeJS.Timeout;
+
+async onReady() {
+  this.connectionTimer = setInterval(() => this.checkConnection(), 30000);
+}
+
+onUnload(callback) {
+  try {
+    if (this.connectionTimer) {
+      clearInterval(this.connectionTimer);
+      this.connectionTimer = undefined;
+    }
+    callback();
+  } catch (e) {
+    callback();
+  }
+}
+```
+
+### ESLint Configuration
+
+**CRITICAL:** ESLint validation must run FIRST in your CI/CD pipeline, before any other tests. This "lint-first" approach catches code quality issues early.
+
+#### Setup
+```bash
+npm install --save-dev eslint @iobroker/eslint-config
+```
+
+#### Configuration (.eslintrc.json)
+```json
+{
+  "extends": "@iobroker/eslint-config",
+  "rules": {
+    // Add project-specific rule overrides here if needed
+  }
+}
+```
+
+#### Package.json Scripts
+```json
+{
+  "scripts": {
+    "lint": "eslint --max-warnings 0 .",
+    "lint:fix": "eslint . --fix"
+  }
+}
+```
+
+#### Best Practices
+1. ✅ Run ESLint before committing — fix ALL warnings, not just errors
+2. ✅ Use `lint:fix` for auto-fixable issues
+3. ✅ Don't disable rules without documentation
+4. ✅ Lint all relevant files (main code, tests, build scripts)
+5. ✅ Keep `@iobroker/eslint-config` up to date
+6. ✅ **ESLint warnings are treated as errors in CI** (`--max-warnings 0`). The `lint` script above already includes this flag — run `npm run lint` to match CI behavior locally
+
+#### Common Issues
+- **Unused variables**: Remove or prefix with underscore (`_variable`)
+- **Missing semicolons**: Run `npm run lint:fix`
+- **Indentation**: Use 4 spaces (ioBroker standard)
+- **console.log**: Replace with `adapter.log.debug()` or remove
+
+---
+
 ## Testing
 
 ### Unit Testing
-- Use Jest as the primary testing framework for ioBroker adapters
+
+- Use Jest as the primary testing framework
 - Create tests for all adapter main functions and helper methods
 - Test error handling scenarios and edge cases
 - Mock external API calls and hardware dependencies
-- For adapters connecting to APIs/devices not reachable by internet, provide example data files to allow testing of functionality without live connections
-- Example test structure:
-  ```javascript
-  describe('AdapterName', () => {
-    let adapter;
-    
-    beforeEach(() => {
-      // Setup test adapter instance
-    });
-    
-    test('should initialize correctly', () => {
-      // Test adapter initialization
-    });
+- For adapters connecting to APIs/devices not reachable by internet, provide example data files
+
+**Example Structure:**
+```javascript
+describe('AdapterName', () => {
+  let adapter;
+  
+  beforeEach(() => {
+    // Setup test adapter instance
   });
-  ```
+  
+  test('should initialize correctly', () => {
+    // Test adapter initialization
+  });
+});
+```
 
 ### Integration Testing
 
-**IMPORTANT**: Use the official `@iobroker/testing` framework for all integration tests. This is the ONLY correct way to test ioBroker adapters.
+**CRITICAL:** Use the official `@iobroker/testing` framework. This is the ONLY correct way to test ioBroker adapters.
 
-**Official Documentation**: https://github.com/ioBroker/testing
+**Official Documentation:** https://github.com/ioBroker/testing
 
 #### Framework Structure
-Integration tests MUST follow this exact pattern:
 
+**✅ Correct Pattern:**
 ```javascript
 const path = require('path');
 const { tests } = require('@iobroker/testing');
 
-// Define test coordinates or configuration
-const TEST_COORDINATES = '52.520008,13.404954'; // Berlin
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-// Use tests.integration() with defineAdditionalTests
 tests.integration(path.join(__dirname, '..'), {
     defineAdditionalTests({ suite }) {
         suite('Test adapter with specific configuration', (getHarness) => {
@@ -89,9 +192,7 @@ tests.integration(path.join(__dirname, '..'), {
             it('should configure and start adapter', function () {
                 return new Promise(async (resolve, reject) => {
                     try {
-                        harness = getHarness();
-                        
-                        // Get adapter object using promisified pattern
+                        // Get adapter object
                         const obj = await new Promise((res, rej) => {
                             harness.objects.getObject('system.adapter.your-adapter.0', (err, o) => {
                                 if (err) return rej(err);
@@ -99,50 +200,35 @@ tests.integration(path.join(__dirname, '..'), {
                             });
                         });
                         
-                        if (!obj) {
-                            return reject(new Error('Adapter object not found'));
-                        }
+                        if (!obj) return reject(new Error('Adapter object not found'));
 
-                        // Configure adapter properties
+                        // Configure adapter
                         Object.assign(obj.native, {
-                            position: TEST_COORDINATES,
-                            createCurrently: true,
+                            position: '52.520008,13.404954',
                             createHourly: true,
-                            createDaily: true,
-                            // Add other configuration as needed
                         });
 
-                        // Set the updated configuration
                         harness.objects.setObject(obj._id, obj);
-
-                        console.log('✅ Step 1: Configuration written, starting adapter...');
                         
-                        // Start adapter and wait
+                        // Start and wait
                         await harness.startAdapterAndWait();
-                        
-                        console.log('✅ Step 2: Adapter started');
+                        await new Promise(resolve => setTimeout(resolve, 15000));
 
-                        // Wait for adapter to process data
-                        const waitMs = 15000;
-                        await wait(waitMs);
-
-                        console.log('🔍 Step 3: Checking states after adapter run...');
+                        // Verify states
+                        const stateIds = await harness.dbConnection.getStateIDs('your-adapter.0.*');
                         
-                        // Verify that basic states exist
-                        const states = await harness.states.getKeysAsync('your-adapter.0.*');
-                        console.log(`Found ${states.length} states created by adapter`);
-                        
-                        if (states.length === 0) {
-                            throw new Error('No states were created by the adapter');
+                        if (stateIds.length > 0) {
+                            console.log('✅ Adapter successfully created states');
+                            await harness.stopAdapter();
+                            resolve(true);
+                        } else {
+                            reject(new Error('Adapter did not create any states'));
                         }
-
-                        resolve();
                     } catch (error) {
-                        console.error('Integration test failed:', error);
                         reject(error);
                     }
                 });
-            }).timeout(60000); // Generous timeout for integration tests
+            }).timeout(40000);
         });
     }
 });
@@ -157,9 +243,7 @@ For mihome-vacuum adapter testing:
 - Test encryption/decryption of tokens
 - Verify multi-device support scenarios
 
-### Advanced Testing Patterns
-
-#### Mocking Hardware/Network Dependencies
+**Mocking Hardware/Network Dependencies:**
 ```javascript
 // Mock miIO protocol responses for testing
 const mockMiio = {
@@ -191,42 +275,195 @@ const sampleMapData = {
 };
 ```
 
-## Adapter Architecture
+#### Testing Success AND Failure Scenarios
 
-### Core Components
+**IMPORTANT:** For every "it works" test, implement corresponding "it fails gracefully" tests.
 
-#### Device Managers
-- **VacuumManager**: Base functionality for Xiaomi Mi Robot
-- **RoborockManager**: Extended features for Roborock devices  
-- **DreameManager**: Dreame vacuum-specific implementation
-- Each manager handles device-specific protocols and features
+**Failure Scenario Example:**
+```javascript
+it('should NOT create daily states when daily is disabled', function () {
+    return new Promise(async (resolve, reject) => {
+        try {
+            harness = getHarness();
+            const obj = await new Promise((res, rej) => {
+                harness.objects.getObject('system.adapter.your-adapter.0', (err, o) => {
+                    if (err) return rej(err);
+                    res(o);
+                });
+            });
+            
+            if (!obj) return reject(new Error('Adapter object not found'));
 
-#### Map Generation (lib/mapCreator.js)
-- Canvas-based rendering of vacuum maps
-- Configurable colors and robot icons
-- Path visualization and zone highlighting
-- Optional dependency - graceful fallback when canvas unavailable
+            Object.assign(obj.native, {
+                createDaily: false, // Daily disabled
+            });
 
-#### Communication Protocols
-- **miIO Protocol**: Direct device communication
-- **Cloud API**: Xiaomi cloud service integration
-- **Valetudo**: Local-only firmware support
+            await new Promise((res, rej) => {
+                harness.objects.setObject(obj._id, obj, (err) => {
+                    if (err) return rej(err);
+                    res(undefined);
+                });
+            });
 
-### Configuration Management
-- Encrypted storage of sensitive data (tokens, passwords)
-- Multi-device configuration support
-- Server region selection for cloud connectivity
+            await harness.startAdapterAndWait();
+            await new Promise((res) => setTimeout(res, 20000));
 
-## Error Handling
+            const stateIds = await harness.dbConnection.getStateIDs('your-adapter.0.*');
+            const dailyStates = stateIds.filter((key) => key.includes('daily'));
+            
+            if (dailyStates.length === 0) {
+                console.log('✅ No daily states found as expected');
+                resolve(true);
+            } else {
+                reject(new Error('Expected no daily states but found some'));
+            }
 
-### Adapter-Specific Error Scenarios
+            await harness.stopAdapter();
+        } catch (error) {
+            reject(error);
+        }
+    });
+}).timeout(40000);
+```
+
+#### Key Rules
+
+1. ✅ Use `@iobroker/testing` framework
+2. ✅ Configure via `harness.objects.setObject()`
+3. ✅ Start via `harness.startAdapterAndWait()`
+4. ✅ Verify states via `harness.states.getState()`
+5. ✅ Allow proper timeouts for async operations
+6. ❌ NEVER test API URLs directly
+7. ❌ NEVER bypass the harness system
+
+#### Workflow Dependencies
+
+Integration tests should run ONLY after lint and adapter tests pass:
+
+```yaml
+integration-tests:
+  needs: [check-and-lint, adapter-tests]
+  runs-on: ubuntu-22.04
+```
+
+### API Testing with Credentials
+
+For adapters connecting to external APIs requiring authentication:
+
+#### Password Encryption for Integration Tests
+
+```javascript
+async function encryptPassword(harness, password) {
+    const systemConfig = await harness.objects.getObjectAsync("system.config");
+    if (!systemConfig?.native?.secret) {
+        throw new Error("Could not retrieve system secret for password encryption");
+    }
+    
+    const secret = systemConfig.native.secret;
+    let result = '';
+    for (let i = 0; i < password.length; ++i) {
+        result += String.fromCharCode(secret[i % secret.length].charCodeAt(0) ^ password.charCodeAt(i));
+    }
+    return result;
+}
+```
+
+#### Demo Credentials Testing Pattern
+
+- Use provider demo credentials when available (e.g., `demo@api-provider.com` / `demo`)
+- Create separate test file: `test/integration-demo.js`
+- Add npm script: `"test:integration-demo": "mocha test/integration-demo --exit"`
+- Implement clear success/failure criteria
+
+**Example Implementation:**
+```javascript
+it("Should connect to API with demo credentials", async () => {
+    const encryptedPassword = await encryptPassword(harness, "demo_password");
+    
+    await harness.changeAdapterConfig("your-adapter", {
+        native: {
+            username: "demo@provider.com",
+            password: encryptedPassword,
+        }
+    });
+
+    await harness.startAdapter();
+    await new Promise(resolve => setTimeout(resolve, 60000));
+    
+    const connectionState = await harness.states.getStateAsync("your-adapter.0.info.connection");
+    
+    if (connectionState?.val === true) {
+        console.log("✅ SUCCESS: API connection established");
+        return true;
+    } else {
+        throw new Error("API Test Failed: Expected API connection. Check logs for API errors.");
+    }
+}).timeout(120000);
+```
+
+---
+
+## Development Best Practices
+
+### Dependency Management
+
+- Always use `npm` for dependency management
+- Use `npm ci` for installing existing dependencies (respects package-lock.json)
+- Use `npm install` only when adding or updating dependencies
+- Keep dependencies minimal and focused
+- Only update dependencies in separate Pull Requests
+
+**When modifying package.json:**
+1. Run `npm install` to sync package-lock.json
+2. Commit both package.json and package-lock.json together
+
+**Best Practices:**
+- Prefer built-in Node.js modules when possible
+- Use `@iobroker/adapter-core` for adapter base functionality
+- Avoid deprecated packages
+- Document specific version requirements
+
+### HTTP Client Libraries
+
+- **Preferred:** Use native `fetch` API (Node.js 20+ required)
+- **Avoid:** `axios` unless specific features are required
+
+**Example with fetch:**
+```javascript
+try {
+  const response = await fetch('https://api.example.com/data');
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+  const data = await response.json();
+} catch (error) {
+  this.log.error(`API request failed: ${error.message}`);
+}
+```
+
+**Other Recommendations:**
+- **Logging:** Use adapter built-in logging (`this.log.*`)
+- **Scheduling:** Use adapter built-in timers and intervals
+- **File operations:** Use Node.js `fs/promises`
+- **Configuration:** Use adapter config system
+
+### Error Handling
+
+- Always catch and log errors appropriately
+- Use adapter log levels (error, warn, info, debug)
+- Provide meaningful, user-friendly error messages
+- Handle network failures gracefully
+- Implement retry mechanisms where appropriate
+- Always clean up timers, intervals, and resources in `unload()` method
+
+**Adapter-Specific Error Scenarios:**
 - Device offline/unreachable
 - Invalid tokens or authentication failures
 - Map generation failures (missing canvas)
 - Protocol version mismatches
 - Network connectivity issues
 
-### Error Response Patterns
+**Error Response Patterns:**
 ```javascript
 // Graceful degradation for optional features
 try {
@@ -250,95 +487,264 @@ async function callWithRetry(operation, retries = 3) {
 }
 ```
 
-## Device Protocol Integration
+---
 
-### miIO Protocol Implementation
-- Token-based authentication
-- Command/response pattern
-- Device capability detection
-- Status polling and event handling
+## Admin UI Configuration
 
-### Multi-Device Architecture
-```javascript
-// Device manager factory pattern
-getManager(model, configuredManager) {
-    const managers = {
-        'roborock.vacuum.s5': RoborockManager,
-        'roborock.vacuum.s6': RoborockManager,
-        'dreame.vacuum.mc1808': DreameManager,
-        // ... more device mappings
-    };
-    
-    return configuredManager || managers[model] || VacuumManager;
-}
-```
+### JSON-Config Setup
 
-### State Management
-- Real-time status updates
-- Battery and consumables monitoring  
-- Cleaning history and statistics
-- Error code translation and reporting
+Use JSON-Config format for modern ioBroker admin interfaces.
 
-## Performance Considerations
-
-### Network Optimization
-- Configurable polling intervals
-- Connection pooling for multiple devices
-- Graceful handling of network timeouts
-
-### Resource Management
-```javascript
-// Proper cleanup in unload method
-async onUnload(callback) {
-    try {
-        // Clear timers
-        if (this.pingTimeout) {
-            clearTimeout(this.pingTimeout);
-            this.pingTimeout = undefined;
-        }
-        
-        // Close device connections
-        if (this.miio) {
-            await this.miio.destroy();
-        }
-        
-        callback();
-    } catch (e) {
-        callback();
+**Example Structure:**
+```json
+{
+  "type": "panel",
+  "items": {
+    "host": {
+      "type": "text",
+      "label": "Host address",
+      "help": "IP address or hostname of the device"
     }
+  }
 }
 ```
 
-## Security Best Practices
+**Guidelines:**
+- ✅ Use consistent naming conventions
+- ✅ Provide sensible default values
+- ✅ Include validation for required fields
+- ✅ Add tooltips for complex options
+- ✅ Ensure translations for all supported languages (minimum English and German)
+- ✅ Write end-user friendly labels, avoid technical jargon
 
-### Token and Password Handling
-- Use ioBroker's built-in encryption for sensitive data
-- Never log tokens or passwords in plain text
-- Implement secure token refresh mechanisms
+### Translation Management
 
-### Network Security
-- Support for local-only operation (Valetudo)
-- Validate all external API responses
-- Implement rate limiting for API calls
+**CRITICAL:** Translation files must stay synchronized with `admin/jsonConfig.json`. Orphaned keys or missing translations cause UI issues and PR review delays.
 
-## Code Style and Standards
+#### Overview
+- **Location:** `admin/i18n/{lang}/translations.json` for 11 languages (de, en, es, fr, it, nl, pl, pt, ru, uk, zh-cn)
+- **Source of truth:** `admin/jsonConfig.json` - all `label` and `help` properties must have translations
+- **Command:** `npm run translate` - auto-generates translations but does NOT remove orphaned keys
+- **Formatting:** English uses tabs, other languages use 4 spaces
 
-- Follow JavaScript/TypeScript best practices
-- Use async/await for asynchronous operations
-- Implement proper resource cleanup in `unload()` method
-- Use semantic versioning for adapter releases
-- Include proper JSDoc comments for public methods
+#### Critical Rules
+1. ✅ Keys must match exactly with jsonConfig.json
+2. ✅ No orphaned keys in translation files
+3. ✅ All translations must be in native language (no English fallbacks)
+4. ✅ Keys must be sorted alphabetically
 
-## CI/CD and Testing Integration
+#### Workflow for Translation Updates
 
-### GitHub Actions for API Testing
-For adapters with external API dependencies, implement separate CI/CD jobs:
+**When modifying admin/jsonConfig.json:**
+
+1. Make your changes to labels/help texts
+2. Run automatic translation: `npm run translate`
+3. Create validation script (`scripts/validate-translations.js`):
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+const jsonConfig = JSON.parse(fs.readFileSync('admin/jsonConfig.json', 'utf8'));
+
+function extractTexts(obj, texts = new Set()) {
+    if (typeof obj === 'object' && obj !== null) {
+        if (obj.label) texts.add(obj.label);
+        if (obj.help) texts.add(obj.help);
+        for (const key in obj) {
+            extractTexts(obj[key], texts);
+        }
+    }
+    return texts;
+}
+
+const requiredTexts = extractTexts(jsonConfig);
+const languages = ['de', 'en', 'es', 'fr', 'it', 'nl', 'pl', 'pt', 'ru', 'uk', 'zh-cn'];
+let hasErrors = false;
+
+languages.forEach(lang => {
+    const translationPath = path.join('admin', 'i18n', lang, 'translations.json');
+    const translations = JSON.parse(fs.readFileSync(translationPath, 'utf8'));
+    const translationKeys = new Set(Object.keys(translations));
+    
+    const missing = Array.from(requiredTexts).filter(text => !translationKeys.has(text));
+    const orphaned = Array.from(translationKeys).filter(key => !requiredTexts.has(key));
+    
+    console.log(`\n=== ${lang} ===`);
+    if (missing.length > 0) {
+        console.error('❌ Missing keys:', missing);
+        hasErrors = true;
+    }
+    if (orphaned.length > 0) {
+        console.error('❌ Orphaned keys (REMOVE THESE):', orphaned);
+        hasErrors = true;
+    }
+    if (missing.length === 0 && orphaned.length === 0) {
+        console.log('✅ All keys match!');
+    }
+});
+
+process.exit(hasErrors ? 1 : 0);
+```
+
+4. Run validation: `node scripts/validate-translations.js`
+5. Remove orphaned keys manually from all translation files
+6. Add missing translations in native languages
+7. Run: `npm run lint && npm run test`
+
+#### Add Validation to package.json
+
+```json
+{
+  "scripts": {
+    "translate": "translate-adapter",
+    "validate:translations": "node scripts/validate-translations.js",
+    "pretest": "npm run lint && npm run validate:translations"
+  }
+}
+```
+
+#### Translation Checklist
+
+Before committing changes to admin UI or translations:
+1. ✅ Validation script shows "All keys match!" for all 11 languages
+2. ✅ No orphaned keys in any translation file
+3. ✅ All translations in native language
+4. ✅ Keys alphabetically sorted
+5. ✅ `npm run lint` passes
+6. ✅ `npm run test` passes
+7. ✅ Admin UI displays correctly
+
+---
+
+## Documentation
+
+### README Updates
+
+#### Required Sections
+1. **Installation** - Clear npm/ioBroker admin installation steps
+2. **Configuration** - Detailed configuration options with examples
+3. **Usage** - Practical examples and use cases
+4. **Changelog** - Version history (use "## **WORK IN PROGRESS**" for ongoing changes)
+5. **License** - License information (typically MIT for ioBroker adapters)
+6. **Support** - Links to issues, discussions, community support
+
+#### Documentation Standards
+- Use clear, concise language
+- Include code examples for configuration
+- Add screenshots for admin interface when applicable
+- Maintain multilingual support (minimum English and German)
+- Always reference issues in commits and PRs (e.g., "fixes #xx")
+
+#### Mandatory README Updates for PRs
+
+For **every PR or new feature**, always add a user-friendly entry to README.md:
+
+- Add entries under `## **WORK IN PROGRESS**` section
+- Use format: `* (author) **TYPE**: Description of user-visible change`
+- Types: **NEW** (features), **FIXED** (bugs), **ENHANCED** (improvements), **TESTING** (test additions), **CI/CD** (automation)
+- Focus on user impact, not technical details
+
+**Example:**
+```markdown
+## **WORK IN PROGRESS**
+
+* (DutchmanNL) **FIXED**: Adapter now properly validates login credentials (fixes #25)
+* (DutchmanNL) **NEW**: Added device discovery to simplify initial setup
+```
+
+### Changelog Management
+
+Follow the [AlCalzone release-script](https://github.com/AlCalzone/release-script) standard.
+
+#### Format Requirements
+
+```markdown
+# Changelog
+
+<!--
+  Placeholder for the next version (at the beginning of the line):
+  ## **WORK IN PROGRESS**
+-->
+
+## **WORK IN PROGRESS**
+
+- (author) **NEW**: Added new feature X
+- (author) **FIXED**: Fixed bug Y (fixes #25)
+
+## v0.1.0 (2023-01-01)
+Initial release
+```
+
+#### Workflow Process
+- **During Development:** All changes go under `## **WORK IN PROGRESS**`
+- **For Every PR:** Add user-facing changes to WORK IN PROGRESS section
+- **Before Merge:** Version number and date added when merging to main
+- **Release Process:** Release-script automatically converts placeholder to actual version
+
+#### Change Entry Format
+- Format: `- (author) **TYPE**: User-friendly description`
+- Types: **NEW**, **FIXED**, **ENHANCED**
+- Focus on user impact, not technical implementation
+- Reference issues: "fixes #XX" or "solves #XX"
+
+---
+
+## CI/CD & GitHub Actions
+
+### Workflow Configuration
+
+#### GitHub Actions Best Practices
+
+**Must use ioBroker official testing actions:**
+- `ioBroker/testing-action-check@v1` for lint and package validation
+- `ioBroker/testing-action-adapter@v1` for adapter tests
+- `ioBroker/testing-action-deploy@v1` for automated releases with Trusted Publishing (OIDC)
+
+**Configuration:**
+- **Node.js versions:** Test on 20.x, 22.x, 24.x
+- **Platform:** Use ubuntu-22.04
+- **Automated releases:** Deploy to npm on version tags (requires NPM Trusted Publishing)
+- **Monitoring:** Include Sentry release tracking for error monitoring
+
+#### Critical: Lint-First Validation Workflow
+
+**ALWAYS run ESLint checks BEFORE other tests.** Benefits:
+- Catches code quality issues immediately
+- Prevents wasting CI resources on tests that would fail due to linting errors
+- Provides faster feedback to developers
+- Enforces consistent code quality
+
+**Workflow Dependency Configuration:**
+```yaml
+jobs:
+  check-and-lint:
+    # Runs ESLint and package validation
+    # Uses: ioBroker/testing-action-check@v1
+    
+  adapter-tests:
+    needs: [check-and-lint]  # Wait for linting to pass
+    # Run adapter unit tests
+    
+  integration-tests:
+    needs: [check-and-lint, adapter-tests]  # Wait for both
+    # Run integration tests
+```
+
+**Key Points:**
+- The `check-and-lint` job has NO dependencies - runs first
+- ALL other test jobs MUST list `check-and-lint` in their `needs` array
+- If linting fails, no other tests run, saving time
+- Fix all ESLint errors before proceeding
+
+### Testing Integration
+
+#### API Testing in CI/CD
+
+For adapters with external API dependencies:
 
 ```yaml
-# Tests API connectivity with demo credentials (runs separately)
 demo-api-tests:
   if: contains(github.event.head_commit.message, '[skip ci]') == false
-  
   runs-on: ubuntu-22.04
   
   steps:
@@ -358,15 +764,13 @@ demo-api-tests:
       run: npm run test:integration-demo
 ```
 
-### CI/CD Best Practices
+#### Testing Best Practices
 - Run credential tests separately from main test suite
-- Use ubuntu-22.04 for consistency
 - Don't make credential tests required for deployment
-- Provide clear failure messages for API connectivity issues
-- Use appropriate timeouts for external API calls (120+ seconds)
+- Provide clear failure messages for API issues
+- Use appropriate timeouts for external calls (120+ seconds)
 
-### Package.json Script Integration
-Add dedicated script for credential testing:
+#### Package.json Integration
 ```json
 {
   "scripts": {
@@ -375,80 +779,74 @@ Add dedicated script for credential testing:
 }
 ```
 
-### Practical Example: Complete API Testing Implementation
-Here's a complete example based on lessons learned from the Discovergy adapter:
+---
 
-#### test/integration-demo.js
+## Adapter Architecture
+
+### Core Components
+
+#### Device Managers
+- **VacuumManager**: Base functionality for Xiaomi Mi Robot
+- **RoborockManager**: Extended features for Roborock devices
+- **DreameManager**: Dreame vacuum-specific implementation
+- Each manager handles device-specific protocols and features
+
+#### Map Generation (lib/mapCreator.js)
+- Canvas-based rendering of vacuum maps
+- Configurable colors and robot icons
+- Path visualization and zone highlighting
+- Optional dependency - graceful fallback when canvas unavailable
+
+#### Communication Protocols
+- **miIO Protocol**: Direct device communication
+- **Cloud API**: Xiaomi cloud service integration
+- **Valetudo**: Local-only firmware support
+
+### Configuration Management
+- Encrypted storage of sensitive data (tokens, passwords)
+- Multi-device configuration support
+- Server region selection for cloud connectivity
+
+### Device Protocol Integration
+
+#### miIO Protocol Implementation
+- Token-based authentication
+- Command/response pattern
+- Device capability detection
+- Status polling and event handling
+
+#### Multi-Device Architecture
 ```javascript
-const path = require("path");
-const { tests } = require("@iobroker/testing");
-
-// Helper function to encrypt password using ioBroker's encryption method
-async function encryptPassword(harness, password) {
-    const systemConfig = await harness.objects.getObjectAsync("system.config");
+// Device manager factory pattern
+getManager(model, configuredManager) {
+    const managers = {
+        'roborock.vacuum.s5': RoborockManager,
+        'roborock.vacuum.s6': RoborockManager,
+        'dreame.vacuum.mc1808': DreameManager,
+        // ... more device mappings
+    };
     
-    if (!systemConfig || !systemConfig.native || !systemConfig.native.secret) {
-        throw new Error("Could not retrieve system secret for password encryption");
-    }
-    
-    const secret = systemConfig.native.secret;
-    let result = '';
-    for (let i = 0; i < password.length; ++i) {
-        result += String.fromCharCode(secret[i % secret.length].charCodeAt(0) ^ password.charCodeAt(i));
-    }
-    
-    return result;
+    return configuredManager || managers[model] || VacuumManager;
 }
-
-// Run integration tests with demo credentials
-tests.integration(path.join(__dirname, ".."), {
-    defineAdditionalTests({ suite }) {
-        suite("API Testing with Demo Credentials", (getHarness) => {
-            let harness;
-            
-            before(() => {
-                harness = getHarness();
-            });
-
-            it("Should connect to API and initialize with demo credentials", async () => {
-                console.log("Setting up demo credentials...");
-                
-                if (harness.isAdapterRunning()) {
-                    await harness.stopAdapter();
-                }
-                
-                const encryptedPassword = await encryptPassword(harness, "demo_password");
-                
-                await harness.changeAdapterConfig("your-adapter", {
-                    native: {
-                        username: "demo@provider.com",
-                        password: encryptedPassword,
-                        // other config options
-                    }
-                });
-
-                console.log("Starting adapter with demo credentials...");
-                await harness.startAdapter();
-                
-                // Wait for API calls and initialization
-                await new Promise(resolve => setTimeout(resolve, 60000));
-                
-                const connectionState = await harness.states.getStateAsync("your-adapter.0.info.connection");
-                
-                if (connectionState && connectionState.val === true) {
-                    console.log("✅ SUCCESS: API connection established");
-                    return true;
-                } else {
-                    throw new Error("API Test Failed: Expected API connection to be established with demo credentials. " +
-                        "Check logs above for specific API errors (DNS resolution, 401 Unauthorized, network issues, etc.)");
-                }
-            }).timeout(120000);
-        });
-    }
-});
 ```
 
-## Adapter-Specific Development Guidelines
+#### State Management
+- Real-time status updates
+- Battery and consumables monitoring
+- Cleaning history and statistics
+- Error code translation and reporting
+
+### Security Best Practices
+
+#### Token and Password Handling
+- Use ioBroker's built-in encryption for sensitive data
+- Never log tokens or passwords in plain text
+- Implement secure token refresh mechanisms
+
+#### Network Security
+- Support for local-only operation (Valetudo)
+- Validate all external API responses
+- Implement rate limiting for API calls
 
 ### Map Generation Best Practices
 - Always check for canvas availability before attempting map operations
@@ -500,3 +898,8 @@ function validateConfig(config) {
     }
 }
 ```
+
+### Network Optimization
+- Configurable polling intervals
+- Connection pooling for multiple devices
+- Graceful handling of network timeouts
