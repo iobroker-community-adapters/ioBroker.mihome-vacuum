@@ -658,6 +658,8 @@ The supported commands are:
 ### 0.0.1 (2017-01-16)
 * (bluefox) initial commit
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 The MIT License (MIT)
 
