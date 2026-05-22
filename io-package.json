@@ -139,7 +139,7 @@
       "type": "free"
     },
     "adminUI": {
-      "config": "materialize"
+      "config": "json"
     },
     "platform": "Javascript/Node.js",
     "mode": "daemon",

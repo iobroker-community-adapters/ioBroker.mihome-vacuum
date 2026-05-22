@@ -1,0 +1,280 @@
+{
+    "type": "tabs",
+    "items": {
+        "tab_main": {
+            "type": "tab",
+            "label": "Main",
+            "items": {
+                "cloud_panel": {
+                    "type": "panel",
+                    "label": "Cloud login",
+                    "xs": 12,
+                    "items": {
+                        "email": {
+                            "type": "text",
+                            "label": "E-mail",
+                            "xs": 12,
+                            "sm": 12,
+                            "md": 4,
+                            "lg": 3,
+                            "xl": 2
+                        },
+                        "password": {
+                            "type": "password",
+                            "label": "Password",
+                            "repeat": false,
+                            "xs": 12,
+                            "sm": 12,
+                            "md": 3,
+                            "lg": 2,
+                            "xl": 2
+                        },
+                        "server": {
+                            "type": "select",
+                            "label": "Server",
+                            "options": [
+                                {"value": "-", "label": "China"},
+                                {"value": "sg", "label": "Singapore"},
+                                {"value": "de", "label": "Germany"},
+                                {"value": "us", "label": "USA"},
+                                {"value": "ru", "label": "Russia"}
+                            ],
+                            "xs": 12,
+                            "sm": 12,
+                            "md": 4,
+                            "lg": 2,
+                            "xl": 2
+                        }
+                    }
+                },
+                "manual_panel": {
+                    "type": "panel",
+                    "label": "Manual settings",
+                    "xs": 12,
+                    "items": {
+                        "ip": {
+                            "type": "text",
+                            "label": "IP address:",
+                            "xs": 12,
+                            "sm": 12,
+                            "md": 4,
+                            "lg": 3,
+                            "xl": 2
+                        },
+                        "token": {
+                            "type": "text",
+                            "label": "Token",
+                            "maxLength": 96,
+                            "xs": 12,
+                            "sm": 12,
+                            "md": 8,
+                            "lg": 6,
+                            "xl": 4
+                        },
+                        "model": {
+                            "type": "text",
+                            "label": "model",
+                            "xs": 12,
+                            "sm": 12,
+                            "md": 4,
+                            "lg": 3,
+                            "xl": 2
+                        },
+                        "manager": {
+                            "type": "select",
+                            "label": "manager",
+                            "options": [
+                                {"value": "", "label": "auto"},
+                                {"value": "roborock", "label": "Roborock"},
+                                {"value": "dreame", "label": "Dreame"},
+                                {"value": "viomi", "label": "Viomi"},
+                                {"value": "xiaomi", "label": "Xiaomi"}
+                            ],
+                            "xs": 12,
+                            "sm": 12,
+                            "md": 4,
+                            "lg": 2,
+                            "xl": 2
+                        },
+                        "port": {
+                            "type": "number",
+                            "label": "Vacuum port:",
+                            "xs": 6,
+                            "sm": 6,
+                            "md": 3,
+                            "lg": 2,
+                            "xl": 1
+                        },
+                        "ownPort": {
+                            "type": "number",
+                            "label": "Own port:",
+                            "xs": 6,
+                            "sm": 6,
+                            "md": 3,
+                            "lg": 2,
+                            "xl": 1
+                        }
+                    }
+                }
+            }
+        },
+        "tab_settings": {
+            "type": "tab",
+            "label": "settings",
+            "items": {
+                "pingInterval": {
+                    "type": "number",
+                    "label": "get Status Intervall",
+                    "unit": "s",
+                    "multiply": 1000,
+                    "xs": 12,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 2,
+                    "xl": 2
+                },
+                "wifiInterval": {
+                    "type": "number",
+                    "label": "get WiFi Intervall",
+                    "unit": "s",
+                    "multiply": 1000,
+                    "xs": 12,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 2,
+                    "xl": 2
+                },
+                "map_text": {
+                    "type": "staticText",
+                    "text": "Map",
+                    "xs": 12
+                },
+                "enableMiMap": {
+                    "type": "checkbox",
+                    "label": "enable Map from xiaomi cloud",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "xl": 3
+                },
+                "valetudo_enable": {
+                    "type": "checkbox",
+                    "label": "Enable Valetudo",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "xl": 3
+                },
+                "other_text": {
+                    "type": "staticText",
+                    "text": "other settings",
+                    "xs": 12
+                },
+                "enableSelfCommands": {
+                    "type": "checkbox",
+                    "label": "Send own commands",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "xl": 3
+                },
+                "sendPauseBeforeHome": {
+                    "type": "checkbox",
+                    "label": "send Pause Before Home",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "xl": 3
+                },
+                "enableResumeZone": {
+                    "type": "checkbox",
+                    "label": "Resume paused zonecleaning with start button",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 8,
+                    "xl": 6
+                }
+            }
+        },
+        "tab_valetudo": {
+            "type": "tab",
+            "label": "Map settings",
+            "items": {
+                "valetudo_requestIntervall": {
+                    "type": "number",
+                    "label": "Request interval",
+                    "xs": 12,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 2,
+                    "xl": 2
+                },
+                "valetudo_MapsaveIntervall": {
+                    "type": "number",
+                    "label": "Map save intervall",
+                    "xs": 12,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 2,
+                    "xl": 2
+                },
+                "newmap": {
+                    "type": "checkbox",
+                    "label": "Use new map format with room colors",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "xl": 3
+                },
+                "valetudo_color_floor": {
+                    "type": "color",
+                    "label": "Color floor:",
+                    "xs": 12,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 2,
+                    "xl": 2
+                },
+                "valetudo_color_wall": {
+                    "type": "color",
+                    "label": "Color wall:",
+                    "xs": 12,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 2,
+                    "xl": 2
+                },
+                "valetudo_color_path": {
+                    "type": "color",
+                    "label": "Color path:",
+                    "xs": 12,
+                    "sm": 6,
+                    "md": 4,
+                    "lg": 2,
+                    "xl": 2
+                },
+                "robot_select": {
+                    "type": "select",
+                    "label": "Robot images",
+                    "options": [
+                        {"value": "robot", "label": "Robot 1"},
+                        {"value": "robot1", "label": "Robot 2"},
+                        {"value": "tank", "label": "Tank"},
+                        {"value": "spaceship", "label": "Space ship"}
+                    ],
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 5,
+                    "lg": 3,
+                    "xl": 2
+                }
+            }
+        }
+    }
+}
