@@ -343,6 +343,11 @@ requests.
     ### **WORK IN PROGRESS**
     * ()
 -->
+
+### **WORK IN PROGRESS**
+
+* ()
+
 ### 6.0.0 (2026-08-26)
 
 * (xXBJXx) Align the Admin requirement with stable Admin 7.8.23 and remove the invalid empty instance-object declaration
