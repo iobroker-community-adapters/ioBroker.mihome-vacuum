@@ -11,69 +11,101 @@
     "url": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum/issues"
   },
   "license": "MIT",
-  "author": "bluefox <dogafox@gmail.com>",
+  "author": {
+    "name": "bluefox",
+    "email": "dogafox@gmail.com"
+  },
   "contributors": [
     "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
   ],
-  "main": "main.js",
+  "main": "build/main.js",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum"
+    "url": "git+https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum.git"
   },
   "scripts": {
-    "test:js": "mocha --config test/mocha.custom.json \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
-    "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit",
+    "build:backend": "tsc -p tsconfig.build.json",
+    "build:admin": "vite build --config src-admin/vite.config.ts",
+    "build:widgets": "vite build --config src-widgets/vite.config.ts && node scripts/copy-widgets.cjs",
+    "check:admin": "tsc --noEmit -p src-admin/tsconfig.json",
+    "build": "npm run build:backend && npm run build:admin && npm run build:widgets",
+    "prepublishOnly": "npm run build",
+    "test:js": "npm run build:backend && mocha --config test/mocha.custom.json \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
+    "test:package": "npm run build && mocha test/package --exit",
+    "test:package-smoke": "npm run build && node scripts/package-smoke.cjs",
     "test:integration": "mocha test/integration --exit",
     "test": "npm run test:js && npm run test:package",
-    "check": "tsc --noEmit -p tsconfig.check.json",
+    "check:widgets": "tsc --noEmit -p src-widgets/tsconfig.json",
+    "check": "tsc --noEmit -p tsconfig.check.json && npm run check:admin && npm run check:widgets",
     "lint": "eslint -c eslint.config.mjs .",
-    "translate": "gulp translateAndUpdateWordsJS",
-    "release": "release-script"
+    "translate": "npm run build:backend && gulp translateAndUpdateWordsJS",
+    "prepare": "npm run build",
+    "release": "release-script",
+    "dev-server": "dev-server"
   },
   "files": [
     "admin{,/!(src)/**}/!(tsconfig|tsconfig.*).json",
     "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",
-    "lib/",
+    "build/**/*.js",
+    "!build/types/**",
     "www/",
+    "widgets/",
     "io-package.json",
-    "LICENSE",
-    "main.js"
+    "LICENSE"
   ],
-  "optionalDependencies": {
-    "canvas": "^3.1.2"
+  "allowScripts": {
+    "canvas@3.2.3": true,
+    "diskusage@1.2.0": true,
+    "esbuild@0.11.23": true,
+    "unix-dgram@2.0.6": true
   },
-  "engines": {
-    "node": ">=22"
+  "optionalDependencies": {
+    "canvas": "^3.2.3"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.4.3",
-    "qs": "^6.14.2"
+    "axios": "^1.20.0",
+    "qs": "6.15.3"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^5.2.1",
     "@alcalzone/release-script-plugin-iobroker": "^5.2.0",
     "@alcalzone/release-script-plugin-license": "^5.2.2",
     "@alcalzone/release-script-plugin-manual-review": "^5.2.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@iobroker/eslint-config": "^2.3.4",
+    "@iobroker/gui-components": "^8.0.2",
     "@iobroker/testing": "^5.3.0",
-    "@tsconfig/node20": "^20.1.9",
-    "@types/chai": "^5.2.2",
+    "@iobroker/types-vis-2": "^2.13.17",
+    "@module-federation/vite": "^1.20.9",
+    "@mui/icons-material": "^6.5.0",
+    "@mui/material": "^6.5.0",
+    "@types/chai": "^5.2.3",
     "@types/chai-as-promised": "^8.0.2",
     "@types/gulp": "^4.0.18",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^20.19.43",
+    "@types/node": "^22.20.0",
     "@types/proxyquire": "^1.3.31",
-    "@types/sinon": "^17.0.3",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@types/sinon": "^22.0.0",
     "@types/sinon-chai": "^4.0.0",
-    "axios": "^1.19.0",
-    "chai": "^5.1.2",
+    "@vitejs/plugin-react": "^6.1.0",
+    "chai": "^5.3.3",
     "chai-as-promised": "^8.0.2",
     "gulp": "^5.0.1",
     "mocha": "^11.8.0",
     "proxyquire": "^2.1.3",
-    "sinon": "^21.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sinon": "^22.1.0",
     "sinon-chai": "^4.0.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "^8.2.2",
+    "vite-plugin-commonjs": "^0.10.4"
   }
 }

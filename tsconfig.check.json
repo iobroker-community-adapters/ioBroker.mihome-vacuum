@@ -1,14 +1,23 @@
 // Specialized tsconfig for type-checking js files
 {
 	"extends": "./tsconfig.json",
-	"compilerOptions": {},
+	"compilerOptions": {
+		"module": "Preserve",
+		"moduleResolution": "Bundler",
+		"types": ["node", "mocha", "@iobroker/types"]
+	},
 	"include": [
 		"**/*.js",
+		"**/*.ts",
 		"**/*.d.ts"
 	],
 	"exclude": [
 		"**/build",
+		"admin/",
 		"node_modules/",
+		"**/node_modules/**",
+		"src-admin/",
+		"src-widgets/",
 		"widgets/",
 		"gulpfile.js"
 	]

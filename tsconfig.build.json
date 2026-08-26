@@ -1,0 +1,18 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "allowJs": false,
+        "checkJs": false,
+        "declaration": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noEmit": false,
+        "outDir": "build",
+        "rootDir": "src",
+        "sourceMap": true,
+        "target": "ES2022",
+        "types": ["node", "@iobroker/types"]
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
+}

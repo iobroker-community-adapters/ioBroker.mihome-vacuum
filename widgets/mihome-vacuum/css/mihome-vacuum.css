@@ -1,0 +1,506 @@
+.mihome-vacuum-widget {
+    min-width: 320px;
+    min-height: 360px;
+    font-family: Inter, Roboto, Arial, sans-serif;
+    font-variant-numeric: tabular-nums;
+}
+.mihome-vacuum-card {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    padding: 18px;
+    overflow: hidden;
+    color: #f5fbff;
+    background:
+        radial-gradient(circle at 8% -8%, rgb(41 151 220 / 32%), transparent 35%),
+        radial-gradient(circle at 100% 100%, rgb(38 104 145 / 13%), transparent 35%),
+        linear-gradient(145deg, #13232e, #081018 72%);
+    border: 1px solid rgb(143 209 249 / 12%);
+    border-radius: 24px;
+    box-shadow: 0 22px 60px rgb(0 0 0 / 38%);
+}
+.mihome-vacuum-header,
+.mihome-vacuum-brand,
+.mihome-vacuum-consumable-head,
+.mihome-vacuum-consumable-foot {
+    display: flex;
+    align-items: center;
+}
+.mihome-vacuum-header {
+    justify-content: space-between;
+    gap: 12px;
+}
+.mihome-vacuum-brand {
+    min-width: 0;
+    gap: 10px;
+}
+.mihome-vacuum-logo {
+    display: grid;
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    color: #08131b;
+    font-size: 23px;
+    background: #69c3ff;
+    border-radius: 13px;
+    box-shadow: 0 8px 25px rgb(62 174 245 / 30%);
+    place-items: center;
+}
+.mihome-vacuum-heading {
+    min-width: 0;
+}
+.mihome-vacuum-heading strong,
+.mihome-vacuum-heading span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.mihome-vacuum-heading strong {
+    font-size: 20px;
+    letter-spacing: -0.025em;
+}
+.mihome-vacuum-heading span {
+    margin-top: 3px;
+    color: rgb(235 246 255 / 64%);
+    font-size: 13px;
+}
+.mihome-vacuum-online {
+    flex: 0 0 auto;
+    padding: 5px 10px;
+    border: 1px solid;
+    border-radius: 999px;
+    font-size: 12px;
+}
+.mihome-vacuum-online.is-online {
+    color: #83e9ad;
+    background: rgb(31 132 76 / 16%);
+    border-color: rgb(73 210 128 / 38%);
+}
+.mihome-vacuum-online.is-offline {
+    color: #ffaaa5;
+    background: rgb(155 42 36 / 16%);
+    border-color: rgb(255 106 96 / 40%);
+}
+.mihome-vacuum-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+}
+.mihome-vacuum-tab {
+    flex: 0 0 auto;
+    padding: 7px 12px;
+    color: rgb(235 246 255 / 68%);
+    font-weight: 700;
+    cursor: pointer;
+    background: rgb(255 255 255 / 3.5%);
+    border: 0;
+    border-radius: 10px;
+}
+.mihome-vacuum-tab.active {
+    color: #06131c;
+    background: #69c3ff;
+}
+.mihome-vacuum-tab:hover,
+.mihome-vacuum-tab:focus-visible {
+    filter: brightness(1.12);
+    outline: 2px solid rgb(105 195 255 / 35%);
+    outline-offset: 1px;
+}
+.mihome-vacuum-panels {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    min-height: 0;
+    overflow: auto;
+}
+.mihome-vacuum-panel {
+    display: none;
+    flex: 0 0 auto;
+    min-width: 0;
+}
+.mihome-vacuum-panel.active {
+    display: block;
+}
+.mihome-vacuum-overview {
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(250px, 0.7fr);
+    gap: 12px;
+    min-height: 280px;
+    align-items: start;
+}
+.mihome-vacuum-overview.without-map {
+    grid-template-columns: 1fr;
+}
+.mihome-vacuum-map {
+    display: grid;
+    align-self: start;
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: rgb(3 11 17 / 42%);
+    border: 1px solid rgb(154 210 244 / 13%);
+    border-radius: 20px;
+    box-shadow: inset 0 1px rgb(255 255 255 / 4%);
+    place-items: center;
+}
+.mihome-vacuum-map-image {
+    position: absolute;
+    inset: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    filter: drop-shadow(0 12px 24px rgb(0 0 0 / 20%));
+}
+.mihome-vacuum-empty {
+    display: grid;
+    min-height: 180px;
+    color: rgb(235 246 255 / 42%);
+    font-size: 13px;
+    text-align: center;
+    place-content: center;
+}
+.mihome-vacuum-empty span {
+    margin-bottom: 5px;
+    font-size: 46px;
+}
+.mihome-vacuum-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+}
+.mihome-vacuum-metrics,
+.mihome-vacuum-history-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+.mihome-vacuum-metrics > div,
+.mihome-vacuum-history-summary > div,
+.mihome-vacuum-box,
+.mihome-vacuum-consumable,
+.mihome-vacuum-history {
+    box-sizing: border-box;
+    background: rgb(255 255 255 / 4.5%);
+    border: 1px solid rgb(154 210 244 / 11%);
+    border-radius: 15px;
+}
+.mihome-vacuum-metrics > div,
+.mihome-vacuum-history-summary > div {
+    min-width: 0;
+    padding: 11px;
+}
+.mihome-vacuum-metrics span,
+.mihome-vacuum-history-summary span {
+    display: block;
+    color: #69c3ff;
+    font-size: 19px;
+}
+.mihome-vacuum-metrics strong,
+.mihome-vacuum-history-summary strong {
+    display: block;
+    margin-top: 5px;
+    overflow: hidden;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.mihome-vacuum-metrics small,
+.mihome-vacuum-history-summary small,
+.mihome-vacuum-box small {
+    display: block;
+    margin-top: 2px;
+    color: rgb(235 246 255 / 48%);
+    font-size: 10px;
+}
+.mihome-vacuum-box {
+    padding: 12px;
+}
+.mihome-vacuum-fan select {
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 6px;
+    padding: 10px;
+    color: #f5fbff;
+    background: rgb(3 11 17 / 36%);
+    border: 1px solid rgb(105 195 255 / 25%);
+    border-radius: 11px;
+}
+.mihome-vacuum-quick {
+    display: grid;
+    flex: 1;
+    gap: 8px;
+    align-content: start;
+}
+.mihome-vacuum-quick > strong {
+    font-size: 13px;
+}
+.mihome-vacuum-health strong {
+    display: block;
+    margin-top: 6px;
+    overflow: hidden;
+    color: #88e7b1;
+    font-size: 13px;
+    text-overflow: ellipsis;
+}
+.mihome-vacuum-health strong.has-error {
+    color: #ffaaa5;
+}
+.mihome-vacuum-secondary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr));
+    gap: 16px;
+    align-items: start;
+}
+.mihome-vacuum-consumables {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+.mihome-vacuum-section-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 9px;
+}
+.mihome-vacuum-section-title > span {
+    color: #69c3ff;
+    font-size: 21px;
+}
+.mihome-vacuum-section-title strong,
+.mihome-vacuum-section-title small {
+    display: block;
+}
+.mihome-vacuum-section-title strong {
+    font-size: 16px;
+}
+.mihome-vacuum-section-title small {
+    margin-top: 2px;
+    color: rgb(235 246 255 / 48%);
+    font-size: 10px;
+}
+.mihome-vacuum-rooms {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+}
+.mihome-vacuum-rooms article {
+    display: grid;
+    gap: 8px;
+    padding: 12px;
+    background: rgb(255 255 255 / 4.5%);
+    border: 1px solid rgb(154 210 244 / 11%);
+    border-radius: 15px;
+}
+.mihome-vacuum-rooms article > strong {
+    overflow: hidden;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.mihome-vacuum-rooms select {
+    padding: 9px;
+    color: #f5fbff;
+    background: rgb(3 11 17 / 36%);
+    border: 1px solid rgb(105 195 255 / 25%);
+    border-radius: 10px;
+}
+.mihome-vacuum-rooms button {
+    padding: 9px;
+    color: #07131c;
+    font-weight: 800;
+    cursor: pointer;
+    background: #69c3ff;
+    border: 0;
+    border-radius: 10px;
+}
+.mihome-vacuum-consumable {
+    display: grid;
+    gap: 12px;
+    min-height: 125px;
+    padding: 14px;
+}
+.mihome-vacuum-consumable-head {
+    gap: 8px;
+}
+.mihome-vacuum-consumable-head > span {
+    color: #61d995;
+    font-size: 20px;
+}
+.mihome-vacuum-consumable-head strong {
+    flex: 1;
+    font-size: 14px;
+}
+.mihome-vacuum-consumable-head b {
+    color: #61d995;
+    font-size: 20px;
+}
+.mihome-vacuum-consumable.warning .mihome-vacuum-consumable-head > span,
+.mihome-vacuum-consumable.warning .mihome-vacuum-consumable-head b {
+    color: #ffbd66;
+}
+.mihome-vacuum-consumable.critical .mihome-vacuum-consumable-head > span,
+.mihome-vacuum-consumable.critical .mihome-vacuum-consumable-head b {
+    color: #ff7f73;
+}
+.mihome-vacuum-consumable.counter .mihome-vacuum-consumable-head > span,
+.mihome-vacuum-consumable.counter .mihome-vacuum-consumable-head b {
+    color: #69c3ff;
+}
+.mihome-vacuum-progress {
+    height: 7px;
+    overflow: hidden;
+    background: rgb(255 255 255 / 7%);
+    border-radius: 9px;
+}
+.mihome-vacuum-progress-placeholder {
+    height: 7px;
+}
+.mihome-vacuum-progress i {
+    display: block;
+    height: 100%;
+    background: #61d995;
+    border-radius: inherit;
+}
+.mihome-vacuum-consumable.warning .mihome-vacuum-progress i {
+    background: #ffbd66;
+}
+.mihome-vacuum-consumable.critical .mihome-vacuum-progress i {
+    background: #ff7f73;
+}
+.mihome-vacuum-consumable-foot {
+    justify-content: space-between;
+}
+.mihome-vacuum-consumable-foot small {
+    color: rgb(235 246 255 / 50%);
+}
+.mihome-vacuum-consumable-foot button {
+    width: 30px;
+    height: 30px;
+    color: rgb(235 246 255 / 65%);
+    font-size: 19px;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+}
+.mihome-vacuum-consumable-foot button:hover {
+    color: #69c3ff;
+    background: rgb(105 195 255 / 10%);
+}
+.mihome-vacuum-history-summary {
+    margin-bottom: 10px;
+}
+.mihome-vacuum-history {
+    overflow: hidden;
+}
+.mihome-vacuum-history article {
+    display: grid;
+    grid-template-columns: minmax(90px, 1.3fr) repeat(2, minmax(70px, 1fr)) 34px;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgb(255 255 255 / 6%);
+}
+.mihome-vacuum-history article:last-child {
+    border-bottom: 0;
+}
+.mihome-vacuum-history article strong,
+.mihome-vacuum-history article small {
+    display: block;
+}
+.mihome-vacuum-history article strong {
+    font-size: 13px;
+}
+.mihome-vacuum-history article small {
+    margin-top: 2px;
+    color: rgb(235 246 255 / 48%);
+    font-size: 10px;
+}
+.mihome-vacuum-history .success {
+    color: #61d995;
+}
+.mihome-vacuum-history .failed {
+    color: #ff9d93;
+}
+.mihome-vacuum-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(50px, 1fr);
+    gap: 8px;
+}
+.mihome-vacuum-controls button {
+    min-width: 0;
+    padding: 10px 6px;
+    color: #cbe8ff;
+    font-weight: 700;
+    cursor: pointer;
+    background: rgb(105 195 255 / 3.5%);
+    border: 1px solid rgb(105 195 255 / 35%);
+    border-radius: 11px;
+}
+.mihome-vacuum-controls button.primary {
+    color: #07131c;
+    background: #69c3ff;
+}
+.mihome-vacuum-controls button:hover,
+.mihome-vacuum-controls button:focus-visible {
+    background: rgb(105 195 255 / 10%);
+    border-color: #69c3ff;
+    outline: 0;
+}
+.mihome-vacuum-controls button.primary:hover {
+    background: #82cdff;
+}
+.mihome-vacuum-controls button span {
+    margin-right: 6px;
+}
+@media (max-width: 700px) {
+    .mihome-vacuum-card {
+        padding: 12px;
+        border-radius: 18px;
+    }
+    .mihome-vacuum-overview {
+        grid-template-columns: 1fr;
+    }
+    .mihome-vacuum-map {
+        aspect-ratio: 1 / 1;
+    }
+    .mihome-vacuum-secondary {
+        grid-template-columns: 1fr;
+    }
+    .mihome-vacuum-consumables {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .mihome-vacuum-rooms {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (max-width: 480px) {
+    .mihome-vacuum-consumables {
+        grid-template-columns: 1fr;
+    }
+    .mihome-vacuum-rooms {
+        grid-template-columns: 1fr;
+    }
+    .mihome-vacuum-controls button {
+        font-size: 0;
+    }
+    .mihome-vacuum-controls button span {
+        margin: 0;
+        font-size: 17px;
+    }
+    .mihome-vacuum-tab {
+        padding: 7px 9px;
+        font-size: 11px;
+    }
+}
