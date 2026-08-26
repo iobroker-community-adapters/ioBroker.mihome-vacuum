@@ -255,6 +255,7 @@
   "native": {
     "email": "",
     "password": "",
+    "cloudSession": "",
     "server": "-",
     "token": "",
     "ip": "",

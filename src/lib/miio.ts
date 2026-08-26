@@ -1,5 +1,5 @@
 import * as crypto from 'node:crypto';
-import * as dgram from 'dgram';
+import * as dgram from 'node:dgram';
 import EventEmitter from 'node:events';
 import type { MiioResponse, MiioTransportErrorCode } from '../types/miio';
 

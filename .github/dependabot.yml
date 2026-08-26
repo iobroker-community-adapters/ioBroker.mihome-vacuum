@@ -6,7 +6,10 @@ version: 2
 updates:
 
   - package-ecosystem: 'npm'
-    directory: '/'
+    directories:
+      - '/'
+      - '/src-admin'
+      - '/src-widgets'
     schedule:
       interval: 'cron'
       timezone: 'Europe/Berlin'

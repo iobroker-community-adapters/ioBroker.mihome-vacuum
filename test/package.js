@@ -53,6 +53,7 @@ describe('Runtime dependencies', () => {
         assert.equal(packageJson.dependencies['@iobroker/adapter-core'], '^3.4.3');
         assert.equal(packageJson.devDependencies['@iobroker/testing'], '^5.3.0');
         assert.equal(packageJson.devDependencies['@iobroker/eslint-config'], '^2.3.4');
+        assert.equal(packageJson.devDependencies['@tsconfig/node22'], '^22.0.6');
         assert.equal(packageJson.devDependencies['@alcalzone/release-script'], '^5.2.1');
         assert.equal(packageJson.devDependencies['@alcalzone/release-script-plugin-iobroker'], '^5.2.0');
         assert.equal(packageJson.devDependencies['@alcalzone/release-script-plugin-license'], '^5.2.2');
@@ -118,18 +119,20 @@ describe('Runtime dependencies', () => {
         assert.equal(packageJson.files.includes('build/**/*.js'), true);
         assert.equal(packageJson.files.includes('!build/types/**'), true);
         assert.equal(packageJson.files.includes('lib/'), false);
-        assert.equal(packageJson.files.includes('main.js'), false);
+        assert.equal(packageJson.files.includes('main.js'), true);
     });
 
     it('builds and uses the TypeScript backend as the runtime entry', () => {
         const packageJson = require('../package.json');
         const buildConfig = require('../tsconfig.build.json');
+        const rootConfigSource = fs.readFileSync(path.join(__dirname, '..', 'tsconfig.json'), 'utf8');
         const checkConfigSource = fs.readFileSync(path.join(__dirname, '..', 'tsconfig.check.json'), 'utf8');
 
-        assert.equal(packageJson.main, 'build/main.js');
+        assert.equal(packageJson.main, 'main.js');
         assert.equal(packageJson.scripts['build:backend'], 'tsc -p tsconfig.build.json');
         assert.match(packageJson.scripts['test:js'], /^npm run build:backend && mocha /);
         assert.equal(buildConfig.compilerOptions.rootDir, 'src');
+        assert.match(rootConfigSource, /"extends": "@tsconfig\/node22\/tsconfig\.json"/);
         assert.equal(buildConfig.compilerOptions.outDir, 'build');
         assert.equal(buildConfig.compilerOptions.noEmit, false);
         assert.equal(packageJson.scripts['build:admin'], 'vite build --config src-admin/vite.config.ts');
@@ -160,12 +163,7 @@ describe('Runtime dependencies', () => {
         assert.equal('prepack' in packageJson.scripts, false);
         assert.equal(packageJson.files.includes('src/'), false);
         assert.equal(packageJson.files.includes('widgets/'), true);
-        assert.deepEqual(packageJson.allowScripts, {
-            'canvas@3.2.3': true,
-            'diskusage@1.2.0': true,
-            'esbuild@0.11.23': true,
-            'unix-dgram@2.0.6': true,
-        });
+        assert.equal(Object.prototype.hasOwnProperty.call(packageJson, 'allowScripts'), false);
         assert.equal(fs.existsSync(path.join(__dirname, '..', 'scripts', 'package-smoke.cjs')), true);
         const packageSmokeSource = fs.readFileSync(
             path.join(__dirname, '..', 'scripts', 'package-smoke.cjs'),
@@ -226,8 +224,10 @@ describe('Runtime dependencies', () => {
         assert.equal(fs.existsSync(path.join(__dirname, '..', 'src', 'types', 'roomMappingProtocol.ts')), true);
         assert.equal(fs.existsSync(path.join(__dirname, '..', 'src', 'types', 'mapCreator.ts')), true);
         assert.equal(fs.existsSync(path.join(__dirname, '..', 'src', 'types', 'main.ts')), true);
+        const bootstrapSource = fs.readFileSync(path.join(__dirname, '..', 'main.js'), 'utf8');
+        assert.match(bootstrapSource, /require\(['"]\.\/build\/main\.js['"]\)/);
+        assert.doesNotMatch(bootstrapSource, /class MihomeVacuum|onReady\s*\(/);
         const removedLegacyRuntime = [
-            'main.js',
             'lib/RRMapParser.js',
             'lib/XiaomiCloudConnector.js',
             'lib/XiaomiCloudCrypto.js',
@@ -310,7 +310,7 @@ describe('Runtime dependencies', () => {
         assert.match(deployJob, /contents: write/);
         assert.match(deployJob, /id-token: write/);
         assert.match(deployJob, /uses: ioBroker\/testing-action-deploy@v1/);
-        assert.match(deployJob, /node-version: "22\.x"/);
+        assert.match(deployJob, /node-version: "24\.x"/);
         assert.match(deployJob, /package-cache: "false"/);
         assert.match(deployJob, /github\.repository == 'iobroker-community-adapters\/ioBroker\.mihome-vacuum'/);
         assert.doesNotMatch(deployJob, /NPM_TOKEN|npm-token|::set-output|npm install|actions\/create-release/);

@@ -60,7 +60,7 @@ function createClient(modulePath = '../build/lib/miio', port = 54321) {
         setConnection: connected => connectionStates.push(connected),
     };
     const Miio = proxyquire(modulePath, {
-        dgram: {
+        'node:dgram': {
             createSocket: () => socket,
         },
     });
@@ -86,7 +86,7 @@ function createClient(modulePath = '../build/lib/miio', port = 54321) {
 
 function createPacketClient(modulePath = '../build/lib/miio') {
     const socket = new FakeSocket();
-    const Miio = proxyquire(modulePath, { dgram: { createSocket: () => socket } });
+    const Miio = proxyquire(modulePath, { 'node:dgram': { createSocket: () => socket } });
     const client = new Miio({
         config: {
             ownPort: 53421,
@@ -105,7 +105,7 @@ describe('Miio lifecycle', () => {
         const sockets = [new FakeSocket(), new FakeSocket()];
         let socketIndex = 0;
         const Miio = proxyquire('../build/lib/miio', {
-            dgram: {
+            'node:dgram': {
                 createSocket: () => sockets[socketIndex++],
             },
         });
@@ -223,7 +223,7 @@ describe('Miio lifecycle', () => {
 describe('Miio packet encoding', () => {
     it('preserves the encrypted byte contract and decrypts the packet payload', () => {
         const socket = new FakeSocket();
-        const Miio = proxyquire('../build/lib/miio', { dgram: { createSocket: () => socket } });
+        const Miio = proxyquire('../build/lib/miio', { 'node:dgram': { createSocket: () => socket } });
         const client = new Miio({
             config: {
                 ownPort: 53421,

@@ -62,6 +62,7 @@ describe('React admin security', () => {
     it('loads a validated token from the local adapter and delegates protected saving to the backend', () => {
         assert.deepEqual(ioPackage.encryptedNative, ['password', 'token', 'cloudSession']);
         assert.deepEqual(ioPackage.protectedNative, ['password', 'token', 'cloudSession']);
+        assert.equal(ioPackage.native.cloudSession, '');
         assert.match(appSource, /'getProtectedConfigStatus'/);
         assert.match(appSource, /'saveConfig'/);
         assert.match(appSource, /typeof result\.token === 'string' && tokenPattern\.test\(result\.token\)/);

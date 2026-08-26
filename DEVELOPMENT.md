@@ -84,9 +84,10 @@ implementation.
 | `scripts/copy-widgets.cjs`                           | Copies only the required VIS 2 build output into `widgets/`                                                 |
 | `io-package.json`                                    | Adapter metadata, native defaults, dependencies, protected fields, VIS registration                         |
 
-Generated backend code is written to `build/`. The productive entry point is `build/main.js`; there
-is no root-level `main.js` runtime anymore. Do not reintroduce the removed JavaScript runtime under
-`lib/`.
+Generated backend code is written to `build/`. The root-level `main.js` is intentionally limited to
+a small CommonJS bootstrap which forwards compact-mode and direct starts to `build/main.js`. All
+runtime behavior remains implemented in TypeScript under `src/`; do not reintroduce runtime logic
+under `main.js` or `lib/`.
 
 ## 4. Runtime architecture
 
@@ -647,7 +648,7 @@ fixtures, but real hardware tests should be recorded when devices are available.
 2. Run `npm run build` and `npm run test:package-smoke` locally.
 3. Check Node.js, js-controller, and Admin minimum versions.
 4. Confirm that production dependencies, not only repository sources, were installed.
-5. Do not restore the removed root `main.js` as a workaround.
+5. Confirm that the root `main.js` bootstrap only forwards to `build/main.js` and contains no runtime logic.
 
 ### Token is reported as invalid or not decrypted
 
@@ -750,8 +751,8 @@ must explicitly create a new login link. Do not implement background reauthentic
 - Do not change the adapter version or release metadata as part of unrelated implementation work.
 - Keep GitHub workflows compatible with the declared Node.js matrix.
 - Use the official `ioBroker/testing-action-check@v1`, `ioBroker/testing-action-adapter@v1`, and
-  `ioBroker/testing-action-deploy@v1` actions. The minimum CI line is Node 22.x; Node 24.x provides
-  forward coverage.
+  `ioBroker/testing-action-deploy@v1` actions. Runtime and checks start with Node 22.x, the matrix
+  also covers Node 24.x, and trusted publishing runs on Node 24.x as required by the release action.
 - Never publish from an unreviewed development fork.
 
 Before opening a community pull request:

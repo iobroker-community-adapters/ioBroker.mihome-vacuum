@@ -348,7 +348,7 @@ requests.
 ### **WORK IN PROGRESS**
 
 * (@xXBJXx) Require Node.js 22.13 or newer, js-controller 7.2.2 or newer, and Admin 7.9.13 or newer
-* (@xXBJXx) Build the productive runtime from TypeScript and start it through `build/main.js`
+* (@xXBJXx) Build the productive runtime from TypeScript and start it through a Git-install-compatible bootstrap
 * (@xXBJXx) Added a responsive React, Vite and TypeScript configuration UI with connection, general, map and timer settings
 * (@xXBJXx) Added Xiaomi login-link authentication and the `auth.status`, `auth.loginUrl`, `auth.lastError`, and `auth.expiresAt` states
 * (@xXBJXx) Added encrypted and protected persistence for the local device token and reusable Xiaomi Cloud session

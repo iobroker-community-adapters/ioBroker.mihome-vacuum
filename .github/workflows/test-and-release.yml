@@ -97,7 +97,7 @@ jobs:
             - name: Publish npm package and create GitHub/Sentry releases
               uses: ioBroker/testing-action-deploy@v1
               with:
-                  node-version: "22.x"
+                  node-version: "24.x"
                   package-cache: "false"
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   sentry: true

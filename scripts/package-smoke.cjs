@@ -62,6 +62,7 @@ try {
     const archivePath = path.join(packDirectory, archive.filename);
     const packagedPaths = new Set(archive.files.map(file => file.path.replaceAll('\\', '/')));
     const requiredPaths = [
+        'main.js',
         'admin/assets/index.css',
         'admin/assets/index.js',
         'admin/index.html',
@@ -82,7 +83,6 @@ try {
 
     const forbiddenPaths = [...packagedPaths].filter(
         file =>
-            file === 'main.js' ||
             file.startsWith('lib/') ||
             file.startsWith('src/') ||
             file.startsWith('src-admin/') ||
@@ -128,11 +128,11 @@ try {
             return originalLoad.call(this, request, parent, isMain);
         };
         const packageJson = require(path.join(root, 'package.json'));
-        assert.equal(packageJson.main, 'build/main.js');
+        assert.equal(packageJson.main, 'main.js');
         assert.equal(typeof require(root), 'function');
         assert.equal(typeof require(path.join(root, 'build/lib/dreame')), 'function');
         assert.equal(typeof require(path.join(root, 'build/lib/maphelper')), 'function');
-        assert.equal(fs.existsSync(path.join(root, 'main.js')), false);
+        assert.equal(fs.existsSync(path.join(root, 'main.js')), true);
         assert.equal(fs.existsSync(path.join(root, 'lib')), false);
         assert.equal(fs.existsSync(path.join(root, 'src')), false);
     `;
