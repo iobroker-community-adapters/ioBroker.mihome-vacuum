@@ -1,4 +1,5 @@
 import type { XiaomiAuthStatus } from './xiaomiCloud';
+import type { AdapterTimeout } from './adapter';
 
 export type XiaomiHomeId = string | number;
 
@@ -20,6 +21,7 @@ export interface XiaomiCloudAdapter {
         enableAdvancedDebug?: boolean;
     };
     namespace: string;
+    setTimeout?: (callback: () => void, delay: number) => AdapterTimeout | undefined;
     encrypt?(value: string): string;
     decrypt?(value: string): string;
     setStateAsync(id: string, value: string | number, ack: boolean): Promise<unknown>;

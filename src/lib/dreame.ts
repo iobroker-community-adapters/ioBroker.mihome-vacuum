@@ -11,6 +11,7 @@ import type {
     DreamePropertyValue,
     DreameState,
 } from '../types/dreame';
+import type { AdapterTimeout } from '../types/adapter';
 
 const objects = objectsModule as DreameObjectsModule;
 const {
@@ -39,7 +40,7 @@ class DreameManager {
     readonly Miio: DreameMiioClient;
     readonly adapter: DreameAdapter;
     washBaseAvailable = false;
-    globalTimeouts: Record<string, NodeJS.Timeout | undefined> = {};
+    globalTimeouts: Record<string, AdapterTimeout | undefined> = {};
     closed = false;
     readonly PARAMS: DreamePropertyDefinition[] = [
         DreameProperties.STATE,
@@ -158,7 +159,7 @@ class DreameManager {
         if (this.closed) {
             return;
         }
-        clearTimeout(this.globalTimeouts.getStates);
+        this.adapter.clearTimeout(this.globalTimeouts.getStates);
         let deviceData: DreameMiioResponse | null = null;
         this.adapter.log.debug('get params for Dreame');
         const chunkSize = 15;
@@ -197,7 +198,10 @@ class DreameManager {
             });
         }
         if (!this.closed) {
-            this.globalTimeouts.getStates = setTimeout(() => void this.getStates(), this.adapter.config.pingInterval);
+            this.globalTimeouts.getStates = this.adapter.setTimeout(
+                () => void this.getStates(),
+                this.adapter.config.pingInterval,
+            );
         }
     }
 
@@ -401,7 +405,7 @@ class DreameManager {
         this.closed = true;
         for (const timeout of Object.values(this.globalTimeouts)) {
             if (timeout) {
-                clearTimeout(timeout);
+                this.adapter.clearTimeout(timeout);
             }
         }
         this.globalTimeouts = {};

@@ -74,7 +74,7 @@ Sentry-Berichte stehen ab js-controller 3.0 zur Verfügung.
 
 - Node.js 22.13 oder neuer
 - js-controller 7.2.2 oder neuer
-- Admin 7.9.13 oder neuer
+- Admin 7.8.23 oder neuer
 - ioBroker-Host und Roboter sollten über dasselbe lokale Netzwerk erreichbar sein
 - Für die lokale UDP-Steuerung wird ein gültiger lokaler Geräte-Token benötigt
 

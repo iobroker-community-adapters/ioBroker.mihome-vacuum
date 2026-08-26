@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('node:fs');
 const assert = require('node:assert/strict');
+const ts = require('typescript');
 const { tests } = require('@iobroker/testing');
 
 // Validate the package files
@@ -44,7 +45,7 @@ describe('Runtime dependencies', () => {
 
         assert.equal(packageJson.dependencies.axios, '^1.20.0');
         assert.equal(Object.prototype.hasOwnProperty.call(packageJson.devDependencies, 'axios'), false);
-        assert.equal(packageJson.dependencies.qs, '6.15.3');
+        assert.equal(packageJson.dependencies.qs, '^6.15.3');
     });
 
     it('keeps the approved ioBroker and release toolchain on the current baseline', () => {
@@ -52,6 +53,7 @@ describe('Runtime dependencies', () => {
 
         assert.equal(packageJson.dependencies['@iobroker/adapter-core'], '^3.4.3');
         assert.equal(packageJson.devDependencies['@iobroker/testing'], '^5.3.0');
+        assert.equal(packageJson.devDependencies['@iobroker/adapter-dev'], '^1.5.0');
         assert.equal(packageJson.devDependencies['@iobroker/eslint-config'], '^2.3.4');
         assert.equal(packageJson.devDependencies['@tsconfig/node22'], '^22.0.6');
         assert.equal(packageJson.devDependencies['@alcalzone/release-script'], '^5.2.1');
@@ -66,8 +68,17 @@ describe('Runtime dependencies', () => {
 
         assert.equal(packageJson.engines.node, '>=22.13.0');
         assert.equal(ioPackage.common.dependencies[0]['js-controller'], '>=7.2.2');
-        assert.equal(ioPackage.common.globalDependencies[0].admin, '>=7.9.13');
+        assert.equal(ioPackage.common.globalDependencies[0].admin, '>=7.8.23');
         assert.equal(packageJson.devDependencies['@types/node'], '^22.20.0');
+    });
+
+    it('declares only instance objects with non-empty IDs', () => {
+        const ioPackage = require('../io-package.json');
+
+        for (const object of ioPackage.instanceObjects) {
+            assert.equal(typeof object._id, 'string');
+            assert.notEqual(object._id.length, 0);
+        }
     });
 
     it('shows a localized warning before upgrades across the version 6 boundary', () => {
@@ -142,7 +153,7 @@ describe('Runtime dependencies', () => {
         );
         assert.equal(packageJson.scripts['check:admin'], 'tsc --noEmit -p src-admin/tsconfig.json');
         assert.equal(packageJson.scripts['check:widgets'], 'tsc --noEmit -p src-widgets/tsconfig.json');
-        assert.equal(packageJson.scripts.translate, 'npm run build:backend && gulp translateAndUpdateWordsJS');
+        assert.equal(packageJson.scripts.translate, 'npm run build:backend && translate-adapter');
         assert.equal(
             packageJson.scripts.build,
             'npm run build:backend && npm run build:admin && npm run build:widgets',
@@ -261,6 +272,50 @@ describe('Runtime dependencies', () => {
             assert.equal(fs.existsSync(path.join(__dirname, '..', removedPath)), false, removedPath);
         }
         assert.equal(fs.existsSync(path.join(__dirname, '..', 'lib', 'XiaomiCloudConnector.test.js')), true);
+    });
+
+    it('uses unload-aware adapter timers and supported object APIs in the runtime', () => {
+        const sourceRoot = path.join(__dirname, '..', 'src', 'lib');
+        const pendingDirectories = [sourceRoot];
+        const unmanagedTimers = [];
+        const deprecatedObjectWrites = [];
+
+        while (pendingDirectories.length) {
+            const directory = pendingDirectories.pop();
+            if (!directory) {
+                continue;
+            }
+            for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+                const entryPath = path.join(directory, entry.name);
+                if (entry.isDirectory()) {
+                    pendingDirectories.push(entryPath);
+                    continue;
+                }
+                if (!entry.name.endsWith('.ts')) {
+                    continue;
+                }
+                const source = fs.readFileSync(entryPath, 'utf8');
+                const sourceFile = ts.createSourceFile(entryPath, source, ts.ScriptTarget.Latest, true);
+                const visit = node => {
+                    if (ts.isCallExpression(node)) {
+                        if (ts.isIdentifier(node.expression) && node.expression.text === 'setTimeout') {
+                            unmanagedTimers.push(path.relative(sourceRoot, entryPath));
+                        }
+                        if (
+                            ts.isPropertyAccessExpression(node.expression) &&
+                            ['setObject', 'setObjectAsync'].includes(node.expression.name.text)
+                        ) {
+                            deprecatedObjectWrites.push(path.relative(sourceRoot, entryPath));
+                        }
+                    }
+                    ts.forEachChild(node, visit);
+                };
+                visit(sourceFile);
+            }
+        }
+
+        assert.deepEqual(unmanagedTimers, []);
+        assert.deepEqual(deprecatedObjectWrites, []);
     });
 
     it('runs JavaScript regression tests in CI independently from linting', () => {
@@ -414,13 +469,13 @@ describe('Runtime dependencies', () => {
         assert.match(legacyWidget, /widgets\/mihome-vacuum\/js\/translations\.js/);
         assert.doesNotMatch(legacyWidget, /widgetTexts/);
         for (const language of ['de', 'en', 'es', 'fr', 'it', 'nl', 'pl', 'pt', 'ru', 'uk', 'zh-cn']) {
-            assert.match(reactTranslations, new RegExp(`admin/i18n/${language}/translations\\.json`));
+            assert.match(reactTranslations, new RegExp(`admin/i18n/${language}\\.json`));
         }
         const languageRoot = path.join(root, 'admin', 'i18n');
-        const english = require(path.join(languageRoot, 'en', 'translations.json'));
+        const english = require(path.join(languageRoot, 'en.json'));
         const expectedKeys = Object.keys(english).sort();
         for (const language of ['de', 'es', 'fr', 'it', 'nl', 'pl', 'pt', 'ru', 'uk', 'zh-cn']) {
-            const dictionary = require(path.join(languageRoot, language, 'translations.json'));
+            const dictionary = require(path.join(languageRoot, `${language}.json`));
             assert.deepEqual(Object.keys(dictionary).sort(), expectedKeys, `${language} translations are incomplete`);
         }
         for (const key of ['dashboard', 'quickControls', 'startRoom', 'noCleaningHistory', 'mihome_vacuum_title']) {

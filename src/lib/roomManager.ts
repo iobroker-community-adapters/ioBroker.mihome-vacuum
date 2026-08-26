@@ -54,7 +54,7 @@ class RoomManager {
             },
             native: {},
         };
-        this.adapter.setObject('rooms.loadRooms', {
+        void this.adapter.setObjectNotExistsAsync('rooms.loadRooms', {
             type: 'state',
             common: {
                 name: this.i18n.loadRooms,
@@ -67,7 +67,7 @@ class RoomManager {
             },
             native: {},
         });
-        this.adapter.setObject('rooms.multiRoomClean', {
+        void this.adapter.setObjectNotExistsAsync('rooms.multiRoomClean', {
             type: 'state',
             common: {
                 name: this.i18n.cleanMultiRooms,
@@ -80,9 +80,8 @@ class RoomManager {
             },
             native: {},
         });
-        this.adapter.setObject(
-            'rooms.addRoom',
-            {
+        void this.adapter
+            .setObjectNotExistsAsync('rooms.addRoom', {
                 type: 'state',
                 common: {
                     name: this.i18n.addRoom,
@@ -93,13 +92,9 @@ class RoomManager {
                     desc: 'add roos manual with map Index or zone coordinates',
                 },
                 native: {},
-            },
-            (_error, object) => {
-                if (object) {
-                    this.adapter.setForeignState(object.id, this.i18n.addRoom, true);
-                }
-            },
-        );
+            })
+            .then(() => this.adapter.setState('rooms.addRoom', this.i18n.addRoom, true))
+            .catch(error => this.adapter.log.warn(`Could not initialize rooms.addRoom: ${String(error)}`));
 
         this.adapter.getStates(`${this.adapter.namespace}.rooms.*`, (_error, states) => {
             if (states) {

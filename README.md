@@ -28,33 +28,32 @@ not guaranteed until they have been tested. Available functions can also vary wi
 
 | Device                 | Basic control | Cleaning history | Room cleaning | Map |
 |:-----------------------|:-------------:|:----------------:|:-------------:|:---:|
-| `viomi.vacuum.v6`      |       ✅       |        —         |       —       |  —  |
-| `viomi.vacuum.v7`      |       ✅       |        —         |       —       |  —  |
-| `viomi.vacuum.v8`      |       ✅       |        —         |       —       |  —  |
-| `viomi.vacuum.v19`     |       ✅       |        —         |       —       |  —  |
-| `rockrobo.vacuum.v1`   |       ✅       |        ✅         |       —       |  ✅  |
-| `roborock.vacuum.s4`   |       ✅       |        ✅         |       ✅       |  ✅  |
-| `roborock.vacuum.s5`   |       ✅       |        ✅         |       ✅       |  ✅  |
-| `roborock.vacuum.s5e`  |       ✅       |        ✅         |       ✅       |  ✅  |
-| `roborock.vacuum.m1s`  |       ✅       |        ✅         |       ✅       |  ✅  |
-| `roborock.vacuum.a10`  |       ✅       |        ✅         |       ✅       |  ✅  |
-| `roborock.vacuum.a15`  |       ✅       |        ✅         |       ✅       |  ✅  |
-| `dreame.vacuum.r2205`  |       ✅       |        ✅         |       —       |  —  |
-| `dreame.vacuum.r2216o` |       ✅       |        ✅         |       —       |  —  |
-| `dreame.vacuum.r2228o` |       ✅       |        ✅         |       —       |  —  |
-| `dreame.vacuum.p2008`  |       ✅       |        ✅         |       —       |  —  |
-| `dreame.vacuum.p2009`  |       ✅       |        ✅         |       —       |  —  |
-| `dreame.vacuum.p2027`  |       ✅       |        ✅         |       —       |  —  |
-| `dreame.vacuum.p2028`  |       ✅       |        ✅         |       —       |  —  |
-| `dreame.vacuum.p2029`  |       ✅       |        ✅         |       —       |  —  |
-| `dreame.vacuum.p2036`  |       ✅       |        ✅         |       —       |  —  |
-| `dreame.vacuum.p2041o` |       ✅       |        ✅         |       —       |  —  |
-| `dreame.vacuum.p2114a` |       ✅       |        ✅         |       —       |  —  |
-| `dreame.vacuum.p2148o` |       ✅       |        ✅         |       —       |  —  |
-| `dreame.vacuum.p2156o` |       ✅       |        ✅         |       —       |  —  |
+| `viomi.vacuum.v6`      |      ✅       |        —         |       —       |  —  |
+| `viomi.vacuum.v7`      |      ✅       |        —         |       —       |  —  |
+| `viomi.vacuum.v8`      |      ✅       |        —         |       —       |  —  |
+| `viomi.vacuum.v19`     |      ✅       |        —         |       —       |  —  |
+| `rockrobo.vacuum.v1`   |      ✅       |        ✅        |       —       | ✅  |
+| `roborock.vacuum.s4`   |      ✅       |        ✅        |      ✅       | ✅  |
+| `roborock.vacuum.s5`   |      ✅       |        ✅        |      ✅       | ✅  |
+| `roborock.vacuum.s5e`  |      ✅       |        ✅        |      ✅       | ✅  |
+| `roborock.vacuum.m1s`  |      ✅       |        ✅        |      ✅       | ✅  |
+| `roborock.vacuum.a10`  |      ✅       |        ✅        |      ✅       | ✅  |
+| `roborock.vacuum.a15`  |      ✅       |        ✅        |      ✅       | ✅  |
+| `dreame.vacuum.r2205`  |      ✅       |        ✅        |       —       |  —  |
+| `dreame.vacuum.r2216o` |      ✅       |        ✅        |       —       |  —  |
+| `dreame.vacuum.r2228o` |      ✅       |        ✅        |       —       |  —  |
+| `dreame.vacuum.p2008`  |      ✅       |        ✅        |       —       |  —  |
+| `dreame.vacuum.p2009`  |      ✅       |        ✅        |       —       |  —  |
+| `dreame.vacuum.p2027`  |      ✅       |        ✅        |       —       |  —  |
+| `dreame.vacuum.p2028`  |      ✅       |        ✅        |       —       |  —  |
+| `dreame.vacuum.p2029`  |      ✅       |        ✅        |       —       |  —  |
+| `dreame.vacuum.p2036`  |      ✅       |        ✅        |       —       |  —  |
+| `dreame.vacuum.p2041o` |      ✅       |        ✅        |       —       |  —  |
+| `dreame.vacuum.p2114a` |      ✅       |        ✅        |       —       |  —  |
+| `dreame.vacuum.p2148o` |      ✅       |        ✅        |       —       |  —  |
+| `dreame.vacuum.p2156o` |      ✅       |        ✅        |       —       |  —  |
 
-`✅` means that the function is supported for the documented model. `—` means that the adapter does not currently provide that function for the
-model.
+`✅` means that the function is supported for the documented model. `—` means that the adapter does not currently provide that function for the model.
 
 ## Disclaimer
 
@@ -72,7 +71,7 @@ with js-controller 3.0 and newer.
 
 - Node.js 22.13 or newer
 - js-controller 7.2.2 or newer
-- Admin 7.9.13 or newer
+- Admin 7.8.23 or newer
 - The ioBroker host and robot should be reachable through the same local network
 - A valid local device token is required for local UDP control
 
@@ -347,28 +346,32 @@ requests.
 
 ### **WORK IN PROGRESS**
 
-* (@xXBJXx) Require Node.js 22.13 or newer, js-controller 7.2.2 or newer, and Admin 7.9.13 or newer
-* (@xXBJXx) Build the productive runtime from TypeScript and start it through a Git-install-compatible bootstrap
-* (@xXBJXx) Added a responsive React, Vite and TypeScript configuration UI with connection, general, map and timer settings
-* (@xXBJXx) Added Xiaomi login-link authentication and the `auth.status`, `auth.loginUrl`, `auth.lastError`, and `auth.expiresAt` states
-* (@xXBJXx) Added encrypted and protected persistence for the local device token and reusable Xiaomi Cloud session
-* (@xXBJXx) Added opt-in advanced diagnostic logging with credential and personal-data redaction
-* (@xXBJXx) Added TypeScript, protocol, lifecycle, multi-instance, admin-security, package and integration test coverage
-* (@xXBJXx) Added clean package builds and a packed-runtime installation smoke test
-* (@xXBJXx) Added redesigned VIS 1 and VIS 2 widgets with maps, rooms, maintenance and history
-* (@xXBJXx) Added shared ioBroker/Weblate translations for Admin, VIS 1 and VIS 2
-* (@xXBJXx) Migrated the adapter runtime and its Roborock, Viomi and Dreame managers from JavaScript to TypeScript
-* (@xXBJXx) Updated the local UDP startup, request dispatching, timeout handling and shutdown lifecycle
-* (@xXBJXx) Isolated runtime state per adapter and manager instance for Compact Mode and multiple instances
-* (@xXBJXx) Kept local IP/token control independent from Xiaomi Cloud authentication
-* (@xXBJXx) Updated runtime and development dependencies, including `canvas` 3.2.3, `qs` 6.15.3 and the current ioBroker tooling
-* (@xXBJXx) Updated CI to build and test the backend, admin UI and installation package on supported Node.js versions
-* (@xXBJXx) Always create `control.clean_home`, independently of optional Alexa/IoT configuration
-* (@xXBJXx) Prevent the first `miIO.info` request from being lost directly after the UDP connection event
-* (@xXBJXx) Prevent timers and pending requests from writing states after adapter shutdown
-* (@xXBJXx) Prevent delayed status callbacks from losing their manager context and terminating the adapter
-* (@xXBJXx) Validate cloud sessions, cloud responses, room objects and optional configuration values before use
-* (@xXBJXx) Redact device tokens, cloud sessions, cookies, login URLs and complete API payloads from normal logs
+* (xXBJXx) Align the Admin requirement with stable Admin 7.8.23 and remove the invalid empty instance-object declaration
+* (xXBJXx) Add the official ioBroker adapter development toolchain and allow compatible `qs` patch updates
+* (xXBJXx) Require Node.js 22.13 or newer, js-controller 7.2.2 or newer, and Admin 7.8.23 or newer
+* (xXBJXx) Build the productive runtime from TypeScript and start it through a Git-install-compatible bootstrap
+* (xXBJXx) Added a responsive React, Vite and TypeScript configuration UI with connection, general, map and timer settings
+* (xXBJXx) Added Xiaomi login-link authentication and the `auth.status`, `auth.loginUrl`, `auth.lastError`, and `auth.expiresAt` states
+* (xXBJXx) Added encrypted and protected persistence for the local device token and reusable Xiaomi Cloud session
+* (xXBJXx) Added opt-in advanced diagnostic logging with credential and personal-data redaction
+* (xXBJXx) Added TypeScript, protocol, lifecycle, multi-instance, admin-security, package and integration test coverage
+* (xXBJXx) Added clean package builds and a packed-runtime installation smoke test
+* (xXBJXx) Added redesigned VIS 1 and VIS 2 widgets with maps, rooms, maintenance and history
+* (xXBJXx) Added shared ioBroker/Weblate translations for Admin, VIS 1 and VIS 2
+* (xXBJXx) Completed all shipped translations and migrated Admin and VIS 2 to ioBroker's short i18n format
+* (xXBJXx) Migrated the adapter runtime and its Roborock, Viomi and Dreame managers from JavaScript to TypeScript
+* (xXBJXx) Updated the local UDP startup, request dispatching, timeout handling and shutdown lifecycle
+* (xXBJXx) Migrated runtime callbacks to unload-aware ioBroker timers and deprecated object writes to supported APIs
+* (xXBJXx) Isolated runtime state per adapter and manager instance for Compact Mode and multiple instances
+* (xXBJXx) Kept local IP/token control independent from Xiaomi Cloud authentication
+* (xXBJXx) Updated runtime and development dependencies, including `canvas` 3.2.3, `qs` 6.15.3 and the current ioBroker tooling
+* (xXBJXx) Updated CI to build and test the backend, admin UI and installation package on supported Node.js versions
+* (xXBJXx) Always create `control.clean_home`, independently of optional Alexa/IoT configuration
+* (xXBJXx) Prevent the first `miIO.info` request from being lost directly after the UDP connection event
+* (xXBJXx) Prevent timers and pending requests from writing states after adapter shutdown
+* (xXBJXx) Prevent delayed status callbacks from losing their manager context and terminating the adapter
+* (xXBJXx) Validate cloud sessions, cloud responses, room objects and optional configuration values before use
+* (xXBJXx) Redact device tokens, cloud sessions, cookies, login URLs and complete API payloads from normal logs
 
 ### 5.3.0 (2025-07-24)
 

@@ -2,6 +2,8 @@ const assert = require('node:assert/strict');
 const RoomManager = require('../build/lib/roomManager');
 
 function asRoomAdapter(adapter) {
+    adapter.setObjectNotExistsAsync ??= async () => undefined;
+    adapter.setState ??= () => undefined;
     return /** @type {import('../src/types/room').RoomAdapter} */ (/** @type {unknown} */ (adapter));
 }
 

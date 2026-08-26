@@ -122,28 +122,28 @@ if (typeof systemDictionary !== 'undefined') {
     "Control of Xiaomi/Roborock vacuum cleaner": {
         "de": "Steuerung von Xiaomi-/Roborock-Staubsaugern",
         "en": "Control of Xiaomi/Roborock vacuum cleaner",
-        "es": "Control of Xiaomi/Roborock vacuum cleaner",
-        "fr": "Control of Xiaomi/Roborock vacuum cleaner",
-        "it": "Control of Xiaomi/Roborock vacuum cleaner",
-        "nl": "Control of Xiaomi/Roborock vacuum cleaner",
-        "pl": "Control of Xiaomi/Roborock vacuum cleaner",
-        "pt": "Control of Xiaomi/Roborock vacuum cleaner",
-        "ru": "Control of Xiaomi/Roborock vacuum cleaner",
-        "uk": "Control of Xiaomi/Roborock vacuum cleaner",
-        "zh-cn": "Control of Xiaomi/Roborock vacuum cleaner"
+        "es": "Control de la aspiradora Xiaomi/Roborock",
+        "fr": "Contrôle de l'aspirateur Xiaomi/Roborock",
+        "it": "Controllo dell'aspirapolvere Xiaomi/Roborock",
+        "nl": "Bediening van Xiaomi/Roborock-stofzuiger",
+        "pl": "Sterowanie odkurzaczem Xiaomi/Roborock",
+        "pt": "Controle do aspirador Xiaomi/Roborock",
+        "ru": "Управление пылесосом Xiaomi/Roborock",
+        "uk": "Керування пилососом Xiaomi/Roborock",
+        "zh-cn": "小米/石头扫地机器人的控制"
     },
     "Could not create Xiaomi login link": {
         "de": "Xiaomi-Anmeldelink konnte nicht erstellt werden",
         "en": "Could not create Xiaomi login link",
-        "es": "Could not create Xiaomi login link",
-        "fr": "Could not create Xiaomi login link",
-        "it": "Could not create Xiaomi login link",
-        "nl": "Could not create Xiaomi login link",
-        "pl": "Could not create Xiaomi login link",
-        "pt": "Could not create Xiaomi login link",
-        "ru": "Could not create Xiaomi login link",
-        "uk": "Could not create Xiaomi login link",
-        "zh-cn": "Could not create Xiaomi login link"
+        "es": "No se pudo crear el enlace de inicio de sesión de Xiaomi",
+        "fr": "Impossible de créer le lien de connexion Xiaomi",
+        "it": "Impossibile creare il collegamento di accesso Xiaomi",
+        "nl": "Kan Xiaomi-inloglink niet maken",
+        "pl": "Nie można utworzyć linku do logowania Xiaomi",
+        "pt": "Não foi possível criar o link de login da Xiaomi",
+        "ru": "Не удалось создать ссылку для входа в систему Xiaomi.",
+        "uk": "Не вдалося створити посилання для входу Xiaomi",
+        "zh-cn": "无法创建小米登录链接"
     },
     "Could not decrypt protected configuration": {
         "de": "Geschützte Konfiguration konnte nicht entschlüsselt werden",
@@ -174,15 +174,15 @@ if (typeof systemDictionary !== 'undefined') {
     "Could not load protected configuration status": {
         "de": "Status der geschützten Konfiguration konnte nicht geladen werden",
         "en": "Could not load protected configuration status",
-        "es": "Could not load protected configuration status",
-        "fr": "Could not load protected configuration status",
-        "it": "Could not load protected configuration status",
-        "nl": "Could not load protected configuration status",
-        "pl": "Could not load protected configuration status",
-        "pt": "Could not load protected configuration status",
-        "ru": "Could not load protected configuration status",
-        "uk": "Could not load protected configuration status",
-        "zh-cn": "Could not load protected configuration status"
+        "es": "No se pudo cargar el estado de configuración protegida",
+        "fr": "Impossible de charger l'état de la configuration protégée",
+        "it": "Impossibile caricare lo stato della configurazione protetta",
+        "nl": "Kan de beveiligde configuratiestatus niet laden",
+        "pl": "Nie można załadować statusu konfiguracji chronionej",
+        "pt": "Não foi possível carregar o status da configuração protegida",
+        "ru": "Не удалось загрузить статус защищенной конфигурации.",
+        "uk": "Не вдалося завантажити статус захищеної конфігурації",
+        "zh-cn": "无法加载受保护的配置状态"
     },
     "Could not load timers": {
         "de": "Timer konnten nicht geladen werden",
@@ -239,15 +239,15 @@ if (typeof systemDictionary !== 'undefined') {
     "Could not start Xiaomi QR login": {
         "de": "Xiaomi-QR-Anmeldung konnte nicht gestartet werden",
         "en": "Could not start Xiaomi QR login",
-        "es": "Could not start Xiaomi QR login",
-        "fr": "Could not start Xiaomi QR login",
-        "it": "Could not start Xiaomi QR login",
-        "nl": "Could not start Xiaomi QR login",
-        "pl": "Could not start Xiaomi QR login",
-        "pt": "Could not start Xiaomi QR login",
-        "ru": "Could not start Xiaomi QR login",
-        "uk": "Could not start Xiaomi QR login",
-        "zh-cn": "Could not start Xiaomi QR login"
+        "es": "No se pudo iniciar el inicio de sesión QR de Xiaomi",
+        "fr": "Impossible de démarrer la connexion Xiaomi QR",
+        "it": "Impossibile avviare l'accesso QR Xiaomi",
+        "nl": "Kan Xiaomi QR-login niet starten",
+        "pl": "Nie można rozpocząć logowania Xiaomi QR",
+        "pt": "Não foi possível iniciar o login do Xiaomi QR",
+        "ru": "Не удалось запустить вход в систему Xiaomi QR.",
+        "uk": "Не вдалося запустити вхід у систему Xiaomi QR",
+        "zh-cn": "无法启动小米二维码登录"
     },
     "Create Xiaomi login link": {
         "de": "Xiaomi-Anmeldelink erstellen",
@@ -304,15 +304,15 @@ if (typeof systemDictionary !== 'undefined') {
     "Diagnostic logs stay redacted and never include credentials": {
         "de": "Diagnoseprotokolle bleiben redigiert und enthalten niemals Zugangsdaten",
         "en": "Diagnostic logs stay redacted and never include credentials",
-        "es": "Diagnostic logs stay redacted and never include credentials",
-        "fr": "Diagnostic logs stay redacted and never include credentials",
-        "it": "Diagnostic logs stay redacted and never include credentials",
-        "nl": "Diagnostic logs stay redacted and never include credentials",
-        "pl": "Diagnostic logs stay redacted and never include credentials",
-        "pt": "Diagnostic logs stay redacted and never include credentials",
-        "ru": "Diagnostic logs stay redacted and never include credentials",
-        "uk": "Diagnostic logs stay redacted and never include credentials",
-        "zh-cn": "Diagnostic logs stay redacted and never include credentials"
+        "es": "Los registros de diagnóstico permanecen redactados y nunca incluyen credenciales",
+        "fr": "Les journaux de diagnostic restent rédigés et n'incluent jamais d'informations d'identification",
+        "it": "I log di diagnostica rimangono oscurati e non includono mai le credenziali",
+        "nl": "Diagnostische logboeken blijven geredigeerd en bevatten nooit inloggegevens",
+        "pl": "Dzienniki diagnostyczne pozostają zredagowane i nigdy nie zawierają danych uwierzytelniających",
+        "pt": "Os logs de diagnóstico permanecem editados e nunca incluem credenciais",
+        "ru": "Журналы диагностики остаются отредактированными и никогда не включают учетные данные.",
+        "uk": "Журнали діагностики залишаються редагованими та ніколи не містять облікові дані",
+        "zh-cn": "诊断日志保持编辑状态并且从不包含凭据"
     },
     "Enable Valetudo": {
         "de": "Aktiviere Valetudo",
@@ -415,7 +415,7 @@ if (typeof systemDictionary !== 'undefined') {
         "pl": "Nieprawidłowa długość tokenu. Oczekiwano 32 lub 96 znaków HEX.",
         "pt": "Comprimento de token inválido. Esperava 32 ou 96 caracteres HEX.",
         "ru": "Недопустимая длина токена. Ожидаемые 32 или 96 символов HEX.",
-        "uk": "Invalid token length. Expected 32 or 96 HEX chars.",
+        "uk": "Недійсна довжина маркера. ",
         "zh-cn": "令牌长度无效。"
     },
     "Keep stored token": {
@@ -434,15 +434,15 @@ if (typeof systemDictionary !== 'undefined') {
     "Leave the token field empty to keep the stored token.": {
         "de": "Lasse das Tokenfeld leer, um den gespeicherten Token beizubehalten.",
         "en": "Leave the token field empty to keep the stored token.",
-        "es": "Leave the token field empty to keep the stored token.",
-        "fr": "Leave the token field empty to keep the stored token.",
-        "it": "Leave the token field empty to keep the stored token.",
-        "nl": "Leave the token field empty to keep the stored token.",
-        "pl": "Leave the token field empty to keep the stored token.",
-        "pt": "Leave the token field empty to keep the stored token.",
-        "ru": "Leave the token field empty to keep the stored token.",
-        "uk": "Leave the token field empty to keep the stored token.",
-        "zh-cn": "Leave the token field empty to keep the stored token."
+        "es": "Deje el campo del token vacío para conservar el token almacenado.",
+        "fr": "Laissez le champ du jeton vide pour conserver le jeton stocké.",
+        "it": "Lascia vuoto il campo token per conservare il token memorizzato.",
+        "nl": "Laat het tokenveld leeg om het opgeslagen token te behouden.",
+        "pl": "Pozostaw pole tokenu puste, aby zachować przechowywany token.",
+        "pt": "Deixe o campo do token vazio para manter o token armazenado.",
+        "ru": "Оставьте поле токена пустым, чтобы сохранить сохраненный токен.",
+        "uk": "Залиште поле маркера порожнім, щоб зберегти збережений маркер.",
+        "zh-cn": "将令牌字段留空以保留存储的令牌。"
     },
     "Login link expired": {
         "de": "Anmeldelink abgelaufen",
@@ -662,7 +662,7 @@ if (typeof systemDictionary !== 'undefined') {
         "pl": "Użyj logowania QR powyżej, a następnie wybierz pobieranie urządzeń. E-mail, hasło i captcha pozostają tylko dla zgodności i nie są już wysyłane.",
         "pt": "Use o login QR acima e depois clique em obter dispositivos. E-mail, senha e captcha são mantidos apenas por compatibilidade e não são mais enviados em novos logins.",
         "ru": "Выполните вход по QR-коду выше, затем нажмите «получить устройства». Электронная почта, пароль и captcha сохранены только для совместимости и больше не отправляются при новом входе.",
-        "uk": "Use the QR login above, then click “get devices”. E-mail, password and captcha are kept only for backwards-compatible configuration and are no longer sent for new logins.",
+        "uk": "Скористайтеся QR-логіном вище, а потім натисніть «отримати пристрої». ",
         "zh-cn": "请先使用上方二维码登录，然后点击获取设备。电子邮件、密码和验证码仅为兼容旧配置而保留，新登录不会再发送这些数据。"
     },
     "Reload": {
@@ -694,15 +694,15 @@ if (typeof systemDictionary !== 'undefined') {
     "Resume paused zone cleaning with start button": {
         "de": "Pausierte Zonenreinigung mit der Starttaste fortsetzen",
         "en": "Resume paused zone cleaning with start button",
-        "es": "Resume paused zone cleaning with start button",
-        "fr": "Resume paused zone cleaning with start button",
-        "it": "Resume paused zone cleaning with start button",
-        "nl": "Resume paused zone cleaning with start button",
-        "pl": "Resume paused zone cleaning with start button",
-        "pt": "Resume paused zone cleaning with start button",
-        "ru": "Resume paused zone cleaning with start button",
-        "uk": "Resume paused zone cleaning with start button",
-        "zh-cn": "Resume paused zone cleaning with start button"
+        "es": "Reanudar la limpieza de la zona en pausa con el botón de inicio",
+        "fr": "Reprendre le nettoyage de la zone en pause avec le bouton de démarrage",
+        "it": "Riprendere la pulizia della zona in pausa con il pulsante di avvio",
+        "nl": "Hervat de gepauzeerde zonereiniging met de startknop",
+        "pl": "Wznów wstrzymane czyszczenie strefy za pomocą przycisku Start",
+        "pt": "Retomar a limpeza da zona pausada com o botão Iniciar",
+        "ru": "Возобновите очистку приостановленной зоны с помощью кнопки «Старт».",
+        "uk": "Відновіть призупинене очищення зони за допомогою кнопки «Пуск».",
+        "zh-cn": "使用开始按钮恢复暂停的区域清洁"
     },
     "Resume paused zonecleaning with start button": {
         "de": "Zonenreinigung nach Pause fortsetzen",
@@ -714,7 +714,7 @@ if (typeof systemDictionary !== 'undefined') {
         "pl": "Wznów wstrzymanie procesu oczyszczania za pomocą przycisku Start",
         "pt": "Retomar o zonecleaning pausado com o botão Iniciar",
         "ru": "Возобновление приостановки zonecleaning с кнопкой запуска",
-        "uk": "Resume paused zonecleaning with start button",
+        "uk": "Відновіть призупинене очищення зон за допомогою кнопки «Пуск».",
         "zh-cn": "使用开始按钮恢复暂停的区域清理"
     },
     "Robot icon": {
@@ -876,15 +876,15 @@ if (typeof systemDictionary !== 'undefined') {
     "The stored token will only be deleted after you save the configuration.": {
         "de": "Der gespeicherte Token wird erst gelöscht, wenn du die Konfiguration speicherst.",
         "en": "The stored token will only be deleted after you save the configuration.",
-        "es": "The stored token will only be deleted after you save the configuration.",
-        "fr": "The stored token will only be deleted after you save the configuration.",
-        "it": "The stored token will only be deleted after you save the configuration.",
-        "nl": "The stored token will only be deleted after you save the configuration.",
-        "pl": "The stored token will only be deleted after you save the configuration.",
-        "pt": "The stored token will only be deleted after you save the configuration.",
-        "ru": "The stored token will only be deleted after you save the configuration.",
-        "uk": "The stored token will only be deleted after you save the configuration.",
-        "zh-cn": "The stored token will only be deleted after you save the configuration."
+        "es": "El token almacenado solo se eliminará después de guardar la configuración.",
+        "fr": "Le jeton stocké ne sera supprimé qu'après avoir enregistré la configuration.",
+        "it": "Il token memorizzato verrà eliminato solo dopo aver salvato la configurazione.",
+        "nl": "Het opgeslagen token wordt pas verwijderd nadat u de configuratie heeft opgeslagen.",
+        "pl": "Zapisany token zostanie usunięty dopiero po zapisaniu konfiguracji.",
+        "pt": "O token armazenado só será excluído após salvar a configuração.",
+        "ru": "Сохраненный токен будет удален только после сохранения конфигурации.",
+        "uk": "Збережений маркер буде видалено лише після збереження конфігурації.",
+        "zh-cn": "保存配置后，存储的令牌才会被删除。"
     },
     "Thursday": {
         "de": "Donnerstag",
@@ -954,15 +954,15 @@ if (typeof systemDictionary !== 'undefined') {
     "Token will be deleted when the configuration is saved.": {
         "de": "Der Token wird beim Speichern der Konfiguration gelöscht.",
         "en": "Token will be deleted when the configuration is saved.",
-        "es": "Token will be deleted when the configuration is saved.",
-        "fr": "Token will be deleted when the configuration is saved.",
-        "it": "Token will be deleted when the configuration is saved.",
-        "nl": "Token will be deleted when the configuration is saved.",
-        "pl": "Token will be deleted when the configuration is saved.",
-        "pt": "Token will be deleted when the configuration is saved.",
-        "ru": "Token will be deleted when the configuration is saved.",
-        "uk": "Token will be deleted when the configuration is saved.",
-        "zh-cn": "Token will be deleted when the configuration is saved."
+        "es": "El token se eliminará cuando se guarde la configuración.",
+        "fr": "Le jeton sera supprimé une fois la configuration enregistrée.",
+        "it": "Il token verrà eliminato quando la configurazione verrà salvata.",
+        "nl": "Token wordt verwijderd wanneer de configuratie wordt opgeslagen.",
+        "pl": "Token zostanie usunięty po zapisaniu konfiguracji.",
+        "pt": "O token será excluído quando a configuração for salva.",
+        "ru": "Токен будет удален при сохранении конфигурации.",
+        "uk": "Токен буде видалено, коли конфігурацію буде збережено.",
+        "zh-cn": "保存配置后，Token 将被删除。"
     },
     "Tuesday": {
         "de": "Dienstag",
@@ -993,15 +993,15 @@ if (typeof systemDictionary !== 'undefined') {
     "Use new Map format with room colors": {
         "de": "Neues Kartenformat mit Raumfarben verwenden",
         "en": "Use new map format with room colors",
-        "es": "Use new map format with room colors",
-        "fr": "Use new map format with room colors",
-        "it": "Use new map format with room colors",
-        "nl": "Use new map format with room colors",
-        "pl": "Use new map format with room colors",
-        "pt": "Use new map format with room colors",
-        "ru": "Use new map format with room colors",
-        "uk": "Use new map format with room colors",
-        "zh-cn": "Use new map format with room colors"
+        "es": "Utilice un nuevo formato de mapa con colores de habitación",
+        "fr": "Utiliser le nouveau format de carte avec les couleurs des pièces",
+        "it": "Utilizza il nuovo formato della mappa con i colori delle stanze",
+        "nl": "Gebruik een nieuw kaartformaat met kamerkleuren",
+        "pl": "Użyj nowego formatu mapy z kolorami pomieszczeń",
+        "pt": "Use o novo formato de mapa com cores de ambiente",
+        "ru": "Используйте новый формат карты с цветами помещений",
+        "uk": "Використовуйте новий формат карти з кольорами кімнат",
+        "zh-cn": "使用带有房间颜色的新地图格式"
     },
     "Vacuum port:": {
         "de": "Port des Roboters: ",
@@ -1084,15 +1084,15 @@ if (typeof systemDictionary !== 'undefined') {
     "Xiaomi login link help": {
         "de": "Erstelle den Xiaomi-Anmeldelink, öffne ihn und bestätige die Anmeldung im Browser. Kehre danach hierher zurück und rufe die Geräte ab.",
         "en": "Create the Xiaomi login link, open it and confirm the login in your browser. Then return here and retrieve the devices.",
-        "es": "Create the Xiaomi login link, open it and confirm the login in your browser. Then return here and retrieve the devices.",
-        "fr": "Create the Xiaomi login link, open it and confirm the login in your browser. Then return here and retrieve the devices.",
-        "it": "Create the Xiaomi login link, open it and confirm the login in your browser. Then return here and retrieve the devices.",
-        "nl": "Create the Xiaomi login link, open it and confirm the login in your browser. Then return here and retrieve the devices.",
-        "pl": "Create the Xiaomi login link, open it and confirm the login in your browser. Then return here and retrieve the devices.",
-        "pt": "Create the Xiaomi login link, open it and confirm the login in your browser. Then return here and retrieve the devices.",
-        "ru": "Create the Xiaomi login link, open it and confirm the login in your browser. Then return here and retrieve the devices.",
-        "uk": "Create the Xiaomi login link, open it and confirm the login in your browser. Then return here and retrieve the devices.",
-        "zh-cn": "Create the Xiaomi login link, open it and confirm the login in your browser. Then return here and retrieve the devices."
+        "es": "Crea el enlace de inicio de sesión de Xiaomi, ábrelo y confirma el inicio de sesión en tu navegador. ",
+        "fr": "Créez le lien de connexion Xiaomi, ouvrez-le et confirmez la connexion dans votre navigateur. ",
+        "it": "Crea il link di accesso Xiaomi, aprilo e conferma il login nel tuo browser. ",
+        "nl": "Maak de Xiaomi-inloglink, open deze en bevestig de login in uw browser. ",
+        "pl": "Utwórz link do logowania Xiaomi, otwórz go i potwierdź logowanie w przeglądarce. ",
+        "pt": "Crie o link de login da Xiaomi, abra-o e confirme o login no seu navegador. ",
+        "ru": "Создайте ссылку для входа в Xiaomi, откройте ее и подтвердите вход в браузере. ",
+        "uk": "Створіть посилання для входу Xiaomi, відкрийте його та підтвердьте вхід у своєму браузері. ",
+        "zh-cn": "创建小米登录链接，打开它并在浏览器中确认登录。"
     },
     "adapter for control of Xiaomi/Roborock vacuum cleaner": {
         "de": "Adapter zur Steuerung des Staubsaugers Xiaomi / Roborock",
@@ -1104,7 +1104,7 @@ if (typeof systemDictionary !== 'undefined') {
         "pl": "adapter do sterowania odkurzaczem Xiaomi / Roborock",
         "pt": "adaptador para controle do aspirador Xiaomi / Roborock",
         "ru": "адаптер для управления пылесосом Xiaomi / Roborock",
-        "uk": "adapter for control of Xiaomi/Roborock vacuum cleaner",
+        "uk": "адаптер для керування пилососом Xiaomi/Roborock",
         "zh-cn": "小米/罗伯克吸尘器控制适配器"
     },
     "add": {
@@ -1143,7 +1143,7 @@ if (typeof systemDictionary !== 'undefined') {
         "pl": "dodaj zegar i wybierz kanały pokojowe bezpośrednio i / lub wybierz pokoje, które wyszukają przypisane kanały pokojowe",
         "pt": "adicione temporizador e escolha os canais da sala diretamente e / ou escolha as salas, que encontram os canais de sala atribuídos",
         "ru": "добавить таймер и выбрать каналы номеров напрямую и / или выбрать номера, которые находят назначенные каналы номеров",
-        "uk": "add timer and choose room channels directly and/or choose rooms, which finds assigned room channels",
+        "uk": "додати таймер і безпосередньо вибрати канали кімнати та/або вибрати кімнати, які знайдуть призначені канали кімнати",
         "zh-cn": "添加计时器并直接选择房间频道和/或选择房间，以查找分配的房间频道"
     },
     "additional settings": {
@@ -1507,7 +1507,7 @@ if (typeof systemDictionary !== 'undefined') {
         "pl": "Zachęcamy do sugerowania nowych funkcji lub urządzeń za pośrednictwem forum Github lub ioBroker. Jeśli podoba Ci się ten adapter, możesz przekazać darowiznę.",
         "pt": "Sinta-se à vontade para sugerir novos recursos ou dispositivos por meio do fórum Github ou ioBroker. Se você gosta deste adaptador, fique à vontade para doar.",
         "ru": "Не стесняйтесь предлагать новые функции или устройства через Github или форум ioBroker. Если вам понравился этот адаптер, пожалуйста, сделайте пожертвование.",
-        "uk": "Feel free to suggest new features or devices via Github or ioBroker forum. If you like this adapter, you very welcome to donate.",
+        "uk": "Не соромтеся пропонувати нові функції чи пристрої на форумі Github або ioBroker. ",
         "zh-cn": "欢迎通过Github或ioBroker论坛建议新功能或设备。如果您喜欢此适配器，则非常欢迎您捐赠。"
     },
     "duration": {
@@ -1897,7 +1897,7 @@ if (typeof systemDictionary !== 'undefined') {
         "pl": "wstaw mapę Współrzędne indeksu lub strefy",
         "pt": "inserir mapa Coordenadas de índice ou zona",
         "ru": "вставить карту указатель или координаты зоны",
-        "uk": "insert map Index or zone coordinates",
+        "uk": "вставити індекс карти або координати зони",
         "zh-cn": "插入地图索引或区域坐标"
     },
     "load rooms from robot": {
@@ -2017,6 +2017,19 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "Map image state",
         "zh-cn": "Map image state"
     },
+    "mihome_vacuum_area": {
+        "de": "Fläche",
+        "en": "Area",
+        "es": "Area",
+        "fr": "Area",
+        "it": "Area",
+        "nl": "Area",
+        "pl": "Area",
+        "pt": "Area",
+        "ru": "Area",
+        "uk": "Area",
+        "zh-cn": "Area"
+    },
     "mihome_vacuum_areaOid": {
         "de": "Datenpunkt der gereinigten Fläche",
         "en": "Cleaned area state",
@@ -2030,6 +2043,32 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "Cleaned area state",
         "zh-cn": "Cleaned area state"
     },
+    "mihome_vacuum_balanced": {
+        "de": "Ausgeglichen",
+        "en": "Balanced",
+        "es": "Balanced",
+        "fr": "Balanced",
+        "it": "Balanced",
+        "nl": "Balanced",
+        "pl": "Balanced",
+        "pt": "Balanced",
+        "ru": "Balanced",
+        "uk": "Balanced",
+        "zh-cn": "Balanced"
+    },
+    "mihome_vacuum_battery": {
+        "de": "Batterie",
+        "en": "Battery",
+        "es": "Battery",
+        "fr": "Battery",
+        "it": "Battery",
+        "nl": "Battery",
+        "pl": "Battery",
+        "pt": "Battery",
+        "ru": "Battery",
+        "uk": "Battery",
+        "zh-cn": "Battery"
+    },
     "mihome_vacuum_batteryOid": {
         "de": "Batteriedatenpunkt",
         "en": "Battery state",
@@ -2042,6 +2081,45 @@ if (typeof systemDictionary !== 'undefined') {
         "ru": "Battery state",
         "uk": "Battery state",
         "zh-cn": "Battery state"
+    },
+    "mihome_vacuum_charging": {
+        "de": "Wird geladen",
+        "en": "Charging",
+        "es": "Charging",
+        "fr": "Charging",
+        "it": "Charging",
+        "nl": "Charging",
+        "pl": "Charging",
+        "pt": "Charging",
+        "ru": "Charging",
+        "uk": "Charging",
+        "zh-cn": "Charging"
+    },
+    "mihome_vacuum_checkSoon": {
+        "de": "Bald prüfen",
+        "en": "Check soon",
+        "es": "Check soon",
+        "fr": "Check soon",
+        "it": "Check soon",
+        "nl": "Check soon",
+        "pl": "Check soon",
+        "pt": "Check soon",
+        "ru": "Check soon",
+        "uk": "Check soon",
+        "zh-cn": "Check soon"
+    },
+    "mihome_vacuum_cleaningBrush": {
+        "de": "Reinigungsbürste",
+        "en": "Cleaning brush",
+        "es": "Cleaning brush",
+        "fr": "Cleaning brush",
+        "it": "Cleaning brush",
+        "nl": "Cleaning brush",
+        "pl": "Cleaning brush",
+        "pt": "Cleaning brush",
+        "ru": "Cleaning brush",
+        "uk": "Cleaning brush",
+        "zh-cn": "Cleaning brush"
     },
     "mihome_vacuum_cleaningBrushOid": {
         "de": "Reinigungsbürstenzähler",
@@ -2082,6 +2160,19 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "General",
         "zh-cn": "General"
     },
+    "mihome_vacuum_completed": {
+        "de": "Abgeschlossen",
+        "en": "Completed",
+        "es": "Completed",
+        "fr": "Completed",
+        "it": "Completed",
+        "nl": "Completed",
+        "pl": "Completed",
+        "pt": "Completed",
+        "ru": "Completed",
+        "uk": "Completed",
+        "zh-cn": "Completed"
+    },
     "mihome_vacuum_connectionOid": {
         "de": "Verbindungsdatenpunkt",
         "en": "Connection state",
@@ -2094,6 +2185,71 @@ if (typeof systemDictionary !== 'undefined') {
         "ru": "Connection state",
         "uk": "Connection state",
         "zh-cn": "Connection state"
+    },
+    "mihome_vacuum_current": {
+        "de": "Aktuell",
+        "en": "Current",
+        "es": "Current",
+        "fr": "Current",
+        "it": "Current",
+        "nl": "Current",
+        "pl": "Current",
+        "pt": "Current",
+        "ru": "Current",
+        "uk": "Current",
+        "zh-cn": "Current"
+    },
+    "mihome_vacuum_dashboard": {
+        "de": "Übersicht",
+        "en": "Dashboard",
+        "es": "Dashboard",
+        "fr": "Dashboard",
+        "it": "Dashboard",
+        "nl": "Dashboard",
+        "pl": "Dashboard",
+        "pt": "Dashboard",
+        "ru": "Dashboard",
+        "uk": "Dashboard",
+        "zh-cn": "Dashboard"
+    },
+    "mihome_vacuum_dock": {
+        "de": "Ladestation",
+        "en": "Dock",
+        "es": "Dock",
+        "fr": "Dock",
+        "it": "Dock",
+        "nl": "Dock",
+        "pl": "Dock",
+        "pt": "Dock",
+        "ru": "Dock",
+        "uk": "Dock",
+        "zh-cn": "Dock"
+    },
+    "mihome_vacuum_duration": {
+        "de": "Dauer",
+        "en": "Duration",
+        "es": "Duration",
+        "fr": "Duration",
+        "it": "Duration",
+        "nl": "Duration",
+        "pl": "Duration",
+        "pt": "Duration",
+        "ru": "Duration",
+        "uk": "Duration",
+        "zh-cn": "Duration"
+    },
+    "mihome_vacuum_dustCollection": {
+        "de": "Staubbehälter",
+        "en": "Dust collection",
+        "es": "Dust collection",
+        "fr": "Dust collection",
+        "it": "Dust collection",
+        "nl": "Dust collection",
+        "pl": "Dust collection",
+        "pt": "Dust collection",
+        "ru": "Dust collection",
+        "uk": "Dust collection",
+        "zh-cn": "Dust collection"
     },
     "mihome_vacuum_dustCollectionOid": {
         "de": "Staubbehälterzähler",
@@ -2120,6 +2276,19 @@ if (typeof systemDictionary !== 'undefined') {
         "ru": "Reset dust collection",
         "uk": "Reset dust collection",
         "zh-cn": "Reset dust collection"
+    },
+    "mihome_vacuum_error": {
+        "de": "Fehler",
+        "en": "Error",
+        "es": "Error",
+        "fr": "Error",
+        "it": "Error",
+        "nl": "Error",
+        "pl": "Error",
+        "pt": "Error",
+        "ru": "Error",
+        "uk": "Error",
+        "zh-cn": "Error"
     },
     "mihome_vacuum_errorOid": {
         "de": "Fehlerdatenpunkt",
@@ -2186,6 +2355,19 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "Turbo fan value",
         "zh-cn": "Turbo fan value"
     },
+    "mihome_vacuum_filter": {
+        "de": "Filter",
+        "en": "Filter",
+        "es": "Filter",
+        "fr": "Filter",
+        "it": "Filter",
+        "nl": "Filter",
+        "pl": "Filter",
+        "pt": "Filter",
+        "ru": "Filter",
+        "uk": "Filter",
+        "zh-cn": "Filter"
+    },
     "mihome_vacuum_filterOid": {
         "de": "Filterlebensdauer",
         "en": "Filter lifetime",
@@ -2212,6 +2394,19 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "Reset filter",
         "zh-cn": "Reset filter"
     },
+    "mihome_vacuum_find": {
+        "de": "Finden",
+        "en": "Find",
+        "es": "Find",
+        "fr": "Find",
+        "it": "Find",
+        "nl": "Find",
+        "pl": "Find",
+        "pt": "Find",
+        "ru": "Find",
+        "uk": "Find",
+        "zh-cn": "Find"
+    },
     "mihome_vacuum_findOid": {
         "de": "Roboter-finden-Befehl",
         "en": "Find command",
@@ -2224,6 +2419,19 @@ if (typeof systemDictionary !== 'undefined') {
         "ru": "Find command",
         "uk": "Find command",
         "zh-cn": "Find command"
+    },
+    "mihome_vacuum_goodCondition": {
+        "de": "Guter Zustand",
+        "en": "Good condition",
+        "es": "Good condition",
+        "fr": "Good condition",
+        "it": "Good condition",
+        "nl": "Good condition",
+        "pl": "Good condition",
+        "pt": "Good condition",
+        "ru": "Good condition",
+        "uk": "Good condition",
+        "zh-cn": "Good condition"
     },
     "mihome_vacuum_history": {
         "de": "Verlauf",
@@ -2250,6 +2458,19 @@ if (typeof systemDictionary !== 'undefined') {
         "ru": "Cleaning history entries",
         "uk": "Cleaning history entries",
         "zh-cn": "Cleaning history entries"
+    },
+    "mihome_vacuum_historySubtitle": {
+        "de": "Letzte und gesamte Reinigungsleistung",
+        "en": "Recent and total cleaning performance",
+        "es": "Recent and total cleaning performance",
+        "fr": "Recent and total cleaning performance",
+        "it": "Recent and total cleaning performance",
+        "nl": "Recent and total cleaning performance",
+        "pl": "Recent and total cleaning performance",
+        "pt": "Recent and total cleaning performance",
+        "ru": "Recent and total cleaning performance",
+        "uk": "Recent and total cleaning performance",
+        "zh-cn": "Recent and total cleaning performance"
     },
     "mihome_vacuum_historyTotalAreaOid": {
         "de": "Gesamte gereinigte Fläche",
@@ -2303,6 +2524,19 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "Return home command",
         "zh-cn": "Return home command"
     },
+    "mihome_vacuum_mainBrush": {
+        "de": "Hauptbürste",
+        "en": "Main brush",
+        "es": "Main brush",
+        "fr": "Main brush",
+        "it": "Main brush",
+        "nl": "Main brush",
+        "pl": "Main brush",
+        "pt": "Main brush",
+        "ru": "Main brush",
+        "uk": "Main brush",
+        "zh-cn": "Main brush"
+    },
     "mihome_vacuum_mainBrushOid": {
         "de": "Lebensdauer der Hauptbürste",
         "en": "Main brush lifetime",
@@ -2342,6 +2576,19 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "Maintenance and reset actions",
         "zh-cn": "Maintenance and reset actions"
     },
+    "mihome_vacuum_maintenanceSubtitle": {
+        "de": "Verbrauchsmaterial und Sensorpflege",
+        "en": "Consumables and sensor care",
+        "es": "Consumables and sensor care",
+        "fr": "Consumables and sensor care",
+        "it": "Consumables and sensor care",
+        "nl": "Consumables and sensor care",
+        "pl": "Consumables and sensor care",
+        "pt": "Consumables and sensor care",
+        "ru": "Consumables and sensor care",
+        "uk": "Consumables and sensor care",
+        "zh-cn": "Consumables and sensor care"
+    },
     "mihome_vacuum_mapOid": {
         "de": "Datenpunkt des Kartenbilds",
         "en": "Map image state",
@@ -2354,6 +2601,45 @@ if (typeof systemDictionary !== 'undefined') {
         "ru": "Map image state",
         "uk": "Map image state",
         "zh-cn": "Map image state"
+    },
+    "mihome_vacuum_mihome_vacuum_widget": {
+        "de": "Staubsaugersteuerung mit Karte",
+        "en": "Vacuum control with map",
+        "es": "Vacuum control with map",
+        "fr": "Vacuum control with map",
+        "it": "Vacuum control with map",
+        "nl": "Vacuum control with map",
+        "pl": "Vacuum control with map",
+        "pt": "Vacuum control with map",
+        "ru": "Vacuum control with map",
+        "uk": "Vacuum control with map",
+        "zh-cn": "Vacuum control with map"
+    },
+    "mihome_vacuum_mihome_vacuum_widget_set": {
+        "de": "Mi Home Vacuum",
+        "en": "Mi Home Vacuum",
+        "es": "Mi Home Vacuum",
+        "fr": "Mi Home Vacuum",
+        "it": "Mi Home Vacuum",
+        "nl": "Mi Home Vacuum",
+        "pl": "Mi Home Vacuum",
+        "pt": "Mi Home Vacuum",
+        "ru": "Mi Home Vacuum",
+        "uk": "Mi Home Vacuum",
+        "zh-cn": "Mi Home Vacuum"
+    },
+    "mihome_vacuum_mopPad": {
+        "de": "Wischpad",
+        "en": "Mop pad",
+        "es": "Mop pad",
+        "fr": "Mop pad",
+        "it": "Mop pad",
+        "nl": "Mop pad",
+        "pl": "Mop pad",
+        "pt": "Mop pad",
+        "ru": "Mop pad",
+        "uk": "Mop pad",
+        "zh-cn": "Mop pad"
     },
     "mihome_vacuum_mopPadOid": {
         "de": "Lebensdauer des Wischpads",
@@ -2381,6 +2667,162 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "Reset mop pad",
         "zh-cn": "Reset mop pad"
     },
+    "mihome_vacuum_noCleaningHistory": {
+        "de": "Kein Reinigungsverlauf",
+        "en": "No cleaning history",
+        "es": "No cleaning history",
+        "fr": "No cleaning history",
+        "it": "No cleaning history",
+        "nl": "No cleaning history",
+        "pl": "No cleaning history",
+        "pt": "No cleaning history",
+        "ru": "No cleaning history",
+        "uk": "No cleaning history",
+        "zh-cn": "No cleaning history"
+    },
+    "mihome_vacuum_noCleaningHistoryText": {
+        "de": "Der Verlauf erscheint, sobald der Adapter Reinigungsdaten empfangen hat.",
+        "en": "History appears after the adapter has received cleaning records from the robot.",
+        "es": "El historial aparece después de que el adaptador ha recibido registros de limpieza del robot.",
+        "fr": "L'historique apparaît une fois que l'adaptateur a reçu des enregistrements de nettoyage du robot.",
+        "it": "La cronologia viene visualizzata dopo che l'adattatore ha ricevuto i record di pulizia dal robot.",
+        "nl": "De geschiedenis verschijnt nadat de adapter reinigingsgegevens van de robot heeft ontvangen.",
+        "pl": "Historia pojawia się po otrzymaniu przez adapter zapisów czyszczenia od robota.",
+        "pt": "O histórico aparece depois que o adaptador recebeu registros de limpeza do robô.",
+        "ru": "История появляется после того, как адаптер получит записи о чистке от робота.",
+        "uk": "Журнал з’являється після того, як адаптер отримав записи очищення від робота.",
+        "zh-cn": "适配器收到机器人的清洁记录后会显示历史记录。"
+    },
+    "mihome_vacuum_noError": {
+        "de": "Kein Fehler",
+        "en": "No error",
+        "es": "No error",
+        "fr": "No error",
+        "it": "No error",
+        "nl": "No error",
+        "pl": "No error",
+        "pt": "No error",
+        "ru": "No error",
+        "uk": "No error",
+        "zh-cn": "No error"
+    },
+    "mihome_vacuum_noHistory": {
+        "de": "Kein Reinigungsverlauf verfügbar",
+        "en": "No cleaning history available",
+        "es": "No cleaning history available",
+        "fr": "No cleaning history available",
+        "it": "No cleaning history available",
+        "nl": "No cleaning history available",
+        "pl": "No cleaning history available",
+        "pt": "No cleaning history available",
+        "ru": "No cleaning history available",
+        "uk": "No cleaning history available",
+        "zh-cn": "No cleaning history available"
+    },
+    "mihome_vacuum_noMaintenanceData": {
+        "de": "Keine Wartungsdaten",
+        "en": "No maintenance data",
+        "es": "No maintenance data",
+        "fr": "No maintenance data",
+        "it": "No maintenance data",
+        "nl": "No maintenance data",
+        "pl": "No maintenance data",
+        "pt": "No maintenance data",
+        "ru": "No maintenance data",
+        "uk": "No maintenance data",
+        "zh-cn": "No maintenance data"
+    },
+    "mihome_vacuum_noMaintenanceText": {
+        "de": "Dieser Roboter stellt keine unterstützten Wartungsdaten bereit.",
+        "en": "This robot does not expose supported consumables yet.",
+        "es": "Este robot aún no expone los consumibles compatibles.",
+        "fr": "Ce robot n'expose pas encore les consommables pris en charge.",
+        "it": "Questo robot non espone ancora i materiali di consumo supportati.",
+        "nl": "Deze robot stelt nog geen ondersteunde verbruiksartikelen bloot.",
+        "pl": "Ten robot nie udostępnia jeszcze obsługiwanych materiałów eksploatacyjnych.",
+        "pt": "Este robô ainda não expõe os consumíveis suportados.",
+        "ru": "Этот робот пока не предоставляет поддерживаемые расходные материалы.",
+        "uk": "Цей робот ще не показує підтримувані витратні матеріали.",
+        "zh-cn": "该机器人尚未公开支持的消耗品。"
+    },
+    "mihome_vacuum_noMap": {
+        "de": "Keine Karte verfügbar",
+        "en": "No map available",
+        "es": "No map available",
+        "fr": "No map available",
+        "it": "No map available",
+        "nl": "No map available",
+        "pl": "No map available",
+        "pt": "No map available",
+        "ru": "No map available",
+        "uk": "No map available",
+        "zh-cn": "No map available"
+    },
+    "mihome_vacuum_noMapAvailable": {
+        "de": "Keine Karte verfügbar",
+        "en": "No map available",
+        "es": "No map available",
+        "fr": "No map available",
+        "it": "No map available",
+        "nl": "No map available",
+        "pl": "No map available",
+        "pt": "No map available",
+        "ru": "No map available",
+        "uk": "No map available",
+        "zh-cn": "No map available"
+    },
+    "mihome_vacuum_notCompleted": {
+        "de": "Nicht abgeschlossen",
+        "en": "Not completed",
+        "es": "Not completed",
+        "fr": "Not completed",
+        "it": "Not completed",
+        "nl": "Not completed",
+        "pl": "Not completed",
+        "pt": "Not completed",
+        "ru": "Not completed",
+        "uk": "Not completed",
+        "zh-cn": "Not completed"
+    },
+    "mihome_vacuum_offline": {
+        "de": "Offline",
+        "en": "Offline",
+        "es": "Offline",
+        "fr": "Offline",
+        "it": "Offline",
+        "nl": "Offline",
+        "pl": "Offline",
+        "pt": "Offline",
+        "ru": "Offline",
+        "uk": "Offline",
+        "zh-cn": "Offline"
+    },
+    "mihome_vacuum_online": {
+        "de": "Online",
+        "en": "Online",
+        "es": "Online",
+        "fr": "Online",
+        "it": "Online",
+        "nl": "Online",
+        "pl": "Online",
+        "pt": "Online",
+        "ru": "Online",
+        "uk": "Online",
+        "zh-cn": "Online"
+    },
+    "mihome_vacuum_pause": {
+        "de": "Pause",
+        "en": "Pause",
+        "es": "Pause",
+        "fr": "Pause",
+        "it": "Pause",
+        "nl": "Pause",
+        "pl": "Pause",
+        "pt": "Pause",
+        "ru": "Pause",
+        "uk": "Pause",
+        "zh-cn": "Pause"
+    },
     "mihome_vacuum_pauseOid": {
         "de": "Pausebefehl",
         "en": "Pause command",
@@ -2393,6 +2835,97 @@ if (typeof systemDictionary !== 'undefined') {
         "ru": "Pause command",
         "uk": "Pause command",
         "zh-cn": "Pause command"
+    },
+    "mihome_vacuum_quickControls": {
+        "de": "Schnellsteuerung",
+        "en": "Quick controls",
+        "es": "Quick controls",
+        "fr": "Quick controls",
+        "it": "Quick controls",
+        "nl": "Quick controls",
+        "pl": "Quick controls",
+        "pt": "Quick controls",
+        "ru": "Quick controls",
+        "uk": "Quick controls",
+        "zh-cn": "Quick controls"
+    },
+    "mihome_vacuum_quiet": {
+        "de": "Leise",
+        "en": "Quiet",
+        "es": "Quiet",
+        "fr": "Quiet",
+        "it": "Quiet",
+        "nl": "Quiet",
+        "pl": "Quiet",
+        "pt": "Quiet",
+        "ru": "Quiet",
+        "uk": "Quiet",
+        "zh-cn": "Quiet"
+    },
+    "mihome_vacuum_replacement": {
+        "de": "Austausch empfohlen",
+        "en": "Replacement recommended",
+        "es": "Replacement recommended",
+        "fr": "Replacement recommended",
+        "it": "Replacement recommended",
+        "nl": "Replacement recommended",
+        "pl": "Replacement recommended",
+        "pt": "Replacement recommended",
+        "ru": "Replacement recommended",
+        "uk": "Replacement recommended",
+        "zh-cn": "Replacement recommended"
+    },
+    "mihome_vacuum_replacementRecommended": {
+        "de": "Austausch empfohlen",
+        "en": "Replacement recommended",
+        "es": "Replacement recommended",
+        "fr": "Replacement recommended",
+        "it": "Replacement recommended",
+        "nl": "Replacement recommended",
+        "pl": "Replacement recommended",
+        "pt": "Replacement recommended",
+        "ru": "Replacement recommended",
+        "uk": "Replacement recommended",
+        "zh-cn": "Replacement recommended"
+    },
+    "mihome_vacuum_reset": {
+        "de": "Zurücksetzen",
+        "en": "Reset",
+        "es": "Reset",
+        "fr": "Reset",
+        "it": "Reset",
+        "nl": "Reset",
+        "pl": "Reset",
+        "pt": "Reset",
+        "ru": "Reset",
+        "uk": "Reset",
+        "zh-cn": "Reset"
+    },
+    "mihome_vacuum_resetConfirm": {
+        "de": "Nur nach Reinigung oder Austausch fortfahren.",
+        "en": "Only continue after cleaning or replacing it.",
+        "es": "Continúe solo después de limpiarlo o reemplazarlo.",
+        "fr": "Ne continuez qu'après l'avoir nettoyé ou remplacé.",
+        "it": "Continuare solo dopo averlo pulito o sostituito.",
+        "nl": "Ga pas verder na het reinigen of vervangen.",
+        "pl": "Kontynuuj dopiero po wyczyszczeniu lub wymianie.",
+        "pt": "Continue somente após limpá-lo ou substituí-lo.",
+        "ru": "Продолжайте работу только после очистки или замены.",
+        "uk": "Продовжуйте лише після очищення або заміни.",
+        "zh-cn": "仅在清洁或更换后才能继续。"
+    },
+    "mihome_vacuum_robotHealth": {
+        "de": "Roboterzustand",
+        "en": "Robot health",
+        "es": "Robot health",
+        "fr": "Robot health",
+        "it": "Robot health",
+        "nl": "Robot health",
+        "pl": "Robot health",
+        "pt": "Robot health",
+        "ru": "Robot health",
+        "uk": "Robot health",
+        "zh-cn": "Robot health"
     },
     "mihome_vacuum_room1Name": {
         "de": "Name von Raum 1",
@@ -2511,6 +3044,32 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "Rooms",
         "zh-cn": "Rooms"
     },
+    "mihome_vacuum_roomsSubtitle": {
+        "de": "Raum mit eigener Saugstufe starten",
+        "en": "Start a room with its own suction level",
+        "es": "Iniciar una habitación con su propio nivel de succión.",
+        "fr": "Démarrer une pièce avec son propre niveau d'aspiration",
+        "it": "Avvia una stanza con il proprio livello di aspirazione",
+        "nl": "Start een kamer met een eigen zuigniveau",
+        "pl": "Uruchom pomieszczenie z własnym poziomem ssania",
+        "pt": "Comece uma sala com seu próprio nível de sucção",
+        "ru": "Создайте комнату с собственным уровнем всасывания.",
+        "uk": "Запустіть кімнату з власним рівнем всмоктування",
+        "zh-cn": "开始一个有自己的吸力水平的房间"
+    },
+    "mihome_vacuum_sensors": {
+        "de": "Sensoren",
+        "en": "Sensors",
+        "es": "Sensors",
+        "fr": "Sensors",
+        "it": "Sensors",
+        "nl": "Sensors",
+        "pl": "Sensors",
+        "pt": "Sensors",
+        "ru": "Sensors",
+        "uk": "Sensors",
+        "zh-cn": "Sensors"
+    },
     "mihome_vacuum_sensorsOid": {
         "de": "Sensorlebensdauer",
         "en": "Sensor lifetime",
@@ -2576,6 +3135,19 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "Show map",
         "zh-cn": "Show map"
     },
+    "mihome_vacuum_sideBrush": {
+        "de": "Seitenbürste",
+        "en": "Side brush",
+        "es": "Side brush",
+        "fr": "Side brush",
+        "it": "Side brush",
+        "nl": "Side brush",
+        "pl": "Side brush",
+        "pt": "Side brush",
+        "ru": "Side brush",
+        "uk": "Side brush",
+        "zh-cn": "Side brush"
+    },
     "mihome_vacuum_sideBrushOid": {
         "de": "Lebensdauer der Seitenbürste",
         "en": "Side brush lifetime",
@@ -2602,6 +3174,19 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "Reset side brush",
         "zh-cn": "Reset side brush"
     },
+    "mihome_vacuum_start": {
+        "de": "Start",
+        "en": "Start",
+        "es": "Start",
+        "fr": "Start",
+        "it": "Start",
+        "nl": "Start",
+        "pl": "Start",
+        "pt": "Start",
+        "ru": "Start",
+        "uk": "Start",
+        "zh-cn": "Start"
+    },
     "mihome_vacuum_startOid": {
         "de": "Startbefehl",
         "en": "Start command",
@@ -2614,6 +3199,19 @@ if (typeof systemDictionary !== 'undefined') {
         "ru": "Start command",
         "uk": "Start command",
         "zh-cn": "Start command"
+    },
+    "mihome_vacuum_startRoom": {
+        "de": "Raum starten",
+        "en": "Start room",
+        "es": "Start room",
+        "fr": "Start room",
+        "it": "Start room",
+        "nl": "Start room",
+        "pl": "Start room",
+        "pt": "Start room",
+        "ru": "Start room",
+        "uk": "Start room",
+        "zh-cn": "Start room"
     },
     "mihome_vacuum_stateOid": {
         "de": "Statusdatenpunkt",
@@ -2641,6 +3239,19 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "States and controls",
         "zh-cn": "States and controls"
     },
+    "mihome_vacuum_strainer": {
+        "de": "Sieb",
+        "en": "Strainer",
+        "es": "Strainer",
+        "fr": "Strainer",
+        "it": "Strainer",
+        "nl": "Strainer",
+        "pl": "Strainer",
+        "pt": "Strainer",
+        "ru": "Strainer",
+        "uk": "Strainer",
+        "zh-cn": "Strainer"
+    },
     "mihome_vacuum_strainerOid": {
         "de": "Siebzähler",
         "en": "Strainer counter",
@@ -2667,6 +3278,32 @@ if (typeof systemDictionary !== 'undefined') {
         "uk": "Reset strainer",
         "zh-cn": "Reset strainer"
     },
+    "mihome_vacuum_suctionPower": {
+        "de": "Saugleistung",
+        "en": "Suction power",
+        "es": "Suction power",
+        "fr": "Suction power",
+        "it": "Suction power",
+        "nl": "Suction power",
+        "pl": "Suction power",
+        "pt": "Suction power",
+        "ru": "Suction power",
+        "uk": "Suction power",
+        "zh-cn": "Suction power"
+    },
+    "mihome_vacuum_time": {
+        "de": "Zeit",
+        "en": "Time",
+        "es": "Time",
+        "fr": "Time",
+        "it": "Time",
+        "nl": "Time",
+        "pl": "Time",
+        "pt": "Time",
+        "ru": "Time",
+        "uk": "Time",
+        "zh-cn": "Time"
+    },
     "mihome_vacuum_timeOid": {
         "de": "Datenpunkt der Reinigungszeit",
         "en": "Cleaning time state",
@@ -2692,6 +3329,97 @@ if (typeof systemDictionary !== 'undefined') {
         "ru": "Title",
         "uk": "Title",
         "zh-cn": "Title"
+    },
+    "mihome_vacuum_totalArea": {
+        "de": "Gesamtfläche",
+        "en": "Total area",
+        "es": "Total area",
+        "fr": "Total area",
+        "it": "Total area",
+        "nl": "Total area",
+        "pl": "Total area",
+        "pt": "Total area",
+        "ru": "Total area",
+        "uk": "Total area",
+        "zh-cn": "Total area"
+    },
+    "mihome_vacuum_totalCleanups": {
+        "de": "Reinigungen gesamt",
+        "en": "Total cleanups",
+        "es": "Total cleanups",
+        "fr": "Total cleanups",
+        "it": "Total cleanups",
+        "nl": "Total cleanups",
+        "pl": "Total cleanups",
+        "pt": "Total cleanups",
+        "ru": "Total cleanups",
+        "uk": "Total cleanups",
+        "zh-cn": "Total cleanups"
+    },
+    "mihome_vacuum_totalTime": {
+        "de": "Gesamtzeit",
+        "en": "Total time",
+        "es": "Total time",
+        "fr": "Total time",
+        "it": "Total time",
+        "nl": "Total time",
+        "pl": "Total time",
+        "pt": "Total time",
+        "ru": "Total time",
+        "uk": "Total time",
+        "zh-cn": "Total time"
+    },
+    "mihome_vacuum_turbo": {
+        "de": "Turbo",
+        "en": "Turbo",
+        "es": "Turbo",
+        "fr": "Turbo",
+        "it": "Turbo",
+        "nl": "Turbo",
+        "pl": "Turbo",
+        "pt": "Turbo",
+        "ru": "Turbo",
+        "uk": "Turbo",
+        "zh-cn": "Turbo"
+    },
+    "mihome_vacuum_unknown": {
+        "de": "Unbekannt",
+        "en": "Unknown",
+        "es": "Unknown",
+        "fr": "Unknown",
+        "it": "Unknown",
+        "nl": "Unknown",
+        "pl": "Unknown",
+        "pt": "Unknown",
+        "ru": "Unknown",
+        "uk": "Unknown",
+        "zh-cn": "Unknown"
+    },
+    "mihome_vacuum_usageCounter": {
+        "de": "Nutzungszähler",
+        "en": "Usage counter",
+        "es": "Usage counter",
+        "fr": "Usage counter",
+        "it": "Usage counter",
+        "nl": "Usage counter",
+        "pl": "Usage counter",
+        "pt": "Usage counter",
+        "ru": "Usage counter",
+        "uk": "Usage counter",
+        "zh-cn": "Usage counter"
+    },
+    "mihome_vacuum_waterFilter": {
+        "de": "Wasserfilter",
+        "en": "Water filter",
+        "es": "Water filter",
+        "fr": "Water filter",
+        "it": "Water filter",
+        "nl": "Water filter",
+        "pl": "Water filter",
+        "pt": "Water filter",
+        "ru": "Water filter",
+        "uk": "Water filter",
+        "zh-cn": "Water filter"
     },
     "mihome_vacuum_waterFilterOid": {
         "de": "Lebensdauer des Wasserfilters",
@@ -2839,15 +3567,15 @@ if (typeof systemDictionary !== 'undefined') {
     "noCleaningHistoryText": {
         "de": "Der Verlauf erscheint, sobald der Adapter Reinigungsdaten empfangen hat.",
         "en": "History appears after the adapter has received cleaning records from the robot.",
-        "es": "History appears after the adapter has received cleaning records from the robot.",
-        "fr": "History appears after the adapter has received cleaning records from the robot.",
-        "it": "History appears after the adapter has received cleaning records from the robot.",
-        "nl": "History appears after the adapter has received cleaning records from the robot.",
-        "pl": "History appears after the adapter has received cleaning records from the robot.",
-        "pt": "History appears after the adapter has received cleaning records from the robot.",
-        "ru": "History appears after the adapter has received cleaning records from the robot.",
-        "uk": "History appears after the adapter has received cleaning records from the robot.",
-        "zh-cn": "History appears after the adapter has received cleaning records from the robot."
+        "es": "El historial aparece después de que el adaptador ha recibido registros de limpieza del robot.",
+        "fr": "L'historique apparaît une fois que l'adaptateur a reçu des enregistrements de nettoyage du robot.",
+        "it": "La cronologia viene visualizzata dopo che l'adattatore ha ricevuto i record di pulizia dal robot.",
+        "nl": "De geschiedenis verschijnt nadat de adapter reinigingsgegevens van de robot heeft ontvangen.",
+        "pl": "Historia pojawia się po otrzymaniu przez adapter zapisów czyszczenia od robota.",
+        "pt": "O histórico aparece depois que o adaptador recebeu registros de limpeza do robô.",
+        "ru": "История появляется после того, как адаптер получит записи о чистке от робота.",
+        "uk": "Журнал з’являється після того, як адаптер отримав записи очищення від робота.",
+        "zh-cn": "适配器收到机器人的清洁记录后会显示历史记录。"
     },
     "noError": {
         "de": "Kein Fehler",
@@ -2891,15 +3619,15 @@ if (typeof systemDictionary !== 'undefined') {
     "noMaintenanceText": {
         "de": "Dieser Roboter stellt keine unterstützten Wartungsdaten bereit.",
         "en": "This robot does not expose supported consumables yet.",
-        "es": "This robot does not expose supported consumables yet.",
-        "fr": "This robot does not expose supported consumables yet.",
-        "it": "This robot does not expose supported consumables yet.",
-        "nl": "This robot does not expose supported consumables yet.",
-        "pl": "This robot does not expose supported consumables yet.",
-        "pt": "This robot does not expose supported consumables yet.",
-        "ru": "This robot does not expose supported consumables yet.",
-        "uk": "This robot does not expose supported consumables yet.",
-        "zh-cn": "This robot does not expose supported consumables yet."
+        "es": "Este robot aún no expone los consumibles compatibles.",
+        "fr": "Ce robot n'expose pas encore les consommables pris en charge.",
+        "it": "Questo robot non espone ancora i materiali di consumo supportati.",
+        "nl": "Deze robot stelt nog geen ondersteunde verbruiksartikelen bloot.",
+        "pl": "Ten robot nie udostępnia jeszcze obsługiwanych materiałów eksploatacyjnych.",
+        "pt": "Este robô ainda não expõe os consumíveis suportados.",
+        "ru": "Этот робот пока не предоставляет поддерживаемые расходные материалы.",
+        "uk": "Цей робот ще не показує підтримувані витратні матеріали.",
+        "zh-cn": "该机器人尚未公开支持的消耗品。"
     },
     "noMap": {
         "de": "Keine Karte verfügbar",
@@ -3554,15 +4282,15 @@ if (typeof systemDictionary !== 'undefined') {
     "resetConfirm": {
         "de": "Nur nach Reinigung oder Austausch fortfahren.",
         "en": "Only continue after cleaning or replacing it.",
-        "es": "Only continue after cleaning or replacing it.",
-        "fr": "Only continue after cleaning or replacing it.",
-        "it": "Only continue after cleaning or replacing it.",
-        "nl": "Only continue after cleaning or replacing it.",
-        "pl": "Only continue after cleaning or replacing it.",
-        "pt": "Only continue after cleaning or replacing it.",
-        "ru": "Only continue after cleaning or replacing it.",
-        "uk": "Only continue after cleaning or replacing it.",
-        "zh-cn": "Only continue after cleaning or replacing it."
+        "es": "Continúe solo después de limpiarlo o reemplazarlo.",
+        "fr": "Ne continuez qu'après l'avoir nettoyé ou remplacé.",
+        "it": "Continuare solo dopo averlo pulito o sostituito.",
+        "nl": "Ga pas verder na het reinigen of vervangen.",
+        "pl": "Kontynuuj dopiero po wyczyszczeniu lub wymianie.",
+        "pt": "Continue somente após limpá-lo ou substituí-lo.",
+        "ru": "Продолжайте работу только после очистки или замены.",
+        "uk": "Продовжуйте лише після очищення або заміни.",
+        "zh-cn": "仅在清洁或更换后才能继续。"
     },
     "robotHealth": {
         "de": "Roboterzustand",
@@ -3801,15 +4529,15 @@ if (typeof systemDictionary !== 'undefined') {
     "roomsSubtitle": {
         "de": "Raum mit eigener Saugstufe starten",
         "en": "Start a room with its own suction level",
-        "es": "Start a room with its own suction level",
-        "fr": "Start a room with its own suction level",
-        "it": "Start a room with its own suction level",
-        "nl": "Start a room with its own suction level",
-        "pl": "Start a room with its own suction level",
-        "pt": "Start a room with its own suction level",
-        "ru": "Start a room with its own suction level",
-        "uk": "Start a room with its own suction level",
-        "zh-cn": "Start a room with its own suction level"
+        "es": "Iniciar una habitación con su propio nivel de succión.",
+        "fr": "Démarrer une pièce avec son propre niveau d'aspiration",
+        "it": "Avvia una stanza con il proprio livello di aspirazione",
+        "nl": "Start een kamer met een eigen zuigniveau",
+        "pl": "Uruchom pomieszczenie z własnym poziomem ssania",
+        "pt": "Comece uma sala com seu próprio nível de sucção",
+        "ru": "Создайте комнату с собственным уровнем всасывания.",
+        "uk": "Запустіть кімнату з власним рівнем всмоктування",
+        "zh-cn": "开始一个有自己的吸力水平的房间"
     },
     "same start time of 2 timer not possible": {
         "de": "gleiche Startzeit von 2 Timer nicht möglich",
@@ -3821,7 +4549,7 @@ if (typeof systemDictionary !== 'undefined') {
         "pl": "ten sam czas rozpoczęcia 2 timera nie jest możliwy",
         "pt": "mesmo horário de início de 2 temporizadores não é possível",
         "ru": "то же время начала 2 таймера невозможно",
-        "uk": "same start time of 2 timer not possible",
+        "uk": "однаковий час запуску 2 таймерів неможливий",
         "zh-cn": "相同的2个计时器开始时间"
     },
     "send Pause Before Home": {

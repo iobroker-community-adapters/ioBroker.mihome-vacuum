@@ -1,3 +1,5 @@
+import type { AdapterTimeout } from './adapter';
+
 export interface TimerTranslations {
     nextTimer: string;
     notAvailable: string;
@@ -34,8 +36,10 @@ export interface TimerAdapter {
         warn(message: string): void;
     };
     formatDate(date: Date, format: string): string;
+    setTimeout: (callback: () => void, delay: number) => AdapterTimeout | undefined;
+    clearTimeout: (timeout: AdapterTimeout | undefined) => void;
     setObjectNotExists(id: string, object: unknown): void;
-    setObject(id: string, object: unknown): void;
+    extendObject(id: string, object: unknown): void;
     setState(id: string, value: unknown, acknowledge: boolean): void;
     setForeignState(
         id: string,

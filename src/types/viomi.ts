@@ -1,3 +1,5 @@
+import type { AdapterTimeout } from './adapter';
+
 export interface ViomiLogger {
     debug(message: string): void;
     info(message: string): void;
@@ -27,6 +29,8 @@ export interface ViomiAdapter {
         pingInterval: number;
     };
     log: ViomiLogger;
+    setTimeout: (callback: () => void, delay: number) => AdapterTimeout | undefined;
+    clearTimeout: (timeout: AdapterTimeout | undefined) => void;
     setObjectNotExistsAsync(id: string, object: ViomiObjectDefinition): Promise<unknown>;
     setStateAsync(id: string, state: { val: unknown; ack: true }): Promise<unknown>;
 }

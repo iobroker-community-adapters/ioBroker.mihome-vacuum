@@ -7,6 +7,7 @@ import type {
     ViomiObjectsModule,
     ViomiState,
 } from '../types/viomi';
+import type { AdapterTimeout } from '../types/adapter';
 
 const objects = objectsModule as ViomiObjectsModule;
 
@@ -14,7 +15,7 @@ class ViomiManager {
     readonly Miio: ViomiMiioClient;
     readonly adapter: ViomiAdapter;
     readonly lastProps: Record<string, unknown> = {};
-    globalTimeouts: Record<string, NodeJS.Timeout | undefined> = {};
+    globalTimeouts: Record<string, AdapterTimeout | undefined> = {};
     closed = false;
     readonly ViomiDevices = [
         'dreame.vacuum.mc1808',
@@ -114,7 +115,7 @@ class ViomiManager {
         if (this.closed) {
             return;
         }
-        clearTimeout(this.globalTimeouts.getStates);
+        this.adapter.clearTimeout(this.globalTimeouts.getStates);
         let deviceData: ViomiMiioResponse | null | undefined;
 
         this.adapter.log.debug('get params for Viomi');
@@ -150,7 +151,10 @@ class ViomiManager {
             });
         }
         if (!this.closed) {
-            this.globalTimeouts.getStates = setTimeout(() => void this.getStates(), this.adapter.config.pingInterval);
+            this.globalTimeouts.getStates = this.adapter.setTimeout(
+                () => void this.getStates(),
+                this.adapter.config.pingInterval,
+            );
         }
     }
 
@@ -267,7 +271,7 @@ class ViomiManager {
         Object.keys(this.globalTimeouts).forEach(id => {
             const timeout = this.globalTimeouts[id];
             if (timeout) {
-                clearTimeout(timeout);
+                this.adapter.clearTimeout(timeout);
             }
         });
         this.globalTimeouts = {};

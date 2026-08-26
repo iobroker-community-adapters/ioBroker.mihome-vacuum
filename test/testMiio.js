@@ -3,6 +3,12 @@ const EventEmitter = require('node:events');
 const proxyquire = require('proxyquire').noCallThru();
 const sinon = require('sinon');
 
+function withManagedTimers(adapter) {
+    adapter.setTimeout = (callback, delay, ...args) => setTimeout(callback, delay, ...args);
+    adapter.clearTimeout = timeout => clearTimeout(timeout);
+    return adapter;
+}
+
 class FakeSocket extends EventEmitter {
     constructor() {
         super();
@@ -47,7 +53,7 @@ function createClient(modulePath = '../build/lib/miio', port = 54321) {
     const connectionStates = [];
     /** @type {Record<string, string[]>} */
     const logs = { debug: [], info: [], warn: [], error: [] };
-    const adapter = {
+    const adapter = withManagedTimers({
         config: {
             ownPort: 53421,
             port,
@@ -58,7 +64,7 @@ function createClient(modulePath = '../build/lib/miio', port = 54321) {
             Object.keys(logs).map(level => [level, message => logs[level].push(String(message))]),
         ),
         setConnection: connected => connectionStates.push(connected),
-    };
+    });
     const Miio = proxyquire(modulePath, {
         'node:dgram': {
             createSocket: () => socket,
@@ -87,7 +93,7 @@ function createClient(modulePath = '../build/lib/miio', port = 54321) {
 function createPacketClient(modulePath = '../build/lib/miio') {
     const socket = new FakeSocket();
     const Miio = proxyquire(modulePath, { 'node:dgram': { createSocket: () => socket } });
-    const client = new Miio({
+    const client = new Miio(withManagedTimers({
         config: {
             ownPort: 53421,
             port: 54321,
@@ -96,7 +102,7 @@ function createPacketClient(modulePath = '../build/lib/miio') {
         },
         log: { debug() {}, info() {}, warn() {}, error() {} },
         setConnection() {},
-    });
+    }));
     return { client, socket };
 }
 
@@ -111,7 +117,7 @@ describe('Miio lifecycle', () => {
         });
         const createAdapter = () => {
             const connectionStates = [];
-            return {
+            return withManagedTimers({
                 config: {
                     ownPort: 53421,
                     port: 54321,
@@ -126,7 +132,7 @@ describe('Miio lifecycle', () => {
                     error: () => undefined,
                 },
                 setConnection: connected => connectionStates.push(connected),
-            };
+            });
         };
         const firstAdapter = createAdapter();
         const secondAdapter = createAdapter();
@@ -224,7 +230,7 @@ describe('Miio packet encoding', () => {
     it('preserves the encrypted byte contract and decrypts the packet payload', () => {
         const socket = new FakeSocket();
         const Miio = proxyquire('../build/lib/miio', { 'node:dgram': { createSocket: () => socket } });
-        const client = new Miio({
+        const client = new Miio(withManagedTimers({
             config: {
                 ownPort: 53421,
                 port: 54321,
@@ -233,7 +239,7 @@ describe('Miio packet encoding', () => {
             },
             log: { debug() {}, info() {}, warn() {}, error() {} },
             setConnection() {},
-        });
+        }));
         const clock = sinon.useFakeTimers({ now: 1700000000000 });
         const plain = JSON.stringify({ id: 7, method: 'get_status', params: [] });
 

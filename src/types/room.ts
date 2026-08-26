@@ -31,7 +31,6 @@ export interface RoomAdapter {
         warn(message: string): void;
         error(message: string): void;
     };
-    setObject(id: string, object: unknown, callback?: (error: unknown, object?: { id: string }) => void): void;
     setObjectNotExistsAsync(id: string, object: unknown): Promise<unknown>;
     setState(id: string, value: unknown, acknowledge: boolean): void;
     setStateAsync(id: string, value: unknown, acknowledge: boolean): Promise<unknown>;

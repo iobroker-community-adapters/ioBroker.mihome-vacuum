@@ -2,6 +2,10 @@ const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const ViomiManager = require('../build/lib/viomi');
 
+function asViomiAdapter(adapter) {
+    return /** @type {import('../src/types/viomi').ViomiAdapter} */ (/** @type {unknown} */ (adapter));
+}
+
 function createAdapter() {
     const states = new Map();
     const debugMessages = [];
@@ -15,6 +19,8 @@ function createAdapter() {
             warn: () => undefined,
             error: () => undefined,
         },
+        setTimeout: (callback, delay) => setTimeout(callback, delay),
+        clearTimeout: timeout => clearTimeout(timeout),
         async setObjectNotExistsAsync() {},
         async setStateAsync(id, state) {
             states.set(id, state);
@@ -44,7 +50,7 @@ describe('ViomiManager status polling', () => {
         ViomiManager.prototype.main = async () => undefined;
         let manager;
         try {
-            manager = new ViomiManager(adapter, { sendMessage: async () => ({}) });
+            manager = new ViomiManager(asViomiAdapter(adapter), { sendMessage: async () => ({}) });
         } finally {
             ViomiManager.prototype.main = originalMain;
         }
@@ -66,7 +72,7 @@ describe('ViomiManager status polling', () => {
 
     it('does not log complete Viomi responses', async () => {
         const adapter = createAdapter();
-        const manager = new ViomiManager(adapter, {
+        const manager = new ViomiManager(asViomiAdapter(adapter), {
             sendMessage: async () => ({ result: ['SENSITIVE_VIOMI_MARKER'] }),
         });
 
@@ -93,9 +99,9 @@ describe('ViomiManager status polling', () => {
                 return { result };
             },
         });
-        const firstManager = new ViomiManager(firstAdapter, createMiio(firstCalls, 2));
+        const firstManager = new ViomiManager(asViomiAdapter(firstAdapter), createMiio(firstCalls, 2));
         await waitForPolling();
-        const secondManager = new ViomiManager(secondAdapter, createMiio(secondCalls, 3));
+        const secondManager = new ViomiManager(asViomiAdapter(secondAdapter), createMiio(secondCalls, 3));
         await waitForPolling();
 
         await firstManager.stateChange('mihome-vacuum.0.control.start', { val: true, ack: false });
@@ -122,7 +128,7 @@ describe('ViomiManager status polling', () => {
         const pollResult = new Promise(resolve => {
             releasePoll = resolve;
         });
-        const manager = new ViomiManager(adapter, {
+        const manager = new ViomiManager(asViomiAdapter(adapter), {
             sendMessage: async () => {
                 resolvePoll(undefined);
                 return pollResult;
@@ -145,7 +151,7 @@ describe('ViomiManager status polling', () => {
                 result: [5, 3, 1, 2105, 80, 0, '0', 30, 42, 10, '0', 0, 1, 1, 2, 1, 1, 0, 1, 1, 0, 1],
             }),
         };
-        const manager = new ViomiManager(adapter, miio);
+        const manager = new ViomiManager(asViomiAdapter(adapter), miio);
 
         await waitForPolling();
         await manager.close();
@@ -158,7 +164,7 @@ describe('ViomiManager status polling', () => {
 
     it('updates available values from a shorter response without reading beyond it', async () => {
         const adapter = createAdapter();
-        const manager = new ViomiManager(adapter, {
+        const manager = new ViomiManager(asViomiAdapter(adapter), {
             sendMessage: async () => ({ result: [5, 2] }),
         });
 
@@ -170,7 +176,7 @@ describe('ViomiManager status polling', () => {
 
     it('ignores a malformed non-array result', async () => {
         const adapter = createAdapter();
-        const manager = new ViomiManager(adapter, {
+        const manager = new ViomiManager(asViomiAdapter(adapter), {
             sendMessage: async () => ({ result: { unexpected: true } }),
         });
 
@@ -217,7 +223,9 @@ describe('ViomiManager TypeScript runtime', () => {
         adapter.setObjectNotExistsAsync = async id => {
             objectIds.push(id);
         };
-        const manager = new ViomiManager(adapter, { sendMessage: async () => ({ result: [...result] }) });
+        const manager = new ViomiManager(asViomiAdapter(adapter), {
+            sendMessage: async () => ({ result: [...result] }),
+        });
 
         await waitForPolling();
         await manager.close();

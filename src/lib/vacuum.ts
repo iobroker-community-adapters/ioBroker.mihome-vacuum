@@ -210,7 +210,7 @@ class VacuumManager {
     }
 
     async getStates() {
-        clearTimeout(this.globalTimeouts['getStates']);
+        this.adapter.clearTimeout(this.globalTimeouts['getStates']);
         if (this.closed) {
             return;
         }
@@ -281,7 +281,10 @@ class VacuumManager {
             }
         }
 
-        this.globalTimeouts['getStates'] = setTimeout(this.getStates.bind(this), this.adapter.config.pingInterval);
+        this.globalTimeouts['getStates'] = this.adapter.setTimeout(
+            this.getStates.bind(this),
+            this.adapter.config.pingInterval,
+        );
     }
     async getOnlyAtStart() {
         for (const __fkt in this.startUp) {
@@ -354,7 +357,10 @@ class VacuumManager {
                 this.roomManager.processRoomMaping(answer);
 
                 // check again in 15 min
-                this.globalTimeouts['getRoomMap'] = setTimeout(this.checkFeaturesRoomMapping.bind(this), 900000);
+                this.globalTimeouts['getRoomMap'] = this.adapter.setTimeout(
+                    this.checkFeaturesRoomMapping.bind(this),
+                    900000,
+                );
             } else {
                 this.features.roomMapping = false;
                 this.vacuum.features.roomMapping = false;
@@ -364,13 +370,16 @@ class VacuumManager {
             }
         } catch (error) {
             this.features.roomMapping = false;
-            this.globalTimeouts['getRoomMap'] = setTimeout(this.checkFeaturesRoomMapping.bind(this), 900000);
+            this.globalTimeouts['getRoomMap'] = this.adapter.setTimeout(
+                this.checkFeaturesRoomMapping.bind(this),
+                900000,
+            );
             this.adapter.log.debug(error);
         }
     }
 
     async getMapPointer() {
-        clearTimeout(this.globalTimeouts['getMapData']);
+        this.adapter.clearTimeout(this.globalTimeouts['getMapData']);
         //if map is not enabled, dont do anything to prevent rate limit
         if (!this.mapEnable) {
             return;
@@ -401,7 +410,7 @@ class VacuumManager {
             }
             // received no Mappointer, try again in ...
             if (this.mapGet) {
-                this.globalTimeouts['getMapData'] = setTimeout(async () => {
+                this.globalTimeouts['getMapData'] = this.adapter.setTimeout(async () => {
                     this.adapter.log.debug('Get Mappointer while cleaning');
                     this.mapEnable && this.getMapPointer(); // get pointer only by mimap
                 }, this.mapPollIntervall);
@@ -410,7 +419,7 @@ class VacuumManager {
         } catch (error) {
             this.adapter.log.debug(error);
             if (this.mapGet) {
-                this.globalTimeouts['getMapData'] = setTimeout(async () => {
+                this.globalTimeouts['getMapData'] = this.adapter.setTimeout(async () => {
                     this.adapter.log.debug('Get Mappointer while cleaning');
                     this.mapEnable && this.getMapPointer(); // get pointer only by mimap
                 }, this.mapPollIntervall);
@@ -419,7 +428,7 @@ class VacuumManager {
     }
 
     async delay(time) {
-        return new Promise(resolve => (this.globalTimeouts['delay'] = setTimeout(resolve, time)));
+        return new Promise(resolve => (this.globalTimeouts['delay'] = this.adapter.setTimeout(resolve, time)));
     }
 
     async getMapData() {
@@ -501,7 +510,7 @@ class VacuumManager {
                 }
                 if (this.mapGet) {
                     //adapter.log.info(VALETUDO.POLLMAPINTERVALL)
-                    this.globalTimeouts['getMapData'] = setTimeout(async () => {
+                    this.globalTimeouts['getMapData'] = this.adapter.setTimeout(async () => {
                         this.adapter.log.debug('Get Mappointer while cleaning');
                         this.mapEnable && this.getMapPointer(); // get pointer only by mimap
 
@@ -512,7 +521,7 @@ class VacuumManager {
             .catch(err => {
                 this.adapter.log.debug(err);
                 if (this.mapGet) {
-                    this.globalTimeouts['getMapData'] = setTimeout(async () => {
+                    this.globalTimeouts['getMapData'] = this.adapter.setTimeout(async () => {
                         this.mapEnable && this.getMapPointer(); // get pointer only by mimap
                         //	this.getMapData();
                     }, this.mapPollIntervall);
@@ -886,7 +895,7 @@ class VacuumManager {
                 case 'pauseResume':
                     if (this.cleanActiveState && activeCleanStates[this.cleanActiveState].resume) {
                         if (state.val == true) {
-                            this.globalTimeouts['onMessage'] = setTimeout(() => {
+                            this.globalTimeouts['onMessage'] = this.adapter.setTimeout(() => {
                                 this.setGetStatus();
                             }, 1000);
                             if (this.cleandState === cleanStates.Pause) {
@@ -909,7 +918,7 @@ class VacuumManager {
                     } else {
                         this.adapter.log.error(`Cant start dust collection only if charging`);
                     }
-                    this.globalTimeouts['onMessage'] = setTimeout(() => {
+                    this.globalTimeouts['onMessage'] = this.adapter.setTimeout(() => {
                         this.setGetStatus();
                     }, 2000);
                     this.adapter.setState(id, false, true);
@@ -923,7 +932,7 @@ class VacuumManager {
                     } else {
                         this.adapter.log.error(`Cant start Mop washing only if charging`);
                     }
-                    this.globalTimeouts['onMessage'] = setTimeout(() => {
+                    this.globalTimeouts['onMessage'] = this.adapter.setTimeout(() => {
                         this.setGetStatus();
                     }, 2000);
                     this.adapter.setState(id, false, true);
@@ -1058,7 +1067,7 @@ class VacuumManager {
 
                             // if consumables reset get data again
                             if (commands[command].method === 'reset_consumable') {
-                                this.globalTimeouts['onMessage'] = setTimeout(() => {
+                                this.globalTimeouts['onMessage'] = this.adapter.setTimeout(() => {
                                     this.setGetConsumable();
                                 }, 500);
                             }
@@ -1097,7 +1106,7 @@ class VacuumManager {
     async onMessage(obj) {
         this.adapter.log.debug(`Received adapter message command: ${obj && obj.command ? obj.command : 'unknown'}`);
         //return {test: 'true'}
-        clearTimeout(this.globalTimeouts['onMessage']);
+        this.adapter.clearTimeout(this.globalTimeouts['onMessage']);
 
         const requireParams = (params) /*: string | string[] */ => {
             if (!(params && params.length)) {
@@ -1156,7 +1165,7 @@ class VacuumManager {
                 // cleaning commands
                 case 'startVacuuming': {
                     const answer = await this.Miio.sendMessage('app_start');
-                    this.globalTimeouts['onMessage'] = setTimeout(() => {
+                    this.globalTimeouts['onMessage'] = this.adapter.setTimeout(() => {
                         void this.setGetStatus().catch(() => {
                             this.Error = true;
                             this.adapter.log.debug('Delayed status update failed');
@@ -1287,7 +1296,6 @@ class VacuumManager {
                     }
 
                     if (await this.startCleaning(cleanStates.RoomCleaning, obj)) {
-                        //setTimeout(()=> {cleaning.setRemoteState(cleanStates.RoomCleaning)},2500) //simulate:
                         params = obj.segments;
                         let repeat = obj.repeat;
                         if (repeat) {
@@ -1339,13 +1347,13 @@ class VacuumManager {
                     return;
 
                 case 'pause':
-                    this.globalTimeouts['onMessage'] = setTimeout(() => {
+                    this.globalTimeouts['onMessage'] = this.adapter.setTimeout(() => {
                         this.setGetStatus();
                     }, 2000);
                     return this.Miio.sendMessage('app_pause');
 
                 case 'charge':
-                    this.globalTimeouts['onMessage'] = setTimeout(() => {
+                    this.globalTimeouts['onMessage'] = this.adapter.setTimeout(() => {
                         this.setGetStatus();
                     }, 2000);
                     return this.Miio.sendMessage('app_charge');
@@ -1360,7 +1368,7 @@ class VacuumManager {
                     if (!requireParams('consumable')) {
                         return;
                     }
-                    this.globalTimeouts['onMessage'] = setTimeout(() => {
+                    this.globalTimeouts['onMessage'] = this.adapter.setTimeout(() => {
                         this.setGetStatus();
                     }, 2000);
                     return await this.Miio.sendMessage('reset_consumable', obj.message.consumable);
@@ -1540,7 +1548,6 @@ class VacuumManager {
                 // update values
                 await this.setGetConsumable();
                 await this.setGetCleanSummary();
-                //MAP.ENABLED && setTimeout(sendMsg, 2000, 'get_map_v1');
             }
         }
         // if (this.checkCleanState)
@@ -1577,7 +1584,6 @@ class VacuumManager {
             return false;
         }
 
-        // why??? setTimeout(sendPing, 2000);
         if (this.cleanActiveState) {
             if (cleanStatus === cleanStates.Cleaning && this.adapter.config.enableResumeZone) {
                 this.adapter.log.debug(`Resuming paused ${activeCleanStates[this.cleanActiveState].name}`);
@@ -1725,7 +1731,7 @@ class VacuumManager {
             this.closePromise = (async () => {
                 this.timerManager?.close();
                 Object.keys(this.globalTimeouts).forEach(
-                    id => this.globalTimeouts[id] && clearTimeout(this.globalTimeouts[id]),
+                    id => this.globalTimeouts[id] && this.adapter.clearTimeout(this.globalTimeouts[id]),
                 );
                 this.globalTimeouts = {};
                 await this.Map.shutdown();

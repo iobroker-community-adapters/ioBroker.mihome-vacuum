@@ -485,7 +485,11 @@ class XiaomiCloudConnector {
     }
 
     delay(ms: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise(resolve => {
+            if (!this.adapter?.setTimeout?.(resolve, ms)) {
+                resolve();
+            }
+        });
     }
 
     shutdown(): void {

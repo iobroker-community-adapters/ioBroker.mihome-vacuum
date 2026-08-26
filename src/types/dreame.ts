@@ -1,3 +1,5 @@
+import type { AdapterTimeout } from './adapter';
+
 export interface DreameLogger {
     debug(message: string): void;
     info(message: string): void;
@@ -32,6 +34,8 @@ export interface DreameAdapter {
     namespace: string;
     config: { pingInterval: number };
     log: DreameLogger;
+    setTimeout: (callback: () => void, delay: number) => AdapterTimeout | undefined;
+    clearTimeout: (timeout: AdapterTimeout | undefined) => void;
     setObjectNotExistsAsync(id: string, object: DreameObjectDefinition): Promise<unknown>;
     setStateAsync(id: string, state: { val: unknown; ack: true }): Promise<unknown>;
     getStateAsync(id: string): Promise<{ val: unknown } | null | undefined>;

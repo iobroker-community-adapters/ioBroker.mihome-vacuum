@@ -3,6 +3,9 @@ const sinon = require('sinon');
 const TimerManager = require('../build/lib/timerManager');
 
 function asTimerAdapter(adapter) {
+    adapter.setTimeout ??= (callback, delay) => setTimeout(callback, delay);
+    adapter.clearTimeout ??= timeout => clearTimeout(timeout);
+    adapter.extendObject ??= adapter.setObject ?? (() => undefined);
     return /** @type {import('../src/types/timer').TimerAdapter} */ (/** @type {unknown} */ (adapter));
 }
 

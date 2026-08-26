@@ -2,6 +2,7 @@ import * as crypto from 'node:crypto';
 import * as dgram from 'node:dgram';
 import EventEmitter from 'node:events';
 import type { MiioResponse, MiioTransportErrorCode } from '../types/miio';
+import type { AdapterTimeout } from '../types/adapter';
 
 interface MiioAdapter {
     config: {
@@ -18,6 +19,12 @@ interface MiioAdapter {
     };
 
     setConnection(connected: boolean): void;
+    setTimeout: (
+        callback: (...args: unknown[]) => void,
+        delay: number,
+        ...args: unknown[]
+    ) => AdapterTimeout | undefined;
+    clearTimeout: (timeout: AdapterTimeout | undefined) => void;
 }
 
 interface PendingRequest {
@@ -46,9 +53,9 @@ class Miio extends EventEmitter {
     closeCallbacks: Array<() => void> = [];
     pingTimeout = 10_000;
     packet: Packet;
-    timeout: NodeJS.Timeout | null = null;
+    timeout: AdapterTimeout | undefined;
     pendingRequests = new Map<number, PendingRequest>();
-    globalTimeouts: Record<string, NodeJS.Timeout | null | undefined> = {};
+    globalTimeouts: Record<string, AdapterTimeout | undefined> = {};
     server: dgram.Socket;
 
     constructor(adapterInstance: MiioAdapter) {
@@ -96,7 +103,7 @@ class Miio extends EventEmitter {
             Object.keys(this.globalTimeouts).forEach(id => {
                 const timeout = this.globalTimeouts[id];
                 if (timeout) {
-                    clearTimeout(timeout);
+                    this.adapter.clearTimeout(timeout);
                 }
             });
             this.globalTimeouts = {};
@@ -121,7 +128,7 @@ class Miio extends EventEmitter {
         Object.keys(this.globalTimeouts).forEach(id => {
             const timeout = this.globalTimeouts[id];
             if (timeout) {
-                clearTimeout(timeout);
+                this.adapter.clearTimeout(timeout);
             }
         });
         this.globalTimeouts = {};
@@ -138,10 +145,10 @@ class Miio extends EventEmitter {
         const nextPing = this.globalTimeouts.nextPing;
         const pingTimeout = this.globalTimeouts.pingTimeout;
         if (nextPing) {
-            clearTimeout(nextPing);
+            this.adapter.clearTimeout(nextPing);
         }
         if (pingTimeout) {
-            clearTimeout(pingTimeout);
+            this.adapter.clearTimeout(pingTimeout);
         }
         try {
             this.server.close(finishClose);
@@ -165,7 +172,7 @@ class Miio extends EventEmitter {
             return;
         }
         const timeoutId = `sendMessage${messageCounter}`;
-        clearTimeout(this.globalTimeouts[timeoutId] ?? undefined);
+        this.adapter.clearTimeout(this.globalTimeouts[timeoutId]);
         delete this.globalTimeouts[timeoutId];
         this.pendingRequests.delete(messageCounter);
         settle(request, result);
@@ -224,8 +231,8 @@ class Miio extends EventEmitter {
     __sendPing(): void {
         const checkAnswer = (message: Buffer, remoteInfo: dgram.RemoteInfo): void => {
             if (message.length === 32 && remoteInfo.port === Number.parseInt(String(this.port), 10)) {
-                clearTimeout(this.globalTimeouts.pingTimeout ?? undefined);
-                clearTimeout(this.globalTimeouts.nextPing ?? undefined);
+                this.adapter.clearTimeout(this.globalTimeouts.pingTimeout);
+                this.adapter.clearTimeout(this.globalTimeouts.nextPing);
                 this.adapter.log.debug('MIIO hello received');
                 this.server.removeListener('message', checkAnswer);
 
@@ -246,8 +253,8 @@ class Miio extends EventEmitter {
                         `Time difference between Mihome Vacuum and ioBroker: ${this.packet.timediff} sec`,
                     );
                 }
-                this.globalTimeouts.nextPing = setTimeout(() => {
-                    this.globalTimeouts.nextPing = null;
+                this.globalTimeouts.nextPing = this.adapter.setTimeout(() => {
+                    this.globalTimeouts.nextPing = undefined;
                     this.__sendPing();
                 }, this.pingTimeout);
             }
@@ -265,18 +272,18 @@ class Miio extends EventEmitter {
                     if (error) {
                         this.adapter.log.warn(`Helo message: ${String(error)}`);
                         this.server.removeListener('message', checkAnswer);
-                        this.globalTimeouts.nextPing = setTimeout(() => {
-                            this.globalTimeouts.nextPing = null;
+                        this.globalTimeouts.nextPing = this.adapter.setTimeout(() => {
+                            this.globalTimeouts.nextPing = undefined;
                             this.__sendPing();
                         }, this.pingTimeout);
                     } else {
-                        this.globalTimeouts.pingTimeout = setTimeout(() => {
-                            this.globalTimeouts.pingTimeout = null;
+                        this.globalTimeouts.pingTimeout = this.adapter.setTimeout(() => {
+                            this.globalTimeouts.pingTimeout = undefined;
                             this.adapter.log.debug('Helo message Timeout');
                             this.connected = false;
                             this.server.removeListener('message', checkAnswer);
-                            this.globalTimeouts.nextPing = setTimeout(() => {
-                                this.globalTimeouts.nextPing = null;
+                            this.globalTimeouts.nextPing = this.adapter.setTimeout(() => {
+                                this.globalTimeouts.nextPing = undefined;
                                 this.__sendPing();
                             }, this.pingTimeout);
                         }, 2000);
@@ -342,10 +349,10 @@ class Miio extends EventEmitter {
                             this._failRequest(messageCounter, 'MIIO_SEND_FAILED', 'MIIO request could not be sent');
                             return;
                         }
-                        this.globalTimeouts[`sendMessage${messageCounter}`] = setTimeout(
+                        this.globalTimeouts[`sendMessage${messageCounter}`] = this.adapter.setTimeout(
                             counter => {
                                 this.adapter.log.debug(
-                                    `MIIO request timed out: method=${safeMethod}, id=${counter}, duration=${Date.now() - startedAt}ms, timeout=2000ms`,
+                                    `MIIO request timed out: method=${safeMethod}, id=${String(counter)}, duration=${Date.now() - startedAt}ms, timeout=2000ms`,
                                 );
                                 this.packet.msgCounter += 100;
                                 this._failRequest(messageCounter, 'MIIO_TIMEOUT', 'MIIO request timed out');

@@ -34,7 +34,7 @@ The repository also contains:
 | -------------- | ------------------------------------------------- |
 | Node.js        | `>=22.13.0`                                       |
 | js-controller  | `>=7.2.2`                                         |
-| ioBroker Admin | `>=7.9.13`                                        |
+| ioBroker Admin | `>=7.8.23`                                        |
 | Backend        | TypeScript, compiled to CommonJS, target ES2022   |
 | Admin UI       | React 18, MUI 6, `@iobroker/gui-components`, Vite |
 | VIS 2 widget   | React 18, MUI 6, Vite Module Federation           |
@@ -367,6 +367,9 @@ memberships. Do not let the UI write timer objects directly.
 Runtime timers must cancel initialization and scheduled callbacks on close. No delayed callback may
 write after shutdown.
 
+Use `adapter.setTimeout` and `adapter.clearTimeout` for runtime work so ioBroker can track timers.
+Do not introduce global `setTimeout` calls in productive sources.
+
 ### 9.4 Feature detection
 
 Unsupported features are stored in `deviceInfo.unsupported` using the existing delimiter contract.
@@ -382,7 +385,7 @@ The production configuration UI is under `src-admin/`:
   tabs, saving, and dialogs;
 - `src/TimerTab.tsx` owns timer editing;
 - `src/types.ts` defines UI and message contracts;
-- `src/translations.ts` loads the central ioBroker language files from `admin/i18n/`;
+- `src/translations.ts` loads the central ioBroker short-format language files from `admin/i18n/`;
 - `vite.config.ts` builds into `admin/`.
 
 `common.adminUI.config` is `html`, so ioBroker loads `admin/index.html`. React parity and the required
@@ -399,6 +402,8 @@ Admin implementation rules:
 - Keep controls keyboard accessible and provide `aria-label`/tooltips for icon-only buttons.
 - Keep responsive layout behavior for narrow dialogs.
 - Add every user-facing label to all translation files and `admin/words.js` where applicable.
+- Maintain translations in ioBroker's short `admin/i18n/<language>.json` format. Run
+  `npm run translate -- convert` after changing `admin/words.js` or translation content.
 - Rebuild generated `admin/index.html` and assets after source changes.
 
 The current admin bundle may report Vite's chunk-size optimization warning. It is not a build
@@ -443,7 +448,7 @@ map cannot overlap the rooms or maintenance cards. Both widget variants translat
 the complete adapter error catalogue and keep unknown codes visible as `Unknown error (code)`.
 
 All visible widget controls, headings, empty states, maintenance messages, and confirmation prompts
-must use the widget language. Following the standard ioBroker/Weblate layout, `admin/i18n/<language>/translations.json`
+must use the widget language. Following the standard ioBroker/Weblate layout, `admin/i18n/<language>.json`
 is the single translation source for the React admin, VIS 2, and VIS 1. VIS 2 imports these files through
 `src-widgets/src/translations.ts`; `scripts/copy-widgets.cjs` validates key parity and generates the VIS 1
 `systemDictionary` bridge at `widgets/mihome-vacuum/js/translations.js`. Do not maintain separate inline
@@ -754,6 +759,19 @@ must explicitly create a new login link. Do not implement background reauthentic
   `ioBroker/testing-action-deploy@v1` actions. Runtime and checks start with Node 22.x, the matrix
   also covers Node 24.x, and trusted publishing runs on Node 24.x as required by the release action.
 - Never publish from an unreviewed development fork.
+
+### Intentional repository-checker exceptions
+
+Some generic repository-checker suggestions conflict with requirements of this adapter:
+
+- `prepare` must build the backend, Admin UI, and widgets because Git installations do not contain
+  committed build output.
+- `mocha`, `chai`, and `sinon` remain direct development dependencies. The TypeScript test sources
+  import them directly, so relying on nested dependencies of `@iobroker/testing` breaks module
+  resolution after a clean `npm ci`.
+- `canvas` remains an optional dependency. It enables map rendering where a compatible native
+  binary is available, but an unavailable binary must not prevent installation or local vacuum
+  control.
 
 Before opening a community pull request:
 

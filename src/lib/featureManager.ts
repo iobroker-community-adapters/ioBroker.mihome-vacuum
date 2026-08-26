@@ -53,13 +53,13 @@ class FeatureManager {
                 objects.newfan_power.common.states['108'] = 'MAXIMUM+';
             }
             this.NewSuctionPower = true;
-            void this.adapter.setObjectAsync('control.fan_power', objects.newfan_power);
+            void this.adapter.extendObjectAsync('control.fan_power', objects.newfan_power);
             this.adapter.getStates('rooms.*', (_error, states) => {
                 if (states) {
                     for (const stateId of Object.keys(states)) {
                         if (stateId.endsWith('.roomFanPower')) {
                             this.adapter.log.debug(`Updating room fan-power state definition: ${stateId}`);
-                            void this.adapter.setObjectAsync(stateId, objects.newfan_power);
+                            void this.adapter.extendObjectAsync(stateId, objects.newfan_power);
                         }
                     }
                 }
@@ -133,7 +133,7 @@ class FeatureManager {
                     objects.water_box_mode.common.states[207] = 'LEVEL';
                     await this.adapter.setObjectNotExistsAsync('control.water_box_level', objects.water_box_level);
                 }
-                await this.adapter.setObjectAsync('control.water_box_mode', objects.water_box_mode);
+                await this.adapter.extendObjectAsync('control.water_box_mode', objects.water_box_mode);
             }
         }
     }

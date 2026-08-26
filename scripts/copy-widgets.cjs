@@ -22,7 +22,7 @@ fs.copyFileSync(path.join(source, 'customWidgets.js'), path.join(target, 'custom
 
 const dictionaries = Object.fromEntries(
     languages.map(language => {
-        const file = path.join(projectRoot, 'admin', 'i18n', language, 'translations.json');
+        const file = path.join(projectRoot, 'admin', 'i18n', `${language}.json`);
         return [language, JSON.parse(fs.readFileSync(file, 'utf8'))];
     }),
 );

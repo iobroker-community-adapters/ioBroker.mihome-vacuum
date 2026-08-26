@@ -17,7 +17,7 @@ export interface FeatureAdapter {
     setState(id: string, value: unknown, ack: boolean): void;
     setStateChanged(id: string, value: unknown, ack: boolean): void;
     setStateAsync(id: string, state: { val: unknown; ack: true }): Promise<unknown>;
-    setObjectAsync(id: string, object: unknown): Promise<unknown>;
+    extendObjectAsync(id: string, object: unknown): Promise<unknown>;
     setObjectNotExistsAsync(id: string, object: unknown): Promise<unknown>;
 }
 

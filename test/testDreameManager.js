@@ -2,6 +2,10 @@ const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const DreameManager = require('../build/lib/dreame');
 
+function asDreameAdapter(adapter) {
+    return /** @type {import('../src/types/dreame').DreameAdapter} */ (/** @type {unknown} */ (adapter));
+}
+
 function createAdapter() {
     const states = new Map();
     const debugMessages = [];
@@ -16,6 +20,8 @@ function createAdapter() {
             warn: () => undefined,
             error: () => undefined,
         },
+        setTimeout: (callback, delay) => setTimeout(callback, delay),
+        clearTimeout: timeout => clearTimeout(timeout),
         async setObjectNotExistsAsync() {},
         async setStateAsync(id, state) {
             states.set(id, state);
@@ -51,7 +57,7 @@ describe('DreameManager status polling', () => {
             }
         };
         let callCount = 0;
-        const manager = new DreameManager(adapter, {
+        const manager = new DreameManager(asDreameAdapter(adapter), {
             sendMessage: async () => {
                 callCount++;
                 return callCount === 1 ? { result: [{ code: -1 }] } : { result: [] };
@@ -73,7 +79,7 @@ describe('DreameManager status polling', () => {
     it('handles a failed optional wash-base probe without exposing the failure', async () => {
         const adapter = createAdapter();
         let callCount = 0;
-        const manager = new DreameManager(adapter, {
+        const manager = new DreameManager(asDreameAdapter(adapter), {
             sendMessage: async () => {
                 callCount++;
                 if (callCount === 1) {
@@ -94,7 +100,7 @@ describe('DreameManager status polling', () => {
     it('does not log complete Dreame property responses', async () => {
         const adapter = createAdapter();
         let callCount = 0;
-        const manager = new DreameManager(adapter, {
+        const manager = new DreameManager(asDreameAdapter(adapter), {
             sendMessage: async (_method, params) => {
                 callCount++;
                 if (callCount === 1) {
@@ -131,7 +137,7 @@ describe('DreameManager status polling', () => {
         const pollResult = new Promise(resolve => {
             releasePoll = resolve;
         });
-        const firstManager = new DreameManager(firstAdapter, {
+        const firstManager = new DreameManager(asDreameAdapter(firstAdapter), {
             sendMessage: async (_method, params) => {
                 firstCallCount++;
                 if (firstCallCount === 1) {
@@ -148,7 +154,7 @@ describe('DreameManager status polling', () => {
 
         await pollStarted;
         let secondCallCount = 0;
-        const secondManager = new DreameManager(secondAdapter, {
+        const secondManager = new DreameManager(asDreameAdapter(secondAdapter), {
             sendMessage: async () => {
                 secondCallCount++;
                 return secondCallCount === 1 ? { result: [{ code: -1 }] } : { result: [] };
@@ -179,7 +185,7 @@ describe('DreameManager status polling', () => {
         const pollResult = new Promise(resolve => {
             releasePoll = resolve;
         });
-        const manager = new DreameManager(adapter, {
+        const manager = new DreameManager(asDreameAdapter(adapter), {
             sendMessage: async () => {
                 callCount++;
                 if (callCount === 1) {
@@ -372,7 +378,7 @@ describe('DreameManager TypeScript runtime', () => {
         const pollResult = new Promise(resolve => {
             releasePoll = resolve;
         });
-        const manager = new DreameManager(adapter, {
+        const manager = new DreameManager(asDreameAdapter(adapter), {
             sendMessage: async () => {
                 calls++;
                 if (calls === 1) {

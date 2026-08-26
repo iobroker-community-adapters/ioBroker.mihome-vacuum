@@ -22,8 +22,8 @@ function createAdapter() {
         async setStateAsync(id, state) {
             events.push(['setStateAsync', id, state]);
         },
-        async setObjectAsync(id) {
-            events.push(['setObjectAsync', id]);
+        async extendObjectAsync(id) {
+            events.push(['extendObjectAsync', id]);
         },
         async setObjectNotExistsAsync(id) {
             events.push(['setObjectNotExistsAsync', id]);
@@ -106,7 +106,7 @@ describe('Generic vacuum FeatureManager runtime', () => {
 
         assert.equal(result.detected, true);
         assert.deepEqual(
-            result.events.filter(event => event[0] === 'setObjectAsync').map(event => event[1]),
+            result.events.filter(event => event[0] === 'extendObjectAsync').map(event => event[1]),
             ['control.fan_power', 'mihome-vacuum.0.rooms.living.roomFanPower'],
         );
         assert.equal(result.events.some(event => event.includes('mihome-vacuum.0.rooms.living.mapIndex')), false);

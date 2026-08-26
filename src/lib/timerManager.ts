@@ -1,4 +1,5 @@
 import type { TimerAdapter, TimerObject, TimerState, TimerTranslations } from '../types/timer';
+import type { AdapterTimeout } from '../types/adapter';
 
 interface CalculatedTimer {
     obj: TimerObject;
@@ -11,7 +12,7 @@ class TimerManager {
     static readonly ENABLED = 1;
     static readonly START = 2;
 
-    readonly timeouts = new Set<NodeJS.Timeout>();
+    readonly timeouts = new Set<AdapterTimeout>();
     nextTimerId: string | null = null;
     nextProcessTime: Date | null = null;
     closed = false;
@@ -36,14 +37,18 @@ class TimerManager {
         }, 500);
     }
 
-    private _setTimeout(callback: () => void, delay: number): NodeJS.Timeout {
-        const timeout = setTimeout(() => {
-            this.timeouts.delete(timeout);
+    private _setTimeout(callback: () => void, delay: number): AdapterTimeout | undefined {
+        const timeout = this.adapter.setTimeout(() => {
+            if (timeout !== undefined) {
+                this.timeouts.delete(timeout);
+            }
             if (!this.closed) {
                 callback();
             }
         }, delay);
-        this.timeouts.add(timeout);
+        if (timeout !== undefined) {
+            this.timeouts.add(timeout);
+        }
         return timeout;
     }
 
@@ -52,7 +57,7 @@ class TimerManager {
             return;
         }
         this.closed = true;
-        this.timeouts.forEach(timeout => clearTimeout(timeout));
+        this.timeouts.forEach(timeout => this.adapter.clearTimeout(timeout));
         this.timeouts.clear();
     }
 
@@ -143,10 +148,10 @@ class TimerManager {
                         }
                     }
                     timerObject.common.name += ` >${channels.slice(1)}`;
-                    this.adapter.setObject(timerObject._id, timerObject);
+                    this.adapter.extendObject(timerObject._id, timerObject);
                 });
             } else {
-                this.adapter.setObject(timerObject._id, timerObject);
+                this.adapter.extendObject(timerObject._id, timerObject);
             }
             this.adapter.log.debug(
                 `calculate new process time (${timerObject.common.states['1']}) for timer ${timerObject._id}`,
@@ -223,7 +228,7 @@ class TimerManager {
             common: { name: `${this.i18n.nextTimer}: ${nextTimerName}` },
         };
         this.nextProcessTime = new Date((this.nextProcessTime as Date).getTime() - this.adapter.config.pingInterval);
-        this.adapter.setObject('timer', timerFolder);
+        this.adapter.extendObject('timer', timerFolder);
         this.adapter.setState('info.nextTimer', nextTimerName, true);
         this.adapter.log.debug(`Next timer: ${nextTimerName}`);
     }
