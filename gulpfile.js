@@ -11,7 +11,7 @@ const iopackage = require('./io-package.json');
 const version = pkg && pkg.version ? pkg.version : iopackage.common.version;
 const fileName = 'words.js';
 const EMPTY = '';
-const translate = require('./lib/tools').translateText;
+const translate = require('./build/lib/tools').translateText;
 const languages = {
     en: {},
     de: {},
@@ -22,6 +22,7 @@ const languages = {
     it: {},
     es: {},
     pl: {},
+    uk: {},
     'zh-cn': {},
 };
 
@@ -47,8 +48,7 @@ function readWordJs(src) {
         } else {
             words = fs.readFileSync(src + fileName).toString();
         }
-        words = words.substring(words.indexOf('{'), words.length);
-        words = words.substring(0, words.lastIndexOf(';'));
+        words = words.substring(words.indexOf('{'), words.indexOf('\n};') + 2);
 
         const resultFunc = new Function(`return ${words};`);
 
@@ -67,7 +67,7 @@ function writeWordJs(data, src) {
     let text = '';
     text += '/*global systemDictionary:true */\n';
     text += "'use strict';\n\n";
-    text += 'systemDictionary = {\n';
+    text += 'var systemDictionary = {\n';
     for (const word in data) {
         text += `    ${padRight(`"${word.replace(/"/g, '\\"')}": {`, 50)}`;
         let line = '';
@@ -80,7 +80,8 @@ function writeWordJs(data, src) {
         }
         text += `${line}},\n`;
     }
-    text += '};';
+    text += "};\n\nif (typeof module !== 'undefined' && module.exports) {\n";
+    text += '    module.exports = systemDictionary;\n}\n';
     if (fs.existsSync(`${src}js/${fileName}`)) {
         fs.writeFileSync(`${src}js/${fileName}`, text);
     } else {
@@ -97,7 +98,7 @@ function words2languages(src) {
                 langs[lang][word] = data[word][lang];
                 //  pre-fill all other languages
                 for (const j in langs) {
-                    langs[j][word] = langs[j][word] || EMPTY;
+                    langs[j][word] = langs[j][word] || data[word].en || EMPTY;
                 }
             }
         }
@@ -240,7 +241,7 @@ gulp.task('updatePackages', function (done) {
         };
         iopackage.common.news = Object.assign(newNews, news);
     }
-    fs.writeFileSync('io-package.json', JSON.stringify(iopackage, null, 4));
+    fs.writeFileSync('io-package.json', JSON.stringify(iopackage, null, 2));
     done();
 });
 
@@ -329,7 +330,7 @@ gulp.task('translate', async function () {
             }
         }
     }
-    fs.writeFileSync('io-package.json', JSON.stringify(iopackage, null, 4));
+    fs.writeFileSync('io-package.json', JSON.stringify(iopackage, null, 2));
 });
 
 gulp.task('translateAndUpdateWordsJS', gulp.series('translate', 'adminLanguages2words', 'adminWords2languages'));

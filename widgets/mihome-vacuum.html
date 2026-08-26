@@ -1,133 +1,182 @@
+<link
+    rel="stylesheet"
+    href="widgets/mihome-vacuum/css/mihome-vacuum.css"
+/>
+
+<script type="text/javascript" src="widgets/mihome-vacuum/js/translations.js"></script>
+
 <script type="text/javascript">
     'use strict';
 
-    if (vis.editMode) {
-        // Add words for basic widgets
-        $.extend(true, systemDictionary, {
-            // Bars
-            "picVisible":       {"en": "Background",        "de": "Hintergrund",        "ru": "Фон"},
-            "oid-state":        {"en": "ID state",          "de": "Zustands ID",        "ru": "ID старт/стоп"},
-            "oid-start":        {"en": "ID to start",       "de": "ID für Start",       "ru": "ID to start"},
-            "oid-pause":        {"en": "ID to pause",       "de": "ID für Pause",       "ru": "ID to pause"},
-            "oid-find":         {"en": "ID for search",     "de": "ID für Suche",       "ru": "ID для поиска"},
-            "oid-home":         {"en": "ID go home",        "de": "ID zu Homebase",     "ru": "ID идти к базе"},
-            "oid-power-level":  {"en": "ID for power level","de": "ID für Saugstufe",   "ru": "ID для мощности"},
-            "oid-power-level-1":  {"en": "Value for power level 1","de": "Wert für Saugstufe 1",   "ru": "Value для мощности 1"},
-            "oid-power-level-2":  {"en": "Value for power level 2","de": "Wert für Saugstufe 2",   "ru": "Value для мощности 2"},
-            "oid-power-level-3":  {"en": "Value for power level 3","de": "Wert für Saugstufe 3",   "ru": "Value для мощности 3"},
-            "oid-connected":    {"en": "ID is connected",   "de": "ID ist verbunden",   "ru": "ID online"}
-        });
-    }
+
     vis.binds['mihome-vacuum'] = {
-        onclick: function (el, isRunning) {
-            var oid = $(el).data('oid');
-            if (oid) {
-                var val = $(el).data('value');
-                if (val) {
-                    vis.setValue(oid, parseInt(val));
-                } else {
-                    if ($(el).data('type') === 'state') {
-                        if (isRunning) {
-                            vis.setValue($(el).data('pause'), true);
-                        } else {
-                            vis.setValue($(el).data('start'), true);
-                        }
-                    } else {
-                        if ($(el).data('type') === 'home' && isRunning) {
-                            // pause first to send back to the dock;
-                            vis.setValue($(el).data('pause'), true);
-                        }
-                        vis.setValue(oid, true);
-                    }
-                }
-            }
-        }
+        setValue: function (element) {
+            var oid = element.getAttribute('data-oid');
+            if (!oid || vis.editMode) return;
+            var value = element.getAttribute('data-value');
+            vis.setValue(oid, value === null ? true : Number(value));
+        },
+        setSelectValue: function (element) {
+            var oid = element.getAttribute('data-oid');
+            if (oid && !vis.editMode) vis.setValue(oid, Number(element.value));
+        },
+        showPanel: function (element, panel) {
+            var card = element.closest('.mihome-vacuum-card');
+            if (!card) return;
+            card.querySelectorAll('.mihome-vacuum-tab').forEach(function (tab) {
+                tab.classList.toggle('active', tab.getAttribute('data-panel') === panel);
+            });
+            card.querySelectorAll('.mihome-vacuum-panel').forEach(function (content) {
+                content.classList.toggle('active', content.getAttribute('data-page') === panel);
+            });
+        },
+        resetConsumable: function (element) {
+            var oid = element.getAttribute('data-oid');
+            var label = element.getAttribute('data-label') || 'consumable';
+            var confirmation = element.getAttribute('data-confirm') || ('Reset ' + label + '?');
+            if (!oid || vis.editMode) return;
+            if (window.confirm(confirmation)) vis.setValue(oid, true);
+        },
     };
 
     if (vis.editMode) {
         vis.binds['mihome-vacuum'].changedId = function (widgetID, view, newId, attr, isCss, oldValue) {
-            var obj = vis.objects[newId];
+            if (oldValue || !newId) return false;
+            var parts = newId.split('.');
+            if (parts.length < 3) return false;
+            parts.length = 2;
+            var base = parts.join('.');
+            var fields = {
+                'oid-map': 'cleanmap.map64',
+                'oid-state': 'info.state',
+                'oid-connected': 'info.connection',
+                'oid-battery': 'info.battery',
+                'oid-area': 'info.cleanedarea',
+                'oid-time': 'info.cleanedtime',
+                'oid-error': 'info.error',
+                'oid-start': 'control.start',
+                'oid-pause': 'control.pause',
+                'oid-home': 'control.home',
+                'oid-find': 'control.find',
+                'oid-power-level': 'control.fan_power',
+                'oid-filter': 'consumable.filter',
+                'oid-filter-reset': 'consumable.filter_reset',
+                'oid-main-brush': 'consumable.main_brush',
+                'oid-main-brush-reset': 'consumable.main_brush_reset',
+                'oid-side-brush': 'consumable.side_brush',
+                'oid-side-brush-reset': 'consumable.side_brush_reset',
+                'oid-sensors': 'consumable.sensors',
+                'oid-sensors-reset': 'consumable.sensors_reset',
+                'oid-water-filter': 'consumable.water_filter',
+                'oid-water-filter-reset': 'consumable.water_filter_reset',
+                'oid-mop-pad': 'consumable.mop_pad',
+                'oid-mop-pad-reset': 'consumable.mop_pad_reset',
+                'oid-strainer': 'consumable.strainer',
+                'oid-strainer-reset': 'consumable.strainer_reset',
+                'oid-cleaning-brush': 'consumable.cleaning_brush',
+                'oid-cleaning-brush-reset': 'consumable.cleaning_brush_reset',
+                'oid-dust-collection': 'consumable.dust_collection',
+                'oid-dust-collection-reset': 'consumable.dust_collection_reset',
+                'oid-history-json': 'history.allTableJSON',
+                'oid-history-area': 'history.total_area',
+                'oid-history-time': 'history.total_time',
+                'oid-history-cleanups': 'history.total_cleanups',
+            };
             var changed = [];
-
-            if (oldValue) return false;
-
-            if (obj) {
-                var ids = newId.split('.');
-                ids.pop();
-                ids.pop();
-                var id = ids.join('.');
-                if (!vis.views[view].widgets[widgetID].data['oid-home'] && vis.objects[id + '.control.home']) {
-                    vis.views[view].widgets[widgetID].data['oid-home'] = id + '.control.home';
-                    vis.widgets[widgetID].data['oid-home'] = id + '.control.home';
-                    changed.push('oid-home');
+            Object.keys(fields).forEach(function (field) {
+                var oid = base + '.' + fields[field];
+                if (!vis.views[view].widgets[widgetID].data[field] && vis.objects[oid]) {
+                    vis.views[view].widgets[widgetID].data[field] = oid;
+                    vis.widgets[widgetID].data[field] = oid;
+                    changed.push(field);
                 }
-                if (!vis.views[view].widgets[widgetID].data['oid-start'] && vis.objects[id + '.control.start']) {
-                    vis.views[view].widgets[widgetID].data['oid-start'] = id + '.control.start';
-                    vis.widgets[widgetID].data['oid-start'] = id + '.control.start';
-                    changed.push('oid-start');
-                }
-                if (!vis.views[view].widgets[widgetID].data['oid-pause'] && vis.objects[id + '.control.pause']) {
-                    vis.views[view].widgets[widgetID].data['oid-pause'] = id + '.control.pause';
-                    vis.widgets[widgetID].data['oid-pause'] = id + '.control.pause';
-                    changed.push('oid-pause');
-                }
-                if (!vis.views[view].widgets[widgetID].data['oid-connected'] && vis.objects[id + '.info.connection']) {
-                    vis.views[view].widgets[widgetID].data['oid-connected'] = id + '.info.connection';
-                    vis.widgets[widgetID].data['oid-connected'] = id + '.info.connection';
-                    changed.push('oid-connected');
-                }
-                if (!vis.views[view].widgets[widgetID].data['oid-find'] && vis.objects[id + '.control.find']) {
-                    vis.views[view].widgets[widgetID].data['oid-find'] = id + '.control.find';
-                    vis.widgets[widgetID].data['oid-find'] = id + '.control.find';
-                    changed.push('oid-find');
-                }
-                if (!vis.views[view].widgets[widgetID].data['oid-power-level'] && vis.objects[id + '.control.fan_power']) {
-                    vis.views[view].widgets[widgetID].data['oid-power-level'] = id + '.control.fan_power';
-                    vis.widgets[widgetID].data['oid-power-level'] = id + '.control.fan_power';
-                    changed.push('oid-power-level');
-                }
-            }
+            });
             return changed.length ? changed : null;
         };
     }
-
 </script>
-<script id="tplXiaomiVacuum"
-        type="text/ejs"
-        class="vis-tpl"
-        data-vis-type="ctrl"
-        data-vis-set="mihome-vacuum"
-        data-vis-name="Control"
-        data-vis-prev='<img src="widgets/mihome-vacuum/img/previewControl.png"></img>'
-        data-vis-attrs="oid-state/id/changedId;oid-home;oid-start;oid-pause;oid-connected;oid-find;oid-power-level;oid-power-level-1[101]/number;oid-power-level-2[102]/number;oid-power-level-3[104]/number;picVisible[true]/checkbox;"
+
+<script
+    id="tplMihomeVacuumControl"
+    type="text/ejs"
+    class="vis-tpl"
+    data-vis-type="ctrl"
+    data-vis-set="mihome-vacuum"
+    data-vis-name="Vacuum dashboard with map, maintenance and history"
+    data-vis-prev='<img src="widgets/mihome-vacuum/img/previewControl.png" alt="" />'
+    data-vis-attrs="vacuum-title[Mi Home Vacuum]/text;show-map[true]/checkbox;show-maintenance[true]/checkbox;show-history[true]/checkbox;oid-map/id/changedId;oid-state/id/changedId;oid-connected/id;oid-battery/id;oid-area/id;oid-time/id;oid-error/id;oid-start/id;oid-pause/id;oid-home/id;oid-find/id;oid-power-level/id;oid-power-level-1[101]/number;oid-power-level-2[102]/number;oid-power-level-3[104]/number;oid-filter/id;oid-filter-reset/id;oid-main-brush/id;oid-main-brush-reset/id;oid-side-brush/id;oid-side-brush-reset/id;oid-sensors/id;oid-sensors-reset/id;oid-water-filter/id;oid-water-filter-reset/id;oid-mop-pad/id;oid-mop-pad-reset/id;oid-strainer/id;oid-strainer-reset/id;oid-cleaning-brush/id;oid-cleaning-brush-reset/id;oid-dust-collection/id;oid-dust-collection-reset/id;oid-history-json/id;oid-history-area/id;oid-history-time/id;oid-history-cleanups/id;room-1-name/text;room-1-start/id;room-1-fan/id;room-2-name/text;room-2-start/id;room-2-fan/id;room-3-name/text;room-3-start/id;room-3-fan/id;room-4-name/text;room-4-start/id;room-4-fan/id;room-5-name/text;room-5-start/id;room-5-fan/id;room-6-name/text;room-6-start/id;room-6-fan/id;"
 >
-<%
-    function isRunning(data) {
-        var val= vis.states.attr(data['oid-state'] + '.val');
-        // 5 = Cleaning, 6 = Returning home, 11 = Spot cleaning, 17 = Zone cleaning
-        return (val == 5 || val == 6 || val == 11 || val == 17);
-    }
-%>
-    <div class="vis-widget <%== this.data.attr('class') %>" style="width: 130px; height: 130px;" id="<%= this.data.attr('wid') %>">
-        <div class="vis-widget-body" style="overflow: visible">
-        <img src="widgets/mihome-vacuum/img/vacuum.png" style="width: 100%; height: 100%; <%= this.data.picVisible === true || this.data.picVisible === 'true' ? '' : 'display: none' %>"/>
-        <div style="position: absolute;width: 33%;top: 0;left: 31%;border: 4px solid black; height: calc(100% - 8px);border-radius: 100px;">
-            <div style="width: calc(100% - 8px); border: 4px solid <%= vis.states.attr(this.data['oid-connected'] + '.val') ? '#C6D4FF' : 'gray' %>; height: calc(100% - 8px); border-radius: 100px;
-            /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#9e9e9e+0,4c4c4c+100,4c4c4c+100 */
-        background: rgb(158,158,158); /* Old browsers */
-        background: -moz-linear-gradient(left,  rgba(158,158,158,1) 0%, rgba(76,76,76,1) 100%, rgba(76,76,76,1) 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(left,  rgba(158,158,158,1) 0%,rgba(76,76,76,1) 100%,rgba(76,76,76,1) 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to right,  rgba(158,158,158,1) 0%,rgba(76,76,76,1) 100%,rgba(76,76,76,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9e9e9e', endColorstr='#4c4c4c',GradientType=1 ); /* IE6-9 */
-        ">
+    <%
+        function value(oid) { return oid ? vis.states.attr(oid + '.val') : undefined; }
+        function percentage(oid) { var n = Number(value(oid)); return isNaN(n) ? 0 : Math.max(0, Math.min(100, Math.round(n))); }
+        function isShown(name) { return this.data[name] !== false && this.data[name] !== 'false'; }
+        var language = typeof systemLang === 'string' ? systemLang : 'en';
+        function tr(key) {
+            var entry = systemDictionary[key];
+            return entry ? (entry[language] || entry.en || key) : key;
+        }
+        var connected = !!value(this.data['oid-connected']);
+        var mapSource = value(this.data['oid-map']) || '';
+        var vacuumStates = {0:'Unknown',1:'Initiating',2:'Sleeping',3:'Waiting',5:'Cleaning',6:'Returning to dock',7:'Manual mode',8:'Charging',9:'Charging error',10:'Paused',11:'Spot cleaning',12:'Error',13:'Shutting down',14:'Updating',15:'Docking',16:'Going to spot',17:'Zone cleaning',18:'Room cleaning',22:'Dust collecting',23:'Mop cleaning',26:'Going to mop cleaning',27:'Mop cleaning paused',28:'Drying mop',29:'Washing mop',30:'Mopping',31:'Cleaning and mopping',32:'Remote cleaning',33:'Inspecting water',34:'Charging complete',35:'Building map'};
+        var vacuumStatesDe = {0:'Unbekannt',1:'Wird gestartet',2:'Schläft',3:'Wartet',5:'Reinigt',6:'Fährt zur Ladestation',7:'Manueller Modus',8:'Wird geladen',9:'Ladefehler',10:'Pausiert',11:'Punktreinigung',12:'Fehler',13:'Wird ausgeschaltet',14:'Wird aktualisiert',15:'Dockt an',16:'Fährt zum Ziel',17:'Zonenreinigung',18:'Raumreinigung',22:'Staub wird abgesaugt',23:'Mopp wird gereinigt',26:'Fährt zur Moppreinigung',27:'Moppreinigung pausiert',28:'Mopp wird getrocknet',29:'Mopp wird gewaschen',30:'Wischt',31:'Reinigt und wischt',32:'Fernreinigung',33:'Wasserprüfung',34:'Vollständig geladen',35:'Karte wird erstellt'};
+        var vacuumStateValue = value(this.data['oid-state']);
+        var activeVacuumStates = language === 'de' ? vacuumStatesDe : vacuumStates;
+        var vacuumState = activeVacuumStates[Number(vacuumStateValue)] || (vacuumStateValue == null ? tr('unknown') : tr('unknown') + ' (' + vacuumStateValue + ')');
+        var vacuumErrors = ['No error','Laser distance sensor error','Collision sensor error','Wheels on top of void, move robot','Clean hovering sensors, move robot','Clean main brush','Clean side brush','Main wheel stuck?','Device stuck, clean area','Dust collector missing','Clean filter','Stuck in magnetic barrier','Low battery','Charging fault','Battery fault','Wall sensors dirty, wipe them','Place me on flat surface','Side brushes problem, reboot me','Suction fan problem','Unpowered charging station','Remove Mop','Clean Mop Pad','Fresh Water Tank Dry','DROP','UNKNOWN','CLIFF','GESTURE','BUMPER_REPEAT','DROP_REPEAT','OPTICAL_FLOW','BOX','TANKBOX','WATERBOX_EMPTY','BOX_FULL','LEFT_WHEEL_MOTOR','RIGHT_WHEEL_MOTOR','TURN_SUFFOCATE','FORWARD_SUFFOCATE','CHARGER_GET','BATTERY_PERCENTAGE','HEART','CAMERA_OCCLUSION','MOVE','FLOW_SHIELDING','INFRARED_SHIELDING','CHARGE_NO_ELECTRIC','FAN_SPEED_ERROR','LEFTWHELL_SPEED','RIGHTWHELL_SPEED','BMI_ACCE','BMI_GYRO','XV','LEFT_MAGNET','RIGHT_MAGNET','FLOW_ERROR','INFRARED_FAULT','CAMERA_FAULT','WATER_PUMP','RTC','AUTO_KEY_TRIG','PV','CAMERA_IDLE','LDS_ERROR','LDS_BUMPER','WATER_PUMP_2','EDGE','CARPET','EDGE_2','ULTRASONIC','NO_GO_ZONE','ROUTE','ROUTE_2','BLOCKED_2','BLOCKED_3','RESTRICTED','RESTRICTED_2','RESTRICTED_3','MOP_REMOVED','MOP_REMOVED_2','MOP_PAD_STOP_ROTATE','MOP_PAD_STOP_ROTATE_2','BIN_FULL','BIN_OPEN','BIN_OPEN_2','BIN_FULL_2','WATER_TANK','DIRTY_WATER_TANK','DIRTY_WATER_TANK_2','DIRTY_WATER_TANK_BLOCKED','DIRTY_WATER_TANK_PUMP','MOP_PAD','WET_MOP_PAD','CLEAN_TANK_LEVEL','DIRTY_TANK_LEVEL','WASHBOARD_LEVEL'];
+        var errorValue = value(this.data['oid-error']);
+        var errorNumber = Number(errorValue);
+        var error = errorNumber === 0 ? tr('noError') : Number.isFinite(errorNumber) ? (vacuumErrors[errorNumber] || 'Unknown error (' + errorNumber + ')') : (errorValue || tr('noError'));
+        var fan = Number(value(this.data['oid-power-level']));
+        var fan1 = Number(this.data['oid-power-level-1']);
+        var fan2 = Number(this.data['oid-power-level-2']);
+        var fan3 = Number(this.data['oid-power-level-3']);
+        var consumables = [
+            [tr('filter'), 'oid-filter', 'oid-filter-reset', '◈'], [tr('mainBrush'), 'oid-main-brush', 'oid-main-brush-reset', '≋'],
+            [tr('sideBrush'), 'oid-side-brush', 'oid-side-brush-reset', '✣'], [tr('sensors'), 'oid-sensors', 'oid-sensors-reset', '⌁'],
+            [tr('waterFilter'), 'oid-water-filter', 'oid-water-filter-reset', '◈'], [tr('mopPad'), 'oid-mop-pad', 'oid-mop-pad-reset', '▱'],
+            [tr('strainer'), 'oid-strainer', 'oid-strainer-reset', '▦', true], [tr('cleaningBrush'), 'oid-cleaning-brush', 'oid-cleaning-brush-reset', '≋', true],
+            [tr('dustCollection'), 'oid-dust-collection', 'oid-dust-collection-reset', '▣', true]
+        ];
+        var rooms = [1,2,3,4,5,6].map(function (number) { return { name: this.data['room-' + number + '-name'], start: this.data['room-' + number + '-start'], fan: this.data['room-' + number + '-fan'] }; }, this).filter(function (room) { return room.name && room.start; });
+        var history = [];
+        try { var rawHistory = value(this.data['oid-history-json']); history = rawHistory ? (typeof rawHistory === 'string' ? JSON.parse(rawHistory) : rawHistory) : []; if (!Array.isArray(history)) history = []; } catch (e) { history = []; }
+    %>
+        <div class="vis-widget <%== this.data.attr('class') %> mihome-vacuum-widget" id="<%= this.data.attr('wid') %>" style="width: 1280px; height: 800px;">
+            <div class="vis-widget-body mihome-vacuum-card">
+                <header class="mihome-vacuum-header">
+                    <div class="mihome-vacuum-brand"><div class="mihome-vacuum-logo">◉</div><div class="mihome-vacuum-heading"><strong><%= this.data['vacuum-title'] || 'Mi Home Vacuum' %></strong><span><%= vacuumState == null ? '—' : vacuumState %></span></div></div>
+                    <span class="mihome-vacuum-online <%= connected ? 'is-online' : 'is-offline' %>"><%= connected ? '● ' + tr('online') : tr('offline') %></span>
+                </header>
+                <nav class="mihome-vacuum-tabs"><button type="button" class="mihome-vacuum-tab active" data-panel="dashboard" onclick="vis.binds['mihome-vacuum'].showPanel(this, 'dashboard')">⌂ <%= tr('dashboard') %></button><% if (isShown.call(this, 'show-history')) { %><button type="button" class="mihome-vacuum-tab" data-panel="history" onclick="vis.binds['mihome-vacuum'].showPanel(this, 'history')">◷ <%= tr('history') %></button><% } %></nav>
+                <main class="mihome-vacuum-panels">
+                    <section class="mihome-vacuum-panel active" data-page="dashboard">
+                        <div class="mihome-vacuum-overview <%= isShown.call(this, 'show-map') ? '' : 'without-map' %>">
+                            <% if (isShown.call(this, 'show-map')) { %><div class="mihome-vacuum-map"><% if (mapSource) { %><div class="mihome-vacuum-map-image" style="background-image: url('<%= mapSource %>');" role="img" aria-label="<%= tr('noMap') %>"></div><% } else { %><div class="mihome-vacuum-empty"><span>◇</span><%= tr('noMap') %></div><% } %></div><% } %>
+                            <aside class="mihome-vacuum-details">
+                                <div class="mihome-vacuum-metrics"><div><span>▰</span><strong><%= value(this.data['oid-battery']) ?? '—' %> %</strong><small><%= tr('battery') %></small></div><div><span>⌗</span><strong><%= value(this.data['oid-area']) ?? '—' %> m²</strong><small><%= tr('area') %></small></div><div><span>◷</span><strong><%= value(this.data['oid-time']) ?? '—' %> min</strong><small><%= tr('time') %></small></div></div>
+                                <label class="mihome-vacuum-box mihome-vacuum-fan"><small><%= tr('suctionPower') %></small><select data-oid="<%= this.data['oid-power-level'] %>" onchange="vis.binds['mihome-vacuum'].setSelectValue(this)"><option value="<%= fan1 %>" <%= fan === fan1 ? 'selected' : '' %>><%= tr('quiet') %></option><option value="<%= fan2 %>" <%= fan === fan2 ? 'selected' : '' %>><%= tr('balanced') %></option><option value="<%= fan3 %>" <%= fan === fan3 ? 'selected' : '' %>><%= tr('turbo') %></option><% if (!isNaN(fan) && fan !== fan1 && fan !== fan2 && fan !== fan3) { %><option value="<%= fan %>" selected><%= tr('current') %> (<%= fan %>)</option><% } %></select></label>
+                                <div class="mihome-vacuum-box mihome-vacuum-quick"><small><%= tr('quickControls') %></small><strong><%= vacuumState %></strong><div class="mihome-vacuum-controls"><button type="button" class="primary" data-oid="<%= this.data['oid-start'] %>" onclick="vis.binds['mihome-vacuum'].setValue(this)"><span>▶</span><%= tr('start') %></button><button type="button" data-oid="<%= this.data['oid-pause'] %>" onclick="vis.binds['mihome-vacuum'].setValue(this)"><span>Ⅱ</span><%= tr('pause') %></button><button type="button" data-oid="<%= this.data['oid-home'] %>" onclick="vis.binds['mihome-vacuum'].setValue(this)"><span>⌂</span><%= tr('dock') %></button><button type="button" data-oid="<%= this.data['oid-find'] %>" onclick="vis.binds['mihome-vacuum'].setValue(this)"><span>⌖</span><%= tr('find') %></button></div></div>
+                                <div class="mihome-vacuum-box mihome-vacuum-health"><small><%= tr('robotHealth') %></small><strong class="<%= error !== tr('noError') ? 'has-error' : '' %>"><%= error || tr('noError') %></strong></div>
+                            </aside>
+                        </div>
+                    </section>
+                    <div class="mihome-vacuum-secondary">
+                    <% if (rooms.length) { %><section class="mihome-vacuum-panel active" data-page="dashboard"><div class="mihome-vacuum-section-title"><span>⌂</span><div><strong><%= tr('rooms') %></strong><small><%= tr('roomsSubtitle') %></small></div></div><div class="mihome-vacuum-rooms"><% rooms.forEach(function (room) { var roomFan = Number(value(room.fan)); %><article><strong><%= room.name %></strong><select data-oid="<%= room.fan %>" onchange="vis.binds['mihome-vacuum'].setSelectValue(this)" <%= room.fan ? '' : 'disabled' %>><option value="<%= fan1 %>" <%= roomFan === fan1 ? 'selected' : '' %>><%= tr('quiet') %></option><option value="<%= fan2 %>" <%= roomFan === fan2 ? 'selected' : '' %>><%= tr('balanced') %></option><option value="<%= fan3 %>" <%= roomFan === fan3 ? 'selected' : '' %>><%= tr('turbo') %></option><% if (!isNaN(roomFan) && roomFan !== fan1 && roomFan !== fan2 && roomFan !== fan3) { %><option value="<%= roomFan %>" selected><%= tr('current') %> (<%= roomFan %>)</option><% } %></select><button type="button" data-oid="<%= room.start %>" onclick="vis.binds['mihome-vacuum'].setValue(this)">▶ <%= tr('startRoom') %></button></article><% }); %></div></section><% } %>
+                    <% if (isShown.call(this, 'show-maintenance')) { %><section class="mihome-vacuum-panel active" data-page="dashboard">
+                        <div class="mihome-vacuum-section-title"><span>⚙</span><div><strong><%= tr('maintenance') %></strong><small><%= tr('maintenanceSubtitle') %></small></div></div>
+                        <div class="mihome-vacuum-consumables">
+                            <% consumables.forEach(function (item) { var oid = this.data[item[1]]; var resetOid = this.data[item[2]]; var level = percentage(oid); if (value(oid) !== undefined) { %>
+                            <article class="mihome-vacuum-consumable <%= item[4] ? 'counter' : level <= 15 ? 'critical' : level <= 35 ? 'warning' : '' %>"><div class="mihome-vacuum-consumable-head"><span><%= item[3] %></span><strong><%= item[0] %></strong><b><%= item[4] ? value(oid) : level + '%' %></b></div><% if (!item[4]) { %><div class="mihome-vacuum-progress"><i style="width:<%= level %>%"></i></div><% } else { %><div class="mihome-vacuum-progress-placeholder"></div><% } %><div class="mihome-vacuum-consumable-foot"><small><%= item[4] ? tr('usageCounter') : level <= 15 ? tr('replacement') : level <= 35 ? tr('checkSoon') : tr('goodCondition') %></small><button type="button" title="<%= tr('reset') %> <%= item[0] %>" data-label="<%= item[0] %>" data-confirm="<%= tr('reset') %> <%= item[0] %>? <%= tr('resetConfirm') %>" data-oid="<%= resetOid %>" onclick="vis.binds['mihome-vacuum'].resetConsumable(this)">↻</button></div></article>
+                            <% } }, this); %>
+                        </div>
+                    </section><% } %>
+                    </div>
+                    <% if (isShown.call(this, 'show-history')) { %><section class="mihome-vacuum-panel" data-page="history">
+                        <div class="mihome-vacuum-section-title"><span>◷</span><div><strong><%= tr('history') %></strong><small><%= tr('historySubtitle') %></small></div></div>
+                        <div class="mihome-vacuum-history-summary"><div><span>◷</span><strong><%= value(this.data['oid-history-cleanups']) ?? '—' %></strong><small><%= tr('totalCleanups') %></small></div><div><span>⌗</span><strong><%= value(this.data['oid-history-area']) ?? '—' %> m²</strong><small><%= tr('totalArea') %></small></div><div><span>◴</span><strong><%= value(this.data['oid-history-time']) ?? '—' %> min</strong><small><%= tr('totalTime') %></small></div></div>
+                        <div class="mihome-vacuum-history"><% if (history.length) { history.slice(0, 12).forEach(function (row) { %><article><div><strong><%= row.Datum || row.date || '—' %></strong><small><%= row.Start || row.start || '—' %></small></div><div><strong><%= row['Fläche'] || row.area || '—' %></strong><small><%= tr('area') %></small></div><div><strong><%= row.Saugzeit || row.duration || '—' %></strong><small><%= tr('duration') %></small></div><span class="<%= (row.Error || row.error || !(row.Ende ?? row.completed)) ? 'failed' : 'success' %>"><%= (row.Error || row.error || !(row.Ende ?? row.completed)) ? '◷' : '●' %></span></article><% }); } else { %><div class="mihome-vacuum-empty"><span>◷</span><%= tr('noHistory') %></div><% } %></div>
+                    </section><% } %>
+                </main>
             </div>
-            <img onclick="vis.binds['mihome-vacuum'].onclick(this, <%= isRunning(this.data) %>)" data-pause="<%= this.data['oid-pause'] %>" data-start="<%= this.data['oid-start'] %>" data-type="state" data-oid="<%= this.data['oid-state'] %>" style="position: absolute; width: 60%; left: 20%; top: 15%;cursor: pointer;<%= this.data['oid-state'] ? '' : 'display: none;' %>" src="widgets/mihome-vacuum/img/<%= isRunning(this.data) ? 'on' : 'off' %>.png"  />
-            <img onclick="vis.binds['mihome-vacuum'].onclick(this, <%= isRunning(this.data) %>)" data-type="home" data-pause="<%= this.data['oid-pause'] %>" data-oid="<%= this.data['oid-home'] %>" style="position: absolute;width: 60%;left: 20%;bottom: 15%;cursor: pointer;<%= this.data['oid-home'] ? '' : 'display: none;' %>" src="widgets/mihome-vacuum/img/home.png" />
         </div>
-        </div>
-        <img onclick="vis.binds['mihome-vacuum'].onclick(this)" data-oid="<%= this.data['oid-find'] %>" style="position: absolute; width: 20%; left: 8%; top: 39%;<%= this.data['oid-find'] ? 'cursor: pointer;' : 'display: none;' %>" src="widgets/mihome-vacuum/img/search.png"  />
-        <div onclick="vis.binds['mihome-vacuum'].onclick(this)" data-value="<%= this.data['oid-power-level-1'] %>" data-oid="<%= this.data['oid-power-level'] %>" style="position: absolute;top: calc(27% - 8px); left: 72%; border: 1px gray solid; border-radius: 25px; width: 16px; height: 16px; text-align: center;cursor: pointer;<%= this.data['oid-power-level'] ? '' : 'display: none;' %>">1</div>
-        <div onclick="vis.binds['mihome-vacuum'].onclick(this)" data-value="<%= this.data['oid-power-level-2'] %>" data-oid="<%= this.data['oid-power-level'] %>" style="position: absolute;top: calc(47% - 8px); left: 77%; border: 1px gray solid; border-radius: 25px; width: 16px; height: 16px; text-align: center;cursor: pointer;<%= this.data['oid-power-level'] ? '' : 'display: none;' %>">2</div>
-        <div onclick="vis.binds['mihome-vacuum'].onclick(this)" data-value="<%= this.data['oid-power-level-3'] %>" data-oid="<%= this.data['oid-power-level'] %>" style="position: absolute;top: calc(66% - 8px); left: 72%; border: 1px gray solid; border-radius: 25px; width: 16px; height: 16px; text-align: center;cursor: pointer;<%= this.data['oid-power-level'] ? '' : 'display: none;' %>">3</div>
-    </div>
 </script>

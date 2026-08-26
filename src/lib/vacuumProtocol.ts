@@ -1,0 +1,98 @@
+export interface VacuumTranslations {
+    weekDaysFull: string[];
+    notAvailable: string;
+    nextTimer: string;
+    loadRooms: string;
+    cleanRoom: string;
+    cleanMultiRooms: string;
+    addRoom: string;
+    waterBox_installed: string;
+    waterBox_filter: string;
+    waterBox_filter_reset: string;
+    waitingPos: string;
+}
+
+export interface ActiveCleanState {
+    name: string;
+    resume?: string;
+}
+
+export const i18n = {
+    weekDaysFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    notAvailable: 'not available',
+    nextTimer: 'next timer',
+    loadRooms: 'load rooms from robot',
+    cleanRoom: 'clean Room',
+    cleanMultiRooms: 'clean assigned rooms',
+    addRoom: 'insert map Index or zone coordinates',
+    waterBox_installed: 'water box installed',
+    waterBox_filter: 'clean water Filter',
+    waterBox_filter_reset: 'water filter reset',
+    waitingPos: 'waiting position',
+} satisfies VacuumTranslations;
+
+export const errorTexts: Record<number, string> = {
+    0: 'No error',
+    1: 'Laser distance sensor error',
+    2: 'Collision sensor error',
+    3: 'Wheels on top of void, move robot',
+    4: 'Clean hovering sensors, move robot',
+    5: 'Clean main brush',
+    6: 'Clean side brush',
+    7: 'Main wheel stuck?',
+    8: 'Device stuck, clean area',
+    9: 'Dust collector missing',
+    10: 'Clean filter',
+    11: 'Stuck in magnetic barrier',
+    12: 'Low battery',
+    13: 'Charging fault',
+    14: 'Battery fault',
+    15: 'Wall sensors dirty, wipe them',
+    16: 'Place me on flat surface',
+    17: 'Side brushes problem, reboot me',
+    18: 'Suction fan problem',
+    19: 'Unpowered charging station',
+};
+
+export const cleanStates = {
+    Unknown: 0,
+    Initiating: 1,
+    Sleeping: 2,
+    Waiting: 3,
+    Remote: 4,
+    Cleaning: 5,
+    Back_toHome: 6,
+    ManuellMode: 7,
+    Charging: 8,
+    Charging_Error: 9,
+    Pause: 10,
+    SpotCleaning: 11,
+    InError: 12,
+    ShuttingDown: 13,
+    Updating: 14,
+    Docking: 15,
+    GoingToSpot: 16,
+    ZoneCleaning: 17,
+    RoomCleaning: 18,
+    DustCollecting: 22,
+    CleaningMop: 23,
+    GoingMopClean: 26,
+} as const;
+
+export const activeCleanStates: Record<number, ActiveCleanState> = {
+    5: { name: 'all ', resume: 'app_start' },
+    11: { name: 'spot ', resume: 'app_spot' },
+    17: { name: 'zone ', resume: 'resume_zoned_clean' },
+    18: { name: 'segment ', resume: 'resume_segment_clean' },
+    22: { name: 'dust collecting ' },
+    23: { name: 'clean mop ' },
+    26: { name: 'going to mop clean ' },
+};
+
+export const defaultCarpetModeSettings = {
+    enabled: 1,
+    stall_time: 10,
+    low: 400,
+    high: 500,
+    integral: 450,
+};

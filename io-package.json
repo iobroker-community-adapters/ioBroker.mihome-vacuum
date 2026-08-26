@@ -139,7 +139,7 @@
       "type": "free"
     },
     "adminUI": {
-      "config": "materialize"
+      "config": "html"
     },
     "platform": "Javascript/Node.js",
     "mode": "daemon",
@@ -161,71 +161,101 @@
     "tier": 2,
     "dependencies": [
       {
-        "js-controller": ">=6.0.11"
+        "js-controller": ">=7.2.2"
       }
     ],
     "globalDependencies": [
       {
-        "admin": ">=7.7.22"
+        "admin": ">=7.8.23"
+      }
+    ],
+    "messages": [
+      {
+        "condition": {
+          "operand": "and",
+          "rules": [
+            "oldVersion<6.0.0",
+            "newVersion>=6.0.0"
+          ]
+        },
+        "title": {
+          "en": "Important update to version 6",
+          "de": "Wichtige Aktualisierung auf Version 6",
+          "ru": "Важное обновление до версии 6",
+          "pt": "Atualização importante para a versão 6",
+          "nl": "Belangrijke update naar versie 6",
+          "fr": "Mise à jour importante vers la version 6",
+          "it": "Aggiornamento importante alla versione 6",
+          "es": "Actualización importante a la versión 6",
+          "pl": "Ważna aktualizacja do wersji 6",
+          "uk": "Важливе оновлення до версії 6",
+          "zh-cn": "版本 6 重要更新"
+        },
+        "text": {
+          "en": "Version 6 is a major modernization and requires Node.js 22.13 or newer, js-controller 7.2.2 or newer, and Admin 7.8.23 or newer. The obsolete Xiaomi password login was replaced by a browser login link. Local IP and token control remains available without Xiaomi Cloud. Back up your configuration and check the selected model, manager, cloud login, timers, and VIS widgets after the update.",
+          "de": "Version 6 ist eine umfassende Modernisierung und benötigt Node.js 22.13 oder neuer, js-controller 7.2.2 oder neuer und Admin 7.8.23 oder neuer. Die veraltete Xiaomi-Passwortanmeldung wurde durch einen Anmeldelink im Browser ersetzt. Die lokale Steuerung über IP und Token funktioniert weiterhin ohne Xiaomi Cloud. Sichere deine Konfiguration und prüfe nach dem Update Modell, Manager, Cloud-Anmeldung, Timer und VIS-Widgets.",
+          "ru": "Версия 6 содержит крупную модернизацию и требует Node.js 22.13 или новее, js-controller 7.2.2 или новее и Admin 7.8.23 или новее. Устаревший вход Xiaomi по паролю заменён ссылкой для входа в браузере. Локальное управление по IP-адресу и токену по-прежнему работает без Xiaomi Cloud. Создайте резервную копию конфигурации и после обновления проверьте модель, менеджер, вход в облако, таймеры и виджеты VIS.",
+          "pt": "A versão 6 é uma grande modernização e requer Node.js 22.13 ou mais recente, js-controller 7.2.2 ou mais recente e Admin 7.8.23 ou mais recente. O login Xiaomi por palavra-passe foi substituído por um link de login no navegador. O controlo local por IP e token continua disponível sem a Xiaomi Cloud. Faça uma cópia de segurança da configuração e verifique o modelo, o gestor, o login na cloud, os temporizadores e os widgets VIS após a atualização.",
+          "nl": "Versie 6 is een grote modernisering en vereist Node.js 22.13 of nieuwer, js-controller 7.2.2 of nieuwer en Admin 7.8.23 of nieuwer. De verouderde Xiaomi-wachtwoordaanmelding is vervangen door een aanmeldlink in de browser. Lokale bediening via IP en token blijft zonder Xiaomi Cloud beschikbaar. Maak een back-up van de configuratie en controleer na de update het model, de manager, de cloudaanmelding, timers en VIS-widgets.",
+          "fr": "La version 6 est une modernisation majeure et nécessite Node.js 22.13 ou plus récent, js-controller 7.2.2 ou plus récent et Admin 7.8.23 ou plus récent. L'ancienne connexion Xiaomi par mot de passe a été remplacée par un lien de connexion dans le navigateur. Le contrôle local par adresse IP et jeton reste disponible sans Xiaomi Cloud. Sauvegardez la configuration et vérifiez après la mise à jour le modèle, le gestionnaire, la connexion au cloud, les minuteries et les widgets VIS.",
+          "it": "La versione 6 è una modernizzazione importante e richiede Node.js 22.13 o successivo, js-controller 7.2.2 o successivo e Admin 7.8.23 o successivo. Il vecchio accesso Xiaomi con password è stato sostituito da un link di accesso nel browser. Il controllo locale tramite IP e token rimane disponibile senza Xiaomi Cloud. Eseguire un backup della configurazione e verificare dopo l'aggiornamento il modello, il gestore, l'accesso cloud, i timer e i widget VIS.",
+          "es": "La versión 6 es una modernización importante y requiere Node.js 22.13 o posterior, js-controller 7.2.2 o posterior y Admin 7.8.23 o posterior. El antiguo inicio de sesión de Xiaomi con contraseña se sustituyó por un enlace de inicio de sesión en el navegador. El control local mediante IP y token sigue disponible sin Xiaomi Cloud. Haga una copia de seguridad de la configuración y compruebe después de la actualización el modelo, el gestor, el acceso a la nube, los temporizadores y los widgets VIS.",
+          "pl": "Wersja 6 jest dużą modernizacją i wymaga Node.js 22.13 lub nowszego, js-controller 7.2.2 lub nowszego oraz Admin 7.8.23 lub nowszego. Przestarzałe logowanie Xiaomi za pomocą hasła zastąpiono łączem logowania w przeglądarce. Sterowanie lokalne przez adres IP i token nadal działa bez Xiaomi Cloud. Utwórz kopię zapasową konfiguracji i po aktualizacji sprawdź model, menedżera, logowanie do chmury, timery i widżety VIS.",
+          "uk": "Версія 6 є значною модернізацією та потребує Node.js 22.13 або новішої версії, js-controller 7.2.2 або новішої версії та Admin 7.8.23 або новішої версії. Застарілий вхід Xiaomi за паролем замінено посиланням для входу в браузері. Локальне керування через IP-адресу й токен залишається доступним без Xiaomi Cloud. Створіть резервну копію конфігурації та після оновлення перевірте модель, менеджер, вхід у хмару, таймери й віджети VIS.",
+          "zh-cn": "版本 6 是一次重大现代化升级，需要 Node.js 22.13 或更高版本、js-controller 7.2.2 或更高版本以及 Admin 7.8.23 或更高版本。旧版小米密码登录已替换为浏览器登录链接。本地 IP 和令牌控制仍可在不使用小米云的情况下工作。请备份配置，并在更新后检查所选型号、管理器、云登录、定时器和 VIS 小部件。"
+        },
+        "link": "https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum#changelog",
+        "linkText": {
+          "en": "Changelog",
+          "de": "Änderungsprotokoll",
+          "ru": "Список изменений",
+          "pt": "Registo de alterações",
+          "nl": "Wijzigingslogboek",
+          "fr": "Journal des modifications",
+          "it": "Registro delle modifiche",
+          "es": "Registro de cambios",
+          "pl": "Dziennik zmian",
+          "uk": "Журнал змін",
+          "zh-cn": "更新日志"
+        },
+        "level": "warn",
+        "buttons": [
+          "agree",
+          "cancel"
+        ]
       }
     ],
     "plugins": {
       "sentry": {
         "dsn": "https://b93cc849b5544d1682e20820bf56d636@sentry.iobroker.net/46"
       }
+    },
+    "visWidgets": {
+      "mihomeVacuumWidgets": {
+        "i18n": "component",
+        "name": "mihomeVacuumWidgets",
+        "url": "mihome-vacuum/customWidgets.js",
+        "bundlerType": "module",
+        "components": [
+          "VacuumControlWidget"
+        ]
+      }
     }
   },
   "encryptedNative": [
     "password",
-    "token"
+    "token",
+    "cloudSession"
   ],
   "protectedNative": [
     "password",
-    "token"
-  ],
-  "messages": [
-    {
-      "condition": {
-        "operand": "and",
-        "rules": [
-          "oldVersion<5.0.0",
-          "newVersion>=5.0.0"
-        ]
-      },
-      "title": {
-        "en": "Important notice!",
-        "de": "Wichtiger Hinweis!",
-        "ru": "Важное замечание!",
-        "pt": "Notícia importante!",
-        "nl": "Belangrijke mededeling!",
-        "fr": "Avis important!",
-        "it": "Avviso IMPORTANTE!",
-        "es": "Noticia importante!",
-        "pl": "Ważna uwaga!",
-        "zh-cn": "重要通知!"
-      },
-      "text": {
-        "en": "BREAKING CHANGE - After update you have to click get-Device in settings and choose your robor again and save",
-        "de": "WICHTIGSTE ÄNDERUNG – Nach dem Update müssen Sie in den Einstellungen auf „Get-Device“ klicken, Ihren Robor erneut auswählen und speichern",
-        "ru": "СЕРЬЕЗНОЕ ИЗМЕНЕНИЕ. После обновления вам нужно нажать «Получить устройство» в настройках, снова выбрать свой робот и сохранить его.",
-        "pt": "MUDANÇA DE QUEBRA - Após a atualização você deve clicar em get-Device nas configurações e escolher seu robor novamente e salvar",
-        "nl": "BREAKING CHANGE - Na de update moet je in de instellingen op Get-Device klikken en je robor opnieuw kiezen en opslaan",
-        "fr": "CHANGEMENT RUPTURE - Après la mise à jour, vous devez cliquer sur Obtenir l'appareil dans les paramètres, choisir à nouveau votre robot et enregistrer",
-        "it": "MODIFICA ROTANTE - Dopo l'aggiornamento devi fare clic su Ottieni dispositivo nelle impostazioni, scegliere nuovamente il tuo robor e salvare",
-        "es": "CAMBIO IMPORTANTE: después de la actualización, debe hacer clic en Obtener dispositivo en la configuración, elegir su robot nuevamente y guardar.",
-        "pl": "PRZERWA ZMIANY - Po aktualizacji musisz kliknąć opcję Pobierz urządzenie w ustawieniach, ponownie wybrać robota i zapisać",
-        "zh-cn": "重大更改 - 更新后，您必须单击设置中的“获取设备”，然后再次选择您的机器人并保存"
-      },
-      "level": "warn",
-      "buttons": [
-        "agree",
-        "cancel"
-      ]
-    }
+    "token",
+    "cloudSession"
   ],
   "native": {
     "email": "",
     "password": "",
+    "cloudSession": "",
     "server": "-",
     "token": "",
     "ip": "",
@@ -234,6 +264,7 @@
     "lib": "",
     "enableMiMap": false,
     "enableSelfCommands": false,
+    "enableAdvancedDebug": false,
     "sendPauseBeforeHome": false,
     "enableResumeZone": false,
     "port": 54321,
@@ -288,15 +319,6 @@
         "type": "string",
         "read": true,
         "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "",
-      "type": "device",
-      "common": {
-        "name": "Vacuum robot",
-        "role": "vacuumCleaner"
       },
       "native": {}
     }

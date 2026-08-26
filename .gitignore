@@ -1,6 +1,8 @@
 .git
 .idea
 node_modules
+.npm-cache/
+build/
 nbproject
 admin/i18n/flat.txt
 admin/i18n/*/flat.txt
@@ -11,3 +13,6 @@ admin/i18n/*/flat.txt
 
 #ignore .commitinfo created by ioBroker release script
 .commitinfo
+
+# Local source screenshot contains private instance data; commit only the redacted copy.
+/admin/media/Login VacuumControl.png

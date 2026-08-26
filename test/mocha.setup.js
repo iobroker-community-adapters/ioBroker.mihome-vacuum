@@ -10,5 +10,6 @@ const chaiAsPromised = require('chai-as-promised');
 const { should, use } = require('chai');
 
 should();
-use(sinonChai);
-use(chaiAsPromised);
+// Chai 5 plugins are ESM modules, while older compatible releases are CommonJS.
+use(sinonChai.default || sinonChai);
+use(chaiAsPromised.default || chaiAsPromised);

@@ -1,0 +1,127 @@
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+}
+
+.App {
+    background:
+        radial-gradient(circle at 12% 8%, rgba(66, 165, 245, 0.09), transparent 26rem),
+        radial-gradient(circle at 90% 30%, rgba(38, 198, 218, 0.055), transparent 28rem);
+}
+
+.content-shell {
+    width: min(100%, 1440px);
+    margin: 0 auto;
+}
+
+.app-header {
+    flex: 0 0 auto;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+    background: linear-gradient(110deg, rgba(66, 165, 245, 0.1), transparent 38%);
+    backdrop-filter: blur(12px);
+}
+
+.brand-row {
+    min-height: 86px;
+    padding: 14px 24px 8px;
+}
+
+.brand-logo {
+    width: 58px;
+    height: 58px;
+    filter: drop-shadow(0 7px 12px rgba(0, 0, 0, 0.24));
+}
+
+.main-tabs {
+    padding: 0 12px;
+}
+
+.main-tabs .MuiTab-root {
+    min-height: 52px;
+    padding-inline: 18px;
+    border-radius: 12px 12px 0 0;
+    text-transform: none;
+    font-weight: 650;
+}
+
+.main-tabs .MuiTab-root.Mui-selected {
+    background: linear-gradient(180deg, rgba(66, 165, 245, 0.13), rgba(66, 165, 245, 0.025));
+}
+
+.main-tabs .MuiTab-iconWrapper {
+    margin-right: 8px;
+}
+
+.page-content {
+    padding: 24px;
+}
+
+.settings-toggle-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.settings-toggle-grid .MuiFormControlLabel-root {
+    min-height: 58px;
+    margin: 0;
+    padding: 6px 12px;
+    border: 1px solid rgba(128, 128, 128, 0.22);
+    border-radius: 12px;
+    background: rgba(128, 128, 128, 0.035);
+    transition:
+        border-color 140ms ease,
+        background-color 140ms ease;
+}
+
+.settings-toggle-grid .MuiFormControlLabel-root:hover {
+    border-color: rgba(66, 165, 245, 0.55);
+    background: rgba(66, 165, 245, 0.07);
+}
+
+.color-field input[type='color'] {
+    min-height: 32px;
+    padding: 4px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+@media (max-width: 760px) {
+    .brand-row {
+        min-height: 72px;
+        padding: 10px 14px 6px;
+    }
+
+    .brand-logo {
+        width: 48px;
+        height: 48px;
+    }
+
+    .main-tabs {
+        padding: 0 4px;
+    }
+
+    .main-tabs .MuiTab-root {
+        min-width: 74px;
+        padding-inline: 10px;
+    }
+
+    .page-content {
+        padding: 14px;
+    }
+
+    .settings-toggle-grid {
+        grid-template-columns: 1fr;
+    }
+}
