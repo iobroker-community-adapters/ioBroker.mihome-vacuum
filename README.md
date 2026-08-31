@@ -21,6 +21,11 @@ address and token, optional Xiaomi Cloud device discovery and maps, room cleanin
 Supported device families include Roborock/rockrobo, Viomi, and Dreame. The exact commands, map functions, rooms, mop controls, dock controls, and
 consumable states depend on the model and firmware.
 
+## Installation
+
+Install and update the adapter through ioBroker Admin using a published npm version. Direct installation from GitHub is not supported and is
+disabled in Admin. The source repository does not contain the generated runtime, Admin UI or VIS 2 bundles; published packages include them.
+
 ## Supported devices and features
 
 The following models are explicitly documented as supported. Other models from the same device families may work with the matching manager, but are
@@ -346,7 +351,9 @@ requests.
 
 ### **WORK IN PROGRESS**
 
-* ()
+* (xXBJXx) Remove install-time and prepublish build hooks, build explicitly in CI, and disable unsupported GitHub installations (#1223)
+* (xXBJXx) Start directly from `build/main.js` and generate Admin/VIS bundles for npm packages instead of tracking build output in Git
+* (xXBJXx) Verify script-free package installation, generated UI assets, direct startup, and Compact Mode
 
 ### 6.0.0 (2026-08-26)
 

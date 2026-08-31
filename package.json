@@ -18,7 +18,7 @@
   "contributors": [
     "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
   ],
-  "main": "main.js",
+  "main": "build/main.js",
   "engines": {
     "node": ">=22.13.0"
   },
@@ -32,7 +32,6 @@
     "build:widgets": "vite build --config src-widgets/vite.config.ts && node scripts/copy-widgets.cjs",
     "check:admin": "tsc --noEmit -p src-admin/tsconfig.json",
     "build": "npm run build:backend && npm run build:admin && npm run build:widgets",
-    "prepublishOnly": "npm run build",
     "test:js": "npm run build:backend && mocha --config test/mocha.custom.json \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
     "test:package": "npm run build && mocha test/package --exit",
     "test:package-smoke": "npm run build && node scripts/package-smoke.cjs",
@@ -42,12 +41,10 @@
     "check": "tsc --noEmit -p tsconfig.check.json && npm run check:admin && npm run check:widgets",
     "lint": "eslint -c eslint.config.mjs .",
     "translate": "npm run build:backend && translate-adapter",
-    "prepare": "npm run build",
     "release": "release-script",
     "dev-server": "dev-server"
   },
   "files": [
-    "main.js",
     "admin{,/!(src)/**}/!(tsconfig|tsconfig.*).json",
     "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",
     "build/**/*.js",
