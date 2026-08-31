@@ -354,6 +354,7 @@ requests.
 * (xXBJXx) Remove install-time and prepublish build hooks, build explicitly in CI, and disable unsupported GitHub installations (#1223)
 * (xXBJXx) Start directly from `build/main.js` and generate Admin/VIS bundles for npm packages instead of tracking build output in Git
 * (xXBJXx) Verify script-free package installation, generated UI assets, direct startup, and Compact Mode
+* (xXBJXx) Remove unused Chai test plugins, add VS Code metadata schema support, and annotate the optional Canvas dependency for the repository checker (#1222)
 
 ### 6.0.0 (2026-08-26)
 
