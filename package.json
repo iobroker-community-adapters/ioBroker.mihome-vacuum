@@ -87,7 +87,7 @@
     "@types/react-dom": "^18.3.7",
     "@types/sinon": "^22.0.0",
     "@vitejs/plugin-react": "^6.1.0",
-    "chai": "^5.3.3",
+    "chai": "^6.2.2",
     "gulp": "^5.0.1",
     "mocha": "^11.8.0",
     "proxyquire": "^2.1.3",
