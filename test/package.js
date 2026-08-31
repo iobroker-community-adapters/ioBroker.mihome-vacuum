@@ -8,6 +8,43 @@ const { tests } = require('@iobroker/testing');
 tests.packageFiles(path.join(__dirname, '..'));
 
 describe('Runtime dependencies', () => {
+    it('keeps Canvas optional so local control does not require native graphics libraries', () => {
+        const packageJson = require('../package.json');
+
+        assert.equal(packageJson.optionalDependencies.canvas, '^3.2.3');
+        assert.equal(Object.hasOwn(packageJson.dependencies, 'canvas'), false);
+        const renderer = fs.readFileSync(path.join(__dirname, '..', 'src', 'lib', 'mapCreator.ts'), 'utf8');
+        assert.match(renderer, /^\/\/ @repochecker: optional dependency 'canvas'$/m);
+    });
+
+    it('declares directly used test tools without unused Chai plugins', () => {
+        const packageJson = require('../package.json');
+        const setup = fs.readFileSync(path.join(__dirname, 'mocha.setup.js'), 'utf8');
+
+        for (const dependency of ['mocha', 'chai', 'sinon', '@types/mocha', '@types/chai', '@types/sinon']) {
+            assert.equal(typeof packageJson.devDependencies[dependency], 'string', dependency);
+        }
+        for (const plugin of ['chai-as-promised', 'sinon-chai']) {
+            assert.equal(Object.hasOwn(packageJson.devDependencies, plugin), false, plugin);
+            assert.equal(Object.hasOwn(packageJson.devDependencies, `@types/${plugin}`), false, plugin);
+            assert.equal(setup.includes(plugin), false, plugin);
+        }
+        assert.match(setup, /process\.on\('unhandledRejection'/);
+    });
+
+    it('associates adapter metadata with the official VS Code JSON schema', () => {
+        const settings = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '.vscode', 'settings.json'), 'utf8'));
+
+        assert.ok(
+            settings['json.schemas'].some(
+                schema =>
+                    schema.fileMatch.includes('io-package.json') &&
+                    schema.url ===
+                        'https://raw.githubusercontent.com/ioBroker/ioBroker.js-controller/master/schemas/io-package.json',
+            ),
+        );
+    });
+
     it('keeps every compiled relative require inside the runtime package', () => {
         const buildDirectory = path.join(__dirname, '..', 'build');
         const pendingDirectories = [buildDirectory];

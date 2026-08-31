@@ -784,12 +784,23 @@ must explicitly create a new login link. Do not implement background reauthentic
 
 Some generic repository-checker suggestions conflict with requirements of this adapter:
 
-- `mocha`, `chai`, and `sinon` remain direct development dependencies. The TypeScript test sources
-  import them directly, so relying on nested dependencies of `@iobroker/testing` breaks module
-  resolution after a clean `npm ci`.
+- `mocha`, `chai`, `sinon`, and their type packages remain direct development dependencies
+  (W0063). The npm scripts invoke Mocha, and the JavaScript regression tests directly import
+  Chai and Sinon and are checked with TypeScript (`checkJs`). Transitive dependencies of
+  `@iobroker/testing` are not a stable public dependency contract and are not guaranteed to be
+  hoisted to the adapter's module-resolution scope. In particular, this adapter uses Chai 5
+  while `@iobroker/testing` 5.3.0 uses Chai 4. The unused `chai-as-promised` and `sinon-chai`
+  plugins and their type packages are no longer declared or registered by this adapter.
 - `canvas` remains an optional dependency. It enables map rendering where a compatible native
   binary is available, but an unavailable binary must not prevent installation or local vacuum
-  control.
+  control. `mapCreator.ts` explicitly annotates this with the checker's supported
+  `@repochecker: optional dependency 'canvas'` comment. `MapHelper` loads the renderer only when
+  maps are enabled and handles a failed load; the package smoke test also installs without
+  optional dependencies. The checker may still suggest checking availability (S5066); do not
+  make Canvas mandatory just to suppress that suggestion.
+
+`.vscode/settings.json` maps `io-package.json` to the official js-controller JSON schema (S4036).
+No jsonConfig schema is needed for the current HTML/React Admin UI.
 
 Before opening a community pull request:
 

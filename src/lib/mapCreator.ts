@@ -1,3 +1,5 @@
+// @repochecker: optional dependency 'canvas'
+// MapHelper catches renderer load failures; local control works without native Canvas.
 import { createCanvas, Image } from 'canvas';
 import type { MapCreatorAdapter, MapCreatorOptions } from '../types/mapCreator';
 
