@@ -3,6 +3,13 @@
 node_modules
 .npm-cache/
 build/
+
+# Generated runtime UI assets; included in npm packages after an explicit build.
+/admin/index.html
+/admin/assets/
+/widgets/mihome-vacuum/assets/
+/widgets/mihome-vacuum/customWidgets.js
+/widgets/mihome-vacuum/js/translations.js
 nbproject
 admin/i18n/flat.txt
 admin/i18n/*/flat.txt

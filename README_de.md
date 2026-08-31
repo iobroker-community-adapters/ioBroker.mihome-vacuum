@@ -21,6 +21,12 @@ eigene Widgets für VIS 1 und VIS 2.
 Zu den unterstützten Gerätefamilien gehören Roborock/rockrobo, Viomi und Dreame. Welche Befehle, Karten-, Raum-, Wisch-, Stations- und
 Wartungsfunktionen verfügbar sind, hängt vom Modell und dessen Firmware ab.
 
+## Installation
+
+Installiere und aktualisiere den Adapter über ioBroker Admin mit einer veröffentlichten npm-Version. Die direkte Installation von GitHub wird
+nicht unterstützt und ist im Admin deaktiviert. Das Quellrepository enthält keine generierten Laufzeit-, Admin-UI- oder VIS-2-Bundles;
+veröffentlichte Pakete enthalten diese Dateien bereits.
+
 ## Unterstützte Geräte und Funktionen
 
 Die folgenden Modelle sind ausdrücklich als unterstützt dokumentiert. Weitere Modelle derselben Gerätefamilien können mit dem passenden Manager

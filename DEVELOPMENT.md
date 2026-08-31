@@ -46,7 +46,13 @@ Install an exact dependency tree with:
 
 ```sh
 npm ci
+npm run build
 ```
+
+Dependency installation does not build the adapter. Always build explicitly before starting or
+packaging a source checkout. Published npm packages already contain the generated runtime and UI.
+The full type check also checks JavaScript tests that import compiled modules, so it needs at least
+`npm run build:backend` first. CI runs `test:js` (which builds the backend) before `npm run check`.
 
 Native `canvas` installation may require the operating-system libraries listed in
 `io-package.json`. Canvas is optional at package level, but map rendering needs a working canvas
@@ -84,10 +90,10 @@ implementation.
 | `scripts/copy-widgets.cjs`                           | Copies only the required VIS 2 build output into `widgets/`                                                 |
 | `io-package.json`                                    | Adapter metadata, native defaults, dependencies, protected fields, VIS registration                         |
 
-Generated backend code is written to `build/`. The root-level `main.js` is intentionally limited to
-a small CommonJS bootstrap which forwards compact-mode and direct starts to `build/main.js`. All
+Generated backend code is written to `build/`. The package entry point is directly `build/main.js`,
+which supports compact-mode and direct starts. There is no root-level `main.js` bootstrap. All
 runtime behavior remains implemented in TypeScript under `src/`; do not reintroduce runtime logic
-under `main.js` or `lib/`.
+under `main.js` or `lib/`. `common.nogit: true` disables unsupported GitHub installations in Admin.
 
 ## 4. Runtime architecture
 
@@ -531,8 +537,11 @@ npm run lint
 - `widgets/mihome-vacuum/customWidgets.js` and its Module Federation chunks.
 
 Do not edit generated JavaScript manually. Change the TypeScript/React source and rebuild. Do not
-commit `node_modules`, `src-widgets/build`, TypeScript declaration output, source maps, local dev
-server state, or agent workspace files.
+commit `build/`, `admin/index.html`, `admin/assets/`, `src-widgets/build/`, the generated VIS 2
+`widgets/mihome-vacuum/assets/` and `customWidgets.js`, or the generated VIS 1 translation bridge
+`widgets/mihome-vacuum/js/translations.js`. Keep sources, `admin/i18n/`, hand-written VIS 1 HTML/CSS,
+images and other static assets tracked. Also exclude `node_modules`, TypeScript declaration output,
+source maps, local dev server state, and agent workspace files.
 
 ### 13.2 Packaging
 
@@ -540,7 +549,9 @@ The package allowlist in `package.json` is intentional. It includes runtime buil
 admin files, widgets, metadata, user-facing documentation, and the license. It excludes TypeScript
 sources, tests, legacy runtime files, and declaration artifacts.
 
-There is deliberately no `prepack` hook. Build before manually creating an archive:
+There are deliberately no install, `prepare`, `prepublish`, `prepublishOnly` or `prepack` hooks.
+`npm ci`, `npm pack` and `npm publish` do not build automatically. Build before manually creating
+an archive (and before any authorized manual publication):
 
 ```sh
 npm run build
@@ -553,8 +564,13 @@ For an end-to-end archive test use:
 npm run test:package-smoke
 ```
 
-The smoke test creates a temporary archive, checks required and forbidden paths, installs only
-production dependencies into a clean temporary project, and loads the productive CommonJS entry.
+The smoke test creates a temporary archive without lifecycle scripts, checks required and forbidden
+paths, installs only production dependencies into a clean temporary project with scripts disabled,
+and loads the productive CommonJS entry. The optional canvas dependency is omitted in this test.
+
+Install user-facing versions through ioBroker Admin from published npm packages. For prerelease
+testing, use a published beta version or a locally built archive; an unbuilt GitHub checkout is not
+an installable package. Do not add lifecycle hooks or commit generated bundles to restore that path.
 
 ### 13.3 ioBroker dev-server
 
@@ -653,7 +669,7 @@ fixtures, but real hardware tests should be recorded when devices are available.
 2. Run `npm run build` and `npm run test:package-smoke` locally.
 3. Check Node.js, js-controller, and Admin minimum versions.
 4. Confirm that production dependencies, not only repository sources, were installed.
-5. Confirm that the root `main.js` bootstrap only forwards to `build/main.js` and contains no runtime logic.
+5. Confirm that `package.json` points directly to `build/main.js` and that the installed package was built before distribution.
 
 ### Token is reported as invalid or not decrypted
 
@@ -758,14 +774,16 @@ must explicitly create a new login link. Do not implement background reauthentic
 - Use the official `ioBroker/testing-action-check@v1`, `ioBroker/testing-action-adapter@v1`, and
   `ioBroker/testing-action-deploy@v1` actions. Runtime and checks start with Node 22.x, the matrix
   also covers Node 24.x, and trusted publishing runs on Node 24.x as required by the release action.
+- Integration and deploy actions must explicitly set `build: true` and `build-command: "npm run build"`.
+  Their default is to skip the build. The check action runs `test:package`, which explicitly builds;
+  the regression job builds through `test:js` and `test:package-smoke`. Never rely on install hooks
+  or files left over from a previous job. The deploy action builds before invoking `npm publish`.
 - Never publish from an unreviewed development fork.
 
 ### Intentional repository-checker exceptions
 
 Some generic repository-checker suggestions conflict with requirements of this adapter:
 
-- `prepare` must build the backend, Admin UI, and widgets because Git installations do not contain
-  committed build output.
 - `mocha`, `chai`, and `sinon` remain direct development dependencies. The TypeScript test sources
   import them directly, so relying on nested dependencies of `@iobroker/testing` breaks module
   resolution after a clean `npm ci`.

@@ -143,6 +143,7 @@
     },
     "platform": "Javascript/Node.js",
     "mode": "daemon",
+    "nogit": true,
     "loglevel": "info",
     "compact": true,
     "icon": "mihome-vacuum.png",

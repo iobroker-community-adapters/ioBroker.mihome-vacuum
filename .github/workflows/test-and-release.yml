@@ -37,11 +37,11 @@ jobs:
             - name: Install Dependencies
               run: npm ci
 
-            - name: Type-check source code
-              run: npm run check
-
             - name: Run JavaScript regression tests
               run: npm run test:js
+
+            - name: Type-check source code
+              run: npm run check
 
             - name: Test packed runtime installation
               run: npm run test:package-smoke
@@ -77,6 +77,8 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   os: ${{ matrix.os }}
+                  build: true
+                  build-command: "npm run build"
 
   # Deploys the final package to NPM
     deploy:
@@ -99,6 +101,8 @@ jobs:
               with:
                   node-version: "24.x"
                   package-cache: "false"
+                  build: true
+                  build-command: "npm run build"
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   sentry: true
                   sentry-token: ${{ secrets.SENTRY_AUTH_TOKEN }}

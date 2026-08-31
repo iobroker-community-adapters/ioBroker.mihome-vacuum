@@ -130,7 +130,7 @@ describe('Runtime dependencies', () => {
         assert.equal(packageJson.files.includes('build/**/*.js'), true);
         assert.equal(packageJson.files.includes('!build/types/**'), true);
         assert.equal(packageJson.files.includes('lib/'), false);
-        assert.equal(packageJson.files.includes('main.js'), true);
+        assert.equal(packageJson.files.includes('main.js'), false);
     });
 
     it('builds and uses the TypeScript backend as the runtime entry', () => {
@@ -139,7 +139,8 @@ describe('Runtime dependencies', () => {
         const rootConfigSource = fs.readFileSync(path.join(__dirname, '..', 'tsconfig.json'), 'utf8');
         const checkConfigSource = fs.readFileSync(path.join(__dirname, '..', 'tsconfig.check.json'), 'utf8');
 
-        assert.equal(packageJson.main, 'main.js');
+        assert.equal(packageJson.main, 'build/main.js');
+        assert.equal(require('../io-package.json').common.nogit, true);
         assert.equal(packageJson.scripts['build:backend'], 'tsc -p tsconfig.build.json');
         assert.match(packageJson.scripts['test:js'], /^npm run build:backend && mocha /);
         assert.equal(buildConfig.compilerOptions.rootDir, 'src');
@@ -164,8 +165,20 @@ describe('Runtime dependencies', () => {
         );
         assert.match(checkConfigSource, /"admin\/"/);
         assert.match(checkConfigSource, /"src-admin\/"/);
-        assert.equal(packageJson.scripts.prepublishOnly, 'npm run build');
-        assert.equal(packageJson.scripts.prepare, 'npm run build');
+        for (const hook of [
+            'preinstall',
+            'install',
+            'postinstall',
+            'preprepare',
+            'prepare',
+            'postprepare',
+            'prepublish',
+            'prepublishOnly',
+            'prepack',
+            'postpack',
+        ]) {
+            assert.equal(Object.prototype.hasOwnProperty.call(packageJson.scripts, hook), false, hook);
+        }
         assert.equal(fs.readFileSync(path.join(__dirname, '..', '.npmrc'), 'utf8').trim(), 'foreground-scripts=false');
         assert.equal(packageJson.scripts['test:package'], 'npm run build && mocha test/package --exit');
         assert.equal(packageJson.scripts['test:package-smoke'], 'npm run build && node scripts/package-smoke.cjs');
@@ -176,10 +189,7 @@ describe('Runtime dependencies', () => {
         assert.equal(packageJson.files.includes('widgets/'), true);
         assert.equal(Object.prototype.hasOwnProperty.call(packageJson, 'allowScripts'), false);
         assert.equal(fs.existsSync(path.join(__dirname, '..', 'scripts', 'package-smoke.cjs')), true);
-        const packageSmokeSource = fs.readFileSync(
-            path.join(__dirname, '..', 'scripts', 'package-smoke.cjs'),
-            'utf8',
-        );
+        const packageSmokeSource = fs.readFileSync(path.join(__dirname, '..', 'scripts', 'package-smoke.cjs'), 'utf8');
         assert.match(packageSmokeSource, /timeout: 600_000/);
         assert.doesNotMatch(packageSmokeSource, /admin\/index_m\.html/);
         assert.equal(fs.existsSync(path.join(__dirname, '..', 'scripts', 'copy-widgets.cjs')), true);
@@ -235,9 +245,7 @@ describe('Runtime dependencies', () => {
         assert.equal(fs.existsSync(path.join(__dirname, '..', 'src', 'types', 'roomMappingProtocol.ts')), true);
         assert.equal(fs.existsSync(path.join(__dirname, '..', 'src', 'types', 'mapCreator.ts')), true);
         assert.equal(fs.existsSync(path.join(__dirname, '..', 'src', 'types', 'main.ts')), true);
-        const bootstrapSource = fs.readFileSync(path.join(__dirname, '..', 'main.js'), 'utf8');
-        assert.match(bootstrapSource, /require\(['"]\.\/build\/main\.js['"]\)/);
-        assert.doesNotMatch(bootstrapSource, /class MihomeVacuum|onReady\s*\(/);
+        assert.equal(fs.existsSync(path.join(__dirname, '..', 'main.js')), false);
         const removedLegacyRuntime = [
             'lib/RRMapParser.js',
             'lib/XiaomiCloudConnector.js',
@@ -331,6 +339,10 @@ describe('Runtime dependencies', () => {
             workflow.indexOf('    check-and-lint:'),
         );
         assert.doesNotMatch(regressionJob, /^        needs:/m);
+        assert.ok(
+            regressionJob.indexOf('run: npm run test:js') < regressionJob.indexOf('run: npm run check'),
+            'Build the backend through test:js before type-checking tests that import generated modules',
+        );
     });
 
     it('runs every CI job on the supported Node.js versions', () => {
@@ -367,8 +379,43 @@ describe('Runtime dependencies', () => {
         assert.match(deployJob, /uses: ioBroker\/testing-action-deploy@v1/);
         assert.match(deployJob, /node-version: "24\.x"/);
         assert.match(deployJob, /package-cache: "false"/);
+        assert.match(deployJob, /^                  build: true$/m);
+        assert.match(deployJob, /^                  build-command: "npm run build"$/m);
         assert.match(deployJob, /github\.repository == 'iobroker-community-adapters\/ioBroker\.mihome-vacuum'/);
         assert.doesNotMatch(deployJob, /NPM_TOKEN|npm-token|::set-output|npm install|actions\/create-release/);
+    });
+
+    it('builds explicitly before integration tests without relying on install hooks', () => {
+        const workflow = fs.readFileSync(
+            path.join(__dirname, '..', '.github', 'workflows', 'test-and-release.yml'),
+            'utf8',
+        );
+        const adapterJob = workflow.slice(workflow.indexOf('    adapter-tests:'), workflow.indexOf('    deploy:'));
+
+        assert.match(adapterJob, /^                  build: true$/m);
+        assert.match(adapterJob, /^                  build-command: "npm run build"$/m);
+    });
+
+    it('ignores reproducible UI output while preserving its build inputs', () => {
+        const root = path.join(__dirname, '..');
+        const ignoredPaths = fs.readFileSync(path.join(root, '.gitignore'), 'utf8').split(/\r?\n/);
+        for (const generatedPath of [
+            '/admin/index.html',
+            '/admin/assets/',
+            '/widgets/mihome-vacuum/assets/',
+            '/widgets/mihome-vacuum/customWidgets.js',
+            '/widgets/mihome-vacuum/js/translations.js',
+        ]) {
+            assert.ok(ignoredPaths.includes(generatedPath), `Missing ignore rule: ${generatedPath}`);
+        }
+        for (const sourcePath of [
+            'src-admin/index.html',
+            'src-widgets/src/VacuumControlWidget.tsx',
+            'admin/i18n/en.json',
+            'widgets/mihome-vacuum.html',
+        ]) {
+            assert.ok(fs.existsSync(path.join(root, sourcePath)), `Missing source: ${sourcePath}`);
+        }
     });
 
     it('uses tokenless Dependabot auto-merge for bounded update classes', () => {
