@@ -44,6 +44,7 @@ function createManager(sendMessage = async () => ({})) {
         setTimeout: (callback, delay) => setTimeout(callback, delay),
         clearTimeout: timeout => clearTimeout(timeout),
         getState: (id, callback) => callback(null, null),
+        getStateAsync: async () => null,
         setStateAsync: async id => stateUpdates.push(id),
         setState: () => undefined,
         setStateChanged: () => undefined,
@@ -328,6 +329,77 @@ describe('VacuumManager object lookup', () => {
             'control.fan_power',
             'mihome-vacuum.test.rooms.living.roomFanPower',
         ]);
+        await manager.close();
+    });
+});
+
+describe('VacuumManager startCleaning room params', () => {
+    it('awaits room settings and applies them via miIO before cleaning starts', async () => {
+        const sent = [];
+        const { manager, adapter, stateUpdates } = createManager(async (method, params) => {
+            sent.push({ method, params });
+            return { result: ['ok'] };
+        });
+        adapter.getStateAsync = async id => {
+            if (id.endsWith('roomFanPower')) {
+                return { val: 102 };
+            }
+            if (id.endsWith('roomWaterBoxMode')) {
+                return { val: 201 };
+            }
+            if (id.endsWith('roomMopMode')) {
+                return { val: 300 };
+            }
+            return null;
+        };
+        manager.features.water_box_mode = 1;
+        manager.features.mop_mode = 1;
+
+        const started = await manager.startCleaning(18, {
+            channels: ['rooms.kitchen', 'rooms.living'],
+            message: 'queued rooms',
+        });
+
+        assert.equal(started, true);
+        assert.deepEqual(sent, [
+            { method: 'set_custom_mode', params: [102] },
+            { method: 'set_water_box_custom_mode', params: [201] },
+            { method: 'set_mop_mode', params: [300] },
+        ]);
+        assert.deepEqual(stateUpdates, ['control.fan_power', 'control.water_box_mode', 'control.mop_mode']);
+        await manager.close();
+    });
+
+    it('marks native segment repeat unsupported only in memory for the current run', async () => {
+        const sent = [];
+        const { manager, adapter } = createManager(async (method, params) => {
+            sent.push({ method, params });
+            if (method === 'app_segment_clean' && params && params[0] && params[0].repeat) {
+                return { error: { code: -10000, message: 'data for segment is not a number' } };
+            }
+            return { result: ['ok'] };
+        });
+        adapter.unsupportedFeatures = '|';
+        adapter.isUnsupportedFeature = key => adapter.unsupportedFeatures.indexOf(`|${key}|`) >= 0;
+        adapter.setUnsupportedFeature = async () => {
+            throw new Error('must not persist unsupported feature for transient segment-repeat errors');
+        };
+        manager.startCleaning = async () => true;
+
+        await manager.onMessage({
+            command: 'cleanSegments',
+            message: { segments: [16], repeat: 2 },
+            segments: [16],
+            channels: null,
+            repeat: 2,
+        });
+
+        assert.equal(adapter.unsupportedFeatures, '|segemntCleanRepeat|');
+        assert.equal(sent.length >= 2, true);
+        assert.equal(sent[0].method, 'app_segment_clean');
+        assert.equal(sent[1].method, 'app_segment_clean');
+        assert.deepEqual(sent[1].params, [16]);
+        assert.equal(manager.queue.length, 1);
         await manager.close();
     });
 });
