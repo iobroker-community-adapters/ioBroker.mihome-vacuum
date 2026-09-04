@@ -17,12 +17,17 @@ describe('Runtime dependencies', () => {
         assert.match(renderer, /^\/\/ @repochecker: optional dependency 'canvas'$/m);
     });
 
-    it('declares directly used test tools without unused Chai plugins', () => {
+    it('relies on @iobroker/testing for mocha/chai/sinon without unused Chai plugins', () => {
         const packageJson = require('../package.json');
         const setup = fs.readFileSync(path.join(__dirname, 'mocha.setup.js'), 'utf8');
 
+        assert.equal(typeof packageJson.devDependencies['@iobroker/testing'], 'string');
         for (const dependency of ['mocha', 'chai', 'sinon', '@types/mocha', '@types/chai', '@types/sinon']) {
-            assert.equal(typeof packageJson.devDependencies[dependency], 'string', dependency);
+            assert.equal(
+                Object.hasOwn(packageJson.devDependencies, dependency),
+                false,
+                `${dependency} is provided by @iobroker/testing`,
+            );
         }
         for (const plugin of ['chai-as-promised', 'sinon-chai']) {
             assert.equal(Object.hasOwn(packageJson.devDependencies, plugin), false, plugin);
