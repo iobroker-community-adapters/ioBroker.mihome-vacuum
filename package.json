@@ -75,7 +75,7 @@
     "@iobroker/testing": "^5.3.0",
     "@iobroker/types-vis-2": "^2.13.17",
     "@module-federation/vite": "^1.21.0",
-    "@mui/icons-material": "^6.5.0",
+    "@mui/icons-material": "^9.4.0",
     "@mui/material": "^6.5.0",
     "@tsconfig/node22": "^22.0.6",
     "@types/chai": "^5.2.3",
