@@ -152,7 +152,8 @@ try {
         };
         const packageJson = require(path.join(root, 'package.json'));
         assert.equal(packageJson.main, 'build/main.js');
-        assert.equal(require(path.join(root, 'io-package.json')).common.nogit, true);
+        // Fork keeps Git/URL installs enabled so existing ioBroker instances can be updated in place.
+        assert.equal(require(path.join(root, 'io-package.json')).common.nogit, false);
         for (const hook of ['preinstall', 'install', 'postinstall', 'prepare', 'prepublish', 'prepublishOnly', 'prepack']) {
             assert.equal(Object.hasOwn(packageJson.scripts, hook), false, hook);
         }

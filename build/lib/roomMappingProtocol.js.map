@@ -1,0 +1,1 @@
+{"version":3,"file":"roomMappingProtocol.js","sourceRoot":"","sources":["../../src/lib/roomMappingProtocol.ts"],"names":[],"mappings":";;AAEA,4CAKC;AALD,SAAgB,gBAAgB,CAAC,QAA6B;IAC1D,IAAI,QAAQ,CAAC,MAAM,IAAI,QAAQ,CAAC,MAAM,KAAK,gBAAgB,IAAK,QAAQ,CAAC,MAA8B,CAAC,MAAM,EAAE,CAAC;QAC7G,OAAO,QAAQ,CAAC,MAAM,CAAC;IAC3B,CAAC;IACD,OAAO,IAAI,CAAC;AAChB,CAAC"}

@@ -1317,18 +1317,25 @@ class VacuumManager {
                         let answer = await this.Miio.sendMessage('app_segment_clean', params);
                         if (answer.error) {
                             // {"error":{"code":-10000,"message":"data for segment is not a number"}}
-                            if (params[0].repeat) {
-                                // some devices doesent support complex Object for app_segment_clean, so we have to use fallback mode
+                            if (params[0] && params[0].repeat) {
+                                // some devices don't support complex Object for app_segment_clean, so we have to use fallback mode
                                 repeat = params[0].repeat;
                                 answer = await this.Miio.sendMessage('app_segment_clean', params[0].segments);
-                                await this.adapter.setUnsupportedFeature('segemntCleanRepeat'); // we will store this for future
+                                // Remember only in-memory for this adapter run. Persisting permanently caused
+                                // native multi-pass to stay disabled after a single transient error.
+                                if (
+                                    typeof this.adapter.unsupportedFeatures === 'string' &&
+                                    this.adapter.unsupportedFeatures.indexOf('|segemntCleanRepeat|') === -1
+                                ) {
+                                    this.adapter.unsupportedFeatures += 'segemntCleanRepeat|';
+                                }
                                 this.adapter.log.info(
-                                    'repeat will not supported native, so we use Queue as Fallback in future!',
+                                    'native segment repeat not accepted by device, using queue fallback for this run',
                                 );
                             }
                         }
                         if (repeat) {
-                            // Falback mode
+                            // Fallback mode: each additional pass is a new clean job → room params must be re-applied
                             obj.info = 'repeat segment';
                             for (let i = 1; i < repeat; i++) {
                                 this.push(JSON.parse(JSON.stringify(obj)));
@@ -1601,66 +1608,99 @@ class VacuumManager {
         }
         this.cleanActiveState = cleanStatus;
         this.activeChannels = messageObj.channels;
-        if (this.activeChannels && this.activeChannels.length === 1) {
-            if (!messageObj.fanSpeed) {
-                this.adapter.getState(
-                    `${this.activeChannels[0]}.roomFanPower`,
-                    (err, fanPower) => fanPower && this.adapter.setStateChanged('control.fan_power', fanPower.val),
-                );
+        // For queued/multi-room jobs: always re-read and apply room settings before clean starts.
+        // Previously this used fire-and-forget setStateChanged, so the clean command often won the race
+        // and later passes kept the robot default (e.g. fan MAXIMUM) instead of roomFanPower.
+        if (this.activeChannels && this.activeChannels.length >= 1) {
+            // One miIO clean job can only use one fan/mop setting; use the first room as source.
+            const roomChannel = this.activeChannels[0];
+            if (messageObj.fanSpeed === undefined || messageObj.fanSpeed === null) {
+                const fanPower = await this.adapter.getStateAsync(`${roomChannel}.roomFanPower`);
+                if (fanPower && fanPower.val !== null && fanPower.val !== undefined) {
+                    messageObj.fanSpeed = fanPower.val;
+                }
             }
             if (this.features.water_box_mode != null && !messageObj.waterBoxMode) {
-                this.adapter.getState(`${this.activeChannels[0]}.roomWaterBoxMode`, (err, waterBoxMode) => {
-                    if (waterBoxMode) {
-                        this.adapter.log.debug(`Set water box mode from Room to ${waterBoxMode.val}`);
-                        this.adapter.setStateChanged('control.water_box_mode', waterBoxMode.val);
-                        if (waterBoxMode.val == 207 && this.features.water_box_mode == 2 && !messageObj.waterBoxLevel) {
-                            this.adapter.getState(
-                                `${this.activeChannels[0]}.roomWaterBoxLevel`,
-                                (err, waterBoxLevel) => {
-                                    if (waterBoxLevel) {
-                                        this.adapter.log.debug(`Set water box level from Room to ${waterBoxLevel.val}`);
-                                        this.adapter.setStateChanged(
-                                            'control.water_box_level',
-                                            waterBoxLevel.val,
-                                            true,
-                                        );
-                                    }
-                                },
-                            );
-                        }
-                    }
-                });
+                const waterBoxMode = await this.adapter.getStateAsync(`${roomChannel}.roomWaterBoxMode`);
+                if (waterBoxMode && waterBoxMode.val !== null && waterBoxMode.val !== undefined) {
+                    messageObj.waterBoxMode = waterBoxMode.val;
+                }
+            }
+            if (
+                this.features.water_box_mode == 2 &&
+                !messageObj.waterBoxLevel &&
+                Number(messageObj.waterBoxMode) === 207
+            ) {
+                const waterBoxLevel = await this.adapter.getStateAsync(`${roomChannel}.roomWaterBoxLevel`);
+                if (waterBoxLevel && waterBoxLevel.val !== null && waterBoxLevel.val !== undefined) {
+                    messageObj.waterBoxLevel = waterBoxLevel.val;
+                }
             }
             if (this.features.mop_mode != null && !messageObj.mopMode) {
-                this.adapter.getState(
-                    `${this.activeChannels[0]}.roomMopMode`,
-                    (err, mopMode) => mopMode && this.adapter.setStateChanged('control.mop_mode', mopMode.val),
-                );
+                const mopMode = await this.adapter.getStateAsync(`${roomChannel}.roomMopMode`);
+                if (mopMode && mopMode.val !== null && mopMode.val !== undefined) {
+                    messageObj.mopMode = mopMode.val;
+                }
             }
-            if (typeof messageObj.repeat === 'undefined') {
-                const repeatObj = await this.adapter.getStateAsync(`${this.activeChannels[0]}.repeat`);
+            if (this.activeChannels.length === 1 && typeof messageObj.repeat === 'undefined') {
+                const repeatObj = await this.adapter.getStateAsync(`${roomChannel}.repeat`);
                 if (repeatObj && Number(repeatObj.val) > 1) {
                     messageObj.repeat = repeatObj.val;
                 }
             }
         }
-        if (messageObj.fanSpeed) {
-            this.adapter.setState('control.fan_power', messageObj.fanSpeed);
-        }
-        if (this.features.water_box_mode != null) {
-            if (messageObj.waterBoxMode) {
-                this.adapter.setStateChanged('control.water_box_mode', messageObj.waterBoxMode);
-            }
-            if (messageObj.waterBoxLevel && this.features.water_box_mode == 2) {
-                this.adapter.setStateChanged('control.water_box_level', messageObj.waterBoxLevel);
-            }
-        }
-        if (messageObj.mopMode && this.features.mop_mode != null) {
-            this.adapter.setStateChanged('control.mop_mode', messageObj.mopMode);
-        }
+        await this.applyCleaningParams(messageObj);
         this.adapter.log.info(`trigger cleaning ${activeCleanState.name}${messageObj.message || ''}`);
         /// need to verify?? this.checkStartCleaning(2);
         return true;
+    }
+
+    /**
+     * Apply fan/water/mop params to the robot before starting a clean.
+     * Sends miIO commands directly so equal ioBroker values still reach the device
+     * (important after dock/home between queued rooms/repeats).
+     *
+     * @param messageObj cleaning request object
+     */
+    async applyCleaningParams(messageObj) {
+        if (messageObj.fanSpeed !== undefined && messageObj.fanSpeed !== null && messageObj.fanSpeed !== '') {
+            this.adapter.log.debug(`Apply fan_power ${messageObj.fanSpeed} before cleaning`);
+            await this.Miio.sendMessage('set_custom_mode', [messageObj.fanSpeed]);
+            await this.adapter.setStateAsync('control.fan_power', messageObj.fanSpeed, true);
+        }
+        if (this.features.water_box_mode != null) {
+            if (
+                messageObj.waterBoxMode !== undefined &&
+                messageObj.waterBoxMode !== null &&
+                messageObj.waterBoxMode !== ''
+            ) {
+                this.adapter.log.debug(`Apply water_box_mode ${messageObj.waterBoxMode} before cleaning`);
+                await this.Miio.sendMessage('set_water_box_custom_mode', [messageObj.waterBoxMode]);
+                await this.adapter.setStateAsync('control.water_box_mode', messageObj.waterBoxMode, true);
+            }
+            if (
+                messageObj.waterBoxLevel !== undefined &&
+                messageObj.waterBoxLevel !== null &&
+                messageObj.waterBoxLevel !== '' &&
+                this.features.water_box_mode == 2
+            ) {
+                this.adapter.log.debug(`Apply water_box_level ${messageObj.waterBoxLevel} before cleaning`);
+                await this.Miio.sendMessage('set_water_box_distance_off', {
+                    distance_off: 210 - messageObj.waterBoxLevel * 5,
+                });
+                await this.adapter.setStateAsync('control.water_box_level', messageObj.waterBoxLevel, true);
+            }
+        }
+        if (
+            messageObj.mopMode !== undefined &&
+            messageObj.mopMode !== null &&
+            messageObj.mopMode !== '' &&
+            this.features.mop_mode != null
+        ) {
+            this.adapter.log.debug(`Apply mop_mode ${messageObj.mopMode} before cleaning`);
+            await this.Miio.sendMessage('set_mop_mode', [messageObj.mopMode]);
+            await this.adapter.setStateAsync('control.mop_mode', messageObj.mopMode, true);
+        }
     }
 
     async stopCleaning() {

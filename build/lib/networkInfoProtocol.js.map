@@ -1,0 +1,1 @@
+{"version":3,"file":"networkInfoProtocol.js","sourceRoot":"","sources":["../../src/lib/networkInfoProtocol.ts"],"names":[],"mappings":";;AAEA,0CAKC;AALD,SAAgB,eAAe,CAAC,QAA6B;IACzD,IAAI,CAAC,QAAQ,CAAC,MAAM,IAAI,QAAQ,CAAC,MAAM,KAAK,gBAAgB,IAAI,CAAC,QAAQ,CAAC,MAAM,CAAC,IAAI,EAAE,CAAC;QACpF,OAAO,IAAI,CAAC;IAChB,CAAC;IACD,OAAO,QAAQ,CAAC,MAAM,CAAC,IAAI,CAAC;AAChC,CAAC"}

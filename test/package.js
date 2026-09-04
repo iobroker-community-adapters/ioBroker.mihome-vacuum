@@ -177,7 +177,8 @@ describe('Runtime dependencies', () => {
         const checkConfigSource = fs.readFileSync(path.join(__dirname, '..', 'tsconfig.check.json'), 'utf8');
 
         assert.equal(packageJson.main, 'build/main.js');
-        assert.equal(require('../io-package.json').common.nogit, true);
+        // Fork keeps Git/URL installs enabled so existing ioBroker instances can be updated in place.
+        assert.equal(require('../io-package.json').common.nogit, false);
         assert.equal(packageJson.scripts['build:backend'], 'tsc -p tsconfig.build.json');
         assert.match(packageJson.scripts['test:js'], /^npm run build:backend && mocha /);
         assert.equal(buildConfig.compilerOptions.rootDir, 'src');

@@ -1,0 +1,30 @@
+import type { ConsumableFeature, FeatureAdapter, VacuumFeatureDeviceState } from '../types/featureManager';
+declare class FeatureManager {
+    readonly deviceState: VacuumFeatureDeviceState;
+    readonly adapter: FeatureAdapter;
+    model: unknown;
+    zoneClean: boolean;
+    mop_mode: boolean | null;
+    water_box: boolean | null;
+    water_box_mode: boolean | 2 | null;
+    dustCollect: boolean | null;
+    washMop: boolean | null;
+    roomMapping: boolean | null;
+    NewSuctionPower: boolean | null;
+    mop: boolean | null;
+    dock_status: boolean | null;
+    consumables: ConsumableFeature[] | null;
+    constructor(deviceState: VacuumFeatureDeviceState, adapterInstance: FeatureAdapter);
+    init(): void;
+    detect(): void;
+    setNewSuctionValues(value: number): Promise<void>;
+    setModel(model: unknown): void;
+    setWaterBox(status: unknown): Promise<void>;
+    setDustCollect(status: unknown): Promise<void>;
+    setWashMop(status: unknown): Promise<void>;
+    setMop(status: unknown): Promise<void>;
+    setWaterBoxMode(mode: unknown, distanceOff: unknown): Promise<void>;
+    setMopMode(mode: unknown): Promise<void>;
+    setDockStatus(status: unknown): Promise<void>;
+}
+export = FeatureManager;

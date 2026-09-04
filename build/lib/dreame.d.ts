@@ -1,0 +1,37 @@
+import type { DreameActionDefinition, DreameAdapter, DreameMiioClient, DreameMiioResponse, DreamePropertyDefinition, DreamePropertyValue, DreameState } from '../types/dreame';
+import type { AdapterTimeout } from '../types/adapter';
+declare class DreameManager {
+    static readonly DreameWaterVolumes: Record<string, number>;
+    static readonly DreameErrors: Record<string, number>;
+    static readonly DreameState: Record<string, number>;
+    static readonly DreameWashBaseState: Record<string, number>;
+    static readonly DreameProperties: Record<string, DreamePropertyDefinition>;
+    static readonly DreameActions: Record<string, DreameActionDefinition>;
+    static readonly DreameBlockedObjects: string[];
+    readonly Miio: DreameMiioClient;
+    readonly adapter: DreameAdapter;
+    washBaseAvailable: boolean;
+    globalTimeouts: Record<string, AdapterTimeout | undefined>;
+    closed: boolean;
+    readonly PARAMS: DreamePropertyDefinition[];
+    readonly ready: Promise<void>;
+    constructor(adapterInstance: DreameAdapter, Miio: DreameMiioClient);
+    private createObjects;
+    init(): Promise<void>;
+    main(): Promise<void>;
+    getStates(): Promise<void>;
+    updateObjectValue(property: DreamePropertyDefinition, control: string, element: DreamePropertyValue): void;
+    mapDeviceValueToStateValue(value: unknown, property: DreamePropertyDefinition): unknown;
+    getSpecialHandlingValues(control: string | undefined, dreameValue: unknown): boolean;
+    stateChange(id: string, state: DreameState | null | undefined): Promise<void>;
+    doCustomHandling(id: string): Promise<boolean>;
+    washMop(): Promise<boolean>;
+    pauseWashMop(): Promise<boolean>;
+    dryMop(): Promise<boolean>;
+    stopDryingMop(): Promise<boolean>;
+    callWashBaseAction(parameters: string): Promise<boolean>;
+    sendValueToDevice(propertyDefinition: DreamePropertyDefinition, state: DreameState): Promise<DreameMiioResponse>;
+    sendActionToDevice(actionDefinition: DreameActionDefinition, parameters?: unknown): Promise<boolean>;
+    close(): Promise<void>;
+}
+export = DreameManager;
