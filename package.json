@@ -71,7 +71,7 @@
     "@emotion/styled": "^11.14.1",
     "@iobroker/adapter-dev": "^1.5.0",
     "@iobroker/eslint-config": "^2.3.4",
-    "@iobroker/gui-components": "^8.0.2",
+    "@iobroker/gui-components": "^10.2.0",
     "@iobroker/testing": "^5.3.0",
     "@iobroker/types-vis-2": "^2.13.17",
     "@module-federation/vite": "^1.21.0",
