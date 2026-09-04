@@ -388,8 +388,8 @@ describe('Runtime dependencies', () => {
             'utf8',
         );
 
-        //assert.match(workflow, /node-version: "22\.x"/);
-        //assert.match(workflow, /node-version: \[22\.x, 24\.x\]/);
+        assert.match(workflow, /node-version: "22\.x"/);
+        assert.match(workflow, /node-version: \[22\.x, 24\.x\]/);
         assert.doesNotMatch(workflow, /node-version: (?:18|20)\.x/);
         assert.doesNotMatch(workflow, /node-version: \[[^\]]*(?:18|20)\.x/);
         assert.equal([...workflow.matchAll(/actions\/checkout@v7/g)].length, 1);
