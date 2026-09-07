@@ -44,6 +44,7 @@ function createManager(sendMessage = async () => ({})) {
         setTimeout: (callback, delay) => setTimeout(callback, delay),
         clearTimeout: timeout => clearTimeout(timeout),
         getState: (id, callback) => callback(null, null),
+        /** @type {(id: string) => Promise<{ val?: unknown } | null>} */
         getStateAsync: async () => null,
         setStateAsync: async id => stateUpdates.push(id),
         setState: () => undefined,
@@ -409,6 +410,30 @@ describe('VacuumManager startCleaning room params', () => {
             { method: 'set_mop_mode', params: [300] },
         ]);
         assert.deepEqual(stateUpdates, ['control.fan_power', 'control.water_box_mode', 'control.mop_mode']);
+        await manager.close();
+    });
+
+    it('still starts cleaning when a parameter command fails', async () => {
+        const sent = [];
+        const { manager, adapter } = createManager(async (method, params) => {
+            sent.push({ method, params });
+            if (method === 'set_custom_mode') {
+                throw Object.assign(new Error('MIIO request timed out'), { code: 'MIIO_TIMEOUT' });
+            }
+            return { result: ['ok'] };
+        });
+        const warnings = [];
+        adapter.log.warn = /** @type {any} */ (
+            message => {
+                warnings.push(String(message));
+            }
+        );
+
+        const started = await manager.startCleaning(18, { channels: ['rooms.kitchen'], fanSpeed: 104 });
+
+        assert.equal(started, true);
+        assert.deepEqual(sent, [{ method: 'set_custom_mode', params: [104] }]);
+        assert.equal(warnings.some(message => message.includes('Could not apply cleaning parameters')), true);
         await manager.close();
     });
 

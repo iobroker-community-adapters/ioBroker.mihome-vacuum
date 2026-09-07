@@ -1657,7 +1657,14 @@ class VacuumManager {
                 }
             }
         }
-        await this.applyCleaningParams(messageObj);
+        try {
+            await this.applyCleaningParams(messageObj);
+        } catch (error) {
+            // A failed fan/water/mop command must not prevent the cleaning itself from starting.
+            this.adapter.log.warn(
+                `Could not apply cleaning parameters before start: ${error instanceof Error ? error.message : String(error)}`,
+            );
+        }
         this.adapter.log.info(`trigger cleaning ${activeCleanState.name}${messageObj.message || ''}`);
         /// need to verify?? this.checkStartCleaning(2);
         return true;
