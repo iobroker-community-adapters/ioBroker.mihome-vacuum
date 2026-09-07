@@ -45,6 +45,7 @@ describe('VacuumManager TypeScript runtime contract', () => {
         const VacuumManager = loadManager('../build/lib/vacuum');
 
         assert.deepEqual(Object.getOwnPropertyNames(VacuumManager.prototype).sort(), [
+            'applyCleaningParams',
             'asyncForEach',
             'checkFeaturesCarpet',
             'checkFeaturesRoomMapping',

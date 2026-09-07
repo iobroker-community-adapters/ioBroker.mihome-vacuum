@@ -362,6 +362,9 @@ requests.
 * (xXBJXx) Answer the legacy `send` message only once and no longer forward it to the device manager
 * (xXBJXx) Reject map updates with a clear error when neither the Xiaomi Cloud map nor Valetudo is enabled instead of leaving the request pending
 * (xXBJXx) Track every pending internal delay separately so all of them are cancelled on unload, and remove a duplicated `control.goTo` definition
+* (kosmix1980) Apply the room fan, water and mop settings through miIO before queued and repeated room cleanings start instead of racing them against the start command (#1231)
+* (kosmix1980) Keep the native multi-pass segment cleaning lockout only for the current run instead of persisting it after a single error (#1231)
+* (xXBJXx) Continue starting the cleaning with a warning when a fan, water or mop parameter command fails
 
 ### 6.0.0 (2026-08-26)
 
