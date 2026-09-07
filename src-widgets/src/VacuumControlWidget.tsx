@@ -1,19 +1,21 @@
 import React from 'react';
-import BatteryFullIcon from '@mui/icons-material/BatteryFull';
-import BuildCircleIcon from '@mui/icons-material/BuildCircle';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import HistoryIcon from '@mui/icons-material/History';
-import HomeIcon from '@mui/icons-material/Home';
-import LocationSearchingIcon from '@mui/icons-material/LocationSearching';
-import MapIcon from '@mui/icons-material/Map';
-import PauseIcon from '@mui/icons-material/Pause';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import ScheduleIcon from '@mui/icons-material/Schedule';
-import SquareFootIcon from '@mui/icons-material/SquareFoot';
-import TuneIcon from '@mui/icons-material/Tune';
+import {
+    BatteryFullIcon,
+    BuildCircleIcon,
+    CheckCircleIcon,
+    CleaningServicesIcon,
+    FilterAltIcon,
+    HistoryIcon,
+    HomeIcon,
+    LocationSearchingIcon,
+    MapIcon,
+    PauseIcon,
+    PlayArrowIcon,
+    RestartAltIcon,
+    ScheduleIcon,
+    SquareFootIcon,
+    TuneIcon,
+} from './icons';
 import {
     Box,
     Button,
