@@ -36,8 +36,8 @@ The repository also contains:
 | js-controller  | `>=7.2.2`                                         |
 | ioBroker Admin | `>=7.8.23`                                        |
 | Backend        | TypeScript, compiled to CommonJS, target ES2022   |
-| Admin UI       | React 18, MUI 6, `@iobroker/gui-components`, Vite |
-| VIS 2 widget   | React 18, MUI 6, Vite Module Federation           |
+| Admin UI       | React 19, MUI 9, `@iobroker/gui-components` 10, Vite |
+| VIS 2 widget   | React 19, MUI 9, Vite Module Federation              |
 
 Use an active Node.js LTS version covered by the CI matrix. Do not introduce APIs that are newer
 than the minimum declared in `package.json`.

@@ -17,7 +17,7 @@ import {
     DialogTitle,
     FormControl,
     FormControlLabel,
-    Grid2 as Grid,
+    Grid,
     IconButton,
     InputAdornment,
     InputLabel,
@@ -544,7 +544,7 @@ class App extends GenericApp<GenericAppProps, VacuumAdminState> {
                             <Stack
                                 direction="row"
                                 spacing={1}
-                                alignItems="center"
+                                sx={{ alignItems: 'center' }}
                             >
                                 <CloudIcon color="primary" />
                                 <Typography variant="h6">{I18n.t('Xiaomi cloud authentication')}</Typography>
@@ -553,7 +553,7 @@ class App extends GenericApp<GenericAppProps, VacuumAdminState> {
                             <Stack
                                 direction={{ xs: 'column', sm: 'row' }}
                                 spacing={2}
-                                alignItems={{ sm: 'center' }}
+                                sx={{ alignItems: { sm: 'center' } }}
                             >
                                 <Button
                                     variant="contained"
@@ -637,11 +637,10 @@ class App extends GenericApp<GenericAppProps, VacuumAdminState> {
                                         <Select
                                             label={I18n.t('devices')}
                                             value={this.state.selectedDevice}
-                                            onChange={event =>
-                                                this.selectDevice(
-                                                    event.target.value === '' ? '' : Number(event.target.value),
-                                                )
-                                            }
+                                            onChange={event => {
+                                                const selected = event.target.value as number | '';
+                                                this.selectDevice(selected === '' ? '' : Number(selected));
+                                            }}
                                         >
                                             <MenuItem value="">{I18n.t('choose Device')}</MenuItem>
                                             {this.state.discoveredDevices.map((device, index) => (
@@ -738,7 +737,7 @@ class App extends GenericApp<GenericAppProps, VacuumAdminState> {
                                         <Stack
                                             direction={{ xs: 'column', sm: 'row' }}
                                             spacing={1}
-                                            alignItems={{ sm: 'center' }}
+                                            sx={{ alignItems: { sm: 'center' } }}
                                         >
                                             <Chip
                                                 color="success"
@@ -827,8 +826,7 @@ class App extends GenericApp<GenericAppProps, VacuumAdminState> {
                         <Stack
                             direction="row"
                             spacing={1}
-                            alignItems="center"
-                            mb={2}
+                            sx={{ alignItems: 'center', mb: 2 }}
                         >
                             <SettingsIcon color="primary" />
                             <Typography variant="h6">{I18n.t('Settings')}</Typography>
@@ -866,7 +864,7 @@ class App extends GenericApp<GenericAppProps, VacuumAdminState> {
                         </Grid>
                         <Stack
                             className="settings-toggle-grid"
-                            mt={2}
+                            sx={{ mt: 2 }}
                         >
                             <FormControlLabel
                                 control={
@@ -963,8 +961,7 @@ class App extends GenericApp<GenericAppProps, VacuumAdminState> {
                     <Stack
                         direction="row"
                         spacing={1}
-                        alignItems="center"
-                        mb={2}
+                        sx={{ alignItems: 'center', mb: 2 }}
                     >
                         <MapIcon color="primary" />
                         <Typography variant="h6">{I18n.t('Map settings')}</Typography>
@@ -973,7 +970,7 @@ class App extends GenericApp<GenericAppProps, VacuumAdminState> {
                     <Grid
                         container
                         spacing={2}
-                        mt={0}
+                        sx={{ mt: 0 }}
                     >
                         <Grid size={{ xs: 12, md: 3 }}>
                             <TextField
@@ -1075,7 +1072,7 @@ class App extends GenericApp<GenericAppProps, VacuumAdminState> {
                         <Box className="content-shell">
                             <Stack
                                 direction="row"
-                                alignItems="center"
+                                sx={{ alignItems: 'center' }}
                                 spacing={2}
                                 className="brand-row"
                             >
@@ -1088,7 +1085,7 @@ class App extends GenericApp<GenericAppProps, VacuumAdminState> {
                                 <Box sx={{ minWidth: 0 }}>
                                     <Typography
                                         variant="h5"
-                                        fontWeight={700}
+                                        sx={{ fontWeight: 700 }}
                                     >
                                         Mi Home Vacuum
                                     </Typography>
