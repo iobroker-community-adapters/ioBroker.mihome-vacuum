@@ -352,6 +352,10 @@ requests.
 
 ### **WORK IN PROGRESS**
 
+* ()
+
+### 6.0.1 (2026-09-07)
+
 * (xXBJXx) Remove install-time and prepublish build hooks, build explicitly in CI, and disable unsupported GitHub installations (#1223)
 * (xXBJXx) Start directly from `build/main.js` and generate Admin/VIS bundles for npm packages instead of tracking build output in Git
 * (xXBJXx) Verify script-free package installation, generated UI assets, direct startup, and Compact Mode
