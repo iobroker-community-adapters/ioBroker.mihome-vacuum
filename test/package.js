@@ -11,7 +11,7 @@ describe('Runtime dependencies', () => {
     it('keeps Canvas optional so local control does not require native graphics libraries', () => {
         const packageJson = require('../package.json');
 
-        assert.equal(packageJson.optionalDependencies.canvas, '^3.2.3');
+        assert.match(packageJson.optionalDependencies.canvas, /^\^[3-9]\.\d+\.\d+$/);
         assert.equal(Object.hasOwn(packageJson.dependencies, 'canvas'), false);
         const renderer = fs.readFileSync(path.join(__dirname, '..', 'src', 'lib', 'mapCreator.ts'), 'utf8');
         assert.match(renderer, /^\/\/ @repochecker: optional dependency 'canvas'$/m);
@@ -80,23 +80,28 @@ describe('Runtime dependencies', () => {
     it('declares axios as a production dependency', () => {
         const packageJson = require('../package.json');
 
-        assert.equal(packageJson.dependencies.axios, '^1.20.0');
+        assert.match(packageJson.dependencies.axios, /^\^[1-9]\d*\.\d+\.\d+$/);
         assert.equal(Object.prototype.hasOwnProperty.call(packageJson.devDependencies, 'axios'), false);
-        assert.equal(packageJson.dependencies.qs, '^6.15.3');
+        assert.match(packageJson.dependencies.qs, /^\^[6-9]\.\d+\.\d+$/);
     });
 
-    it('keeps the approved ioBroker and release toolchain on the current baseline', () => {
+    it('keeps the approved ioBroker and release toolchain declared with caret ranges', () => {
         const packageJson = require('../package.json');
+        const caretRange = /^\^\d+\.\d+\.\d+$/;
 
-        assert.equal(packageJson.dependencies['@iobroker/adapter-core'], '^3.4.3');
-        assert.equal(packageJson.devDependencies['@iobroker/testing'], '^5.3.0');
-        assert.equal(packageJson.devDependencies['@iobroker/adapter-dev'], '^1.5.0');
-        assert.equal(packageJson.devDependencies['@iobroker/eslint-config'], '^2.3.4');
-        assert.equal(packageJson.devDependencies['@tsconfig/node22'], '^22.0.6');
-        assert.equal(packageJson.devDependencies['@alcalzone/release-script'], '^5.2.1');
-        assert.equal(packageJson.devDependencies['@alcalzone/release-script-plugin-iobroker'], '^5.2.0');
-        assert.equal(packageJson.devDependencies['@alcalzone/release-script-plugin-license'], '^5.2.2');
-        assert.equal(packageJson.devDependencies['@alcalzone/release-script-plugin-manual-review'], '^5.2.0');
+        assert.match(packageJson.dependencies['@iobroker/adapter-core'], /^\^[3-9]\.\d+\.\d+$/);
+        for (const dependency of [
+            '@iobroker/testing',
+            '@iobroker/adapter-dev',
+            '@iobroker/eslint-config',
+            '@tsconfig/node22',
+            '@alcalzone/release-script',
+            '@alcalzone/release-script-plugin-iobroker',
+            '@alcalzone/release-script-plugin-license',
+            '@alcalzone/release-script-plugin-manual-review',
+        ]) {
+            assert.match(packageJson.devDependencies[dependency] ?? '', caretRange, dependency);
+        }
     });
 
     it('declares the documented Node.js, js-controller, and Admin minimum versions', () => {
@@ -106,7 +111,7 @@ describe('Runtime dependencies', () => {
         assert.equal(packageJson.engines.node, '>=22.13.0');
         assert.equal(ioPackage.common.dependencies[0]['js-controller'], '>=7.2.2');
         assert.equal(ioPackage.common.globalDependencies[0].admin, '>=7.8.23');
-        assert.equal(packageJson.devDependencies['@types/node'], '^22.20.0');
+        assert.match(packageJson.devDependencies['@types/node'], /^\^(?:2[2-9]|[3-9]\d)\.\d+\.\d+$/);
     });
 
     it('declares only instance objects with non-empty IDs', () => {
@@ -388,15 +393,17 @@ describe('Runtime dependencies', () => {
             'utf8',
         );
 
+        // Node.js 22 is the primary baseline; the matrix may add newer versions.
         assert.match(workflow, /node-version: "22\.x"/);
-        assert.match(workflow, /node-version: \[22\.x, 24\.x\]/);
+        assert.match(workflow, /node-version: \[22\.x(?:, (?:2[4-9]|[3-9]\d)\.x)*\]/);
         assert.doesNotMatch(workflow, /node-version: (?:18|20)\.x/);
         assert.doesNotMatch(workflow, /node-version: \[[^\]]*(?:18|20)\.x/);
-        assert.equal([...workflow.matchAll(/actions\/checkout@v7/g)].length, 1);
-        assert.equal([...workflow.matchAll(/actions\/setup-node@v7/g)].length, 1);
-        assert.doesNotMatch(workflow, /actions\/(?:checkout|setup-node)@v[1-6]/);
-        assert.match(workflow, /uses: ioBroker\/testing-action-check@v1/);
-        assert.match(workflow, /uses: ioBroker\/testing-action-adapter@v1/);
+        // Official actions are used exactly once each; Dependabot may raise their major versions.
+        assert.equal([...workflow.matchAll(/actions\/checkout@v\d+/g)].length, 1);
+        assert.equal([...workflow.matchAll(/actions\/setup-node@v\d+/g)].length, 1);
+        assert.doesNotMatch(workflow, /actions\/(?:checkout|setup-node)@v[1-6]/);
+        assert.match(workflow, /uses: ioBroker\/testing-action-check@v\d+/);
+        assert.match(workflow, /uses: ioBroker\/testing-action-adapter@v\d+/);
         assert.match(workflow, /group: \$\{\{ github\.ref \}\}/);
         assert.match(workflow, /cancel-in-progress: true/);
         assert.match(workflow, /- name: Type-check source code\s+run: npm run check/);
@@ -413,8 +420,8 @@ describe('Runtime dependencies', () => {
         assert.match(deployJob, /needs: \[regression-tests, check-and-lint, adapter-tests\]/);
         assert.match(deployJob, /contents: write/);
         assert.match(deployJob, /id-token: write/);
-        assert.match(deployJob, /uses: ioBroker\/testing-action-deploy@v1/);
-        assert.match(deployJob, /node-version: "24\.x"/);
+        assert.match(deployJob, /uses: ioBroker\/testing-action-deploy@v\d+/);
+        assert.match(deployJob, /node-version: "(?:2[4-9]|[3-9]\d)\.x"/);
         assert.match(deployJob, /package-cache: "false"/);
         assert.match(deployJob, /^                  build: true$/m);
         assert.match(deployJob, /^                  build-command: "npm run build"$/m);
