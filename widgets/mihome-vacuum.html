@@ -141,7 +141,7 @@
         var history = [];
         try { var rawHistory = value(this.data['oid-history-json']); history = rawHistory ? (typeof rawHistory === 'string' ? JSON.parse(rawHistory) : rawHistory) : []; if (!Array.isArray(history)) history = []; } catch (e) { history = []; }
     %>
-        <div class="vis-widget <%== this.data.attr('class') %> mihome-vacuum-widget" id="<%= this.data.attr('wid') %>" style="width: 1280px; height: 800px;">
+        <div class="vis-widget <%== this.data.attr('class') %> mihome-vacuum-widget" id="<%= this.data.attr('wid') %>" style="width: 100%; height: 100%;">
             <div class="vis-widget-body mihome-vacuum-card">
                 <header class="mihome-vacuum-header">
                     <div class="mihome-vacuum-brand"><div class="mihome-vacuum-logo">◉</div><div class="mihome-vacuum-heading"><strong><%= this.data['vacuum-title'] || 'Mi Home Vacuum' %></strong><span><%= vacuumState == null ? '—' : vacuumState %></span></div></div>
@@ -151,7 +151,7 @@
                 <main class="mihome-vacuum-panels">
                     <section class="mihome-vacuum-panel active" data-page="dashboard">
                         <div class="mihome-vacuum-overview <%= isShown.call(this, 'show-map') ? '' : 'without-map' %>">
-                            <% if (isShown.call(this, 'show-map')) { %><div class="mihome-vacuum-map"><% if (mapSource) { %><div class="mihome-vacuum-map-image" style="background-image: url('<%= mapSource %>');" role="img" aria-label="<%= tr('noMap') %>"></div><% } else { %><div class="mihome-vacuum-empty"><span>◇</span><%= tr('noMap') %></div><% } %></div><% } %>
+                            <% if (isShown.call(this, 'show-map')) { %><div class="mihome-vacuum-map"><% if (mapSource) { %><div class="mihome-vacuum-map-image" style="background-image: url('<%= mapSource %>');" role="img" aria-label="<%= tr('mapAlt') %>"></div><% } else { %><div class="mihome-vacuum-empty"><span>◇</span><%= tr('noMap') %></div><% } %></div><% } %>
                             <aside class="mihome-vacuum-details">
                                 <div class="mihome-vacuum-metrics"><div><span>▰</span><strong><%= value(this.data['oid-battery']) ?? '—' %> %</strong><small><%= tr('battery') %></small></div><div><span>⌗</span><strong><%= value(this.data['oid-area']) ?? '—' %> m²</strong><small><%= tr('area') %></small></div><div><span>◷</span><strong><%= value(this.data['oid-time']) ?? '—' %> min</strong><small><%= tr('time') %></small></div></div>
                                 <label class="mihome-vacuum-box mihome-vacuum-fan"><small><%= tr('suctionPower') %></small><select data-oid="<%= this.data['oid-power-level'] %>" onchange="vis.binds['mihome-vacuum'].setSelectValue(this)"><option value="<%= fan1 %>" <%= fan === fan1 ? 'selected' : '' %>><%= tr('quiet') %></option><option value="<%= fan2 %>" <%= fan === fan2 ? 'selected' : '' %>><%= tr('balanced') %></option><option value="<%= fan3 %>" <%= fan === fan3 ? 'selected' : '' %>><%= tr('turbo') %></option><% if (!isNaN(fan) && fan !== fan1 && fan !== fan2 && fan !== fan3) { %><option value="<%= fan %>" selected><%= tr('current') %> (<%= fan %>)</option><% } %></select></label>

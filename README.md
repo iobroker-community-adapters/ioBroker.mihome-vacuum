@@ -279,15 +279,26 @@ properties. Defaults point to `mihome-vacuum.0`; change them when using another 
 Select the widget set **Mi Home Vacuum** and add **Vacuum control with map**. Its settings are grouped into general options, states and controls,
 maintenance, rooms, and history.
 
+- **Instance selection:** choose the **status state** (`info.state`) of the adapter instance you want to display. All empty state attributes are
+  filled from that instance automatically, so switching from `mihome-vacuum.0` to another instance takes one click.
+- **Theme:** the widget follows the light or dark theme and the primary color of your VIS 2 project. An optional **accent color** overrides the
+  primary color.
+- **Suction levels:** the selectable levels come from the `control.fan_power` state of your robot, so every model shows its own levels. The three
+  numeric fallback values are only used when the state has no level catalogue.
+- **Status and error texts:** taken from the adapter's state definitions and translated where a translation exists.
+- **History:** the number of shown cleaning runs is configurable.
+
 ![VIS 2 vacuum widget](admin/media/Vis%202%20VacuumControlWidget.png)
 
 ### Rooms, suction levels, and layout
 
-Each room entry can have its own displayed name, start state, fan-power state, and suction level. The numerical fan values are configurable because
-Roborock, Viomi, and Dreame models may use different ranges.
+With **Detect rooms automatically** (default) the VIS 2 widget shows every room the adapter created below `rooms.*`, including its own suction
+level where the robot supports it. Disable the option to configure up to six rooms manually with a displayed name, start state, and fan-power
+state. The VIS 1 widget always uses the manual room configuration.
 
-The widgets preserve the complete map aspect ratio and adapt their layout to the available width. If a widget is too small, its content scrolls
-instead of allowing the map to overlap controls or maintenance cards.
+The widgets preserve the complete map aspect ratio and adapt their layout to their own width, not to the browser window. If a widget is too
+small, its content scrolls instead of allowing the map to overlap controls or maintenance cards. Resetting a consumable counter asks for
+confirmation first.
 
 ### Widget history
 
@@ -352,6 +363,8 @@ requests.
 
 ### **WORK IN PROGRESS**
 
+* (xXBJXx) Reworked the VIS 2 widget: it follows the VIS 2 theme with an optional accent color, lays itself out by its own width, fills all state attributes from the selected instance, detects rooms automatically, takes suction levels and status texts from the adapter states, confirms resets in a dialog, and has a configurable history length
+* (xXBJXx) VIS 1 widget: respect the configured widget size instead of forcing 1280x800 and label the map image correctly
 * (xXBJXx) Upgraded the Admin configuration and the VIS 2 widget to React 19, MUI 9, and `@iobroker/gui-components` 10 so the widget keeps working with upcoming VIS 2 releases while staying compatible with the current VIS 2
 * (xXBJXx) Updated `qs` to 6.16 and the VIS 2 type definitions and Module Federation tooling to their current versions
 

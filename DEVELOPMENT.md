@@ -428,19 +428,56 @@ instance. Keep write commands disabled in edit mode.
 
 ### 11.2 VIS 2
 
-The React widget is `src-widgets/src/VacuumControlWidget.tsx`. It extends the VIS 2 `visRxWidget`
-base class, which collects configured state IDs and owns subscriptions. Do not add duplicate manual
-subscriptions. It deliberately provides the same overview, maintenance, history, and reset features
-as VIS 1.
+The React widget lives in `src-widgets/src/`:
+
+| Path                          | Responsibility                                                                                     |
+| ----------------------------- | -------------------------------------------------------------------------------------------------- |
+| `VacuumControlWidget.tsx`     | Widget class: `getWidgetInfo`, instance auto-fill (`onChange` of `stateOid`), object catalogues, room discovery, room fan subscription, `write` |
+| `components/Dashboard.tsx`    | Layout, tabs, derived values, memo-stable card lists, confirmation dialog                          |
+| `components/Overview.tsx`     | Map, key figures, suction selector, quick actions, robot health                                    |
+| `components/RoomPanel.tsx`    | Room cards (start + suction level)                                                                 |
+| `components/Maintenance.tsx`  | Consumable cards                                                                                   |
+| `components/HistoryPanel.tsx` | Totals and cleaning runs                                                                           |
+| `components/FanSelect.tsx`, `ConfirmDialog.tsx`, `primitives.tsx` | Shared controls                                                |
+| `hooks/`                      | `useContainerWidth` (ResizeObserver) and `useStable`                                               |
+| `lib/`                        | Pure, React-free helpers: `format.ts`, `history.ts`, `autofill.ts`, `rooms.ts`, `i18n.ts`, `types.ts` |
+| `theme.ts`                    | Widget colors derived from the VIS 2 MUI theme (`useTheme`, `alpha`) with an optional accent color |
+| `icons.tsx`                   | Own `SvgIcon` components; the widget must not import `@mui/icons-material` (see below)             |
+
+Rules that follow from the runtime environment:
+
+- The class extends the VIS 2 `visRxWidget` base class, which collects the configured state IDs and
+  owns their subscriptions. The only manual subscription is the one for the fan states of
+  automatically detected rooms; it is diffed against the previous list and removed on unmount.
+- Layout decisions use the widget's own width (`useContainerWidth`), never MUI viewport
+  breakpoints: a narrow widget on a wide screen must get the compact layout.
+- Colors come from the host theme through `useWidgetTheme`; no hard-coded palette. `accentColor`
+  is the only color attribute.
+- Child components are `React.memo` and receive primitive props or arrays stabilized with
+  `useStable`, so a changing state re-renders only the affected card.
+- Translation keys of `getWidgetInfo` (`label`, `tooltip`, group `label`) must exist as **plain**
+  keys in `admin/i18n/*.json`: VIS 2 merges the exposed dictionary unchanged into its global `I18n`
+  and resolves them with `I18n.t(field.label)`. The `mihome_vacuum_` prefix from `getI18nPrefix()`
+  is only applied by `this.t()` inside the widget; the files therefore carry both variants.
+- Suction levels are built from the `common.states` of the `control.fan_power` object; status and
+  error labels from the `common.states` of `info.state` / `info.error`, translated by numeric code
+  (`state_<n>`, `error_<n>` in `admin/i18n`). The built-in catalogues in `lib/format.ts` are the
+  fallback when the objects cannot be read.
+- Selecting `stateOid` fills every empty (or still `mihome-vacuum.0`) state attribute from that
+  instance, but only for states that exist (`collectInstanceChanges`).
+- `roomsAuto` (default) discovers `rooms.*` channels of the instance; the six manual room attribute
+  groups are hidden while it is enabled and used as the fallback.
+- `@mui/icons-material` must not be imported by the widget: each icon module deep-imports
+  `@mui/material/utils/createSvgIcon`, Module Federation only shares the root `@mui/material` entry,
+  and the bundled copy of the MUI styled engine crashed on the MUI 6 host of VIS 2 2.15. The same
+  applies to any deep import of `@mui/material/*` or `@mui/system/*`; `test/package.js` rejects them.
 
 Both variants keep map, rooms, controls, and maintenance together on the dashboard. Cleaning history
-has a separate tab so large record lists do not overload the main view. Up to six room cards can be
-configured with a user-facing name, `rooms.<id>.roomClean` start state, and optional
-`rooms.<id>.roomFanPower` state. A room card deliberately exposes only its start action and suction
-level. Numeric `info.state` values are converted to readable robot-state labels inside the widgets.
-The map sidebar contains the primary suction selector, readable current status, robot health, and the
-four quick actions (start, pause, dock, and find). Do not duplicate these actions in a bottom toolbar;
-the sidebar is intentionally used to avoid empty space beside tall map images.
+has a separate tab so large record lists do not overload the main view. A room card deliberately
+exposes only its start action and suction level. The map sidebar contains the primary suction
+selector, readable current status, robot health, and the four quick actions (start, pause, dock,
+and find). Do not duplicate these actions in a bottom toolbar; the sidebar is intentionally used to
+avoid empty space beside tall map images.
 
 The map frame uses a wide 16:10 desktop ratio, falls back to a square mobile ratio, and renders
 `cleanmap.map64` as an absolutely centered image with automatic dimensions, bounded by `max-width`
@@ -472,8 +509,22 @@ breaking widget rendering.
 The widget build first writes to `src-widgets/build/`. `scripts/copy-widgets.cjs` then replaces only
 generated `customWidgets.js` and `assets/` while preserving shared VIS 1 images and CSS.
 
-Both widget variants default to instance `mihome-vacuum.0` and `cleanmap.map64`. Fan values are
-configurable because model families use different numeric scales.
+Both widget variants default to instance `mihome-vacuum.0` and `cleanmap.map64`. The numeric
+fallback fan values are configurable because model families use different numeric scales.
+
+Development and tests:
+
+- `npm run dev:widgets` runs the Vite build in watch mode and copies every result into `widgets/`,
+  so a running `dev-server watch` picks up each change without a manual `npm run build:widgets`.
+  Known limitation of `@iobroker/dev-server` 0.8.0: its file sync can crash with `ENOENT ... unlink`
+  when a rebuild removes hashed chunks it is about to copy. Restart it with
+  `dev-server watch --noStart --noInstall` in that case.
+- `test/testWidgetHelpers.js` unit-tests the pure helpers in `src-widgets/src/lib/` (they are
+  transpiled on the fly with the TypeScript API). It is part of `npm run test:js`.
+- `npm run test:widgets` runs `test/widgets.test.js` with `@iobroker/vis-2-widgets-testing`: it
+  installs js-controller, web and vis-2 into a temporary directory, opens the palette in a headless
+  browser and adds every widget of the set. It needs network access and several minutes, so it is
+  not part of the default `npm test` gate; run it before a release that changes the widget.
 
 When changing either widget:
 

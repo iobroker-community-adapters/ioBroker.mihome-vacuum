@@ -501,8 +501,28 @@ describe('Runtime dependencies', () => {
             path.join(root, 'widgets', 'mihome-vacuum', 'css', 'mihome-vacuum.css'),
             'utf8',
         );
-        const reactWidget = fs.readFileSync(path.join(root, 'src-widgets', 'src', 'VacuumControlWidget.tsx'), 'utf8');
-        const reactTranslations = fs.readFileSync(path.join(root, 'src-widgets', 'src', 'translations.ts'), 'utf8');
+        const widgetSourceRoot = path.join(root, 'src-widgets', 'src');
+        const widgetSourceFiles = [];
+        const pendingWidgetDirectories = [widgetSourceRoot];
+        while (pendingWidgetDirectories.length) {
+            const directory = pendingWidgetDirectories.pop();
+            if (!directory) {
+                continue;
+            }
+            for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+                const entryPath = path.join(directory, entry.name);
+                if (entry.isDirectory()) {
+                    pendingWidgetDirectories.push(entryPath);
+                } else if (/\.tsx?$/.test(entry.name)) {
+                    widgetSourceFiles.push(entryPath);
+                }
+            }
+        }
+        // The React widget is split into a class, components, hooks and pure helper modules; the
+        // contract checks below look at the union of all its sources.
+        const reactWidget = widgetSourceFiles.map(file => fs.readFileSync(file, 'utf8')).join('\n');
+        const reactWidgetClass = fs.readFileSync(path.join(widgetSourceRoot, 'VacuumControlWidget.tsx'), 'utf8');
+        const reactTranslations = fs.readFileSync(path.join(widgetSourceRoot, 'translations.ts'), 'utf8');
 
         assert.deepEqual(ioPackage.common.visWidgets.mihomeVacuumWidgets, {
             i18n: 'component',
@@ -545,18 +565,32 @@ describe('Runtime dependencies', () => {
         assert.match(legacyWidget, /room-1-start/);
         assert.match(legacyWidgetCss, /aspect-ratio:\s*16\s*\/\s*10/);
         assert.match(legacyWidget, /class="mihome-vacuum-map-image"/);
+        assert.doesNotMatch(legacyWidget, /width: 1280px; height: 800px/);
         assert.match(legacyWidgetCss, /\.mihome-vacuum-map-image\s*{[^}]*position:\s*absolute/s);
         assert.match(legacyWidgetCss, /\.mihome-vacuum-map-image\s*{[^}]*background-size:\s*contain/s);
         assert.match(legacyWidgetCss, /\.mihome-vacuum-panels\s*{[^}]*display:\s*flex/s);
-        assert.match(reactWidget, /window\.confirm/);
-        assert.match(reactWidget, /SectionButton/);
-        assert.match(reactWidget, /formatVacuumState/);
-        assert.match(reactWidget, /room1StartOid/);
-        assert.match(reactWidget, /aspectRatio:\s*{[^}]*'16 \/ 10'/s);
+        // Resets are confirmed with the themed dialog, never with the blocking browser prompt.
+        assert.doesNotMatch(reactWidget, /window\.confirm/);
+        assert.match(reactWidget, /ConfirmDialog/);
+        assert.match(reactWidget, /formatState\(/);
+        assert.match(reactWidget, /formatError\(/);
+        assert.match(reactWidgetClass, /roomStartOid/);
+        assert.match(reactWidgetClass, /manualRoom\(6\)/);
+        assert.match(reactWidgetClass, /onChange: fillFromInstance/);
+        assert.match(reactWidgetClass, /roomsAuto/);
+        // The widget must not bundle MUI icons: they deep-import the MUI styled engine, which breaks on a
+        // VIS 2 host with another MUI major. Icons come from the shared SvgIcon of the host instead.
+        assert.doesNotMatch(reactWidget, /from '@mui\/icons-material/);
+        assert.doesNotMatch(reactWidget, /from '@mui\/material\//);
+        assert.doesNotMatch(reactWidget, /from '@mui\/system/);
+        assert.match(reactWidget, /'16 \/ 10'/);
         assert.match(reactWidget, /objectFit:\s*'contain'/);
         assert.match(reactWidget, /maxHeight:\s*'100%'/);
         assert.match(reactWidget, /position:\s*'absolute'/);
         assert.match(reactWidget, /flexDirection:\s*'column'/);
+        // Layout follows the widget's own width, not the browser viewport.
+        assert.match(reactWidget, /ResizeObserver/);
+        assert.doesNotMatch(reactWidget, /\{\s*xs:\s*['{]/);
         assert.match(legacyWidget, /widgets\/mihome-vacuum\/js\/translations\.js/);
         assert.doesNotMatch(legacyWidget, /widgetTexts/);
         for (const language of ['de', 'en', 'es', 'fr', 'it', 'nl', 'pl', 'pt', 'ru', 'uk', 'zh-cn']) {
@@ -569,7 +603,19 @@ describe('Runtime dependencies', () => {
             const dictionary = require(path.join(languageRoot, `${language}.json`));
             assert.deepEqual(Object.keys(dictionary).sort(), expectedKeys, `${language} translations are incomplete`);
         }
-        for (const key of ['dashboard', 'quickControls', 'startRoom', 'noCleaningHistory', 'mihome_vacuum_title']) {
+        for (const key of [
+            'dashboard',
+            'quickControls',
+            'startRoom',
+            'noCleaningHistory',
+            'mihome_vacuum_title',
+            'mihome_vacuum_roomsAuto',
+            'mihome_vacuum_accentColor',
+            'confirm',
+            'cancel',
+            'state_5',
+            'error_5',
+        ]) {
             assert.equal(typeof english[key], 'string', `Missing shared widget translation ${key}`);
         }
     });

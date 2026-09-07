@@ -288,15 +288,26 @@ Widget-Eigenschaften zuweisen. Die Standardwerte zeigen auf `mihome-vacuum.0`; b
 Im Widget-Set **Mi Home Vacuum** das Widget **Staubsaugersteuerung mit Karte** auswählen. Die Einstellungen sind in Allgemein, Zustände und Steuerung,
 Wartung, Räume und Verlauf gegliedert.
 
+- **Instanzauswahl:** den **Status-Datenpunkt** (`info.state`) der gewünschten Adapterinstanz wählen. Alle leeren Datenpunkt-Attribute werden daraus
+  automatisch gefüllt, der Wechsel von `mihome-vacuum.0` auf eine andere Instanz ist damit ein Klick.
+- **Design:** das Widget folgt dem hellen oder dunklen Theme und der Primärfarbe des VIS-2-Projekts. Eine optionale **Akzentfarbe** überschreibt die
+  Primärfarbe.
+- **Saugstufen:** die wählbaren Stufen stammen aus dem Datenpunkt `control.fan_power` des Roboters, jedes Modell zeigt also seine eigenen Stufen. Die
+  drei Zahlenwerte dienen nur als Ersatz, wenn der Datenpunkt keine Stufenliste hat.
+- **Status- und Fehlertexte:** kommen aus den Datenpunkt-Definitionen des Adapters und werden übersetzt, wo eine Übersetzung vorliegt.
+- **Verlauf:** die Anzahl der angezeigten Reinigungen ist einstellbar.
+
 ![VIS-2-Saugroboter-Widget](admin/media/Vis%202%20VacuumControlWidget.png)
 
 ### Räume, Saugleistung und Darstellung
 
-Jeder Raumeintrag kann einen eigenen Anzeigenamen, Start-Datenpunkt, Saugleistungs-Datenpunkt und eine eigene Saugstufe besitzen. Die Zahlenwerte der
-Saugstufen sind konfigurierbar, weil Roborock-, Viomi- und Dreame-Modelle unterschiedliche Wertebereiche verwenden können.
+Mit **Räume automatisch erkennen** (Standard) zeigt das VIS-2-Widget alle Räume, die der Adapter unter `rooms.*` angelegt hat, inklusive eigener
+Saugstufe, wenn der Roboter das unterstützt. Ohne die Option lassen sich bis zu sechs Räume manuell mit Anzeigename, Start-Datenpunkt und
+Saugleistungs-Datenpunkt konfigurieren. Das VIS-1-Widget verwendet immer die manuelle Raumkonfiguration.
 
-Die Widgets erhalten das vollständige Seitenverhältnis der Karte und passen den Aufbau an die verfügbare Breite an. Ist ein Widget zu klein, wird der
-Inhalt gescrollt, statt Karte, Steuerelemente oder Wartungskarten zu überlagern.
+Die Widgets erhalten das vollständige Seitenverhältnis der Karte und passen den Aufbau an ihre eigene Breite an, nicht an das Browserfenster. Ist ein
+Widget zu klein, wird der Inhalt gescrollt, statt Karte, Steuerelemente oder Wartungskarten zu überlagern. Das Zurücksetzen eines
+Verbrauchsmaterial-Zählers fragt vorher nach einer Bestätigung.
 
 ### Verlauf im Widget
 
