@@ -352,7 +352,8 @@ requests.
 
 ### **WORK IN PROGRESS**
 
-* ()
+* (xXBJXx) Upgraded the Admin configuration and the VIS 2 widget to React 19, MUI 9, and `@iobroker/gui-components` 10 so the widget keeps working with upcoming VIS 2 releases
+* (xXBJXx) Updated `qs` to 6.16 and the VIS 2 type definitions and Module Federation tooling to their current versions
 
 ### 6.0.1 (2026-09-07)
 

@@ -567,10 +567,10 @@ export default class VacuumControlWidget extends (window.visRxWidget as typeof V
         if (!oid || this.props.editMode) {
             return;
         }
-        this.props.context.socket.setState(oid, value, (error?: Error | null) => {
-            if (error) {
-                window.console.warn(`Cannot write vacuum state ${oid}: ${error.message}`);
-            }
+        this.props.context.socket.setState(oid, value).catch((error: unknown) => {
+            window.console.warn(
+                `Cannot write vacuum state ${oid}: ${error instanceof Error ? error.message : String(error)}`,
+            );
         });
     };
 

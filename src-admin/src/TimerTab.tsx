@@ -94,13 +94,13 @@ export function TimerTab(props: TimerTabProps): React.JSX.Element {
                     <Stack
                         direction={{ xs: 'column', sm: 'row' }}
                         spacing={1}
-                        alignItems={{ sm: 'center' }}
+                        sx={{ alignItems: { sm: 'center' } }}
                     >
                         <Box sx={{ flex: 1, minWidth: 240 }}>
                             <Stack
                                 direction="row"
                                 spacing={1}
-                                alignItems="center"
+                                sx={{ alignItems: 'center' }}
                             >
                                 <ScheduleRounded color="primary" />
                                 <Typography variant="h6">{I18n.t('Timer')}</Typography>

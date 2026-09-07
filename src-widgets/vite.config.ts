@@ -8,8 +8,10 @@ import commonjs from 'vite-plugin-commonjs';
 import { defineConfig } from 'vite';
 
 const packageJson = JSON.parse(readFileSync(fileURLToPath(new URL('../package.json', import.meta.url)), 'utf8'));
+// @iobroker/types-vis-2 keeps the shared list in sync with what the vis-2 host provides: react, react-dom, the
+// JSX runtime, @emotion/react, @mui/private-theming, @mui/system and @mui/material as singletons. Icons are not
+// shared anymore and stay tree-shakeable inside the widget bundle.
 const shared = moduleFederationShared(packageJson);
-// Icons are imported by their individual entry points and should stay tree-shakeable.
 delete shared['@mui/icons-material'];
 
 export default defineConfig({
@@ -33,6 +35,8 @@ export default defineConfig({
     ],
     resolve: {
         tsconfigPaths: true,
+        // Same set as the shared modules above: the fallback copies inside the widget bundle must be unique too.
+        dedupe: ['react', 'react-dom', '@emotion/react', '@mui/material', '@mui/system', '@mui/icons-material'],
     },
     build: {
         target: 'chrome89',
