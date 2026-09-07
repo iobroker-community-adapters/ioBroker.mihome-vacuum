@@ -6,7 +6,7 @@ describe('ioBroker object TypeScript runtime catalog', () => {
     it('matches the reviewed complete recursive catalog fixture', () => {
         const digest = crypto.createHash('sha256').update(JSON.stringify(objects)).digest('hex');
 
-        assert.equal(digest, '50d814aecdd313ea2fce1068139311fc1ac5d96d8a28da7f2f12fe2a74137fec');
+        assert.equal(digest, '3c7a3e539f9affaf9432ce9bbd5a1ea2778301c34fab3a14ee9e65aa14d784d3');
     });
 
     it('preserves every top-level catalog consumed by runtime managers', () => {

@@ -330,4 +330,46 @@ describe('VacuumManager object lookup', () => {
         ]);
         await manager.close();
     });
+
+    it('requests the cleaning summary for the getCleaningSummary message', async () => {
+        const calls = [];
+        const { manager } = createManager(async (method, params) => {
+            calls.push({ method, params });
+            return { result: [1, 2, 3] };
+        });
+
+        const response = await manager.onMessage({ command: 'getCleaningSummary', message: {} });
+
+        assert.deepEqual(calls, [{ method: 'get_clean_summary', params: undefined }]);
+        assert.deepEqual(response, { result: [1, 2, 3] });
+        await manager.close();
+    });
+
+    it('keeps a separate handle for every pending delay and cancels all of them on close', async () => {
+        const clock = sinon.useFakeTimers();
+        try {
+            const { manager } = createManager();
+            let settled = 0;
+
+            const first = manager.delay(1_000).then(() => settled++);
+            const second = manager.delay(1_000).then(() => settled++);
+            const pendingKeys = Object.keys(manager.globalTimeouts).filter(key => key.startsWith('delay_'));
+            assert.equal(pendingKeys.length, 2);
+
+            await clock.tickAsync(1_000);
+            await Promise.all([first, second]);
+            assert.equal(settled, 2);
+            assert.deepEqual(
+                Object.keys(manager.globalTimeouts).filter(key => manager.globalTimeouts[key]),
+                [],
+            );
+
+            void manager.delay(5_000);
+            await manager.close();
+            await clock.tickAsync(5_000);
+            assert.equal(settled, 2);
+        } finally {
+            clock.restore();
+        }
+    });
 });

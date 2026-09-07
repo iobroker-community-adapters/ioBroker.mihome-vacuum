@@ -100,6 +100,7 @@ const defaultNative: VacuumNative = {
     manager: '',
     enableMiMap: false,
     enableSelfCommands: false,
+    enableAlexa: false,
     enableAdvancedDebug: false,
     sendPauseBeforeHome: false,
     enableResumeZone: false,
@@ -895,6 +896,15 @@ class App extends GenericApp<GenericAppProps, VacuumAdminState> {
                                     />
                                 }
                                 label={I18n.t('Send own commands')}
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={this.state.native.enableAlexa}
+                                        onChange={event => this.updateNative('enableAlexa', event.target.checked)}
+                                    />
+                                }
+                                label={I18n.t('Add Alexa/IoT states')}
                             />
                             <FormControlLabel
                                 control={

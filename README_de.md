@@ -156,6 +156,7 @@ Der Tab Verbindung enthält die Xiaomi-Cloud-Anmeldung, die Gerätesuche und die
 - **Karte aus der Xiaomi Cloud aktivieren:** aktiviert den Xiaomi-Cloud-Kartenabruf und benötigt eine gültige Cloud-Sitzung.
 - **Valetudo aktivieren:** verwendet eine kompatible lokale Valetudo-Kartenquelle.
 - **Eigene Befehle senden:** erzeugt die Experten-Datenpunkte `control.X_send_command` und `control.X_get_response`.
+- **Alexa/IoT-Datenpunkte anlegen:** erzeugt zusätzlich `control.pauseResume` für Sprachassistenten und IoT-Anbindungen. `control.clean_home` ist immer vorhanden.
 - **Pause senden vor Zuhause:** sendet bei Modellen, die dies benötigen, zuerst Pause und danach den Befehl zur Ladestation.
 - **Pausierte Zonenreinigung mit Start fortsetzen:** setzt eine unterbrochene Zonenreinigung fort, statt eine vollständige Reinigung zu starten.
 - **Erweiterte Diagnoseprotokollierung:** ergänzt ausführliche, bereinigte Debug-Ausgaben. Diese Option nur vorübergehend zur Fehlersuche aktivieren.

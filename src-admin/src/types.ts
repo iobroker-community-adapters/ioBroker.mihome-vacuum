@@ -26,6 +26,7 @@ export interface VacuumNative extends Record<string, unknown> {
     manager: string;
     enableMiMap: boolean;
     enableSelfCommands: boolean;
+    enableAlexa: boolean;
     enableAdvancedDebug: boolean;
     sendPauseBeforeHome: boolean;
     enableResumeZone: boolean;

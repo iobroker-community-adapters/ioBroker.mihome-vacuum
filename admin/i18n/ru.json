@@ -388,5 +388,6 @@
     "water filter reset": "сброс фильтра воды",
     "waterFilter": "Water filter",
     "waterFilterOid": "Water filter lifetime",
-    "waterFilterResetOid": "Reset water filter"
+    "waterFilterResetOid": "Reset water filter",
+    "Add Alexa/IoT states": "Добавить состояния Alexa/IoT"
 }
