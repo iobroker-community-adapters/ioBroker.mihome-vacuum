@@ -909,19 +909,6 @@ const objects = {
             native: {},
         },
         {
-            _id: 'goTo',
-            type: 'state',
-            common: {
-                name: 'Go to point',
-                type: 'string',
-                def: '',
-                read: true,
-                write: true,
-                desc: 'let the vacuum go to a point on the map',
-            },
-            native: {},
-        },
-        {
             _id: 'zoneClean',
             type: 'state',
             common: {

@@ -51,6 +51,18 @@ describe('MapHelper logging', () => {
         assert.equal(debugMessages.some(message => message.includes(sensitiveLocationMarker)), false);
     });
 
+    it('rejects a map update when neither the cloud map nor Valetudo is enabled', async () => {
+        const mapHelper = new MapHelper({}, createAdapter());
+        mapHelper.getMapURL = async () => {
+            throw new Error('must not be called');
+        };
+        mapHelper.getMapBase64 = async () => {
+            throw new Error('must not be called');
+        };
+
+        await assert.rejects(mapHelper.updateMap('map-without-source'), /No map source enabled/);
+    });
+
     it('shuts down its cloud connector once', async () => {
         const adapter = {
             config: {},

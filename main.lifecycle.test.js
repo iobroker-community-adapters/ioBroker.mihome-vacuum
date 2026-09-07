@@ -11,6 +11,8 @@ class FakeAdapter extends EventEmitter {
         this.warnMessages = [];
         this.errorMessages = [];
         this.sentMessages = [];
+        this.createdObjects = [];
+        this.deletedObjects = [];
         this.log = {
             debug: message => this.debugMessages.push(String(message)),
             info: () => undefined,
@@ -19,9 +21,13 @@ class FakeAdapter extends EventEmitter {
         };
     }
 
-    async setObjectNotExistsAsync() {}
+    async setObjectNotExistsAsync(id) {
+        this.createdObjects.push(id);
+    }
     async extendObjectAsync() {}
-    async delObjectAsync() {}
+    async delObjectAsync(id) {
+        this.deletedObjects.push(id);
+    }
     async getStateAsync() {
         return null;
     }
@@ -34,9 +40,10 @@ class FakeAdapter extends EventEmitter {
 }
 
 /**
- * @param {{ closeThrows?: boolean, managerCloseThrows?: boolean, managerReadyRejects?: boolean, managerCommandRejects?: boolean, managerStateChangeRejects?: boolean, modelResponses?: object[] }} [options]
+ * @param {{ closeThrows?: boolean, managerCloseThrows?: boolean, managerReadyRejects?: boolean, managerCommandRejects?: boolean, managerStateChangeRejects?: boolean, modelResponses?: object[], config?: object }} [options]
  */
 function createAdapter({
+    config = {},
     closeThrows = false,
     managerCloseThrows = false,
     managerReadyRejects = false,
@@ -111,6 +118,7 @@ function createAdapter({
             config: {
                 token: '00000000000000000000000000000000',
                 pingInterval: 20000,
+                ...config,
             },
         }),
         counters,
@@ -531,5 +539,35 @@ describe('Adapter unload lifecycle', () => {
         assert.equal(adapter.unsupportedFeatures, '|segemntCleanRepeat|');
         assert.equal(adapter.warnMessages.includes('Could not persist a detected unsupported device feature'), true);
         assert.equal(adapter.warnMessages.join('\n').includes('SENSITIVE_UNSUPPORTED_WRITE_MARKER'), false);
+    });
+
+    it('answers the legacy send command exactly once without forwarding it to the manager', async () => {
+        const { adapter } = createAdapter();
+
+        await adapter.main();
+        await adapter.getModel();
+        await adapter.onMessage({ command: 'send', message: { text: 'hello' }, from: 'script', callback: 'request' });
+
+        assert.deepEqual(
+            adapter.sentMessages.map(message => message.response),
+            ['Message received'],
+        );
+        await adapter.onUnload(() => undefined);
+    });
+
+    it('always creates clean_home and adds the IoT states only when enableAlexa is set', async () => {
+        const withoutAlexa = createAdapter().adapter;
+        await withoutAlexa.main();
+        assert.equal(withoutAlexa.createdObjects.includes('control.clean_home'), true);
+        assert.equal(withoutAlexa.createdObjects.includes('control.pauseResume'), false);
+        assert.equal(withoutAlexa.deletedObjects.includes('control.pauseResume'), true);
+        await withoutAlexa.onUnload(() => undefined);
+
+        const withAlexa = createAdapter({ config: { enableAlexa: true } }).adapter;
+        await withAlexa.main();
+        assert.equal(withAlexa.createdObjects.includes('control.clean_home'), true);
+        assert.equal(withAlexa.createdObjects.includes('control.pauseResume'), true);
+        assert.equal(withAlexa.deletedObjects.includes('control.pauseResume'), false);
+        await withAlexa.onUnload(() => undefined);
     });
 });

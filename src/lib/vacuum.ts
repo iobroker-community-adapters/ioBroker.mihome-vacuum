@@ -55,6 +55,7 @@ class VacuumManager {
         this.carpetModeSettings = { ...defaultCarpetModeSettings };
         this.adapter = adapterInstance;
         this.globalTimeouts = {};
+        this.delayCounter = 0;
         this.closed = false;
         this.logEntries = [];
         this.Error = false;
@@ -428,7 +429,14 @@ class VacuumManager {
     }
 
     async delay(time) {
-        return new Promise(resolve => (this.globalTimeouts['delay'] = this.adapter.setTimeout(resolve, time)));
+        // Every pending delay keeps its own handle so overlapping delays are all cancelled on close().
+        const key = `delay_${++this.delayCounter}`;
+        return new Promise<void>(resolve => {
+            this.globalTimeouts[key] = this.adapter.setTimeout(() => {
+                delete this.globalTimeouts[key];
+                resolve();
+            }, time);
+        });
     }
 
     async getMapData() {
@@ -1375,7 +1383,7 @@ class VacuumManager {
 
                 // get info about cleanups
                 case 'getCleaningSummary':
-                    return await this.Miio.sendMessage('reset_consumable', obj.message.consumable);
+                    return await this.Miio.sendMessage('get_clean_summary');
 
                 case 'getCleaningRecord':
                     // require the record id to be given

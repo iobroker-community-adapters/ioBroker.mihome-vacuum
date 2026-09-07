@@ -265,6 +265,7 @@
     "lib": "",
     "enableMiMap": false,
     "enableSelfCommands": false,
+    "enableAlexa": false,
     "enableAdvancedDebug": false,
     "sendPauseBeforeHome": false,
     "enableResumeZone": false,

@@ -637,23 +637,16 @@ export class MihomeVacuum extends utils.Adapter {
      * @param obj message object
      */
     async onMessage(obj) {
-        if (typeof obj === 'object' && obj.message) {
-            if (obj.command === 'send') {
-                // e.g. send email or pushover or whatever
-                this.log.info('send command');
-
-                // Send response in callback if required
-                if (obj.callback) {
-                    this.sendTo(obj.from, obj.command, 'Message received', obj.callback);
-                }
-            }
-        }
         // responds to the adapter that sent the original message
         const respond = response => obj.callback && this.sendTo(obj.from, obj.command, response, obj.callback);
 
         // handle the message
         if (obj) {
             switch (obj.command) {
+                case 'send':
+                    // Legacy template command: answer exactly once and never forward it to the manager.
+                    this.log.info('send command');
+                    return respond('Message received');
                 case 'discovery': {
                     if (!this.xiaomiApi) {
                         this.xiaomiApi = new XiaomiCloudConnector(this.log, obj.message.authObj, this);

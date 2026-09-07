@@ -149,6 +149,7 @@ The Connection tab contains Xiaomi Cloud authentication, device discovery, and t
 - **Enable map from Xiaomi Cloud:** enables Xiaomi Cloud map downloads. Requires an authenticated cloud session.
 - **Enable Valetudo:** uses a compatible local Valetudo map source.
 - **Send own commands:** creates the expert states `control.X_send_command` and `control.X_get_response`.
+- **Add Alexa/IoT states:** additionally creates `control.pauseResume` for voice assistants and IoT integrations. `control.clean_home` always exists.
 - **Send pause before home:** sends a pause before the return-to-dock command for models that require it.
 - **Resume paused zone cleaning with start button:** resumes an interrupted zone cleaning instead of starting a complete cleaning.
 - **Advanced diagnostic logging:** adds detailed, redacted debug information. Enable it only temporarily while troubleshooting.
@@ -355,6 +356,12 @@ requests.
 * (xXBJXx) Start directly from `build/main.js` and generate Admin/VIS bundles for npm packages instead of tracking build output in Git
 * (xXBJXx) Verify script-free package installation, generated UI assets, direct startup, and Compact Mode
 * (xXBJXx) Remove unused Chai test plugins, add VS Code metadata schema support, and annotate the optional Canvas dependency for the repository checker (#1222)
+* (xXBJXx) Allow Dependabot updates of GitHub Actions and dependency versions without failing the package policy tests (#1235)
+* (xXBJXx) Restore the "Add Alexa/IoT states" option in the Admin configuration so `control.pauseResume` is no longer deleted on every start
+* (xXBJXx) Fix the `getCleaningSummary` message, which sent a consumable reset instead of requesting the cleaning summary
+* (xXBJXx) Answer the legacy `send` message only once and no longer forward it to the device manager
+* (xXBJXx) Reject map updates with a clear error when neither the Xiaomi Cloud map nor Valetudo is enabled instead of leaving the request pending
+* (xXBJXx) Track every pending internal delay separately so all of them are cancelled on unload, and remove a duplicated `control.goTo` definition
 
 ### 6.0.0 (2026-08-26)
 

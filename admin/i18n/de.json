@@ -388,5 +388,6 @@
     "water filter reset": "Wasser Filter zurücksetzen",
     "waterFilter": "Wasserfilter",
     "waterFilterOid": "Lebensdauer des Wasserfilters",
-    "waterFilterResetOid": "Wasserfilter zurücksetzen"
+    "waterFilterResetOid": "Wasserfilter zurücksetzen",
+    "Add Alexa/IoT states": "Alexa/IoT-Datenpunkte anlegen"
 }

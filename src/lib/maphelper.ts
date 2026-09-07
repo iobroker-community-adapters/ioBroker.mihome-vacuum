@@ -202,6 +202,12 @@ class MapHelper {
                 this.getMapBase64()
                     .then(mapData => resolve(mapData))
                     .catch(error => reject(error));
+            } else {
+                reject(
+                    new Error(
+                        'No map source enabled; enable the Xiaomi Cloud map or Valetudo in the adapter configuration',
+                    ),
+                );
             }
         });
     }
