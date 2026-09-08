@@ -287,6 +287,17 @@ maintenance, rooms, and history.
   numeric fallback values are only used when the state has no level catalogue.
 - **Status and error texts:** taken from the adapter's state definitions and translated where a translation exists.
 - **History:** the number of shown cleaning runs is configurable.
+- **Cleaning settings:** water level, mop mode and carpet mode appear as controls when your robot provides the matching states. The
+  instance selection also finds the Viomi and Dreame variants of these states.
+- **Dock station:** shows the dock status and offers emptying the dust bin as well as washing and drying the mop for robots with such
+  a station.
+- **Maps:** robots with several maps get a map selector on the map image, and **Reload map** fetches the current map from the robot.
+- **Schedule:** shows the do-not-disturb state, the next timer and every timer created in the adapter configuration. A timer can be
+  switched on or off, skipped once or started immediately from the widget. The section can be hidden with **Show schedule**.
+
+Every control appears only when the adapter created the matching state for your robot, so the widget adapts to the feature set of
+the model. Widgets created with an earlier adapter version pick up the new states of their instance automatically; the attributes in
+the widget settings only need to be changed when a state should point somewhere else.
 
 ![VIS 2 vacuum widget](admin/media/Vis%202%20VacuumControlWidget.png)
 
@@ -363,6 +374,8 @@ requests.
 
 ### **WORK IN PROGRESS**
 
+* (xXBJXx) Completed the Spanish, French, Italian, Dutch, Polish, Portuguese, Russian, Ukrainian and Chinese translations of the Admin configuration and both widgets; they previously showed English texts
+* (xXBJXx) VIS 2 widget: added water level, mop mode and carpet mode controls, dock station status and actions, map selection and reload, and a schedule section with do-not-disturb, next timer and timer switches; every control appears only when the robot provides the matching state, and the instance selection also finds the Viomi and Dreame state names
 * (xXBJXx) Reworked the VIS 2 widget: it follows the VIS 2 theme with an optional accent color, lays itself out by its own width, fills all state attributes from the selected instance, detects rooms automatically, takes suction levels and status texts from the adapter states, confirms resets in a dialog, and has a configurable history length
 * (xXBJXx) VIS 1 widget: respect the configured widget size instead of forcing 1280x800 and label the map image correctly
 * (xXBJXx) Upgraded the Admin configuration and the VIS 2 widget to React 19, MUI 9, and `@iobroker/gui-components` 10 so the widget keeps working with upcoming VIS 2 releases while staying compatible with the current VIS 2

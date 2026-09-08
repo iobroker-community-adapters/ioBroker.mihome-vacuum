@@ -72,6 +72,7 @@ const FAN_LABEL_KEYS: Record<string, string> = {
     SILENT: 'quiet',
     BALANCED: 'balanced',
     STANDARD: 'balanced',
+    MEDIUM: 'medium',
     TURBO: 'turbo',
     MAXIMUM: 'maximum',
     MAX: 'maximum',
@@ -79,6 +80,35 @@ const FAN_LABEL_KEYS: Record<string, string> = {
     CUSTOM: 'custom',
     OFF: 'off',
     MOP: 'mop',
+};
+
+/**
+ * Names used by the water level, mop mode and dock status catalogues of the Roborock, Viomi and
+ * Dreame managers, mapped to translation keys. Unknown names are shown as they are.
+ */
+export const CATALOG_LABEL_KEYS: Record<string, string> = {
+    OFF: 'off',
+    LOW: 'low',
+    MEDIUM: 'medium',
+    HIGH: 'high',
+    NORMAL: 'normal',
+    STANDARD: 'standard',
+    CUSTOM: 'custom',
+    DEEP: 'deep',
+    DEEPPLUS: 'deepPlus',
+    VACUUM: 'vacuum',
+    VACUUMANDMOP: 'vacuumAndMop',
+    MOP: 'mop',
+    OK: 'ok',
+    IDLE: 'idle',
+    WASHING: 'washing',
+    DRYING: 'drying',
+    RETURNING: 'returning',
+    PAUSED: 'paused',
+    'CLEAN ADD WATER': 'cleanAddWater',
+    'ADDING WATER': 'addingWater',
+    'WATER EMPTY': 'waterEmpty',
+    'WASTE WATER TANK FULL': 'wasteWaterTankFull',
 };
 
 /**
@@ -91,6 +121,93 @@ const FAN_LABEL_KEYS: Record<string, string> = {
  */
 function translateCatalogEntry(language: string, prefix: string, code: number, catalogText: string): string {
     return optionalText(language, `${prefix}_${code}`) ?? catalogText;
+}
+
+/**
+ * Translates the name of a catalogue entry when a translation key is mapped for it.
+ *
+ * @param name - text from the adapter's `common.states`
+ * @param language - widget language
+ * @param keys - name (upper case) to translation key
+ */
+export function catalogLabel(
+    name: string,
+    language: string,
+    keys: Record<string, string> = CATALOG_LABEL_KEYS,
+): string {
+    const key = keys[name.trim().toUpperCase()];
+    return (key ? optionalText(language, key) : undefined) ?? name;
+}
+
+/**
+ * Builds the selectable options of a numeric state from its `common.states` catalogue, sorted by
+ * value. Returns an empty list when the object has no catalogue.
+ *
+ * @param catalog - `common.states` of the object, if known
+ * @param language - widget language
+ * @param keys - name (upper case) to translation key; pass an empty object to keep the names verbatim
+ */
+export function buildOptions(
+    catalog: StateCatalog | undefined,
+    language: string,
+    keys: Record<string, string> = CATALOG_LABEL_KEYS,
+): FanOption[] {
+    if (!catalog) {
+        return [];
+    }
+    return Object.entries(catalog)
+        .map(([value, name]) => ({ value: Number(value), name: String(name) }))
+        .filter(entry => Number.isFinite(entry.value))
+        .sort((a, b) => a.value - b.value)
+        .map(entry => ({ value: entry.value, label: catalogLabel(entry.name, language, keys) }));
+}
+
+/**
+ * Formats a catalogue-backed value (water level, mop mode, dock status) for display.
+ *
+ * @param value - raw state value
+ * @param catalog - `common.states` of the object, if known
+ * @param language - widget language
+ * @param text - text lookup
+ */
+export function formatCatalogValue(
+    value: StateValue | undefined,
+    catalog: StateCatalog | undefined,
+    language: string,
+    text: TextFunction,
+): string {
+    if (value === undefined || value === null || value === '') {
+        return text('unknown');
+    }
+    const entry = catalog?.[String(value)];
+    if (entry) {
+        return catalogLabel(entry, language);
+    }
+    return typeof value === 'string' ? value : String(value);
+}
+
+export type DockLevel = 'good' | 'busy' | 'critical';
+
+/**
+ * Classifies the dock status: idle and ok are good, water or tank problems are critical, every
+ * other known state (washing, drying, filling) is a running activity.
+ *
+ * @param value - value of the dock status state
+ * @param catalog - `common.states` of the dock status object, if known
+ */
+export function dockLevel(value: StateValue | undefined, catalog: StateCatalog | undefined): DockLevel {
+    const numeric = Number(value);
+    if (value === undefined || value === null || value === '' || !Number.isFinite(numeric) || numeric === 0) {
+        return 'good';
+    }
+    const name = (catalog?.[String(numeric)] ?? '').toUpperCase();
+    if (name === 'OK' || name === 'IDLE') {
+        return 'good';
+    }
+    if (numeric >= 30 || /EMPTY|FULL|ERROR/.test(name)) {
+        return 'critical';
+    }
+    return 'busy';
 }
 
 /**
@@ -172,15 +289,7 @@ export function buildFanOptions(
     text: TextFunction,
 ): FanOption[] {
     if (catalog && Object.keys(catalog).length) {
-        return Object.entries(catalog)
-            .map(([value, name]) => ({ value: Number(value), name: String(name) }))
-            .filter(entry => Number.isFinite(entry.value))
-            .sort((a, b) => a.value - b.value)
-            .map(entry => {
-                const key = FAN_LABEL_KEYS[entry.name.toUpperCase()];
-                const label = key ? optionalText(language, key) : undefined;
-                return { value: entry.value, label: label ?? entry.name };
-            });
+        return buildOptions(catalog, language, FAN_LABEL_KEYS);
     }
     return [
         { value: fallback.quiet, label: text('quiet') },
@@ -230,4 +339,13 @@ export function formatMetric(value: StateValue | undefined, unit: string): strin
     const shown =
         typeof value === 'number' || Number.isFinite(numeric) ? String(Math.round(numeric * 100) / 100) : String(value);
     return unit ? `${shown} ${unit}` : shown;
+}
+
+/**
+ * Interprets a state value as boolean (`true`, `'true'`, `1` and `'1'` are on).
+ *
+ * @param value - raw state value
+ */
+export function isOn(value: StateValue | undefined): boolean {
+    return value === true || value === 'true' || value === 1 || value === '1';
 }

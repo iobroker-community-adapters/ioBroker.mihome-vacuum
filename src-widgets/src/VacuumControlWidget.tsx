@@ -10,15 +10,33 @@ import type {
 import type VisRxWidget from '@iobroker/types-vis-2/visRxWidget';
 
 import { Dashboard } from './components/Dashboard';
-import { AUTO_FILL_FIELDS, DEFAULT_BASE, collectInstanceChanges, instanceBaseFromId } from './lib/autofill';
+import {
+    DEFAULT_BASE,
+    autoFillCandidates,
+    collectInstanceChanges,
+    instanceBaseFromId,
+    missingAttributeCandidates,
+    resolveMissingAttributes,
+} from './lib/autofill';
 import { createText, type TextFunction } from './lib/i18n';
 import { roomsFromAttributes, roomsFromObjects } from './lib/rooms';
-import type { RoomDefinition, StateCatalog, StateValue, VacuumControlData } from './lib/types';
+import { timersFromObjects } from './lib/timers';
+import type {
+    ObjectMetaMap,
+    RoomDefinition,
+    StateCatalog,
+    StateValue,
+    TimerDefinition,
+    VacuumControlData,
+} from './lib/types';
 
 interface WidgetState extends Partial<VisRxWidgetState> {
-    catalogs: { state?: StateCatalog; error?: StateCatalog; fan?: StateCatalog };
+    meta: ObjectMetaMap;
     autoRooms: RoomDefinition[];
-    roomFans: Record<string, StateValue | undefined>;
+    timers: TimerDefinition[];
+    extraValues: Record<string, StateValue | undefined>;
+    /** Instance states resolved for attributes the widget never had (see `effectiveData`). */
+    resolved: Record<string, string>;
 }
 
 type SocketLike = {
@@ -33,6 +51,30 @@ type SocketLike = {
     subscribeState: (id: string | string[], cb: ioBroker.StateChangeHandler) => Promise<void>;
     unsubscribeState: (id: string | string[], cb?: ioBroker.StateChangeHandler) => void;
 };
+
+/**
+ * Attributes whose objects are read on mount and on every attribute change. The object tells
+ * whether the state exists (the matching control is shown only then) and provides the
+ * `common.states` catalogue for the level, mode, map and status selectors.
+ */
+const META_ATTRIBUTES: ReadonlyArray<keyof VacuumControlData> = [
+    'stateOid',
+    'errorOid',
+    'fanOid',
+    'mapSelectOid',
+    'mapReloadOid',
+    'waterOid',
+    'mopModeOid',
+    'carpetOid',
+    'dockStatusOid',
+    'dustCollectOid',
+    'washMopOid',
+    'pauseWashMopOid',
+    'startDryingOid',
+    'stopDryingOid',
+    'dndOid',
+    'nextTimerOid',
+];
 
 /**
  * Fills all empty (or still default) state attributes from the instance of the selected state,
@@ -54,8 +96,7 @@ async function fillFromInstance(
     if (!base) {
         return;
     }
-    const ids = AUTO_FILL_FIELDS.map(([, suffix]) => `${base}.${suffix}`);
-    const objects = (await socket.getObjectsById(ids)) ?? {};
+    const objects = (await socket.getObjectsById(autoFillCandidates(base))) ?? {};
     const changes = collectInstanceChanges(data, base, id => Boolean(objects[id]));
     if (Object.keys(changes).length) {
         changeData({ ...data, ...changes });
@@ -75,7 +116,7 @@ export default class VacuumControlWidget extends (window.visRxWidget as typeof V
     WidgetState
 >) {
     private unmounted = false;
-    private subscribedFans: string[] = [];
+    private subscribedExtra: string[] = [];
     private metaVersion = 0;
     private text: TextFunction = createText('en');
     private textLanguage = '';
@@ -110,6 +151,7 @@ export default class VacuumControlWidget extends (window.visRxWidget as typeof V
                         { name: 'showMap', type: 'checkbox', label: 'showMap', default: true },
                         { name: 'showMaintenance', type: 'checkbox', label: 'showMaintenance', default: true },
                         { name: 'showHistory', type: 'checkbox', label: 'showHistory', default: true },
+                        { name: 'showSchedule', type: 'checkbox', label: 'showSchedule', default: true },
                         { name: 'accentColor', type: 'color', label: 'accentColor', default: '' },
                     ],
                 },
@@ -126,6 +168,8 @@ export default class VacuumControlWidget extends (window.visRxWidget as typeof V
                             onChange: fillFromInstance,
                         },
                         { name: 'mapOid', type: 'id', label: 'mapOid', default: id('cleanmap.map64') },
+                        { name: 'mapSelectOid', type: 'id', label: 'mapSelectOid', default: id('cleanmap.actualMap') },
+                        { name: 'mapReloadOid', type: 'id', label: 'mapReloadOid', default: id('cleanmap.loadMap') },
                         { name: 'connectionOid', type: 'id', label: 'connectionOid', default: id('info.connection') },
                         { name: 'batteryOid', type: 'id', label: 'batteryOid', default: id('info.battery') },
                         { name: 'areaOid', type: 'id', label: 'areaOid', default: id('info.cleanedarea') },
@@ -139,6 +183,47 @@ export default class VacuumControlWidget extends (window.visRxWidget as typeof V
                         { name: 'fanQuiet', type: 'number', label: 'fanQuiet', default: 101 },
                         { name: 'fanBalanced', type: 'number', label: 'fanBalanced', default: 102 },
                         { name: 'fanTurbo', type: 'number', label: 'fanTurbo', default: 104 },
+                    ],
+                },
+                {
+                    name: 'settings',
+                    label: 'cleaningSettings',
+                    fields: [
+                        { name: 'waterOid', type: 'id', label: 'waterOid', default: id('control.water_box_mode') },
+                        { name: 'mopModeOid', type: 'id', label: 'mopModeOid', default: id('control.mop_mode') },
+                        { name: 'carpetOid', type: 'id', label: 'carpetOid', default: id('control.carpet_mode') },
+                    ],
+                },
+                {
+                    name: 'dock',
+                    label: 'dockStation',
+                    fields: [
+                        { name: 'dockStatusOid', type: 'id', label: 'dockStatusOid', default: id('info.dock_status') },
+                        {
+                            name: 'dustCollectOid',
+                            type: 'id',
+                            label: 'dustCollectOid',
+                            default: id('control.dustCollect'),
+                        },
+                        { name: 'washMopOid', type: 'id', label: 'washMopOid', default: id('control.washMop') },
+                        {
+                            name: 'pauseWashMopOid',
+                            type: 'id',
+                            label: 'pauseWashMopOid',
+                            default: id('control.pauseWashMop'),
+                        },
+                        {
+                            name: 'startDryingOid',
+                            type: 'id',
+                            label: 'startDryingOid',
+                            default: id('control.startDrying'),
+                        },
+                        {
+                            name: 'stopDryingOid',
+                            type: 'id',
+                            label: 'stopDryingOid',
+                            default: id('control.stopDrying'),
+                        },
                     ],
                 },
                 {
@@ -255,6 +340,24 @@ export default class VacuumControlWidget extends (window.visRxWidget as typeof V
                     ],
                 },
                 {
+                    name: 'schedule',
+                    label: 'schedule',
+                    fields: [
+                        {
+                            name: 'dndOid',
+                            type: 'id',
+                            label: 'dndOid',
+                            default: id('info.dnd'),
+                        },
+                        {
+                            name: 'nextTimerOid',
+                            type: 'id',
+                            label: 'nextTimerOid',
+                            default: id('info.nextTimer'),
+                        },
+                    ],
+                },
+                {
                     name: 'history',
                     label: 'history',
                     fields: [
@@ -323,40 +426,73 @@ export default class VacuumControlWidget extends (window.visRxWidget as typeof V
 
     componentWillUnmount(): void {
         this.unmounted = true;
-        this.unsubscribeFans();
+        this.unsubscribeExtra();
         super.componentWillUnmount();
     }
 
     /**
-     * Reads the `common.states` catalogues of the state, error and fan objects and discovers the
-     * rooms of the adapter instance. Runs on mount and whenever the widget attributes change.
+     * Reads the configured state objects (existence and `common.states` catalogues) and discovers
+     * the rooms and timers of the adapter instance. Runs on mount and whenever the attributes change.
      */
     private async refreshMeta(): Promise<void> {
         const version = ++this.metaVersion;
         const data = this.state.rxData;
-        const ids = [data.stateOid, data.errorOid, data.fanOid].filter(Boolean);
-        let objects: Record<string, ioBroker.Object> = {};
+        const base = instanceBaseFromId(data.stateOid);
+        // Attributes a widget never had (created before the attribute existed) are resolved from
+        // the instance, so the matching control appears without editing the widget. The base class
+        // does not subscribe to them, so they join the manual subscription below.
+        const attributes = data as unknown as Record<string, unknown>;
+        const candidateIds = base ? missingAttributeCandidates(attributes, base) : [];
+        const ids = [
+            ...new Set([
+                ...META_ATTRIBUTES.map(key => data[key]).filter(
+                    (value): value is string => typeof value === 'string' && value !== '',
+                ),
+                ...candidateIds,
+            ]),
+        ];
+        let objects: Record<string, ioBroker.Object | undefined> = {};
         try {
             objects = (ids.length ? await this.socket.getObjectsById(ids) : undefined) ?? {};
         } catch (error) {
             window.console.warn(`mihome-vacuum widget: cannot read state objects: ${String(error)}`);
         }
-        let autoRooms: RoomDefinition[] = [];
-        if (data.roomsAuto !== false) {
-            autoRooms = await this.discoverRooms(instanceBaseFromId(data.stateOid));
-        }
+        const resolved = resolveMissingAttributes(attributes, base, id => Boolean(objects[id]));
+        const [autoRooms, timers] = await Promise.all([
+            data.roomsAuto !== false ? this.discoverRooms(base) : Promise.resolve([]),
+            data.showSchedule !== false ? this.discoverTimers(base) : Promise.resolve([]),
+        ]);
         if (this.unmounted || version !== this.metaVersion) {
             return;
         }
-        this.patchState(() => ({
-            catalogs: {
-                state: catalogOf(objects[data.stateOid]),
-                error: catalogOf(objects[data.errorOid]),
-                fan: catalogOf(objects[data.fanOid]),
-            },
-            autoRooms,
-        }));
-        await this.subscribeFans(autoRooms.map(room => room.fanOid).filter(Boolean));
+        const meta: ObjectMetaMap = {};
+        for (const [id, object] of Object.entries(objects)) {
+            if (object) {
+                meta[id] = { type: object.type, states: catalogOf(object) };
+            }
+        }
+        this.patchState(() => ({ meta, autoRooms, timers, resolved }));
+        await this.subscribeExtra([
+            ...autoRooms.map(room => room.fanOid).filter(Boolean),
+            ...timers.map(timer => timer.oid),
+            ...Object.values(resolved),
+        ]);
+    }
+
+    /**
+     * Widget attributes with the resolved instance states filled in for attributes that were
+     * never configured. Explicitly emptied attributes stay empty.
+     */
+    private effectiveData(): VacuumControlData {
+        const data = this.state.rxData;
+        const resolved = this.state.resolved ?? {};
+        const merged: Record<string, unknown> = { ...data };
+        for (const [field, id] of Object.entries(resolved)) {
+            if (merged[field] === undefined) {
+                merged[field] = id;
+            }
+        }
+        return merged as unknown as VacuumControlData;
     }
 
     private async discoverRooms(base: string): Promise<RoomDefinition[]> {
@@ -382,54 +518,68 @@ export default class VacuumControlWidget extends (window.visRxWidget as typeof V
         }
     }
 
+    private async discoverTimers(base: string): Promise<TimerDefinition[]> {
+        if (!base) {
+            return [];
+        }
+        try {
+            const states = await this.socket.getObjectViewSystem('state', `${base}.timer.`, `${base}.timer.香`);
+            return timersFromObjects(base, Object.values(states ?? {}));
+        } catch (error) {
+            window.console.warn(`mihome-vacuum widget: cannot discover timers: ${String(error)}`);
+            return [];
+        }
+    }
+
     /**
-     * The room fan states are not part of the widget attributes, so they need their own subscription.
+     * The room fan states and the timer states are not part of the widget attributes, so they
+     * need their own subscription.
      *
      * @param id - state ID
      * @param state - new state or null when deleted
      */
-    private readonly onRoomFan: ioBroker.StateChangeHandler = (id, state) => {
+    private readonly onExtraState: ioBroker.StateChangeHandler = (id, state) => {
         if (this.unmounted) {
             return;
         }
         const value = (state?.val ?? undefined) as StateValue | undefined;
-        this.patchState(previous => ({ roomFans: { ...(previous.roomFans ?? {}), [id]: value } }));
+        this.patchState(previous => ({ extraValues: { ...(previous.extraValues ?? {}), [id]: value } }));
     };
 
-    private async subscribeFans(ids: string[]): Promise<void> {
+    private async subscribeExtra(ids: string[]): Promise<void> {
         const wanted = [...new Set(ids)].sort();
-        if (wanted.join('|') === this.subscribedFans.join('|')) {
+        if (wanted.join('|') === this.subscribedExtra.join('|')) {
             return;
         }
-        this.unsubscribeFans();
+        this.unsubscribeExtra();
         if (!wanted.length) {
             return;
         }
-        this.subscribedFans = wanted;
+        this.subscribedExtra = wanted;
         try {
-            await this.socket.subscribeState(wanted, this.onRoomFan);
+            await this.socket.subscribeState(wanted, this.onExtraState);
             const values = await Promise.all(wanted.map(id => this.socket.getState(id).catch(() => null)));
             if (this.unmounted) {
                 return;
             }
-            const roomFans: Record<string, StateValue | undefined> = {};
+            const extraValues: Record<string, StateValue | undefined> = {};
             wanted.forEach((id, index) => {
-                roomFans[id] = values[index]?.val ?? undefined;
+                extraValues[id] = values[index]?.val ?? undefined;
             });
-            this.patchState(previous => ({ roomFans: { ...(previous.roomFans ?? {}), ...roomFans } }));
+            this.patchState(previous => ({ extraValues: { ...(previous.extraValues ?? {}), ...extraValues } }));
         } catch (error) {
-            window.console.warn(`mihome-vacuum widget: cannot subscribe room states: ${String(error)}`);
+            window.console.warn(`mihome-vacuum widget: cannot subscribe additional states: ${String(error)}`);
         }
     }
 
-    private unsubscribeFans(): void {
-        if (this.subscribedFans.length) {
+    private unsubscribeExtra(): void {
+        if (this.subscribedExtra.length) {
             try {
-                this.socket.unsubscribeState(this.subscribedFans, this.onRoomFan);
+                this.socket.unsubscribeState(this.subscribedExtra, this.onExtraState);
             } catch {
                 // the socket may already be gone during unmount
             }
-            this.subscribedFans = [];
+            this.subscribedExtra = [];
         }
     }
 
@@ -451,15 +601,16 @@ export default class VacuumControlWidget extends (window.visRxWidget as typeof V
             this.textLanguage = language;
             this.text = createText(language);
         }
-        const data = this.state.rxData;
+        const data = this.effectiveData();
         const rooms = data.roomsAuto !== false ? (this.state.autoRooms ?? []) : roomsFromAttributes(data);
         return (
             <Dashboard
                 data={data}
                 values={this.state.values as Record<string, StateValue | undefined>}
-                catalogs={this.state.catalogs ?? {}}
+                meta={this.state.meta ?? {}}
                 rooms={rooms}
-                roomFans={this.state.roomFans ?? {}}
+                timers={this.state.timers ?? []}
+                extraValues={this.state.extraValues ?? {}}
                 language={language}
                 text={this.text}
                 editMode={this.props.editMode}

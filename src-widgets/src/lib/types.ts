@@ -9,8 +9,11 @@ export interface VacuumControlData {
     showMap: boolean;
     showMaintenance: boolean;
     showHistory: boolean;
+    showSchedule: boolean;
     accentColor: string;
     mapOid: string;
+    mapSelectOid: string;
+    mapReloadOid: string;
     connectionOid: string;
     stateOid: string;
     batteryOid: string;
@@ -22,6 +25,17 @@ export interface VacuumControlData {
     pauseOid: string;
     homeOid: string;
     findOid: string;
+    waterOid: string;
+    mopModeOid: string;
+    carpetOid: string;
+    dockStatusOid: string;
+    dustCollectOid: string;
+    washMopOid: string;
+    pauseWashMopOid: string;
+    startDryingOid: string;
+    stopDryingOid: string;
+    dndOid: string;
+    nextTimerOid: string;
     filterOid: string;
     filterResetOid: string;
     mainBrushOid: string;
@@ -103,6 +117,7 @@ export interface RoomItem extends RoomDefinition {
     fan: StateValue | undefined;
 }
 
+/** One selectable entry of a level or mode selector. */
 export interface FanOption {
     value: number;
     label: string;
@@ -110,5 +125,32 @@ export interface FanOption {
 
 /** `common.states` of a state object: value (as string key) to label. */
 export type StateCatalog = Record<string, string>;
+
+/** The parts of a state object the widget needs: its type and the value catalogue. */
+export interface ObjectMeta {
+    type?: string;
+    states?: StateCatalog;
+}
+
+/** Object metadata keyed by state ID; an ID without entry does not exist. */
+export type ObjectMetaMap = Record<string, ObjectMeta>;
+
+/** A cleaning timer of the adapter (`timer.<days>_<hour>_<minute>`). */
+export interface TimerDefinition {
+    oid: string;
+    /** Weekdays as `Date.getDay()` numbers (0 = Sunday). */
+    days: number[];
+    hour: number;
+    minute: number;
+    /** Room channels started by the timer, empty for a full clean. */
+    channels: string[];
+    /** Next run as reported by the adapter, empty when not calculated yet. */
+    nextRun: string;
+}
+
+export interface TimerItem extends TimerDefinition {
+    /** Timer state: -1 disabled, 0 skip next run, 1 enabled, 2 start now. */
+    value: number | undefined;
+}
 
 export type ContainerSize = 'narrow' | 'medium' | 'wide';

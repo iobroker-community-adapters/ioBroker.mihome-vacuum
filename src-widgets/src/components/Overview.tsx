@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Typography } from '@mui/material';
+import { Box, IconButton, MenuItem, Select, Tooltip, Typography } from '@mui/material';
 
 import {
     BatteryFullIcon,
@@ -9,6 +9,7 @@ import {
     MapIcon,
     PauseIcon,
     PlayArrowIcon,
+    RefreshIcon,
     ScheduleIcon,
     SquareFootIcon,
 } from '../icons';
@@ -24,6 +25,10 @@ export interface OverviewProps {
     size: ContainerSize;
     showMap: boolean;
     mapSource: string;
+    /** Selectable maps of a multi-map robot; the selector appears from two entries on. */
+    mapOptions: FanOption[];
+    mapValue: StateValue | undefined;
+    hasMapReload: boolean;
     battery: string;
     area: string;
     time: string;
@@ -33,6 +38,8 @@ export interface OverviewProps {
     fan: StateValue | undefined;
     fanOptions: FanOption[];
     onFan: (value: number) => void;
+    onMap: (value: number) => void;
+    onMapReload: () => void;
     onStart: () => void;
     onPause: () => void;
     onHome: () => void;
@@ -46,6 +53,15 @@ export interface OverviewProps {
 export const Overview = React.memo(function Overview(props: OverviewProps): React.JSX.Element {
     const { theme, text, size } = props;
     const sideBySide = props.showMap && size === 'wide';
+    const mapNumeric = Number(props.mapValue);
+    const mapSelected =
+        props.mapValue !== undefined &&
+        props.mapValue !== null &&
+        props.mapValue !== '' &&
+        props.mapOptions.some(option => option.value === mapNumeric)
+            ? mapNumeric
+            : '';
+    const showMapTools = props.showMap && (props.mapOptions.length > 1 || props.hasMapReload);
     return (
         <Box
             sx={{
@@ -98,6 +114,70 @@ export const Overview = React.memo(function Overview(props: OverviewProps): Reac
                             <Typography variant="body2">{text('noMapAvailable')}</Typography>
                         </Box>
                     )}
+                    {showMapTools ? (
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: 8,
+                                right: 8,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                                zIndex: 1,
+                            }}
+                        >
+                            {props.mapOptions.length > 1 ? (
+                                <Select
+                                    size="small"
+                                    value={mapSelected}
+                                    displayEmpty
+                                    onChange={event => props.onMap(Number(event.target.value))}
+                                    inputProps={{ 'aria-label': text('selectMap') }}
+                                    MenuProps={{ disablePortal: false }}
+                                    sx={{
+                                        ...theme.select,
+                                        minWidth: 130,
+                                        bgcolor: theme.surfaceBg,
+                                        '& .MuiSelect-select': { py: 0.55, fontSize: 13, fontWeight: 700 },
+                                    }}
+                                >
+                                    {mapSelected === '' ? (
+                                        <MenuItem
+                                            value=""
+                                            disabled
+                                        >
+                                            {text('selectMap')}
+                                        </MenuItem>
+                                    ) : null}
+                                    {props.mapOptions.map(option => (
+                                        <MenuItem
+                                            key={option.value}
+                                            value={option.value}
+                                        >
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            ) : null}
+                            {props.hasMapReload ? (
+                                <Tooltip title={text('reloadMap')}>
+                                    <IconButton
+                                        size="small"
+                                        aria-label={text('reloadMap')}
+                                        onClick={props.onMapReload}
+                                        sx={{
+                                            color: theme.muted,
+                                            bgcolor: theme.surfaceBg,
+                                            border: `1px solid ${theme.panelBorder}`,
+                                            '&:hover': { color: theme.accent, bgcolor: theme.surfaceBg },
+                                        }}
+                                    >
+                                        <RefreshIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                            ) : null}
+                        </Box>
+                    ) : null}
                 </Box>
             ) : null}
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25, minWidth: 0 }}>
