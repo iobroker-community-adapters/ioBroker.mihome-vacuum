@@ -559,6 +559,17 @@ describe('Runtime dependencies', () => {
             assert.match(source, /history\.total_time/);
             assert.match(source, /history\.total_cleanups/);
             assert.match(source, /room/i);
+            // Stage-2 controls exist in both widget generations.
+            assert.match(source, /control\.water_box_mode/);
+            assert.match(source, /control\.mop_mode/);
+            assert.match(source, /control\.carpet_mode/);
+            assert.match(source, /info\.dock_status/);
+            assert.match(source, /control\.dustCollect/);
+            assert.match(source, /control\.washMop/);
+            assert.match(source, /cleanmap\.actualMap/);
+            assert.match(source, /cleanmap\.loadMap/);
+            assert.match(source, /info\.dnd/);
+            assert.match(source, /info\.nextTimer/);
         }
         assert.match(legacyWidget, /resetConsumable/);
         assert.match(legacyWidget, /showPanel/);
@@ -566,6 +577,23 @@ describe('Runtime dependencies', () => {
         assert.match(legacyWidgetCss, /aspect-ratio:\s*16\s*\/\s*10/);
         assert.match(legacyWidget, /class="mihome-vacuum-map-image"/);
         assert.doesNotMatch(legacyWidget, /width: 1280px; height: 800px/);
+        // VIS 1 parity with the React widget: SVG icons instead of Unicode glyphs, the stage-2
+        // controls, manager-specific auto-fill alternatives, translated state/error codes and a
+        // layout that follows the widget width.
+        assert.doesNotMatch(legacyWidget, /[◈≋✣⌁▱▦▣◉●⌂◷◇▰⌗▶Ⅱ⌖⚙↻◴]/);
+        assert.match(legacyWidget, /<svg class="mihome-vacuum-icon/);
+        assert.match(legacyWidget, /oid-water\/id;oid-mop-mode\/id;oid-carpet\/id;oid-dock-status\/id/);
+        assert.match(legacyWidget, /oid-map-select\/id;oid-map-reload\/id/);
+        assert.match(legacyWidget, /oid-dnd\/id;oid-next-timer\/id/);
+        assert.match(legacyWidget, /history-limit\[12\]\/number/);
+        assert.match(legacyWidget, /'setting\.water_grade'/);
+        assert.match(legacyWidget, /'info\.dock_state'/);
+        assert.match(legacyWidget, /trOpt\('state_' \+ /);
+        assert.match(legacyWidget, /trOpt\('error_' \+ /);
+        assert.match(legacyWidget, /setToggle/);
+        assert.match(legacyWidgetCss, /container-type:\s*inline-size/);
+        assert.match(legacyWidgetCss, /@container mihome-vacuum \(max-width: 700px\)/);
+        assert.doesNotMatch(legacyWidgetCss, /@media/);
         assert.match(legacyWidgetCss, /\.mihome-vacuum-map-image\s*{[^}]*position:\s*absolute/s);
         assert.match(legacyWidgetCss, /\.mihome-vacuum-map-image\s*{[^}]*background-size:\s*contain/s);
         assert.match(legacyWidgetCss, /\.mihome-vacuum-panels\s*{[^}]*display:\s*flex/s);
@@ -635,9 +663,16 @@ describe('Runtime dependencies', () => {
             'quickControls',
             'startRoom',
             'noCleaningHistory',
-            'mihome_vacuum_title',
-            'mihome_vacuum_roomsAuto',
-            'mihome_vacuum_accentColor',
+            'title',
+            'roomsAuto',
+            'accentColor',
+            'mihome_vacuum_widget',
+            'mihome_vacuum_widget_set',
+            'oid-water',
+            'oid-dock-status',
+            'oid-map-select',
+            'history-limit',
+            'show-schedule',
             'confirm',
             'cancel',
             'state_5',
