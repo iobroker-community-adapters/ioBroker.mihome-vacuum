@@ -60,6 +60,25 @@ not guaranteed until they have been tested. Available functions can also vary wi
 
 `✅` means that the function is supported for the documented model. `—` means that the adapter does not currently provide that function for the model.
 
+### Requesting support for a new model
+
+The adapter picks its device library from the first part of the model id, the part before the first dot: `roborock` and `rockrobo` use
+the Roborock library, `viomi` the Viomi library, `dreame` and `xiaomi` the Dreame/MIOT library. A model of one of these families that is
+not listed above usually works with the same library: basic control, status, battery, consumables and cleaning history are available when
+the robot uses the standard properties, and properties the robot does not expose stay empty. If such a model works for you, open an issue
+with the model id and firmware version so it can be added to the table.
+
+If the log shows `Model <id> not supported! You can try to setup manually a library in settings.`, the model id starts with a prefix the
+adapter does not know (for example `ijai` or `xtl`). The adapter then creates no states although the instance is running. You can force one
+of the libraries with the **Manager** option in the instance settings; devices that use the MIOT protocol sometimes work with the Dreame
+library. A library of its own for a new vendor needs the MIOT specification of the model (`https://home.miot-spec.com/spec/<model id>`)
+and someone who owns the device and can test.
+
+Every request or bug report should contain the model id and firmware (`deviceInfo.model`, `deviceInfo.fw_ver`), the adapter, js-controller
+and Node.js versions, which states work and which do not, and the debug log around the problem, especially the lines containing
+`Device model detected`, `MIIO request` and `Status update:`. For map problems add the value of `auth.status` and the output of
+`npm ls canvas` from the ioBroker directory. Remove tokens, login links, cloud sessions and IP addresses before posting.
+
 ## Disclaimer
 
 All product and company names, logos, and trademarks mentioned in this project belong to their respective owners. Xiaomi, Mi Home, Roborock, Viomi,
@@ -378,6 +397,8 @@ requests.
     * ()
 -->
 ### **WORK IN PROGRESS**
+
+* (xXBJXx) Documented how new models are supported and rewrote the GitHub issue templates as English forms
 
 ### 6.1.0 (2026-09-08)
 

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+    - name: Documentation
+      url: https://github.com/iobroker-community-adapters/ioBroker.mihome-vacuum#readme
+      about: Supported devices, configuration, Xiaomi Cloud login, maps, widgets and troubleshooting.
+    - name: ioBroker forum
+      url: https://forum.iobroker.net/
+      about: Questions about setup and usage are best asked in the forum.

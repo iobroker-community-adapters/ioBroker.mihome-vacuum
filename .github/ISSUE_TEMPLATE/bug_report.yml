@@ -1,0 +1,77 @@
+name: Bug report
+description: Something does not work as it should
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Please test with the current adapter release from npm before reporting. A debug log is needed for almost every problem; without it the cause usually cannot be found. Remove tokens, login links, cloud sessions and IP addresses from everything you post.
+    - type: textarea
+      id: description
+      attributes:
+          label: What happens
+          description: What you did, what you expected and what happened instead.
+      validations:
+          required: true
+    - type: input
+      id: adapter
+      attributes:
+          label: Adapter version
+          description: Must be the current release (6.1.0 or newer).
+      validations:
+          required: true
+    - type: input
+      id: controller
+      attributes:
+          label: js-controller and Admin versions
+          placeholder: js-controller 7.2.2, Admin 7.8.23
+      validations:
+          required: true
+    - type: input
+      id: node
+      attributes:
+          label: Node.js version and operating system
+          placeholder: Node.js 22.13.0, Debian 12
+      validations:
+          required: true
+    - type: input
+      id: model
+      attributes:
+          label: Model and firmware
+          description: Values of `deviceInfo.model` and `deviceInfo.fw_ver`.
+          placeholder: roborock.vacuum.a15, 4.1.3-0812
+      validations:
+          required: true
+    - type: dropdown
+      id: auth
+      attributes:
+          label: Xiaomi Cloud login (`auth.status`)
+          description: Only relevant for map and discovery problems; local control does not need the cloud.
+          options:
+              - not used
+              - not_authenticated
+              - waiting_for_scan
+              - waiting_for_confirmation
+              - authenticated
+              - expired
+              - error
+    - type: textarea
+      id: log
+      attributes:
+          label: Debug log
+          description: Log level **debug**, from the adapter start until the problem occurs. For control problems the lines containing `Device model detected`, `command:`, `MIIO request`, `Status update:` and `trigger cleaning` matter most.
+          render: text
+      validations:
+          required: true
+    - type: textarea
+      id: canvas
+      attributes:
+          label: Map rendering (only for map problems)
+          description: Output of `npm ls canvas` from the ioBroker directory and the value of `cleanmap.mapStatus`.
+          render: text
+    - type: checkboxes
+      id: redacted
+      attributes:
+          label: Privacy
+          options:
+              - label: I removed tokens, login links, cloud sessions and IP addresses from the log and the description.
+                required: true
