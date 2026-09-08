@@ -10,13 +10,27 @@ const root = path.join(__dirname, '..');
 const source = fs.readFileSync(path.join(root, 'widgets', 'mihome-vacuum.html'), 'utf8');
 const languages = ['de', 'en', 'es', 'fr', 'it', 'nl', 'pl', 'pt', 'ru', 'uk', 'zh-cn'];
 
-const bindScript = /<script type="text\/javascript">([\s\S]*?)<\/script>/.exec(source)[1];
+/**
+ * Fails loudly when the template structure the test relies on is missing.
+ *
+ * @template T
+ * @param {T | null | undefined} value - regex match or lookup result
+ * @returns {T} the value
+ */
+function required(value) {
+    if (value === null || value === undefined) {
+        throw new Error('The VIS 1 template does not have the expected structure');
+    }
+    return value;
+}
+
+const bindScript = required(/<script type="text\/javascript">([\s\S]*?)<\/script>/.exec(source))[1];
 // The template tag spans several lines and its data-vis-prev attribute contains a `>`; the tag
 // closes with a `>` on its own line.
 const tagStart = source.indexOf('id="tplMihomeVacuumControl"');
 const tagEnd = source.indexOf('\n>', tagStart) + 2;
 const templateEnd = source.lastIndexOf('</script>');
-const attributeDefinition = /data-vis-attrs="([^"]*)"/.exec(source.slice(tagStart, tagEnd))[1];
+const attributeDefinition = required(/data-vis-attrs="([^"]*)"/.exec(source.slice(tagStart, tagEnd)))[1];
 const template = source.slice(tagEnd, templateEnd);
 
 const dictionaries = Object.fromEntries(
@@ -34,10 +48,10 @@ const systemDictionary = Object.fromEntries(
 
 /** Attribute defaults as VIS 1 derives them from `name[default]/type`. */
 function defaultData() {
+    /** @type {Record<string, unknown>} */
     const data = {};
     for (const entry of attributeDefinition.split(';').filter(Boolean)) {
-        const match = /^([^[/]+)(?:\[([^\]]*)\])?\/(\w+)/.exec(entry);
-        const [, name, fallback, type] = match;
+        const [, name, fallback, type] = required(/^([^[/]+)(?:\[([^\]]*)\])?\/(\w+)/.exec(entry));
         if (fallback === undefined) {
             data[name] = '';
         } else if (type === 'checkbox') {
@@ -101,6 +115,7 @@ function render({ data = {}, states = {}, objects = {}, language = 'en', editMod
     };
     const context = vm.createContext({ vis, window: {}, console, systemDictionary, systemLang: language });
     vm.runInContext(bindScript, context);
+    /** @type {Record<string, unknown>} */
     const widgetData = { ...defaultData(), ...data };
     widgetData.attr = name => (name === 'wid' ? 'w1' : name === 'class' ? '' : widgetData[name]);
     const escape = value =>
