@@ -278,8 +278,14 @@ Auswahl der Saugleistung, Schnellsteuerung, bis zu sechs Räumen, Wartungsaktion
 
 ### VIS 1
 
-Im Widget-Set **mihome-vacuum** das Widget **Vacuum dashboard with map, maintenance and history** auswählen. Danach die benötigten Datenpunkte in den
-Widget-Eigenschaften zuweisen. Die Standardwerte zeigen auf `mihome-vacuum.0`; bei einer anderen Instanz müssen sie angepasst werden.
+Im Widget-Set **mihome-vacuum** das Widget **Vacuum dashboard with map, maintenance and history** auswählen. Zuerst den
+**Status-Datenpunkt** (`info.state`) der Instanz wählen: Das Widget füllt daraus alle anderen leeren Datenpunkt-Attribute, auch die
+Viomi- und Dreame-Varianten von Wasserstufe, Wischmodus und Stationsstatus.
+
+Das VIS-1-Widget bietet dieselben Bereiche wie das VIS-2-Widget: Wasserstufe, Wischmodus und Teppichmodus, die Basisstation mit ihren
+Aktionen, eine Kartenauswahl mit Neuladen bei mehreren Karten, den Nicht-stören-Status mit dem nächsten Timer und eine einstellbare
+Anzahl an Verlaufseinträgen. Jeder Bereich erscheint nur, wenn sein Datenpunkt zugewiesen ist; Datenpunkte für Funktionen, die der
+Roboter nicht hat, bleiben daher leer. Timer lassen sich nur in VIS 2 schalten, VIS 1 zeigt den nächsten geplanten Lauf.
 
 ![VIS-1-Saugroboter-Widget](admin/media/Vis%201%20VacuumControlWidget.png)
 

@@ -420,11 +420,32 @@ failure, but substantial new functionality should use code splitting where pract
 ### 11.1 VIS 1
 
 The classic EJS widget is `widgets/mihome-vacuum.html`; its styles are in
-`widgets/mihome-vacuum/css/mihome-vacuum.css`. It provides a responsive dashboard with map, live
-values, cleaning controls, consumable maintenance, protected reset actions, and cleaning history.
+`widgets/mihome-vacuum/css/mihome-vacuum.css`. It provides the same sections as the VIS 2 widget:
+map with selector and reload, live values, suction level, quick controls, cleaning settings (water
+level, mop mode, carpet mode), dock station, do-not-disturb and next timer, rooms, consumable
+maintenance with confirmed resets, and the cleaning history with a configurable length.
 
-VIS 1 attributes can auto-fill related object IDs after the user selects a state from an adapter
-instance. Keep write commands disabled in edit mode.
+Implementation notes:
+
+- `vis.binds['mihome-vacuum']` holds the Material icon path data (`icon(name)` renders an inline
+  SVG; no Unicode glyphs), the `catalog(oid, fallback)` helper that reads `common.states` from
+  `vis.objects` and falls back to the Roborock catalogues when the object is not loaded, and the
+  write helpers. Write commands stay disabled in edit mode.
+- `autoFill` maps every attribute to candidate state suffixes; `changedId` fills empty attributes
+  with the first candidate that exists in `vis.objects`, so Viomi (`control.water_grade`) and
+  Dreame (`setting.water_grade`, `info.dock_state`) instances are configured with one click.
+- Sections render only when their state attribute is set. Because the auto-fill only assigns
+  existing states, an unsupported feature stays hidden.
+- State and error texts use the `state_<n>` / `error_<n>` translation keys and fall back to the
+  built-in English catalogues; catalogue names (water level, mop mode, dock status) are translated
+  through the same key map as the VIS 2 widget.
+- Breakpoints are container queries on `.mihome-vacuum-widget`, so the layout follows the widget
+  width instead of the browser viewport.
+- `test/testLegacyWidget.js` compiles the EJS template with a small VIS 1 stub and renders the
+  model-dependent sections; run it after every template change.
+- VIS 1 translates attribute names by their raw name (`oid-water`, `history-limit`), so every new
+  attribute needs its own key in all 11 `admin/i18n` files. Timers cannot be switched in VIS 1 (no
+  object discovery at runtime); the widget shows `info.nextTimer` instead.
 
 ### 11.2 VIS 2
 

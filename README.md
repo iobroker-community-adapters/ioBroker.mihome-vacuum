@@ -269,8 +269,14 @@ suction-level selection, quick controls, up to six rooms, maintenance actions, a
 
 ### VIS 1
 
-Select the widget set **mihome-vacuum** and add **Vacuum dashboard with map, maintenance and history**. Assign the required object IDs in the widget
-properties. Defaults point to `mihome-vacuum.0`; change them when using another instance.
+Select the widget set **mihome-vacuum** and add **Vacuum dashboard with map, maintenance and history**. Select the **status state**
+(`info.state`) of your instance first: the widget fills every other empty state attribute from that instance, including the Viomi and
+Dreame variants of the water level, mop mode and dock states.
+
+The VIS 1 widget offers the same sections as the VIS 2 widget: water level, mop mode and carpet mode, the dock station with its
+actions, a map selector with reload for multi-map robots, the do-not-disturb state with the next timer, and a configurable number of
+history entries. Each section appears only when its state is assigned, so leave the states of features your robot does not have
+empty. Timers can only be switched in VIS 2; VIS 1 shows the next scheduled run.
 
 ![VIS 1 vacuum widget](admin/media/Vis%201%20VacuumControlWidget.png)
 
@@ -374,6 +380,8 @@ requests.
 
 ### **WORK IN PROGRESS**
 
+* (xXBJXx) VIS 1 widget: added the cleaning settings, dock station, map selection, do-not-disturb and next-timer sections of the VIS 2 widget, a configurable history length, manager-specific auto-fill of the state attributes, translated state and error texts in all languages, SVG icons instead of Unicode symbols, and a layout that follows the widget width
+* (xXBJXx) Removed 115 unused duplicate translation keys of the widget texts
 * (xXBJXx) Completed the Spanish, French, Italian, Dutch, Polish, Portuguese, Russian, Ukrainian and Chinese translations of the Admin configuration and both widgets; they previously showed English texts
 * (xXBJXx) VIS 2 widget: added water level, mop mode and carpet mode controls, dock station status and actions, map selection and reload, and a schedule section with do-not-disturb, next timer and timer switches; every control appears only when the robot provides the matching state, and the instance selection also finds the Viomi and Dreame state names
 * (xXBJXx) Reworked the VIS 2 widget: it follows the VIS 2 theme with an optional accent color, lays itself out by its own width, fills all state attributes from the selected instance, detects rooms automatically, takes suction levels and status texts from the adapter states, confirms resets in a dialog, and has a configurable history length
