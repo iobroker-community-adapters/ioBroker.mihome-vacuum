@@ -377,8 +377,9 @@ requests.
     ### **WORK IN PROGRESS**
     * ()
 -->
-
 ### **WORK IN PROGRESS**
+
+### 6.1.0 (2026-09-08)
 
 * (xXBJXx) VIS 1 widget: added the cleaning settings, dock station, map selection, do-not-disturb and next-timer sections of the VIS 2 widget, a configurable history length, manager-specific auto-fill of the state attributes, translated state and error texts in all languages, SVG icons instead of Unicode symbols, and a layout that follows the widget width
 * (xXBJXx) Removed 115 unused duplicate translation keys of the widget texts
