@@ -578,6 +578,33 @@ describe('Runtime dependencies', () => {
         assert.match(reactWidgetClass, /manualRoom\(6\)/);
         assert.match(reactWidgetClass, /onChange: fillFromInstance/);
         assert.match(reactWidgetClass, /roomsAuto/);
+        // Extended controls (map selection, water/mop/carpet, dock, schedule) appear only when the
+        // adapter created the matching state; the defaults point at the generic manager IDs.
+        for (const suffix of [
+            'cleanmap\\.actualMap',
+            'cleanmap\\.loadMap',
+            'control\\.water_box_mode',
+            'control\\.mop_mode',
+            'control\\.carpet_mode',
+            'info\\.dock_status',
+            'control\\.dustCollect',
+            'control\\.washMop',
+            'control\\.pauseWashMop',
+            'control\\.startDrying',
+            'control\\.stopDrying',
+            'info\\.dnd',
+            'info\\.nextTimer',
+        ]) {
+            assert.match(reactWidgetClass, new RegExp(suffix));
+        }
+        assert.match(reactWidget, /CleaningSettings/);
+        assert.match(reactWidget, /DockPanel/);
+        assert.match(reactWidget, /SchedulePanel/);
+        assert.match(reactWidget, /timersFromObjects\(/);
+        assert.match(reactWidget, /TIMER_START/);
+        assert.match(reactWidget, /startTimerNowConfirm/);
+        assert.match(reactWidget, /'setting\.water_grade'/);
+        assert.match(reactWidget, /'info\.dock_state'/);
         // The widget must not bundle MUI icons: they deep-import the MUI styled engine, which breaks on a
         // VIS 2 host with another MUI major. Icons come from the shared SvgIcon of the host instead.
         assert.doesNotMatch(reactWidget, /from '@mui\/icons-material/);
@@ -615,6 +642,13 @@ describe('Runtime dependencies', () => {
             'cancel',
             'state_5',
             'error_5',
+            'cleaningSettings',
+            'dockStation',
+            'schedule',
+            'waterOid',
+            'mapSelectOid',
+            'startTimerNowConfirm',
+            'wasteWaterTankFull',
         ]) {
             assert.equal(typeof english[key], 'string', `Missing shared widget translation ${key}`);
         }

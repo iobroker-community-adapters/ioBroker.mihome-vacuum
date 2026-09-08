@@ -436,19 +436,37 @@ The React widget lives in `src-widgets/src/`:
 | `components/Dashboard.tsx`    | Layout, tabs, derived values, memo-stable card lists, confirmation dialog                          |
 | `components/Overview.tsx`     | Map, key figures, suction selector, quick actions, robot health                                    |
 | `components/RoomPanel.tsx`    | Room cards (start + suction level)                                                                 |
+| `components/CleaningSettings.tsx` | Water level, mop mode and carpet mode (catalogue-driven selects and a switch)                 |
+| `components/DockPanel.tsx`    | Dock status and dust-collect / wash / dry actions                                                  |
+| `components/SchedulePanel.tsx` | Do-not-disturb, next timer and the timer rows (enable, skip once, start now)                     |
 | `components/Maintenance.tsx`  | Consumable cards                                                                                   |
 | `components/HistoryPanel.tsx` | Totals and cleaning runs                                                                           |
 | `components/FanSelect.tsx`, `ConfirmDialog.tsx`, `primitives.tsx` | Shared controls                                                |
 | `hooks/`                      | `useContainerWidth` (ResizeObserver) and `useStable`                                               |
-| `lib/`                        | Pure, React-free helpers: `format.ts`, `history.ts`, `autofill.ts`, `rooms.ts`, `i18n.ts`, `types.ts` |
+| `lib/`                        | Pure, React-free helpers: `format.ts`, `history.ts`, `autofill.ts`, `rooms.ts`, `timers.ts`, `i18n.ts`, `types.ts` |
 | `theme.ts`                    | Widget colors derived from the VIS 2 MUI theme (`useTheme`, `alpha`) with an optional accent color |
 | `icons.tsx`                   | Own `SvgIcon` components; the widget must not import `@mui/icons-material` (see below)             |
 
 Rules that follow from the runtime environment:
 
 - The class extends the VIS 2 `visRxWidget` base class, which collects the configured state IDs and
-  owns their subscriptions. The only manual subscription is the one for the fan states of
-  automatically detected rooms; it is diffed against the previous list and removed on unmount.
+  owns their subscriptions. The only manual subscription covers states outside the attributes: the
+  fan states of automatically detected rooms and the `timer.*` states; it is diffed against the
+  previous list and removed on unmount.
+- `refreshMeta()` reads the objects of the attributes listed in `META_ATTRIBUTES` and stores their
+  existence and `common.states` in `state.meta`. A control (water level, mop mode, carpet mode, dock
+  actions, map selector, schedule) is rendered only when its object exists, so the same widget fits
+  Roborock, Viomi and Dreame feature sets without per-model options.
+- `AUTO_FILL_FIELDS` lists alternative suffixes per attribute (for example `control.water_box_mode`,
+  `control.water_grade`, `setting.water_grade`); the instance auto-fill takes the first one that
+  exists. Add the alternative there when a manager creates a function under another ID.
+- Timers are discovered from `<instance>.timer.*` (`<days>_<HH>_<MM>`); the widget writes the
+  adapter's timer values (-1 disabled, 0 skip once, 1 enabled, 2 start now) and confirms "start now".
+- VIS 2 does not add defaults for attributes a saved widget does not have (only when the user
+  enables an attribute group). `resolveMissingAttributes` therefore resolves `undefined` attributes
+  to the first existing candidate of the instance at runtime (`state.resolved`, merged by
+  `effectiveData()`), and those states join the manual subscription because the base class only
+  subscribes to attribute values. An attribute emptied by the user (`''`) is never resolved.
 - Layout decisions use the widget's own width (`useContainerWidth`), never MUI viewport
   breakpoints: a narrow widget on a wide screen must get the compact layout.
 - Colors come from the host theme through `useWidgetTheme`; no hard-coded palette. `accentColor`

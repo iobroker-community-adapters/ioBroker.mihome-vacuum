@@ -296,6 +296,19 @@ Wartung, Räume und Verlauf gegliedert.
   drei Zahlenwerte dienen nur als Ersatz, wenn der Datenpunkt keine Stufenliste hat.
 - **Status- und Fehlertexte:** kommen aus den Datenpunkt-Definitionen des Adapters und werden übersetzt, wo eine Übersetzung vorliegt.
 - **Verlauf:** die Anzahl der angezeigten Reinigungen ist einstellbar.
+- **Reinigungseinstellungen:** Wasserstufe, Wischmodus und Teppichmodus erscheinen als Bedienelemente, wenn der Roboter die
+  passenden Datenpunkte liefert. Die Instanzauswahl findet auch die Viomi- und Dreame-Varianten dieser Datenpunkte.
+- **Basisstation:** zeigt den Stationsstatus und bietet bei Robotern mit passender Station das Leeren des Staubbehälters sowie das
+  Waschen und Trocknen des Mopps an.
+- **Karten:** Roboter mit mehreren Karten erhalten eine Kartenauswahl auf dem Kartenbild, **Karte neu laden** holt die aktuelle Karte
+  vom Roboter.
+- **Zeitplan:** zeigt den Nicht-stören-Status, den nächsten Timer und alle in der Adapterkonfiguration angelegten Timer. Ein Timer
+  lässt sich im Widget ein- oder ausschalten, einmal überspringen oder sofort starten. Der Bereich kann mit **Zeitplan anzeigen**
+  ausgeblendet werden.
+
+Jedes Bedienelement erscheint nur, wenn der Adapter den passenden Datenpunkt für den Roboter angelegt hat; das Widget passt sich so
+dem Funktionsumfang des Modells an. Mit einer älteren Adapterversion angelegte Widgets übernehmen die neuen Datenpunkte ihrer Instanz
+automatisch; die Attribute in den Widget-Einstellungen müssen nur geändert werden, wenn ein Datenpunkt woanders hinzeigen soll.
 
 ![VIS-2-Saugroboter-Widget](admin/media/Vis%202%20VacuumControlWidget.png)
 
