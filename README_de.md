@@ -63,6 +63,26 @@ installierten Firmware abhängen.
 `✅` bedeutet, dass die Funktion für das dokumentierte Modell unterstützt wird. `—` bedeutet, dass der Adapter diese Funktion für das Modell derzeit
 nicht bereitstellt.
 
+### Unterstützung für ein neues Modell anfragen
+
+Der Adapter wählt seine Gerätebibliothek nach dem ersten Teil der Modell-ID, dem Teil vor dem ersten Punkt: `roborock` und `rockrobo`
+verwenden die Roborock-Bibliothek, `viomi` die Viomi-Bibliothek, `dreame` und `xiaomi` die Dreame/MIOT-Bibliothek. Ein Modell einer dieser
+Familien, das oben nicht aufgeführt ist, funktioniert meist mit derselben Bibliothek: Grundsteuerung, Status, Akku, Verbrauchsmaterial und
+Reinigungsverlauf stehen zur Verfügung, wenn der Roboter die Standard-Eigenschaften nutzt; Eigenschaften, die der Roboter nicht liefert,
+bleiben leer. Funktioniert ein solches Modell bei dir, eröffne bitte ein Issue mit Modell-ID und Firmware-Version, damit es in die Tabelle
+aufgenommen werden kann.
+
+Zeigt das Log `Model <id> not supported! You can try to setup manually a library in settings.`, beginnt die Modell-ID mit einem Präfix, das
+der Adapter nicht kennt (zum Beispiel `ijai` oder `xtl`). Der Adapter legt dann keine Datenpunkte an, obwohl die Instanz läuft. Über die
+Option **Manager** in den Instanzeinstellungen lässt sich eine der Bibliotheken erzwingen; Geräte mit MIOT-Protokoll funktionieren manchmal
+mit der Dreame-Bibliothek. Eine eigene Bibliothek für einen neuen Hersteller braucht die MIOT-Spezifikation des Modells
+(`https://home.miot-spec.com/spec/<Modell-ID>`) und jemanden, der das Gerät besitzt und testen kann.
+
+Jede Anfrage und jeder Fehlerbericht sollte enthalten: Modell-ID und Firmware (`deviceInfo.model`, `deviceInfo.fw_ver`), die Versionen von
+Adapter, js-controller und Node.js, welche Datenpunkte funktionieren und welche nicht, sowie das Debug-Log rund um das Problem, vor allem
+die Zeilen mit `Device model detected`, `MIIO request` und `Status update:`. Bei Kartenproblemen zusätzlich den Wert von `auth.status` und
+die Ausgabe von `npm ls canvas` aus dem ioBroker-Verzeichnis. Token, Login-Links, Cloud-Sitzungen und IP-Adressen vorher entfernen.
+
 ## Haftungsausschluss
 
 Alle in diesem Projekt genannten Produkt- und Firmennamen, Logos und Marken gehören ihren jeweiligen Eigentümern. Xiaomi, Mi Home, Roborock, Viomi,

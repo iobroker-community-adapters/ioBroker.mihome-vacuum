@@ -1,0 +1,71 @@
+name: New device
+description: Ask for support of a robot model that is not listed in the README
+title: '[<model id>] '
+labels: ['new device']
+body:
+    - type: markdown
+      attributes:
+          value: |
+              The adapter picks its device library from the first part of the model id: `roborock`/`rockrobo`, `viomi`, `dreame` and `xiaomi` are known. A model of one of these families usually works already; models with another prefix need the MIOT specification and someone who owns the device. Please read the section "Requesting support for a new model" in the README first and test with the current adapter release before opening the issue.
+    - type: input
+      id: model
+      attributes:
+          label: Model id
+          description: Value of `deviceInfo.model` or the model shown in the Mi Home app.
+          placeholder: dreame.vacuum.r2211o
+      validations:
+          required: true
+    - type: input
+      id: firmware
+      attributes:
+          label: Firmware
+          description: Value of `deviceInfo.fw_ver`.
+    - type: input
+      id: adapter
+      attributes:
+          label: Adapter version
+          description: Must be the current release from npm (6.1.0 or newer).
+      validations:
+          required: true
+    - type: dropdown
+      id: manager
+      attributes:
+          label: Manager setting used for the test
+          description: The **Manager** option in the instance settings.
+          options:
+              - Auto
+              - Roborock
+              - Dreame
+              - Viomi
+              - Xiaomi
+      validations:
+          required: true
+    - type: textarea
+      id: works
+      attributes:
+          label: What works
+          description: Which of `control.start`, `control.pause`, `control.home`, `control.find`, `control.fan_power`, `info.battery`, `info.state` and the consumables react or show values.
+    - type: textarea
+      id: missing
+      attributes:
+          label: What is missing or wrong
+          description: States that stay empty, show wrong values or do not react, ideally with the service/property ids (siid/piid) from the MIOT specification.
+    - type: input
+      id: spec
+      attributes:
+          label: MIOT specification
+          placeholder: https://home.miot-spec.com/spec/<model id>
+    - type: textarea
+      id: log
+      attributes:
+          label: Debug log
+          description: Log level **debug**, from the adapter start until the first status update, including the lines containing `Device model detected`, `MIIO request` and `Status update:`. Remove tokens, login links, cloud sessions and IP addresses.
+          render: text
+      validations:
+          required: true
+    - type: checkboxes
+      id: tester
+      attributes:
+          label: Testing
+          options:
+              - label: I own this device and can test changes.
