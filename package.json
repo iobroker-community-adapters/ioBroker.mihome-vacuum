@@ -75,7 +75,7 @@
     "@iobroker/adapter-dev": "^1.5.0",
     "@iobroker/eslint-config": "^2.3.4",
     "@iobroker/gui-components": "^10.2.3",
-    "@iobroker/testing": "^5.3.0",
+    "@iobroker/testing": "^6.1.2",
     "@iobroker/types-vis-2": "~2.20.1",
     "@iobroker/vis-2-widgets-testing": "^1.0.7",
     "@module-federation/vite": "^1.21.5",
