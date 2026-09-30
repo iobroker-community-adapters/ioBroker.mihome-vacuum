@@ -12,6 +12,9 @@
 [![Translation status](https://weblate.iobroker.net/widgets/adapters/-/mihome-vacuum/svg-badge.svg)](https://weblate.iobroker.net/engage/adapters/?utm_source=widget)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
 
+> [!IMPORTANT]
+> This adapter cannot be installed from github
+
 [Deutsche Dokumentation](README_de.md)
 
 The mihome-vacuum adapter connects ioBroker to compatible Xiaomi ecosystem robot vacuum cleaners. It supports local control through the robot's IP
