@@ -115,7 +115,7 @@ Die Xiaomi Cloud ist für die normale lokale Steuerung optional. Sie dient der k
 5. Den angezeigten Link öffnen und die Xiaomi-Anmeldung im Browser bestätigen.
 6. Zu ioBroker zurückkehren, sobald der Cloud-Status **Angemeldet** anzeigt.
 7. Auf **Geräte abrufen** klicken und den Saugroboter aus der Liste auswählen.
-8. Die automatisch eingetragenen Werte für Token, IP-Adresse, Modell und Manager prüfen.
+8. Die automatisch eingetragenen Werte für Token, IP-Adresse und Modell prüfen; den Manager auf **Auto** lassen.
 9. Die Konfiguration speichern und kontrollieren, ob `info.connection` den Wert `true` erhält.
 
 ![Verbindung und Xiaomi-Cloud-Anmeldung](admin/media/Login%20VacuumControl-redacted.png)
@@ -138,7 +138,7 @@ sie unter **Manuelle Einstellungen** eingetragen werden:
 - **Token:** lokaler hexadezimaler Geräte-Token
 - **IP-Adresse:** aktuelle lokale Adresse des Roboters
 - **Modell:** Modellkennung wie `roborock.vacuum.s5`
-- **Manager:** wird normalerweise automatisch erkannt; Roborock, Viomi oder Dreame nur bei Bedarf manuell auswählen
+- **Manager:** auf **Auto** lassen; der Manager wird aus dem Modell ermittelt. Roborock, Viomi, Dreame oder Xiaomi MIoT nur manuell auswählen, wenn das Modell nicht erkannt wird. Roborock-Geräte unterstützen kein MIoT und lassen sich mit dem Dreame- oder Xiaomi-MIoT-Manager nicht steuern; der Adapter verwendet dann den Roborock-Manager und schreibt eine Warnung ins Log
 - **Port des Roboters:** normalerweise `54321`
 - **Eigener Port:** lokaler UDP-Port dieser Adapterinstanz, normalerweise `53421`
 

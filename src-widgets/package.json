@@ -1,4 +1,28 @@
 {
-  "private": true,
-  "type": "module"
+    "name": "iobroker.mihome-vacuum-widgets",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite build --watch",
+        "check": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json"
+    },
+    "devDependencies": {
+        "@emotion/react": "^11.14.0",
+        "@emotion/styled": "^11.14.1",
+        "@iobroker/gui-components": "^10.3.12",
+        "@iobroker/types-vis-2": "~2.20.2",
+        "@module-federation/vite": "1.23.5",
+        "@mui/icons-material": "^9.5.0",
+        "@mui/material": "^9.5.0",
+        "@mui/system": "^9.5.0",
+        "@types/node": "^26.6.5",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
+        "@vitejs/plugin-react": "^6.1.2",
+        "react": "^19.3.1",
+        "react-dom": "^19.3.1",
+        "vite": "8.3.4",
+        "vite-plugin-commonjs": "^0.10.4"
+    }
 }

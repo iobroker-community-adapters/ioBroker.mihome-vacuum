@@ -152,6 +152,8 @@
     "maintenance": "Entretien et réinitialisations",
     "maintenanceSubtitle": "Consommables et entretien des capteurs",
     "manager": "gestionnaire d'utilisation",
+    "managerAuto": "Auto (recommandé)",
+    "managerHint": "Conservez « Auto » sauf si votre modèle n'est pas détecté. Les appareils Roborock ne peuvent pas être contrôlés avec le gestionnaire Dreame ou Xiaomi MIoT.",
     "manuell settings": "Paramètres manuels",
     "mapOid": "État de l'image de la carte",
     "mihome_vacuum_widget": "Commande de l'aspirateur avec carte",

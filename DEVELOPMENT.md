@@ -32,7 +32,7 @@ The repository also contains:
 
 | Component      | Required baseline                                 |
 | -------------- | ------------------------------------------------- |
-| Node.js        | `>=22.13.0`                                       |
+| Node.js        | `>=22.19.0`                                       |
 | js-controller  | `>=7.2.2`                                         |
 | ioBroker Admin | `>=7.8.23`                                        |
 | Backend        | TypeScript, compiled to CommonJS, target ES2022   |
@@ -42,12 +42,20 @@ The repository also contains:
 Use an active Node.js LTS version covered by the CI matrix. Do not introduce APIs that are newer
 than the minimum declared in `package.json`.
 
-Install an exact dependency tree with:
+The admin UI (`src-admin/`) and the VIS 2 widget (`src-widgets/`) are separate npm projects with their
+own `package.json` and `package-lock.json`. The root project only holds the backend, test, and release
+tooling. Install an exact dependency tree for all three with:
 
 ```sh
 npm ci
+cd src-admin && npm ci && cd ..
+cd src-widgets && npm ci && cd ..
 npm run build
 ```
+
+`npm run npm` does the same with `npm i` (updating the lock files). `npm run build:admin` and
+`npm run build:widgets` run `npm i` in their sub-project before building, so `npm run build` also works
+on a fresh checkout. `npm run update-packages` bumps the dependencies of all three projects.
 
 Dependency installation does not build the adapter. Always build explicitly before starting or
 packaging a source checkout. Published npm packages already contain the generated runtime and UI.
@@ -627,7 +635,7 @@ npm run lint
 - `widgets/mihome-vacuum/customWidgets.js` and its Module Federation chunks.
 
 Do not edit generated JavaScript manually. Change the TypeScript/React source and rebuild. Do not
-commit `build/`, `admin/index.html`, `admin/assets/`, `src-widgets/build/`, the generated VIS 2
+commit `build/`, `admin/index.html`, `admin/assets/`, `src-widgets/build/`, `src-*/node_modules/`, the generated VIS 2
 `widgets/mihome-vacuum/assets/` and `customWidgets.js`, or the generated VIS 1 translation bridge
 `widgets/mihome-vacuum/js/translations.js`. Keep sources, `admin/i18n/`, hand-written VIS 1 HTML/CSS,
 images and other static assets tracked. Also exclude `node_modules`, TypeScript declaration output,

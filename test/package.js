@@ -17,14 +17,11 @@ describe('Runtime dependencies', () => {
         assert.match(renderer, /^\/\/ @repochecker: optional dependency 'canvas'$/m);
     });
 
-    it('declares directly used test tools without unused Chai plugins', () => {
+    it('uses node:assert instead of Chai', () => {
         const packageJson = require('../package.json');
         const setup = fs.readFileSync(path.join(__dirname, 'mocha.setup.js'), 'utf8');
 
-        for (const dependency of ['mocha', 'chai', 'sinon', '@types/mocha', '@types/chai', '@types/sinon']) {
-            assert.equal(typeof packageJson.devDependencies[dependency], 'string', dependency);
-        }
-        for (const plugin of ['chai-as-promised', 'sinon-chai']) {
+        for (const plugin of ['chai', 'chai-as-promised', 'sinon-chai']) {
             assert.equal(Object.hasOwn(packageJson.devDependencies, plugin), false, plugin);
             assert.equal(Object.hasOwn(packageJson.devDependencies, `@types/${plugin}`), false, plugin);
             assert.equal(setup.includes(plugin), false, plugin);
@@ -82,7 +79,7 @@ describe('Runtime dependencies', () => {
 
         assert.match(packageJson.dependencies.axios, /^\^[1-9]\d*\.\d+\.\d+$/);
         assert.equal(Object.prototype.hasOwnProperty.call(packageJson.devDependencies, 'axios'), false);
-        assert.match(packageJson.dependencies.qs, /^\^[6-9]\.\d+\.\d+$/);
+        assert.equal(Object.hasOwn(packageJson.dependencies, 'qs'), false);
     });
 
     it('keeps the approved ioBroker and release toolchain declared with caret ranges', () => {
@@ -108,7 +105,7 @@ describe('Runtime dependencies', () => {
         const packageJson = require('../package.json');
         const ioPackage = require('../io-package.json');
 
-        assert.equal(packageJson.engines.node, '>=22.13.0');
+        assert.equal(packageJson.engines.node, '>=22.19.0');
         assert.equal(ioPackage.common.dependencies[0]['js-controller'], '>=7.2.2');
         assert.equal(ioPackage.common.globalDependencies[0].admin, '>=7.8.23');
         assert.match(packageJson.devDependencies['@types/node'], /^\^(?:2[2-9]|[3-9]\d)\.\d+\.\d+$/);
@@ -189,13 +186,28 @@ describe('Runtime dependencies', () => {
         assert.match(rootConfigSource, /"extends": "@tsconfig\/node22\/tsconfig\.json"/);
         assert.equal(buildConfig.compilerOptions.outDir, 'build');
         assert.equal(buildConfig.compilerOptions.noEmit, false);
-        assert.equal(packageJson.scripts['build:admin'], 'vite build --config src-admin/vite.config.ts');
+        assert.equal(packageJson.scripts['build:admin'], 'cd src-admin && npm i && npm run build');
         assert.equal(
             packageJson.scripts['build:widgets'],
-            'vite build --config src-widgets/vite.config.ts && node scripts/copy-widgets.cjs',
+            'cd src-widgets && npm i && npm run build && cd .. && node scripts/copy-widgets.cjs',
         );
-        assert.equal(packageJson.scripts['check:admin'], 'tsc --noEmit -p src-admin/tsconfig.json');
-        assert.equal(packageJson.scripts['check:widgets'], 'tsc --noEmit -p src-widgets/tsconfig.json');
+        assert.equal(packageJson.scripts['check:admin'], 'cd src-admin && npm run check');
+        assert.equal(packageJson.scripts['check:widgets'], 'cd src-widgets && npm run check');
+        for (const subProject of ['src-admin', 'src-widgets']) {
+            const subPackageJson = require(`../${subProject}/package.json`);
+            assert.equal(subPackageJson.private, true, subProject);
+            assert.equal(subPackageJson.scripts.build, 'vite build', subProject);
+            assert.equal(
+                subPackageJson.scripts.check,
+                'tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json',
+                subProject,
+            );
+            for (const dependency of ['react', 'react-dom', '@mui/material', 'vite', '@vitejs/plugin-react']) {
+                assert.equal(typeof subPackageJson.devDependencies[dependency], 'string', `${subProject}: ${dependency}`);
+                assert.equal(Object.hasOwn(packageJson.devDependencies, dependency), false, dependency);
+            }
+            assert.equal(fs.existsSync(path.join(__dirname, '..', subProject, 'package-lock.json')), true, subProject);
+        }
         assert.equal(packageJson.scripts.translate, 'npm run build:backend && translate-adapter');
         assert.equal(
             packageJson.scripts.build,

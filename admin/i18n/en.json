@@ -152,6 +152,8 @@
     "maintenance": "Maintenance and reset actions",
     "maintenanceSubtitle": "Consumables and sensor care",
     "manager": "use manager",
+    "managerAuto": "Auto (recommended)",
+    "managerHint": "Keep \"Auto\" unless your model is not detected. Roborock devices cannot be controlled with the Dreame or Xiaomi MIoT manager.",
     "manuell settings": "Manual settings",
     "mapOid": "Map image state",
     "mihome_vacuum_widget": "Vacuum control with map",

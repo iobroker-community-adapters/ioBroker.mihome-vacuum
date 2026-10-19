@@ -28,6 +28,15 @@ function resultArray(response: DreameMiioResponse | null | undefined): DreamePro
     return response && Array.isArray(response.result) ? (response.result as DreamePropertyValue[]) : null;
 }
 
+/**
+ * Devices without MIoT support (e.g. Roborock) answer MIoT requests with `"unknown_method"` instead of an error.
+ *
+ * @param response miIO response of a MIoT request
+ */
+function isUnknownMethod(response: DreameMiioResponse | null | undefined): boolean {
+    return response?.result === 'unknown_method';
+}
+
 class DreameManager {
     static readonly DreameWaterVolumes = DreameWaterVolumes;
     static readonly DreameErrors = DreameErrors;
@@ -42,6 +51,7 @@ class DreameManager {
     washBaseAvailable = false;
     globalTimeouts: Record<string, AdapterTimeout | undefined> = {};
     closed = false;
+    miotUnsupportedWarned = false;
     readonly PARAMS: DreamePropertyDefinition[] = [
         DreameProperties.STATE,
         DreameProperties.ERROR,
@@ -175,7 +185,12 @@ class DreameManager {
                 if (this.closed) {
                     return;
                 }
-                this.adapter.log.debug('Received Dreame property response');
+                if (isUnknownMethod(deviceData)) {
+                    this.warnMiotUnsupported('get_properties');
+                    deviceData = null;
+                } else {
+                    this.adapter.log.debug('Received Dreame property response');
+                }
             } catch {
                 deviceData = null;
                 if (this.closed) {
@@ -260,6 +275,10 @@ class DreameManager {
                 if (id == propertyDefinition.control) {
                     deviceData = await this.sendValueToDevice(propertyDefinition, state);
                 }
+            }
+            if (deviceData && typeof deviceData === 'object' && isUnknownMethod(deviceData)) {
+                this.warnMiotUnsupported('set_properties');
+                return;
             }
             if (deviceData && typeof deviceData === 'object' && deviceData.result) {
                 await this.getStates();
@@ -389,6 +408,10 @@ class DreameManager {
             aiid: actionDefinition.aiid,
             in: parameters,
         });
+        if (isUnknownMethod(returnData)) {
+            this.warnMiotUnsupported('action');
+            return false;
+        }
         const result = asActionResult(returnData.result);
         if (result?.code == -1) {
             this.adapter.log.debug('Action failed! MIOT Action not available or data sent not correct.');
@@ -396,6 +419,22 @@ class DreameManager {
         }
         this.adapter.log.debug('Action successfull!');
         return true;
+    }
+
+    /**
+     * Logs once per manager that the device rejected MIoT requests, which points to a wrong manager setting.
+     *
+     * @param method MIoT method that the device rejected
+     */
+    warnMiotUnsupported(method: string): void {
+        if (this.miotUnsupportedWarned) {
+            this.adapter.log.debug(`Dreame request ${method} not supported by the device`);
+            return;
+        }
+        this.miotUnsupportedWarned = true;
+        this.adapter.log.warn(
+            `The device answered the MIoT request ${method} with "unknown_method" and cannot be controlled by the Dreame/Xiaomi MIoT manager. Please set the manager to "Auto" in the instance settings.`,
+        );
     }
 
     close(): Promise<void> {
