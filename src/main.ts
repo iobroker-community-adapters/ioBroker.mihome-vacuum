@@ -265,6 +265,23 @@ export class MihomeVacuum extends utils.Adapter {
             manager = managerList[configuredManager];
             if (!manager) {
                 this.log.error(`selected manager ${configuredManager} is not supported`);
+                return manager;
+            }
+            const modelPrefix = model ? model.split('.')[0] : '';
+            const detectedManager = managerList[modelPrefix];
+            if (detectedManager && detectedManager !== manager) {
+                if (detectedManager === VacuumManager && manager === DreameManager) {
+                    // Roborock firmware does not speak MIoT: it answers every request with "unknown_method",
+                    // so the Dreame/Xiaomi manager can neither read nor control the device.
+                    this.log.warn(
+                        `Manager "${configuredManager}" (MIoT protocol) cannot control ${model}; using the Roborock manager instead. Please set the manager to "Auto" in the instance settings.`,
+                    );
+                    manager = detectedManager;
+                } else {
+                    this.log.warn(
+                        `Manager "${configuredManager}" does not match the detected model ${model} (auto detection would use "${modelPrefix}"). If the device does not respond, set the manager to "Auto" in the instance settings.`,
+                    );
+                }
             }
         } else if (model) {
             //try to get stock Model maybe it is working

@@ -13,7 +13,7 @@
 [![Downloads](https://img.shields.io/npm/dm/iobroker.mihome-vacuum.svg)](https://www.npmjs.com/package/iobroker.mihome-vacuum)
 
 > [!IMPORTANT]
-> This adapter cannot be installed from github
+> This adapter cannot be installed from GitHub
 
 [Deutsche Dokumentation](README_de.md)
 
@@ -113,7 +113,7 @@ Xiaomi Cloud is optional for normal local control. It is used for convenient dev
 5. Open the displayed link and confirm the Xiaomi login in the browser.
 6. Return to ioBroker after the cloud status changes to **Authenticated**.
 7. Click **Get devices** and select the vacuum from the device list.
-8. Check the automatically filled token, IP address, model, and manager.
+8. Check the automatically filled token, IP address, and model; keep the manager on **Auto**.
 9. Save the configuration and verify that `info.connection` becomes `true`.
 
 ![Connection and Xiaomi Cloud login](admin/media/Login%20VacuumControl-redacted.png)
@@ -134,7 +134,7 @@ settings**:
 - **Token:** local hexadecimal device token
 - **IP address:** current local address of the robot
 - **Model:** model identifier such as `roborock.vacuum.s5`
-- **Manager:** normally detected automatically; manually choose Roborock, Viomi, or Dreame only when necessary
+- **Manager:** keep **Auto**; the manager is detected from the model. Choose Roborock, Viomi, Dreame, or Xiaomi MIoT manually only when the model is not detected. Roborock devices do not support MIoT and cannot be controlled with the Dreame or Xiaomi MIoT manager; the adapter then uses the Roborock manager and logs a warning
 - **Vacuum port:** normally `54321`
 - **Own port:** local UDP port used by this adapter instance, normally `53421`
 
@@ -402,6 +402,10 @@ requests.
 ### **WORK IN PROGRESS**
 
 * (xXBJXx) Documented how new models are supported and rewrote the GitHub issue templates as English forms
+* (bluefox) Roborock devices are no longer controlled by a manually selected Dreame/Xiaomi MIoT manager; the adapter warns and uses the Roborock manager instead (#1250)
+* (bluefox) The Dreame/Xiaomi MIoT manager reports devices that answer `unknown_method` instead of logging the command as successful (#1250)
+* (bluefox) Clarified the manager selection in the instance settings (#1250)
+* (bluefox) Admin and widget dependencies moved into `src-admin` and `src-widgets`; replaced `chai` with `node:assert` and `qs` with `URLSearchParams`
 
 ### 6.1.0 (2026-09-08)
 

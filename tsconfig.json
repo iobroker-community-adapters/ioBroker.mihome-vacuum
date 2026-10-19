@@ -7,12 +7,10 @@
 		"noEmit": true,
 
 		// check JS files
-		"allowJs": true,
-		"checkJs": true,
-
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"esModuleInterop": true,
+		"allowJs": false,
+		"module": "Node16",
+		"moduleResolution": "node16",
+		"rootDir": "./src",
 		// this is necessary for the automatic typing of the adapter config
 		"resolveJsonModule": true,
 
@@ -26,7 +24,7 @@
 		// "noUnusedLocals": true,
 		// "noUnusedParameters": true,
 
-		// Consider targetting es2019 or higher if you only support Node.js 12+
+		// Consider targeting es2019 or higher if you only support Node.js 12+
 		"target": "es2018",
 
 	},
@@ -36,6 +34,6 @@
 		"**/*.d.ts"
 	],
 	"exclude": [
-		"node_modules/**"
+		"**/node_modules/**"
 	]
 }

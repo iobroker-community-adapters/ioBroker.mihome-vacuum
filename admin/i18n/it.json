@@ -152,6 +152,8 @@
     "maintenance": "Manutenzione e azzeramenti",
     "maintenanceSubtitle": "Consumabili e cura dei sensori",
     "manager": "utilizzare il gestore",
+    "managerAuto": "Automatico (consigliato)",
+    "managerHint": "Mantieni \"Automatico\" a meno che il modello non venga rilevato. I dispositivi Roborock non possono essere controllati con il gestore Dreame o Xiaomi MIoT.",
     "manuell settings": "Impostazioni manuali",
     "mapOid": "Stato dell'immagine della mappa",
     "mihome_vacuum_widget": "Controllo del robot aspirapolvere con mappa",

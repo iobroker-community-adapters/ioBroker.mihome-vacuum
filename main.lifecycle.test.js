@@ -541,6 +541,25 @@ describe('Adapter unload lifecycle', () => {
         assert.equal(adapter.warnMessages.join('\n').includes('SENSITIVE_UNSUPPORTED_WRITE_MARKER'), false);
     });
 
+    it('does not use a MIoT manager for Roborock models and warns about mismatching managers (#1250)', async () => {
+        const { adapter } = createAdapter();
+        const roborockManager = adapter.getManager('roborock.vacuum.s5', '');
+
+        assert.equal(adapter.getManager('roborock.vacuum.s5', 'dreame'), roborockManager);
+        assert.equal(adapter.getManager('rockrobo.vacuum.v1', 'xiaomi'), roborockManager);
+        assert.equal(adapter.warnMessages.length, 2);
+        assert.match(adapter.warnMessages[0], /using the Roborock manager instead/);
+
+        adapter.warnMessages.length = 0;
+        const viomiManager = adapter.getManager('viomi.vacuum.v8', 'viomi');
+        assert.notEqual(adapter.getManager('dreame.vacuum.p2008', 'roborock'), adapter.getManager('dreame.vacuum.p2008', ''));
+        assert.equal(adapter.getManager('dreame.vacuum.p2008', 'roborock'), roborockManager);
+        assert.notEqual(viomiManager, roborockManager);
+        assert.equal(adapter.warnMessages.length, 2);
+        assert.match(adapter.warnMessages[0], /does not match the detected model dreame\.vacuum\.p2008/);
+        await adapter.onUnload(() => undefined);
+    });
+
     it('answers the legacy send command exactly once without forwarding it to the manager', async () => {
         const { adapter } = createAdapter();
 

@@ -1,6 +1,5 @@
 import axios, { type AxiosInstance } from 'axios';
 import * as crypto from 'node:crypto';
-import qs from 'qs';
 import {
     signedNonce,
     generateNonce,
@@ -444,7 +443,7 @@ class XiaomiCloudConnector {
             encryptedFieldCount: Object.keys(fields).length,
         });
         try {
-            const response = await this.session.post<string>(`${url}?${qs.stringify(fields, { encode: true })}`, null, {
+            const response = await this.session.post<string>(`${url}?${new URLSearchParams(fields).toString()}`, null, {
                 headers: {
                     'Accept-Encoding': 'identity',
                     'User-Agent': this.agent,

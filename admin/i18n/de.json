@@ -152,6 +152,8 @@
     "maintenance": "Wartung und Zurücksetzen",
     "maintenanceSubtitle": "Verbrauchsmaterial und Sensorpflege",
     "manager": "Verwende Manager",
+    "managerAuto": "Auto (empfohlen)",
+    "managerHint": "„Auto“ beibehalten, außer das Modell wird nicht erkannt. Roborock-Geräte lassen sich mit dem Dreame- oder Xiaomi-MIoT-Manager nicht steuern.",
     "manuell settings": "Manuelle Einstellungen",
     "mapOid": "Datenpunkt des Kartenbilds",
     "mihome_vacuum_widget": "Staubsaugersteuerung mit Karte",

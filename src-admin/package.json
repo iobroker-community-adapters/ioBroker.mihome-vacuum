@@ -1,4 +1,23 @@
 {
+    "name": "iobroker.mihome-vacuum-admin",
     "private": true,
-    "type": "module"
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "check": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json"
+    },
+    "devDependencies": {
+        "@emotion/react": "^11.14.0",
+        "@emotion/styled": "^11.14.1",
+        "@iobroker/gui-components": "^10.3.12",
+        "@mui/icons-material": "^9.5.0",
+        "@mui/material": "^9.5.0",
+        "@types/node": "^26.6.5",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
+        "@vitejs/plugin-react": "^6.1.2",
+        "react": "^19.3.1",
+        "react-dom": "^19.3.1",
+        "vite": "^8.3.4"
+    }
 }

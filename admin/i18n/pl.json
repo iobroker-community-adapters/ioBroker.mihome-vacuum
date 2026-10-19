@@ -152,6 +152,8 @@
     "maintenance": "Konserwacja i resetowanie",
     "maintenanceSubtitle": "Materiały eksploatacyjne i pielęgnacja czujników",
     "manager": "użyj menedżera",
+    "managerAuto": "Automatycznie (zalecane)",
+    "managerHint": "Pozostaw „Automatycznie”, chyba że model nie zostanie wykryty. Urządzeń Roborock nie można sterować menedżerem Dreame ani Xiaomi MIoT.",
     "manuell settings": "Ustawienia ręczne",
     "mapOid": "Stan obrazu mapy",
     "mihome_vacuum_widget": "Sterowanie odkurzaczem z mapą",

@@ -152,6 +152,8 @@
     "maintenance": "维护与重置",
     "maintenanceSubtitle": "耗材与传感器保养",
     "manager": "使用经理",
+    "managerAuto": "自动（推荐）",
+    "managerHint": "除非无法识别您的型号，否则请保持“自动”。Roborock 设备无法通过 Dreame 或 Xiaomi MIoT 管理器控制。",
     "manuell settings": "手动设置",
     "mapOid": "地图图像状态",
     "mihome_vacuum_widget": "带地图的扫地机器人控制",

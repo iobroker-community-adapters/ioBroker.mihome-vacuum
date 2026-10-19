@@ -23,3 +23,7 @@ admin/i18n/*/flat.txt
 
 # Local source screenshot contains private instance data; commit only the redacted copy.
 /admin/media/Login VacuumControl.png
+
+# Module Federation temp files of the widget build
+.__mf__temp/
+*.tsbuildinfo

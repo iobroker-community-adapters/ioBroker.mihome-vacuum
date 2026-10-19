@@ -8,7 +8,7 @@ import commonjs from 'vite-plugin-commonjs';
 import { defineConfig, type Plugin } from 'vite';
 import { spawnSync } from 'node:child_process';
 
-const packageJson = JSON.parse(readFileSync(fileURLToPath(new URL('../package.json', import.meta.url)), 'utf8'));
+const packageJson = JSON.parse(readFileSync(fileURLToPath(new URL('./package.json', import.meta.url)), 'utf8'));
 // @iobroker/types-vis-2 keeps the shared list in sync with what the vis-2 host provides: react, react-dom, the
 // JSX runtime, @emotion/react, @mui/private-theming, @mui/system and @mui/material as singletons. Icons are not
 // shared anymore and stay tree-shakeable inside the widget bundle.

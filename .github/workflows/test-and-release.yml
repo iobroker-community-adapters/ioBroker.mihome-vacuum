@@ -35,7 +35,7 @@ jobs:
                   cache: npm
 
             - name: Install Dependencies
-              run: npm ci
+              run: npm ci && npm ci --prefix src-admin && npm ci --prefix src-widgets
 
             - name: Run JavaScript regression tests
               run: npm run test:js
@@ -57,6 +57,7 @@ jobs:
               uses: ioBroker/testing-action-check@v2
               with:
                   node-version: "22.x"
+                  install-command: "npm ci && npm ci --prefix src-admin && npm ci --prefix src-widgets"
                   lint: true
 
     # Runs adapter tests on all supported node versions and OSes
