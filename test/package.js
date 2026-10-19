@@ -105,7 +105,7 @@ describe('Runtime dependencies', () => {
         const packageJson = require('../package.json');
         const ioPackage = require('../io-package.json');
 
-        assert.equal(packageJson.engines.node, '>=22.13.0');
+        assert.equal(packageJson.engines.node, '>=22.19.0');
         assert.equal(ioPackage.common.dependencies[0]['js-controller'], '>=7.2.2');
         assert.equal(ioPackage.common.globalDependencies[0].admin, '>=7.8.23');
         assert.match(packageJson.devDependencies['@types/node'], /^\^(?:2[2-9]|[3-9]\d)\.\d+\.\d+$/);
