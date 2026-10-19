@@ -32,7 +32,7 @@ The repository also contains:
 
 | Component      | Required baseline                                 |
 | -------------- | ------------------------------------------------- |
-| Node.js        | `>=22.13.0`                                       |
+| Node.js        | `>=22.19.0`                                       |
 | js-controller  | `>=7.2.2`                                         |
 | ioBroker Admin | `>=7.8.23`                                        |
 | Backend        | TypeScript, compiled to CommonJS, target ES2022   |

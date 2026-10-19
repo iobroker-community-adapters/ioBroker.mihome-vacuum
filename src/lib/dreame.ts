@@ -28,7 +28,11 @@ function resultArray(response: DreameMiioResponse | null | undefined): DreamePro
     return response && Array.isArray(response.result) ? (response.result as DreamePropertyValue[]) : null;
 }
 
-/** Devices without MIoT support (e.g. Roborock) answer MIoT requests with `"unknown_method"` instead of an error. */
+/**
+ * Devices without MIoT support (e.g. Roborock) answer MIoT requests with `"unknown_method"` instead of an error.
+ *
+ * @param response miIO response of a MIoT request
+ */
 function isUnknownMethod(response: DreameMiioResponse | null | undefined): boolean {
     return response?.result === 'unknown_method';
 }
@@ -417,7 +421,11 @@ class DreameManager {
         return true;
     }
 
-    /** Logs once per manager that the device rejected MIoT requests, which points to a wrong manager setting. */
+    /**
+     * Logs once per manager that the device rejected MIoT requests, which points to a wrong manager setting.
+     *
+     * @param method MIoT method that the device rejected
+     */
     warnMiotUnsupported(method: string): void {
         if (this.miotUnsupportedWarned) {
             this.adapter.log.debug(`Dreame request ${method} not supported by the device`);
