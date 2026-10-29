@@ -410,6 +410,7 @@ requests.
 * (bluefox) The Dreame/Xiaomi MIoT manager reports devices that answer `unknown_method` instead of logging the command as successful (#1250)
 * (bluefox) Clarified the manager selection in the instance settings (#1250)
 * (bluefox) Admin and widget dependencies moved into `src-admin` and `src-widgets`; replaced `chai` with `node:assert` and `qs` with `URLSearchParams`
+* (bluefox) Node.js 22.19 or newer is required
 
 ### 6.1.0 (2026-09-08)
 
