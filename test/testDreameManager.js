@@ -399,4 +399,32 @@ describe('DreameManager TypeScript runtime', () => {
         assert.deepEqual(manager.globalTimeouts, {});
         assert.equal(adapter.debugMessages.join('\n').includes('synthetic-sensitive-wash-probe'), false);
     });
+
+    it('reports devices without MIoT support instead of treating unknown_method as success (#1250)', async () => {
+        const adapter = createAdapter();
+        const warnMessages = [];
+        adapter.log.warn = message => warnMessages.push(String(message));
+        const calls = [];
+        const manager = createIdleManager(DreameManager, adapter, {
+            sendMessage: async (method, params) => {
+                calls.push({ method, params });
+                return { result: 'unknown_method' };
+            },
+        });
+        await waitForManager();
+
+        await manager.getStates();
+        const actionResult = await manager.sendActionToDevice(DreameManager.DreameActions.START);
+        await manager.stateChange('mihome-vacuum.test.setting.water_grade', { val: '11', ack: false });
+        await manager.close();
+
+        assert.equal(actionResult, false);
+        assert.equal(adapter.states.size, 0);
+        assert.equal(warnMessages.length, 1);
+        assert.match(warnMessages[0], /unknown_method/);
+        assert.match(warnMessages[0], /"Auto"/);
+        assert.equal(adapter.debugMessages.includes('Action successfull!'), false);
+        assert.equal(adapter.debugMessages.includes('Received Dreame property response'), false);
+        assert.equal(calls.filter(call => call.method === 'get_properties').length > 1, true);
+    });
 });

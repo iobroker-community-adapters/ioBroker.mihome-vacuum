@@ -152,6 +152,8 @@
     "maintenance": "Onderhoud en resetacties",
     "maintenanceSubtitle": "Verbruiksartikelen en sensoronderhoud",
     "manager": "gebruik beheerder",
+    "managerAuto": "Automatisch (aanbevolen)",
+    "managerHint": "Laat \"Automatisch\" staan, tenzij uw model niet wordt herkend. Roborock-apparaten kunnen niet worden bediend met de Dreame- of Xiaomi MIoT-manager.",
     "manuell settings": "Handmatige instellingen",
     "mapOid": "State kaartafbeelding",
     "mihome_vacuum_widget": "Robotstofzuigerbediening met kaart",

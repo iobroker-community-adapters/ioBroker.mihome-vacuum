@@ -11,6 +11,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "rootDir": "./src",
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
@@ -25,7 +26,11 @@
     ]
   },
   "include": [
-    "src",
-    "vite.config.ts"
+    "src"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }

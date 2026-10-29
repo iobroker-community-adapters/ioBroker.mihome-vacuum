@@ -17,6 +17,7 @@ import {
     DialogTitle,
     FormControl,
     FormControlLabel,
+    FormHelperText,
     Grid,
     IconButton,
     InputAdornment,
@@ -782,12 +783,13 @@ class App extends GenericApp<GenericAppProps, VacuumAdminState> {
                                         value={this.state.native.manager}
                                         onChange={event => this.updateNative('manager', String(event.target.value))}
                                     >
-                                        <MenuItem value="">Auto</MenuItem>
-                                        <MenuItem value="roborock">Roborock</MenuItem>
-                                        <MenuItem value="dreame">Dreame</MenuItem>
+                                        <MenuItem value="">{I18n.t('managerAuto')}</MenuItem>
+                                        <MenuItem value="roborock">Roborock / Rockrobo (miIO)</MenuItem>
+                                        <MenuItem value="dreame">Dreame (MIoT)</MenuItem>
                                         <MenuItem value="viomi">Viomi</MenuItem>
-                                        <MenuItem value="xiaomi">Xiaomi</MenuItem>
+                                        <MenuItem value="xiaomi">Xiaomi MIoT (Dreame protocol)</MenuItem>
                                     </Select>
+                                    <FormHelperText>{I18n.t('managerHint')}</FormHelperText>
                                 </FormControl>
                             </Grid>
                             <Grid size={{ xs: 6, md: 2 }}>
