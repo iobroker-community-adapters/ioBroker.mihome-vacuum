@@ -338,6 +338,10 @@ automatisch; die Attribute in den Widget-Einstellungen müssen nur geändert wer
 
 ![VIS-2-Saugroboter-Widget](admin/media/Vis%202%20VacuumControlWidget.png)
 
+Dasselbe Widget in einer dunklen vis-2-Ansicht, Übersicht mit Karte, Akku, gereinigter Fläche und Zeit, Saugleistung und Schnellsteuerung:
+
+![vis-2 Saugroboter-Widget, dunkles Design](admin/media/vis2-vacuum-control-dark.png)
+
 ### Räume, Saugleistung und Darstellung
 
 Mit **Räume automatisch erkennen** (Standard) zeigt das VIS-2-Widget alle Räume, die der Adapter unter `rooms.*` angelegt hat, inklusive eigener
