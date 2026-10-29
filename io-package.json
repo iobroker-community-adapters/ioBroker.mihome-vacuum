@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mihome-vacuum",
-    "version": "6.2.0",
+    "version": "6.2.1",
     "news": {
+      "6.2.1": {
+        "en": "Fixed the release checks that stopped the publication of 6.2.0; this version contains all changes of 6.2.0",
+        "de": "Die Release-Checks verhinderten die Veröffentlichung von 6.2.0; sie enthält alle Änderungen von 6.2.0",
+        "ru": "Исправлены проверки версий, из-за которых публикация 6.2.0 была остановлена; эта версия содержит все изменения 6.2.0",
+        "pt": "Corrigido o erro que impediu a publicação da 6.2.0; esta versão contém todas as mudanças da 6.2.0",
+        "nl": "De releasecontroles die de publicatie van 6.2.0 stopten, zijn opgelost; deze versie bevat alle wijzigingen van 6.2.0",
+        "fr": "Correction des mises à jour qui empêchaient la publication de la 6.2.0 ; cette version contient tous les changements",
+        "it": "Risolti i controlli che bloccarono la pubblicazione della 6.2.0; contiene tutte le modifiche",
+        "es": "Se corrigieron las comprobaciones que impedían la publicación de 6.2.0; esta versión contiene todos los cambios de 6.2.0",
+        "pl": "Naprawiono sprawdzanie wersji, które wstrzymały publikację wersji 6.2.0; ta wersja zawiera wszystkie zmiany w wersji 6.2.0",
+        "uk": "Виправлені перевірки випуску, які зупинили публікацію 6.2.0; ця версія містить всі зміни 6.2.0",
+        "zh-cn": "修复了停止 6.2.0 发布的版本检查；此版本包含 6.2.0 的所有更改"
+      },
       "6.2.0": {
         "en": "Documented how new models are supported and rewrote the GitHub issue templates as English forms\nRoborock devices are no longer controlled by a manually selected Dreame/Xiaomi MIoT manager; the adapter warns and uses the Roborock manager instead (#1250)\nThe Dreame/Xiaomi MIoT manager reports devices that answer `unknown_method` instead of logging the command as successful (#1250)\nClarified the manager selection in the instance settings (#1250)\nAdmin and widget dependencies moved into `src-admin` and `src-widgets`; replaced `chai` with `node:assert` and `qs` with `URLSearchParams`\nNode.js 22.19 or newer is required",
         "de": "Dokumentiert, wie neue Modelle unterstützt werden, und GitHub-Vorlagen auf Englisch\nRoborock-Geräte werden nicht mehr von einem manuell ausgewählten Dreame/Xiaomi MIoT-Manager gesteuert. Der Adapter warnt und nutzt stattdessen den Roborock-Manager (#1250)\nDer Dreame/Xiaomi MIoT-Manager meldet Geräte, die `unknown_method` beantworten, statt ihn als Erfolg zu melden (#1250)\nDie Managerauswahl in den Instanzeinstellungen geklärt (#1250)\nAdmin- und Widget-Abhängigkeiten wurden in `src-admin` und `src-widgets` verschoben; `chai` durch `node:assert` und `qs` durch `URLSearchParams` ersetzt\nNode.js 22.19 oder neuer ist nötig",
@@ -80,19 +93,6 @@
         "pl": "dodaj adres IP do informacji\nprzydzielić rockrobo (valetudo) do roborock Manager",
         "uk": "додати IP-адресу на інформацію\nпризначте рокробо (valetudo) до roborock Manager",
         "zh-cn": "将 IP 服装添加到信息中\n指定 Rockrobo( valetudo) 为 Roborock 管理器"
-      },
-      "5.1.0": {
-        "en": "Added mop pad status and some states for Dreame/Xiaomi \nchange model handling",
-        "de": "Hinzugefügt Mop Pad Status und einige Zustände für Dreame/Xiaomi\nänderung modellhandling",
-        "ru": "Добавлен статус мопа пада и некоторые штаты для Dreame/Xiaomi\nизменение модели обработки",
-        "pt": "Adicionado mop pad status e alguns estados para Dreame/Xiaomi\nmanipulação do modelo de mudança",
-        "nl": "Toegevoegd mop pad status en sommige staten voor Dreame/Xiaomi\nmodelhandling wijzigen",
-        "fr": "Ajout du statut de mop pad et de certains états pour Dreame/Xiaomi\nchangement de la gestion du modèle",
-        "it": "Aggiunto stato mop pad e alcuni stati per Dreame/Xiaomi\ncambiamento modello di gestione",
-        "es": "Estado de almohadillas mop agregado y algunos estados para Dreame/Xiaomi\ncambio modelo de manejo",
-        "pl": "Dodano stan mopa i kilka stanów dla Dreame / Xiaomi\nzmiana obsługi modelu",
-        "uk": "Додано mop місце та деякі стани для Dreame / Xiaomi\nзміна моделювання моделі",
-        "zh-cn": "添加拖把状态和一些Dreake/小米状态\n更改模式处理"
       }
     },
     "titleLang": {

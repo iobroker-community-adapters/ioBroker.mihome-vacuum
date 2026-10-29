@@ -1,4 +1,9 @@
 # Older changes
+## 5.3.0 (2025-07-24)
+
+* (dirkhe) update dependecies
+* (dirkhe) replace request with axios
+* (dirkhe) fix login issues by replacing and moving code to XiaomiCloudConnector
 
 ## 5.2.0 (2025-01-22)
 

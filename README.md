@@ -403,7 +403,7 @@ requests.
     ### **WORK IN PROGRESS**
     * ()
 -->
-### **WORK IN PROGRESS**
+### 6.2.1 (2026-10-29)
 
 * (bluefox) Fixed the release checks that stopped the publication of 6.2.0; this version contains all changes of 6.2.0
 
@@ -471,12 +471,6 @@ requests.
 * (xXBJXx) Prevent delayed status callbacks from losing their manager context and terminating the adapter
 * (xXBJXx) Validate cloud sessions, cloud responses, room objects and optional configuration values before use
 * (xXBJXx) Redact device tokens, cloud sessions, cookies, login URLs and complete API payloads from normal logs
-
-### 5.3.0 (2025-07-24)
-
-* (dirkhe) update dependecies
-* (dirkhe) replace request with axios
-* (dirkhe) fix login issues by replacing and moving code to XiaomiCloudConnector
 
 [Older changelog entries](CHANGELOG_OLD.md)
 
