@@ -329,6 +329,10 @@ the widget settings only need to be changed when a state should point somewhere 
 
 ![VIS 2 vacuum widget](admin/media/Vis%202%20VacuumControlWidget.png)
 
+The same widget in a dark vis-2 view, overview with map, battery, cleaned area and time, suction level and the quick controls:
+
+![vis-2 vacuum widget, dark theme](admin/media/vis2-vacuum-control-dark.png)
+
 ### Rooms, suction levels, and layout
 
 With **Detect rooms automatically** (default) the VIS 2 widget shows every room the adapter created below `rooms.*`, including its own suction
