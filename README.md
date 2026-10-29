@@ -403,7 +403,7 @@ requests.
     ### **WORK IN PROGRESS**
     * ()
 -->
-### **WORK IN PROGRESS**
+### 6.2.0 (2026-10-29)
 
 * (xXBJXx) Documented how new models are supported and rewrote the GitHub issue templates as English forms
 * (bluefox) Roborock devices are no longer controlled by a manually selected Dreame/Xiaomi MIoT manager; the adapter warns and uses the Roborock manager instead (#1250)
@@ -473,11 +473,6 @@ requests.
 * (dirkhe) update dependecies
 * (dirkhe) replace request with axios
 * (dirkhe) fix login issues by replacing and moving code to XiaomiCloudConnector
-
-### 5.2.0 (2025-01-22)
-
-* (dirkhe) add IP Adress to info
-* (dirkhe) assign rockrobo (valetudo) to roborock Manager
 
 [Older changelog entries](CHANGELOG_OLD.md)
 

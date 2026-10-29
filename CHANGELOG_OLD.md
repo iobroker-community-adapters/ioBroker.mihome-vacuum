@@ -388,3 +388,7 @@
 ### 0.0.1 (2017-01-16)
 
 * (bluefox) initial commit
+## 5.2.0 (2025-01-22)
+
+* (dirkhe) add IP Adress to info
+* (dirkhe) assign rockrobo (valetudo) to roborock Manager
