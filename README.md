@@ -403,6 +403,10 @@ requests.
     ### **WORK IN PROGRESS**
     * ()
 -->
+### **WORK IN PROGRESS**
+
+* (bluefox) Fixed the release checks that stopped the publication of 6.2.0; this version contains all changes of 6.2.0
+
 ### 6.2.0 (2026-10-29)
 
 * (xXBJXx) Documented how new models are supported and rewrote the GitHub issue templates as English forms

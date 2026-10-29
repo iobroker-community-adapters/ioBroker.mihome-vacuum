@@ -728,12 +728,20 @@ describe('Runtime dependencies', () => {
         const root = path.join(__dirname, '..');
         const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
         const germanReadme = fs.readFileSync(path.join(root, 'README_de.md'), 'utf8');
+        const oldChangelog = fs.readFileSync(path.join(root, 'CHANGELOG_OLD.md'), 'utf8');
+        const version = require('../package.json').version.replaceAll('.', '\\.');
 
         assert.match(readme, /^## Changelog$/m);
-        assert.match(readme, /^### \*\*WORK IN PROGRESS\*\*$/m);
+        // The release script removes the "WORK IN PROGRESS" heading in the release commit and adds it again
+        // afterwards, so only the placeholder comment is always present.
         assert.match(readme, /Placeholder for the next version/);
-        assert.match(readme, /^### 5\.3\.0 \(2025-07-24\)$/m);
-        assert.match(readme, /^### 5\.2\.0 \(2025-01-22\)$/m);
+        assert.match(readme, new RegExp(`^### ${version} \\(\\d{4}-\\d{2}-\\d{2}\\)$`, 'm'));
+        // The release script moves older entries from the README into CHANGELOG_OLD.md.
+        const history = `${readme}\n${oldChangelog}`;
+        // README entries use "###", CHANGELOG_OLD.md entries "##" (the level the release script expects there).
+        assert.match(history, /^#{2,3} 5\.3\.0 \(2025-07-24\)$/m);
+        assert.match(history, /^#{2,3} 5\.2\.0 \(2025-01-22\)$/m);
+        assert.doesNotMatch(oldChangelog, /^### \d+\.\d+\.\d+/m);
         assert.match(readme, /\[Older changelog entries\]\(CHANGELOG_OLD\.md\)/);
         assert.doesNotMatch(readme, /^### Unreleased$/m);
         assert.doesNotMatch(readme, /\[CHANGELOG\.md\]\(CHANGELOG\.md\)/);
