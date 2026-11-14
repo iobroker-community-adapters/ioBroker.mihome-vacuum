@@ -9,7 +9,7 @@
     "devDependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.1",
-        "@iobroker/gui-components": "^10.3.12",
+        "@iobroker/gui-components": "^10.4.4",
         "@mui/icons-material": "^9.5.0",
         "@mui/material": "^9.5.0",
         "@types/node": "^26.6.6",
