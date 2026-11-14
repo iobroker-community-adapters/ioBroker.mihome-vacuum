@@ -12,7 +12,7 @@
         "@emotion/styled": "^11.14.1",
         "@iobroker/gui-components": "^10.4.4",
         "@iobroker/types-vis-2": "~2.20.2",
-        "@module-federation/vite": "1.23.5",
+        "@module-federation/vite": "1.23.11",
         "@mui/icons-material": "^9.5.0",
         "@mui/material": "^9.5.0",
         "@mui/system": "^9.5.0",
