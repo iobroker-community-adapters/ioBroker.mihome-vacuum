@@ -470,3 +470,37 @@ describe('VacuumManager startCleaning room params', () => {
         await manager.close();
     });
 });
+
+describe('VacuumManager cleanRooms message', () => {
+    it('cleans the room channels of an ioBroker room with the room manager as this', async () => {
+        const RoomManager = proxyquire('../build/lib/roomManager', {});
+        const { manager, adapter } = createManager();
+        const sent = [];
+        adapter.namespace = 'mihome-vacuum.test';
+        // the constructor reads the existing rooms
+        adapter.getStates = (_pattern, callback) => callback(null, null);
+        adapter.getForeignObjects = (pattern, type, enums, callback) => {
+            assert.equal(pattern, 'mihome-vacuum.test.rooms.*');
+            callback(null, {
+                'mihome-vacuum.test.rooms.kitchen.mapIndex': { enums: { 'enum.rooms.kitchen': 'Kitchen' } },
+                'mihome-vacuum.test.rooms.living.mapIndex': { enums: { 'enum.rooms.living': 'Living' } },
+            });
+        };
+        adapter.getForeignStates = (ids, callback) => {
+            callback(null, Object.fromEntries(ids.map(id => [id, { val: 16 }])));
+        };
+        adapter.sendTo = (instance, command, message) => sent.push({ instance, command, message });
+        manager.roomManager = new RoomManager(adapter, {});
+
+        await manager.onMessage({ command: 'cleanRooms', message: { rooms: 'enum.rooms.kitchen' } });
+
+        assert.deepEqual(sent, [
+            {
+                instance: 'mihome-vacuum.test',
+                command: 'cleanSegments',
+                message: { segments: [16], channels: ['mihome-vacuum.test.rooms.kitchen'] },
+            },
+        ]);
+        await manager.close();
+    });
+});

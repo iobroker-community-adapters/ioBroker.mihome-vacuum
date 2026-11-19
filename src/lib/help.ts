@@ -102,8 +102,9 @@ Commands (sendTo mihome-vacuum.0):
   fanSpeed / waterBoxMode / waterBoxLevel / mopMode: a value of the states control.fan_power / water_box_mode /
   water_box_level / mop_mode (see their object), else the settings of the room (rooms.<room>.roomFanPower,
   roomWaterBoxMode, roomWaterBoxLevel, roomMopMode, repeat) apply; repeat = number of passes. Empty answer.
-- cleanRooms {rooms}: meant to clean the room channels of these ioBroker rooms (e.g. "enum.rooms.kitchen"), but it
-  fails in this version: use cleanSegments with their mapIndex, or write true to rooms.<room>.roomClean.
+- cleanRooms {rooms}: cleans the room channels assigned to these ioBroker rooms: rooms = an enum ID like
+  "enum.rooms.kitchen" or a list of them (a string message is taken as rooms); their mapIndex goes to cleanSegments (or
+  cleanZone) with the settings of the rooms. Empty answer; nothing happens if no room channel belongs to them.
 - cleanZone {coordinates, fanSpeed?, waterBoxMode?, waterBoxLevel?, mopMode?} or the coordinates alone: cleans
   zones of the map, coordinates = "[x1,y1,x2,y2,passes]", several as "[...],[...]" (map units, the dock is about
   at 25500,25500). Empty answer.

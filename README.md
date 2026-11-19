@@ -411,6 +411,7 @@ requests.
 ### **WORK IN PROGRESS**
 
 * (bluefox) Added the message "help": a description of all messages for AI agents (e.g. pi-agent), and common.supportedMessages.help
+* (bluefox) Fixed: the message "cleanRooms" now cleans the room channels of the given ioBroker rooms instead of throwing a TypeError
 
 ### 6.2.1 (2026-10-29)
 
