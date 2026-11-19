@@ -263,6 +263,11 @@ Reset a lifetime only after the corresponding component has been cleaned or repl
 When **Send own commands** is enabled, commands can be written to `control.X_send_command`; responses appear in `control.X_get_response`. This is
 intended for experienced users. Invalid or model-incompatible commands can cause unexpected robot behavior.
 
+### Messages for scripts and AI agents
+
+`sendTo('mihome-vacuum.0', 'help', {})` answers a description of all messages of the adapter for AI agents (e.g. pi-agent) and script
+authors: `{ help, commands }`, where `commands` lists every message with `write: true` if it changes something.
+
 ## Important states
 
 | Channel             | Purpose                                               |
@@ -403,6 +408,10 @@ requests.
     ### **WORK IN PROGRESS**
     * ()
 -->
+### **WORK IN PROGRESS**
+
+* (bluefox) Added the message "help": a description of all messages for AI agents (e.g. pi-agent), and common.supportedMessages.help
+
 ### 6.2.1 (2026-10-29)
 
 * (bluefox) Fixed the release checks that stopped the publication of 6.2.0; this version contains all changes of 6.2.0
