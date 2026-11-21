@@ -73,7 +73,7 @@
     "@alcalzone/release-script-plugin-manual-review": "^5.2.0",
     "@iobroker/adapter-dev": "^1.5.0",
     "@iobroker/eslint-config": "^2.3.4",
-    "@iobroker/testing": "^6.3.1",
+    "@iobroker/testing": "^6.3.2",
     "@iobroker/vis-2-widgets-testing": "^2.0.1",
     "@tsconfig/node22": "^22.0.6",
     "@types/node": "^22.20.5",
