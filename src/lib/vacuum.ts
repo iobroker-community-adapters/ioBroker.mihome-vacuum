@@ -1358,7 +1358,10 @@ class VacuumManager {
                     if (!requireParams('rooms')) {
                         return;
                     }
-                    this.roomManager.findMapIndexByRoom(obj.message.rooms, this.roomManager.cleanRooms);
+                    // an arrow function: passed unbound, cleanRooms lost its this and threw a TypeError
+                    this.roomManager.findMapIndexByRoom(obj.message.rooms, statesFound =>
+                        this.roomManager.cleanRooms(statesFound),
+                    );
                     return;
 
                 case 'pause':

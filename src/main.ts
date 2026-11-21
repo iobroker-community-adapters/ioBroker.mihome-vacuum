@@ -8,6 +8,7 @@ import {
     parseProtectedConfigSaveRequest,
     ProtectedConfigError,
 } from './lib/protectedConfig';
+import { COMMANDS, HELP } from './lib/help';
 
 /*
  * Created with @iobroker/create-adapter v1.27.0
@@ -660,6 +661,8 @@ export class MihomeVacuum extends utils.Adapter {
         // handle the message
         if (obj) {
             switch (obj.command) {
+                case 'help':
+                    return respond({ help: HELP, commands: COMMANDS });
                 case 'send':
                     // Legacy template command: answer exactly once and never forward it to the manager.
                     this.log.info('send command');
