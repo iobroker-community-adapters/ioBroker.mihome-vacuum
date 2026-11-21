@@ -10,7 +10,7 @@
     "devDependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.1",
-        "@iobroker/gui-components": "^10.4.4",
+        "@iobroker/gui-components": "^10.4.6",
         "@iobroker/types-vis-2": "~2.20.9",
         "@module-federation/vite": "1.23.11",
         "@mui/icons-material": "^9.5.0",
