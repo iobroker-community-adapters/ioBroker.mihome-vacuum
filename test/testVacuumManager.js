@@ -504,3 +504,41 @@ describe('VacuumManager cleanRooms message', () => {
         await manager.close();
     });
 });
+
+describe('VacuumManager with the robot commands of the shared catalog', () => {
+    it('cleans the rooms of clean through cleanSegments and queues a second cleaning', async () => {
+        const { robotCommand } = require('../build/lib/robotCommands');
+        const sent = [];
+        const { manager, adapter } = createManager(async (method, params) => {
+            sent.push({ method, params });
+            return { id: 7, result: ['ok'] };
+        });
+        adapter.namespace = 'mihome-vacuum.test';
+        adapter.isUnsupportedFeature = () => false;
+        adapter.getObjectAsync = async () => null;
+        adapter.getForeignObjectAsync = async () => null;
+        adapter.getForeignObjectsAsync = async pattern =>
+            pattern === 'enum.rooms.*'
+                ? {}
+                : {
+                      'mihome-vacuum.test.rooms.kitchen': {
+                          _id: 'mihome-vacuum.test.rooms.kitchen',
+                          common: { name: 'Kitchen' },
+                      },
+                  };
+        adapter.getForeignStatesAsync = async () => ({ 'mihome-vacuum.test.rooms.kitchen.mapIndex': { val: 16 } });
+
+        const answer = await robotCommand(adapter, manager, { command: 'clean', message: { rooms: ['kitchen'] } });
+
+        assert.deepEqual(answer, { ok: true, rooms: ['Kitchen'] });
+        assert.deepEqual(sent, [{ method: 'app_segment_clean', params: [16] }]);
+        assert.deepEqual(manager.activeChannels, ['mihome-vacuum.test.rooms.kitchen']);
+
+        const queued = await robotCommand(adapter, manager, { command: 'clean', message: { rooms: 16 } });
+
+        assert.deepEqual(queued, { ok: true, pending: true, rooms: ['Kitchen'] });
+        assert.equal(sent.length, 1);
+        assert.equal(manager.queue.length, 1);
+        await manager.close();
+    });
+});

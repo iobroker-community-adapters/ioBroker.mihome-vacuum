@@ -4,6 +4,7 @@ const path = require('node:path');
 
 const { COMMANDS, HELP } = require('../build/lib/help');
 const stockCommands = require('../build/lib/stockCommands');
+const { ROBOT_COMMANDS } = require('../build/lib/robotCommands');
 
 /** The commands of the switch of a method: from the method to the next method of the class */
 function casesOf(file, method, nextMethod) {
@@ -48,6 +49,16 @@ describe('help', () => {
         for (const command of ['getStatus', 'getConsumableStatus', 'getCleaningSummary', 'getCleaningRecord']) {
             assert.equal(COMMANDS.find(c => c.command === command).write, false, command);
         }
+    });
+
+    it('marks the commands of the shared catalog with their family', () => {
+        const marked = COMMANDS.filter(c => c.standard);
+        assert.deepEqual(marked.map(c => c.command).sort(), [...ROBOT_COMMANDS].sort());
+        for (const { command, standard, write } of marked) {
+            assert.equal(standard, `robot.${command}`, command);
+            assert.equal(write, !['getRooms', 'getStatus'].includes(command), command);
+        }
+        assert.ok(HELP.includes('shared catalog'));
     });
 
     it('keeps the lines short', () => {

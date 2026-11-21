@@ -9,6 +9,7 @@ import {
     ProtectedConfigError,
 } from './lib/protectedConfig';
 import { COMMANDS, HELP } from './lib/help';
+import { robotCommand, type RobotAdapter } from './lib/robotCommands';
 
 /*
  * Created with @iobroker/create-adapter v1.27.0
@@ -727,6 +728,15 @@ export class MihomeVacuum extends utils.Adapter {
                         });
                     }
                     return;
+
+                // the commands of the shared catalog (family robot): lib/robotCommands.ts
+                case 'getRooms':
+                case 'clean':
+                case 'pause':
+                case 'stop':
+                case 'home':
+                case 'getStatus':
+                    return respond(await robotCommand(this as unknown as RobotAdapter, this.vacuum, obj));
 
                 case 'getTimers':
                     try {

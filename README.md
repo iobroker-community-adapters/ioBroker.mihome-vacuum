@@ -267,6 +267,8 @@ intended for experienced users. Invalid or model-incompatible commands can cause
 
 `sendTo('mihome-vacuum.0', 'help', {})` answers a description of all messages of the adapter for AI agents (e.g. pi-agent) and script
 authors: `{ help, commands }`, where `commands` lists every message with `write: true` if it changes something.
+`getRooms`, `clean`, `pause`, `stop`, `home` and `getStatus` follow the shared catalog of commands for robots (marked
+`standard: 'robot.<command>'` in the list) and answer `{ error, reason }` on failure.
 
 ## Important states
 
@@ -412,6 +414,7 @@ requests.
 
 * (bluefox) Added the message "help": a description of all messages for AI agents (e.g. pi-agent), and common.supportedMessages.help
 * (bluefox) Fixed: the message "cleanRooms" now cleans the room channels of the given ioBroker rooms instead of throwing a TypeError
+* (bluefox) Added the standard commands of the shared catalog: robot.getRooms, robot.clean, robot.pause, robot.stop, robot.home, robot.getStatus
 
 ### 6.2.1 (2026-10-29)
 

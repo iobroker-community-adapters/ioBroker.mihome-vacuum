@@ -283,11 +283,14 @@ describe('Adapter unload lifecycle', () => {
 
         await adapter.main();
         await adapter.getModel();
+        await adapter.onMessage({ command: 'getConsumableStatus', message: {}, from: 'script', callback: 'request' });
+        // getStatus follows the shared catalog (lib/robotCommands.ts): {error: text, reason}
         await adapter.onMessage({ command: 'getStatus', message: {}, from: 'script', callback: 'request' });
 
         assert.deepEqual(adapter.sentMessages[0].response, {
             error: { code: 'MIIO_TIMEOUT', message: 'MIIO request timed out' },
         });
+        assert.deepEqual(adapter.sentMessages[1].response, { error: 'MIIO request timed out', reason: 'TIMEOUT' });
         await adapter.onUnload(() => undefined);
     });
 
